@@ -1,0 +1,28 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# VIM
+*.swp
+
+
+# Debug files
+*.dSYM/
+
+# Vscode
+*.json
+
+# Git lig
+libft/.git
