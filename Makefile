@@ -83,7 +83,7 @@ fclean : clean
 	$(CLEANUP) $(PATHO)
 	$(CLEANUP) $(NAME)
 	$(CLEANUP) $(NAMEDB)
-	printf "$(RED)minishell is delete\n$(NC)"
+	printf "$(RED)$(NAME) is delete\n$(NC)"
 
 re : fclean all
 
