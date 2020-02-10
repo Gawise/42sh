@@ -96,7 +96,7 @@ void			ft_strdel(char **as);
 void			ft_putnbr(int n);
 void			ft_putnbr_fd(int n, int fd);
 void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
-void			ft_lstdel(t_list **alst, void (*del)(void *));
+void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void			ft_print_bits(unsigned char nb);
 void			ft_del_tab(void **tabi);
@@ -108,7 +108,7 @@ void			ft_lst_push_front(t_list **begin, void *data,
 void			ft_lst_push_back(t_list **begin, void *data,
 		size_t size);
 int				ft_lstdelif(t_list **begin, void *data,
-		int (*f)(void *, void *), void (*del)(void *));
+		int (*f)(void *, void *), void (*del)(void *, size_t));
 size_t			ft_wcharlen(unsigned wc);
 size_t			ft_wstrlen(unsigned *str);
 void			ft_ftoa(double val, int prec, char res[CVTBUFSZ]);

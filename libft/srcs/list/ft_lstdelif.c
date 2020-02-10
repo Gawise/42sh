@@ -13,7 +13,7 @@
 #include "libft.h"
 
 static	int		manage_elem(t_list **begin, t_list *target, t_list *previus,
-		void (*del)(void *))
+		void (*del)(void *, size_t))
 {
 	if (target == *begin)
 		*begin = (*begin)->next;
@@ -24,7 +24,7 @@ static	int		manage_elem(t_list **begin, t_list *target, t_list *previus,
 }
 
 int				ft_lstdelif(t_list **begin, void *data,
-		int (*f)(void *, void *), void (*del)(void *))
+		int (*f)(void *, void *), void (*del)(void *, size_t))
 {
 	t_list *tmp;
 	t_list *previus;
