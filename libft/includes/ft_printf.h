@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/12 18:41:41 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/23 17:53:16 by hmerieux         ###   ########.fr       */
+/*   Created: 2019/08/19 19:59:22 by guaubret          #+#    #+#             */
+/*   Updated: 2019/08/21 19:08:26 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,107 +14,119 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <limits.h>
+# include <errno.h>
+# include <inttypes.h>
+# include "libft.h"
 
-typedef struct			s_flags
+# define F_SHARP		(1 << 0)
+# define F_ZERO			(1 << 1)
+# define F_MINUS		(1 << 2)
+# define F_SPACE		(1 << 3)
+# define F_PLUS			(1 << 4)
+# define F_WWILD		(1 << 5)
+# define F_PWILD		(1 << 6)
+# define F_H			(1 << 7)
+# define F_HH			(1 << 8)
+# define F_L			(1 << 9)
+# define F_LL			(1 << 10)
+# define F_UPX			(1 << 11)
+# define F_PCONV		(1 << 12)
+# define F_Z			(1 << 13)
+# define F_J			(1 << 14)
+# define F_PGIVEN		(1 << 15)
+# define BUF_SIZE		100
+
+# define CH_SHARP(x)	(x & F_SHARP)
+# define CH_ZERO(x)		(x & F_ZERO)
+# define CH_MINUS(x)	(x & F_MINUS)
+# define CH_SPACE(x)	(x & F_SPACE)
+# define CH_PLUS(x)		(x & F_PLUS)
+# define CH_WWILD(x)	(x & F_WWILD)
+# define CH_PWILD(x)	(x & F_PWILD)
+# define CH_H(x)		(x & F_H)
+# define CH_HH(x)		(x & F_HH)
+# define CH_L(x)		(x & F_L)
+# define CH_LL(x)		(x & F_LL)
+# define CH_UPX(x)		(x & F_UPX)
+# define CH_PCONV(x)	(x & F_PCONV)
+# define CH_Z(x)		(x & F_Z)
+# define CH_J(x)		(x & F_J)
+# define CH_PGIVEN(x)	(x & F_PGIVEN)
+
+# define C_RED			"\033[0;31m"
+# define C_BRED			"\033[1;31m"
+# define C_GREEN		"\033[0;32m"
+# define C_BGREEN		"\033[1;32m"
+# define C_YELLOW		"\033[0;33m"
+# define C_BYELLOW		"\033[1;33m"
+# define C_BLUE			"\033[0;34m"
+# define C_BBLUE		"\033[1;34m"
+# define C_MAGENTA		"\033[0;35m"
+# define C_BMAGENTA		"\033[1;35m"
+# define C_CYAN			"\033[0;36m"
+# define C_BCYAN		"\033[1;36m"
+# define C_EOC			"\033[0m"
+
+typedef struct		s_printf
 {
-	int					large;
-	int					left;
-	int					zero;
-	int					preci;
-	int					precinull;
-	int					plus;
-	int					space;
-	int					diez;
-	int					wc;
-}						t_flags;
+	char			*fmt;
+	char			*err_ptr;
+	int				fd;
+	char			**str;
+	int				str_n;
+	char			type;
+	va_list			ap;
+	char			buf[BUF_SIZE];
+	int				buf_len;
+	short			flags;
+	short			f_index;
+	int				width;
+	int				prec;
+	unsigned		conv;
+	int				printed;
+	int				pad;
+	unsigned int	base;
+	int				ret;
+	void			*disp;
+	int				disp_set;
+	int				as;
+}					t_printf;
 
-typedef struct			s_convert
-{
-	char				c;
-	void				(*ftpr)(void *buf, const char *convert, va_list ap);
-}						t_convert;
+void				read_arg(t_printf *data);
+void				read_flags(t_printf *data);
+void				read_width(t_printf *data);
+void				read_prec(t_printf *data);
+void				read_length_mod(t_printf *data);
+void				read_conv_spec(t_printf *data);
 
-typedef struct			s_buf
-{
-	int					fd;
-	int					i;
-	int					j;
-	unsigned long long	nb;
-	t_convert			tab[17];
-	char				buf[4096];
-}						t_buf;
+void				flush(t_printf *data);
+void				buffer(void *str, t_printf *data, size_t len);
+void				add_pad(t_printf *data, int n);
+int					init_type(t_printf *data, int fd, char **str, int str_n);
+void				xtoa_base(uintmax_t val, int base,
+		char s[21], t_printf *data);
+void				init_dispatcher(t_printf *data,
+		void (*disp[11])(t_printf *));
+void				init_data(t_printf *data, const char *format, int as);
 
-typedef struct			s_float
-{
-	int					s;
-	char				*sipart;
-	char				*sfpart;
-	long double			ipart;
-	long double			fpart;
-}						t_float;
+int					ft_printf(const char *format, ...);
+int					ft_dprintf(int fd, const char *format, ...);
+int					ft_sprintf(char *str, const char *format, ...);
+int					ft_snprintf(char *str, size_t size,
+		const char *format, ...);
+int					ft_asprintf(char **ret, const char *format, ...);
 
-typedef struct			s_bitfield_flt
-{
-	unsigned long		m:64;
-	unsigned int		e:15;
-	unsigned int		s:1;
-}						t_bt_flt;
-
-/*
-** Ft_printf
-*/
-
-int						ft_dprintf(int fd, const char *format, ...);
-
-/*
-** Conversion
-*/
-
-void					ft_create_convert(t_buf *buf);
-void					ft_convert_char(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_string(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_integer(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_octal(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_hexal(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_percent(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_pointeur(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_float(void *buf,
-							const char *convert, va_list ap);
-void					ft_ldouble(t_float *flt, t_flags *flags);
-void					ft_double(t_float *flt, t_flags *flags);
-
-/*
-** Tools
-*/
-
-int						ft_atoi_convert(int *i, const char *convert);
-char					*ft_grap_nb(va_list ap, const char *convert);
-char					*ft_grap_unb(va_list ap, const char *convert, int base);
-char					*ft_grap_pnb(va_list ap, t_flags flags);
-char					*ft_itoa_base(long long value, int base);
-char					*ft_uitoa_base(unsigned long long value, int base);
-void					ft_printreset(t_buf *buf);
-void					ft_init_structbuf(t_buf *buf, int fd);
-void					ft_init_structflags(t_flags *flags);
-void					ft_grap_flags(t_flags *flags,
-							const char *convert, va_list ap, int i);
-
-/*
-***************	Bonus %n %b %B %U %D *
-*/
-
-void					ft_convert_n(void *buf,
-							const char *convert, va_list ap);
-void					ft_print_memory(void *buf,
-							const char *convert, va_list ap);
-void					ft_convert_to_binary(void *buf,
-							const char *convert, va_list ap);
+void				conv_float(t_printf *data);
+void				conv_int(t_printf *data);
+void				conv_uint(t_printf *data);
+void				conv_char(t_printf *data);
+void				conv_str(t_printf *data);
+void				conv_ptr(t_printf *data);
+void				conv_color(t_printf *data);
+void				conv_esc(t_printf *data);
 
 #endif

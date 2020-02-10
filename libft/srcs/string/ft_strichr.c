@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_strichr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/12 18:48:13 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 18:48:14 by hmerieux         ###   ########.fr       */
+/*   Created: 2019/08/19 20:40:27 by guaubret          #+#    #+#             */
+/*   Updated: 2019/08/19 20:40:36 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
+int		ft_strichr(char *s, int c)
 {
-	while (lst != NULL)
-	{
-		f(lst);
-		lst = lst->next;
-	}
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		if (s[i] == c)
+			return (i);
+	return (-1);
 }

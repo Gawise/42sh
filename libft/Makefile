@@ -58,6 +58,7 @@ SRCS += ft_strcpy.c
 SRCS += ft_strdel.c
 SRCS += ft_strdup.c
 SRCS += ft_strequ.c
+SRCS += ft_strichr.c
 SRCS += ft_striter.c
 SRCS += ft_striteri.c
 SRCS += ft_strjoin.c
@@ -67,8 +68,10 @@ SRCS += ft_strlen.c
 SRCS += ft_strmap.c
 SRCS += ft_strmapi.c
 SRCS += ft_strncat.c
+SRCS += ft_strnlclnjoin.c
 SRCS += ft_strncmp.c
 SRCS += ft_strncpy.c
+SRCS += ft_strndup.c
 SRCS += ft_strnequ.c
 SRCS += ft_strnew.c
 SRCS += ft_strnstr.c
@@ -80,41 +83,48 @@ SRCS += ft_strsub.c
 SRCS += ft_strtrim.c
 SRCS += ft_tolower.c
 SRCS += ft_toupper.c
+SRCS += ft_wcharlen.c
+SRCS += ft_wstrlen.c
 
 #-------------------------List-----------------------------#
 SRCS += ft_lstadd.c
 SRCS += ft_lstdel.c
+SRCS += ft_lstdelif.c
 SRCS += ft_lstdelone.c
 SRCS += ft_lstiter.c
 SRCS += ft_lstmap.c
 SRCS += ft_lstnew.c
 SRCS += ft_lstpushfront.c
 SRCS += ft_lstpushback.c
-SRCS += ft_lstdelif.c
 SRCS += ft_lst_join.c
+SRCS += ft_lstpush.c
+SRCS += ft_lstaddtail.c
+SRCS += ft_lstgettail.c
+SRCS += ft_lstdeltail.c
+SRCS += ft_lstdelhead.c
 
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c
 SRCS += ft_itoa.c
+SRCS += ft_ftoa.c
 
 #-------------------------Calcul----------------------------#
 SRCS += ft_recursive_power.c
 SRCS += ft_sqrt.c
+SRCS += ft_fcvt.c
+SRCS += ft_modf.c
 
 #-------------------------ft_printf-------------------------#
-SRCS += ft_dprintf.c
-SRCS += convert_char.c
-SRCS += convert_float.c
-SRCS += convert_octal.c
-SRCS += convert_string.c
-SRCS += convert_digit.c
-SRCS += convert_hexal.c
-SRCS += convert_pointeur.c
-SRCS += calcul_float.c
-SRCS += init_struct.c
-SRCS += tools.c
-SRCS += utools.c
-SRCS += bonus.c
+SRCS += xprintf.c
+SRCS += arg.c
+SRCS += char.c
+SRCS += colors.c
+SRCS += float.c
+SRCS += int.c
+SRCS += misc.c
+SRCS += misc2.c
+SRCS += read.c
+SRCS += uint.c
 
 #-------------------------Systeme-------------------------#
 SRCS += ft_which.c
@@ -130,7 +140,7 @@ vpath %.c srcs/memory
 vpath %.c srcs/output
 vpath %.c srcs/input
 vpath %.c srcs/string
-vpath %.c srcs/ft_printf
+vpath %.c srcs/ft_printf/srcs
 
 vpath %.h includes
 

@@ -32,7 +32,7 @@ int				ft_lstdelif(t_list **begin, void *data,
 	if (!*begin || !begin || !data)
 		return (-1);
 	tmp = *begin;
-	while (tmp && f(tmp->content, data) != 1)
+	while (tmp && f(tmp->data, data) != 1)
 	{
 		previus = tmp;
 		tmp = tmp->next;

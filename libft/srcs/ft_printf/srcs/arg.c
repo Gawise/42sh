@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   arg.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/07 18:53:59 by guaubret          #+#    #+#             */
-/*   Updated: 2018/11/16 18:29:55 by guaubret         ###   ########.fr       */
+/*   Created: 2019/08/19 19:18:22 by guaubret          #+#    #+#             */
+/*   Updated: 2019/08/21 10:22:52 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_isprint(int c)
+#include "ft_printf.h"
+
+void		read_arg(t_printf *data)
 {
-	if (c >= 32 && c <= 126)
-		return (1);
-	return (0);
+	if (*(data->fmt) == '{')
+		conv_color(data);
+	else
+	{
+		data->flags = 0;
+		data->width = 0;
+		data->prec = 0;
+		data->conv = 0;
+		data->err_ptr = data->fmt;
+		data->fmt++;
+		read_flags(data);
+		read_width(data);
+		read_prec(data);
+		read_length_mod(data);
+		read_conv_spec(data);
+	}
 }

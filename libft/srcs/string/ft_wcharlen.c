@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_wcharlen.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/12 18:48:13 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 18:48:14 by hmerieux         ###   ########.fr       */
+/*   Created: 2019/08/19 20:40:50 by guaubret          #+#    #+#             */
+/*   Updated: 2019/08/19 20:40:52 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
+size_t		ft_wcharlen(unsigned wc)
 {
-	while (lst != NULL)
-	{
-		f(lst);
-		lst = lst->next;
-	}
+	if (wc < 0x80)
+		return (1);
+	else if (wc < 0x800)
+		return (2);
+	else if (wc < 0x10000)
+		return (3);
+	else
+		return (4);
 }

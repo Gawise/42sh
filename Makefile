@@ -15,13 +15,29 @@ CYAN=\033[0;36m
 WHITE=\033[0;37m
 
 
-SRCS +=
-SRCS +=
-SRCS +=
-SRCS +=
-SRCS +=
+SRCS += main.c
+SRCS += lexer.c
+SRCS += parser.c
+SRCS += init.c
+SRCS += word.c
+SRCS += redir.c
+SRCS += assign.c
+SRCS += and_or.c
+SRCS += cmd.c
+SRCS += amp.c
+SRCS += newline.c
+SRCS += args_tab.c
+SRCS += lst_to_tab.c
+SRCS += parserdb.c
 
-CC = Clang
+vpath %.c srcs
+vpath %.c srcs/lexer
+vpath %.c srcs/parser
+vpath %.c srcs/evaluator
+vpath %.c srcs/debug
+vpath %.h includes
+
+CC = clang
 COMPILE = $(CC) -c
 COMPILEDB = $(CC) -g
 
@@ -31,7 +47,7 @@ CLEANUP = rm -rf
 DSYN = $(NAMEDB).dSYM
 
 
-PATHO = obj/
+PATHO = objs/
 SPATH = srcs/
 IPATH = includes/
 LPATH = libft/
@@ -40,7 +56,7 @@ LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
 WFLAGS = -Wall -Werror -Wextra
-IFLAGS = -I$(IPATH) -I$(LIPATH)
+IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address
 
@@ -51,10 +67,11 @@ OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
 all : $(NAME)
 
 $(NAME) : $(LIB) $(PATHO) $(OBJS)
-	$(CC) -o $@ $< $(OBJS)
+	printf "$< $(OBJS)\n"
+	$(CC) -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-$(OBJS) : $(PATHO)%.o : $(SPATH)%.c
+$(OBJS) : $(PATHO)%.o : %.c
 	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(PATHO) :
@@ -93,5 +110,5 @@ norme:
 	norminette libft/srcs
 	norminette libft/includes
 
-.PHONY: all clean fclean norme re
+.PHONY: all clean fclean norme re debug
 .SILENT:

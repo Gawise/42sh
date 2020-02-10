@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_wstrlen.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/12 18:48:13 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 18:48:14 by hmerieux         ###   ########.fr       */
+/*   Created: 2019/08/19 20:40:57 by guaubret          #+#    #+#             */
+/*   Updated: 2019/08/19 20:40:58 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
+size_t		ft_wstrlen(unsigned *str)
 {
-	while (lst != NULL)
+	size_t	len;
+
+	len = 0;
+	while (*str != L'\0')
 	{
-		f(lst);
-		lst = lst->next;
+		len += ft_wcharlen(*str);
+		str++;
 	}
+	return (len);
 }

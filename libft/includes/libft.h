@@ -19,16 +19,24 @@
 # include <unistd.h>
 # include <fcntl.h>
 
+# define CVTBUFSZ 200
+
 typedef struct	s_list
 {
-	void			*content;
-	size_t			content_size;
+	void			*data;
+	size_t			size;
 	struct s_list	*next;
 }				t_list;
 
+typedef union	u_modf
+{
+	double				f;
+	long long unsigned	i;
+}				t_modf;
+
 int				ft_isdir(char *path, int link);
 void			ft_lst_join(t_list *lst1, t_list **lst2, int refresh);
-t_list			*ft_lstnew(void const *content, size_t content_size);
+t_list			*ft_lstnew(void const *data, size_t size);
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int				ft_recursive_power(int nb, int pw);
 int				ft_sqrt(int nb);
@@ -87,7 +95,7 @@ void			ft_putendl_fd(char const *s, int fd);
 void			ft_strdel(char **as);
 void			ft_putnbr(int n);
 void			ft_putnbr_fd(int n, int fd);
-void			ft_lstdelone(t_list **alst, void (*del)(void *));
+void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void			ft_print_bits(unsigned char nb);
@@ -95,11 +103,24 @@ void			ft_del_tab(void **tabi);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 size_t			ft_strlen(const char *s);
 unsigned char	ft_swap_bits(unsigned char octet);
-void			ft_lst_push_front(t_list **begin, void *content,
-		size_t content_size);
-void			ft_lst_push_back(t_list **begin, void *content,
-		size_t content_size);
+void			ft_lst_push_front(t_list **begin, void *data,
+		size_t size);
+void			ft_lst_push_back(t_list **begin, void *data,
+		size_t size);
 int				ft_lstdelif(t_list **begin, void *data,
 		int (*f)(void *, void *), void (*del)(void *));
+size_t			ft_wcharlen(unsigned wc);
+size_t			ft_wstrlen(unsigned *str);
+void			ft_ftoa(double val, int prec, char res[CVTBUFSZ]);
+int				ft_strichr(char *s, int c);
+t_list			*ft_lstpush(t_list **alst, void *data, size_t size);
+char			*ft_strndup(const char *s1, size_t n);
+void			ft_lstaddtail(t_list **alst, t_list *new);
+t_list			*ft_lstgettail(t_list **alst);
+void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
+char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
+void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
+char			*ft_fcvt(double val, int ndigits, int *decpt, char *buf);
+double			ft_modf(double val, double *integral);
 
 #endif
