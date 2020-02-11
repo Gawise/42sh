@@ -6,6 +6,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "line_edition.h"
+#include "exec.h"
 
 void	print_debug(t_list *elem);
 
@@ -33,11 +34,12 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		*lexer;
 	t_parser	parser;
-
-
+	t_cfg		shell;
+	
+	
+	init_shell(&shell, env);
 	(void)ac;
 	(void)av;
-	(void)env;
 	ft_printf("\n$> ");
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
@@ -49,7 +51,10 @@ int		main(int ac, char **av, char **env)
 		ft_lexer(line, lexer);
 		ft_lstiter(lexer->token_lst, print_debug);
 		ft_parser(lexer, &parser);
+		ft_eval(&shell, parser.table);
+
 		//ft_printf("$> ");
 	}
 	return (0);
 }
+
