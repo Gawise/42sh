@@ -36,7 +36,7 @@ int	p_add_io_num(t_token *token, t_parser *parser)
 	redir = (t_redir *)cmd->curr_redir->data;
 	redir->io_num = ft_atoi(token->str);
 	parser->prev_state = parser->state;
-	parser->state = 4;
+	parser->state = 5;
 	return (1);
 }
 
@@ -51,12 +51,12 @@ int	p_add_redir(t_token *token, t_parser *parser)
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
-	if (parser->state != 4 && !p_create_redir(cmd))
+	if (parser->state != 5 && !p_create_redir(cmd))
 		return (0);
 	redir = (t_redir *)cmd->curr_redir->data;
 	redir->type = token->type;
-	if (parser->state != 4)
+	if (parser->state != 5)
 		parser->prev_state = parser->state;
-	parser->state = 2;
+	parser->state = 3;
 	return (1);
 }

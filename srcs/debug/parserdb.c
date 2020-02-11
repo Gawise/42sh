@@ -36,6 +36,47 @@ int	get_nb_word_list(t_list *list)
 	return (nb);
 }
 
+void	print_assignment(t_list *assignment)
+{
+	t_assignment	*assign;
+
+	assign = (t_assignment *)assignment->data;
+	ft_printf("\t\t| %13s | %13s |\n", assign->var, assign->val);
+}
+
+char	*get_redir_op(t_token_type type)
+{
+	if (type == 10)
+		return (ft_strdup("<"));
+	if (type == 11)
+		return (ft_strdup("<<"));
+	if (type == 12)
+		return (ft_strdup(">"));
+	if (type == 13)
+		return (ft_strdup(">>"));
+	if (type == 14)
+		return (ft_strdup("<&"));
+	if (type == 15)
+		return (ft_strdup(">&"));
+	if (type == 16)
+		return (ft_strdup("<<-"));
+	return (NULL);
+}
+
+void	print_redir(t_list *redirection)
+{
+	t_redir		*redir;
+	char		*operator;
+
+	redir = (t_redir *)redirection->data;
+	operator = get_redir_op(redir->type);
+	if (redir->io_num >= 0)
+		ft_printf("\t\t| %7d | %6s | %10s |\n", redir->io_num, operator, redir->file);
+	else
+		ft_printf("\t\t| %7c | %6s | %10s |\n", '-', operator, redir->file);
+	free(operator);
+}
+
 void	print_s_cmd(t_list *cmd_list)
 {
 	t_list		*args;
@@ -45,12 +86,15 @@ void	print_s_cmd(t_list *cmd_list)
 
 	cmd = (t_simple_cmd*)cmd_list->data;
 	args = cmd->args;
-	if ((nb_args = get_nb_word_list(args)))
+	if (args && (nb_args = get_nb_word_list(args)))
 		n_arg = 1;
-	ft_printf("\t\t\033[1m-----------------\033[0m\n");
-	ft_printf("\t\t| %13s |\n", "cmd_name");
-	ft_printf("\t\t| %13s |\n", cmd->cmd_name);
-	ft_printf("\t\t-----------------\n");
+	if (cmd->cmd_name)
+	{
+		ft_printf("\t\t\033[1m-----------------\033[0m\n");
+		ft_printf("\t\t| %13s |\n", "cmd_name");
+		ft_printf("\t\t| %13s |\n", cmd->cmd_name);
+		ft_printf("\t\t-----------------\n");
+	}
 	if (args)
 	{
 		ft_printf("\t\t| %13s |\n", "arguments");
@@ -62,6 +106,25 @@ void	print_s_cmd(t_list *cmd_list)
 		}
 		ft_printf("\t\t-----------------\n");
 	}
+	if (cmd->assign)
+	{
+		if (cmd->cmd_name)
+			ft_printf("\n");
+		ft_printf("\t\t---------------------------------\n");
+		ft_printf("\t\t| %13s | %13s |\n", "assign_var", "assign_val");
+		ft_lstiter(cmd->assign, print_assignment);
+		ft_printf("\t\t---------------------------------\n");
+	}
+	if (cmd->redir)
+	{
+		if (cmd->cmd_name || cmd->assign)
+			ft_printf("\n");
+		ft_printf("\t\t---------------------------------\n");
+		ft_printf("\t\t| %7s | %6s | %10s |\n", "io_nbr", "type", "file");
+		ft_lstiter(cmd->redir, print_redir);
+		ft_printf("\t\t---------------------------------\n");
+	}
+
 //	ft_printf("| %10s | %10s | %10s |\n", "nb_assign", "nb_redir");
 //	ft_printf("| %10d | %10d | %10d |\n", get_nb_assign(), get_nb_redir());
 }
