@@ -263,7 +263,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	parser->curr_table = parser->table;
 	p_init_state_machine(table_builder);
 	p_tokeniter(lexer->token_lst, parser, table_builder);
-//	print_parser(parser);
+	print_parser(parser);
 	p_make_args_tab(parser);
 	return (1);
 }
