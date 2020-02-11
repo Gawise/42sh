@@ -29,7 +29,7 @@ int	get_nb_word_list(t_list *list)
 {
 	int nb = 1;
 
-	if (!list->data)
+	if (!list || !list->data)
 		return (0);
 	while ((list = list->next))
 		nb++;

@@ -29,8 +29,16 @@ SRCS += newline.c
 SRCS += args_tab.c
 SRCS += lst_to_tab.c
 SRCS += parserdb.c
+SRCS += ft_prompt.c
+SRCS += keys.c
+SRCS += keys2.c
+SRCS += signals.c
+SRCS += term_init.c
+SRCS += utils.c
+SRCS += cursor.c
 
 vpath %.c srcs
+vpath %.c srcs/line_edition
 vpath %.c srcs/lexer
 vpath %.c srcs/parser
 vpath %.c srcs/evaluator
@@ -67,7 +75,7 @@ OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
 all : $(NAME)
 
 $(NAME) : $(LIB) $(PATHO) $(OBJS)
-	$(CC) -o $@ $(OBJS) $<
+	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
 $(OBJS) : $(PATHO)%.o : %.c
