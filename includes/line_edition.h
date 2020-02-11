@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_select.h                                        :+:      :+:    :+:   */
+/*   line_edition.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:47:25 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 16:30:18 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:06:53 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,9 @@
 # include <fcntl.h>
 # include <termios.h>
 # include <term.h>
+# include "struct.h"
 # define PROMPT_SIZE 15
 
-typedef struct	s_point
-{
-	int x;
-	int y;
-}				t_point;
-
-typedef struct	s_line_lst
-{
-	struct s_line_lst	*prev;
-	struct s_line_lst	*next;
-	char				*str;
-	int					len;
-	int					nb_lines;
-}				t_line_lst;
-
-typedef struct	s_cs_line
-{
-	int				line_col;
-	int				col;
-	int				row;
-	int				min_col;
-	int				min_row;
-	int				scroll;
-	int				max_scroll;
-	int				tty;
-	t_point			screen;
-	char			*input;
-	int				sig_int;
-	int				cr;
-	char			*prompt;
-}				t_cs_line;
 
 t_cs_line		*cs_master(char *prompt, int init);
 void			space_bar(t_cs_line *cs);
