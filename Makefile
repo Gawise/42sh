@@ -94,7 +94,7 @@ $(NAME) : $(LIB) $(PATHO) $(OBJS)
 	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-## $(OBJS) : $(PATHO)%.o : %.c
+$(OBJS) : $(PATHO)%.o : %.c
 	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(PATHO) :
