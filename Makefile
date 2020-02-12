@@ -108,7 +108,7 @@ $(LIBDB) :
 
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) $(CFLAGS) -o $(NAMEDB) $^ srcs/*.c
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ srcs/*.c srcs/**/*.c
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
 
 clean :
