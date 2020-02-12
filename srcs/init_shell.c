@@ -12,7 +12,8 @@ void		set_signal_ign(void)
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
-	signal(SIGCHLD, SIG_IGN);
+	signal(SIGCHLD, SIG_DFL);
+	//signal(SIGCHLD, SIG_IGN);
 }
 
 void		init_cfg(t_cfg *cfg, char **env)

@@ -47,6 +47,7 @@ SRCS += init_shell.c
 SRCS += cleaner.c
 SRCS += building_struct.c
 SRCS += leveling.c
+SRCS += wait.c
 SRCS +=
 
 
