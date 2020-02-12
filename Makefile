@@ -22,12 +22,11 @@ SRCS += init.c
 SRCS += word.c
 SRCS += redir.c
 SRCS += assign.c
+SRCS += args_tab.c
 SRCS += and_or.c
 SRCS += cmd.c
 SRCS += amp.c
 SRCS += newline.c
-SRCS += args_tab.c
-SRCS += lst_to_tab.c
 SRCS += parserdb.c
 
 vpath %.c srcs
