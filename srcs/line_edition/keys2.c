@@ -12,11 +12,13 @@
 /* ************************************************************************** */
 
 #include "line_edition.h"
+#include "struct.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "libft.h"
 #include <signal.h>
 #include <sys/ioctl.h>
+#include <stdio.h>
 
 int		back_space(t_cs_line *cs)
 {
@@ -73,18 +75,22 @@ int		check_keys(char *caps)
 		arrow_right(cs);
 	if ((ft_strcmp(caps, "\e[B") == 0 || ft_strcmp(caps, "\x09") == 0)
 			&& (ret = 1))
-		arrow_down(cs);
+		history_down(cs);
 	if (ft_strcmp(caps, "\e[1;2A") == 0 && (ret = 1))
-		maj_arrow_up(cs);
-	if (ft_strcmp(caps, "\e[1;2B") == 0 && (ret = 1))
-		maj_arrow_down(cs);
-	if (ft_strcmp(caps, "\e[A") == 0 && (ret = 1))
 		arrow_up(cs);
-	if (ft_strcmp(caps, "\e[H") == 0 && (ret = 1))
+	if (ft_strcmp(caps, "\e[1;2B") == 0 && (ret = 1))
+		arrow_down(cs);
+	if (ft_strcmp(caps, "\e[1;2C") == 0 && (ret = 1))
+        mv_word_right(cs);
+	if (ft_strcmp(caps, "\e[1;2D") == 0 && (ret = 1))
+        mv_word_left(cs);
+	if (ft_strcmp(caps, "\e[A") == 0 && (ret = 1))
+		history_up(cs);
+	if ((ft_strcmp(caps, "\e[H") == 0 || caps[0] == 1) && (ret = 1))
 		home_key(cs);
-	if (ft_strcmp(caps, "\e[F") == 0 && (ret = 1))
+	if ((ft_strcmp(caps, "\e[F") == 0 || caps[0] == 5) && (ret = 1))
 		end_key(cs);
-	if (ft_strcmp(caps, "\n") == 0)
+	if (ft_strcmp(caps, "\n") == 0 || ft_strcmp(caps, "\eEOF") == 0)
         ret = -1;
 	if (ft_strcmp(caps, "\033[6n") == 0 || caps[0] == '[')
 		ret = -1;

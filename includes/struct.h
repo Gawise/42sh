@@ -5,12 +5,11 @@
 # include <sys/types.h>
 # include <termios.h>
 
-
 # define L_BUFF_SIZE	256
 
 
 typedef struct s_list	t_list;
-
+typedef struct s_dlist	t_dlist;
 
 
 typedef struct	s_cfg
@@ -191,19 +190,20 @@ typedef struct	s_line_lst
 
 typedef struct	s_cs_line
 {
-	int				line_col;
-	int				col;
-	int				row;
-	int				min_col;
-	int				min_row;
-	int				scroll;
-	int				max_scroll;
-	int				tty;
-	t_point			screen;
-	char			*input;
-	int				sig_int;
-	int				cr;
-	char			*prompt;
+	int             line_col;
+    int             col;
+    int             row;
+    int             min_col;
+    int             min_row;
+    int             scroll;
+    int             max_scroll;
+    int             tty;
+    t_point         screen;
+    char            *input;
+    int             sig_int;
+    int             cr;
+    char            *prompt;
+    t_dlist         *history;
 }				t_cs_line;
 
 

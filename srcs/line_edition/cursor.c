@@ -6,12 +6,13 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 
 /*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:07:24 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:52:40 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "line_edition.h"
+#include "struct.h"
 
 void	cs_set(void)
 {
@@ -56,6 +57,7 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.max_scroll = 0;
 		cs.input = ft_strnew(0);
 		cs.prompt = prompt;
+		cs.history = NULL;
 	}
 	return (&cs);
 }
