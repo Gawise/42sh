@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:23:25 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/11 23:14:33 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,13 @@ void	sig_handler(int sig)
 
 	if (sig >= 0 && (cs = cs_master(NULL, 0)))
 	{
-		ft_clear(0);
+	//	ft_clear(0);
 		term_init(0, NULL);
-		if (cs->input)
-			ft_strdel(&cs->input);
+		cs->line_col = ft_strlen(cs->input);
+		move_cs(&cs);
+		while (cs && cs->history && cs->history->next)
+			cs->history = cs->history->next;
+		ft_dlstdelone(&cs->history);
 		cs->sig_int = 1;
 	}
 }

@@ -33,15 +33,15 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		*lexer;
 	t_parser	parser;
-
+	t_dlist		*hist;
 
 	(void)ac;
 	(void)av;
 	(void)env;
-	ft_printf("\n$> ");
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
-	while ((line = ft_prompt("21sh-1.0$ ")))
+	hist = init_history();
+	while ((line = ft_prompt("21sh-1.0$ ", &hist)))
 	{
 		if (ft_strequ("exit", line))
 			exit(0);
@@ -51,5 +51,6 @@ int		main(int ac, char **av, char **env)
 		ft_parser(lexer, &parser);
 		//ft_printf("$> ");
 	}
+	ft_dlstdel(&hist);
 	return (0);
 }

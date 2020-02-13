@@ -36,6 +36,8 @@ SRCS += signals.c
 SRCS += term_init.c
 SRCS += utils.c
 SRCS += cursor.c
+SRCS += history.c
+SRCS += move_word.c
 
 vpath %.c srcs
 vpath %.c srcs/line_edition
@@ -75,11 +77,11 @@ OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
 all : $(NAME)
 
 $(NAME) : $(LIB) $(PATHO) $(OBJS)
-	$(CC) -lncurses -o $@ $(OBJS) $<
+	$(CC) -g -fsanitize=address -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
 $(OBJS) : $(PATHO)%.o : %.c
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(COMPILE) -g $(CFLAGS) $< -o $@
 
 $(PATHO) :
 	$(MKDIR) $@
@@ -92,7 +94,7 @@ $(LIBDB) :
 
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) $(CFLAGS) -o $(NAMEDB) $^ srcs/*.c
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ srcs/*.c srcs/**/*.c
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
 
 clean :

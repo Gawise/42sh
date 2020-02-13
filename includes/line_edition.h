@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_select.h                                        :+:      :+:    :+:   */
+/*   line_edition.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:47:25 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 16:30:18 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 14:20:04 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <termios.h>
 # include <term.h>
 # define PROMPT_SIZE 15
+# include "libft.h"
 
 typedef struct	s_point
 {
@@ -49,6 +50,7 @@ typedef struct	s_cs_line
 	int				sig_int;
 	int				cr;
 	char			*prompt;
+	t_dlist			*history;
 }				t_cs_line;
 
 t_cs_line		*cs_master(char *prompt, int init);
@@ -80,11 +82,16 @@ void			end_key(t_cs_line *cs);
 void			maj_arrow_down(t_cs_line *cs);
 void			maj_arrow_up(t_cs_line *cs);
 int				get_line(t_cs_line *cs);
-char			*ft_prompt(char *prompt);
+char			*ft_prompt(char *prompt, t_dlist **lst);
 int				get_col(t_cs_line *cs);
 t_point			cs_pos(t_cs_line *cs);
 void			ft_utoa(char **str);
 void			join_input(t_cs_line *cs, char *input);
 void			print_prompt(t_cs_line *cs);
+void			history_up(t_cs_line *cs);
+void			history_down(t_cs_line *cs);
+t_dlist			*init_history(void);
+void			mv_word_left(t_cs_line *cs);
+void			mv_word_right(t_cs_line *cs);
 
 #endif

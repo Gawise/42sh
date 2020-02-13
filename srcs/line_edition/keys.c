@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:38:30 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:37:53 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,12 @@ void	print_cmdline(t_cs_line *cs)
 		t_point z = trim_input(cs);
 		start = z.x;
 		end = z.y;
-		oc = cs->input[end + 1];
-		cs->input[end + 1] = '\0';
+		if (end < (int)ft_strlen(cs->input))
+			end++;
+		oc = cs->input[end];
+		cs->input[end] = '\0';
 		ft_putstr_fd(&cs->input[start], cs->tty);
-		cs->input[end + 1] = oc;
+		cs->input[end] = oc;
 		move_cs(&cs);
 	}
 }
@@ -161,6 +163,7 @@ void	line_master(t_cs_line *cs, char *input)
 			cs->scroll = cs->cr - (cs->screen.y - cs->min_row - 1);
 		if (cs->scroll < 0)
 			cs->scroll = 0;
+		cs->history->data = cs->input;
 	}
 }
 
@@ -351,45 +354,4 @@ void	end_key(t_cs_line *cs)
 		print_cmdline(cs);
 		move_cs(&cs);
 	}
-}
-
-void	maj_arrow_down(t_cs_line *cs)
-{
-	t_line_lst  *tmp;
-	tmp = NULL;
-	cs = NULL;
-	/*
-	   if (cs && (tmp = line_getlst(cs->list, cs->line + 1)))
-	   {
-	   if (cs->line < cs->nb_lines && tmp->next)
-	   {
-	   cs->line += 1;
-	   if (cs->line_col % cs->screen.x > tmp->next->len)
-	   cs->line_col = tmp->next->len;
-	   else
-	   cs->line_col = cs->line_col % cs->screen.x;
-	   }
-	   move_cs(&cs);
-	   }*/
-}
-
-void	maj_arrow_up(t_cs_line *cs)
-{
-	t_line_lst  *tmp;
-	tmp = NULL;
-	cs = NULL;
-	/*
-	   if (cs && (tmp = line_getlst(cs->list, cs->line + 1)))
-	   {
-	   if (cs->line > 0 && tmp->prev)
-	   {
-	   if (cs->line_col % cs->screen.x > tmp->prev->len)
-	   cs->line_col = tmp->prev->len;
-	   else
-	   cs->line_col = cs->line_col % cs->screen.x;
-	   cs->line -= 1;
-	   }
-	   move_cs(&cs);
-	   }
-	 */
 }

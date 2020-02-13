@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 17:01:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 18:05:02 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 13:55:00 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	read_input(void)
 	cs = cs_master(NULL, 0);
 	while (stop >= 0)
 	{
+		cs->history->data = cs->input;
 		ioctl(cs->tty, FIONREAD, &len);
 		if (cs->sig_int == 0 && len <= 0)
 			continue ;
@@ -73,7 +74,7 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt)
+char	*ft_prompt(char *prompt, t_dlist **lst)
 {
 	char		*ret;
 	t_cs_line	*cs;
@@ -83,13 +84,23 @@ char	*ft_prompt(char *prompt)
 	{
 		cs->sig_int = 0;
 		get_cs_line_position(&cs->min_col, &cs->min_row);
+		cs->history = ft_dlstnew(cs->input, 1);
+		ft_dlstaddtail(lst, cs->history);
 		read_input();
 		init_signals();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
 		ret = cs->input;
+		if (ret && ret[0])
+			cs->history->data = ft_strdup(ret);
+		else
+		{
+			while (cs && cs->history && cs->history->next)
+				cs->history = cs->history->next;
+			ft_dlstdelone(&cs->history);
+		}
 	}
-	if (!ret)
-		ret = ft_strnew(0);
+//	if (!ret)
+//		ret = ft_strnew(0);
 	return (ret);
 }

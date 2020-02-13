@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:43:11 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 19:36:00 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:14:42 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 # include <fcntl.h>
 
 # define CVTBUFSZ 200
+
+typedef struct  s_dlist
+{
+    void            *data;
+    size_t			size;
+    struct s_dlist	*next;
+	struct s_dlist	*prev;
+}				t_dlist;
 
 typedef struct	s_list
 {
@@ -122,5 +130,9 @@ char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 char			*ft_fcvt(double val, int ndigits, int *decpt, char *buf);
 double			ft_modf(double val, double *integral);
+t_dlist			*ft_dlstnew(void *content, size_t content_size);
+void			ft_dlstdelone(t_dlist **alst);
+void			ft_dlstdel(t_dlist **alst);
+void			ft_dlstaddtail(t_dlist **alst, t_dlist *new);
 
 #endif

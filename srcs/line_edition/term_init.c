@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:24:34 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:38:21 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	unset_term(struct termios *old_term)
 
 	if ((cs = cs_master(NULL, 0)))
 	{
-		ft_clear(0);
-		tputs(tgoto(tgetstr("cm", NULL), cs->min_col, cs->min_row),
-				1, &my_putchar);
+		//ft_clear(0);
+		//tputs(tgoto(tgetstr("cm", NULL), cs->min_col, cs->min_row),
+		//		1, &my_putchar);
 		//tputs(tgetstr("ve", NULL), 1, &my_putchar);
 		tcsetattr(cs->tty, 0, old_term);
 		signal(SIGWINCH, SIG_DFL);

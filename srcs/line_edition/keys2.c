@@ -75,9 +75,17 @@ int		check_keys(char *caps)
 			&& (ret = 1))
 		arrow_down(cs);
 	if (ft_strcmp(caps, "\e[1;2A") == 0 && (ret = 1))
-		maj_arrow_up(cs);
+	{
+		history_up(cs);
+	}
 	if (ft_strcmp(caps, "\e[1;2B") == 0 && (ret = 1))
-		maj_arrow_down(cs);
+		history_down(cs);
+	if (ft_strcmp(caps, "\e[1;2C") == 0 && (ret = 1))
+	{
+        mv_word_right(cs);
+	}
+	if (ft_strcmp(caps, "\e[1;2D") == 0 && (ret = 1))
+        mv_word_left(cs);
 	if (ft_strcmp(caps, "\e[A") == 0 && (ret = 1))
 		arrow_up(cs);
 	if (ft_strcmp(caps, "\e[H") == 0 && (ret = 1))
