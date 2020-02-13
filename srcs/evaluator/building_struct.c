@@ -2,10 +2,11 @@
 #include "exec.h"
 #include "parser.h"
 
-char	**ft_ctabdup(char **t) //mettre dans lib
+char	**ft_tabdup(char **t) //mettre dans lib
 {
 	char	**dup;
 	int		i;
+
 	dup = NULL;
 	if (t)
 	{
@@ -22,7 +23,6 @@ char	**ft_ctabdup(char **t) //mettre dans lib
 }
 
 
-
 int		cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	int				i;
@@ -33,9 +33,10 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 	ft_bzero(&process, sizeof(t_process));
 	while (s_cmd)
 	{
+		
 		cmd = s_cmd->data;
 		process.cmd = ft_strdup(cmd->cmd_name);
-		process.av = ft_ctabdup(cmd->av);
+		process.av = ft_tabdup(cmd->av);
 		process.std[0] = STDIN_FILENO;
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
@@ -52,6 +53,10 @@ int		cmd_to_job(t_job *job, t_list *s_cmd)
 
 	ft_bzero(job, sizeof(t_job));   /*set t_pipe a 0. Besoin d etre a -1?*/
 	nb_p = cmd_to_process(&job->process, s_cmd);
+	job->std[0] = STDIN_FILENO;
+	job->std[1] = STDOUT_FILENO;
+	job->std[2] = STDERR_FILENO;
+
 //	job->pipe = create_pipe_list(nb_p);
 
 	return (0);

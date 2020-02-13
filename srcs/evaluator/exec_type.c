@@ -33,5 +33,8 @@ int		process_type(t_list *var, t_process *p)
 	if (!ft_strchr(p->cmd, '/'))
 		return (any_slash(var, p));
 	p->setup += LOCATED;
+	/* 127 NOT FOUND
+	 * 126 NOT EXEC
+	 * */
 	return (0);
 }
