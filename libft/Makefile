@@ -102,7 +102,10 @@ SRCS += ft_lstaddtail.c
 SRCS += ft_lstgettail.c
 SRCS += ft_lstdeltail.c
 SRCS += ft_lstdelhead.c
-
+SRCS += ft_dlstaddtail.c
+SRCS += ft_dlstnew.c
+SRCS += ft_dlstdel.c
+SRCS += ft_dlstdelone.c
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c
 SRCS += ft_itoa.c
