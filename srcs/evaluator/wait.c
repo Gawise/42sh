@@ -1,7 +1,6 @@
 #include "exec.h"
 #include "libft.h"
 
-#include <stdio.h>
 
 int			ft_lstis(t_list *lst, int (*f)(t_list *elem)) // mettre dans lib
 {
@@ -86,14 +85,16 @@ int		wait_process(t_job *job)
 			ex("[WAIT_PROCESS] error waitpid");
 		update_process(job->process, pid_child, wstatus);
 	}
-	t_process *process;
-	t_list *j = job->process;
-	while (j)
-	{
-		process = j->data;
-		printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->retour, process->status);
-		j = j->next;
-	}
+	/* DEBUG  */
+		t_process *process;
+		t_list *j = job->process;
+		while (j)
+		{
+			process = j->data;
+			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->retour, process->status);
+			j = j->next;
+		}
+	/*		*/
 	printf("sort du wait\n");
 	return (0);
 }

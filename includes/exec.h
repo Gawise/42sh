@@ -1,6 +1,8 @@
 #ifndef EXEC_H
 # define EXEC_H
 
+
+	#include <stdio.h>				//debug
 # include "struct.h"
 
 # define TRUE 1

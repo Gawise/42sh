@@ -15,12 +15,15 @@ void	ex(char *s)
 #include <signal.h>
 void	set_signal_child(void)
 {
+	signal(SIGHUP, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, SIG_DFL);
+	signal(SIGCHLD, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
+	signal(SIGCONT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
-	signal(SIGCHLD, SIG_DFL);
 }
 
 /*    plus besoin si strjoin valide avec stdarg
@@ -92,11 +95,10 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 
 	printf("\t[PARANT PROCESS]  PID  = %d\t PGID = %d \n", process->pid, job->pgid);
 	setpgid(process->pid, job->pgid);
-	/*
-	 *if (job->fg)
-	 *    tcsetpgrp(STDIN_FILENO, job->pgid);
-	 */
 
+	if (job->fg)
+		if (tcsetpgrp(STDIN_FILENO, job->pgid))
+			perror("[PARENT PROCESS] error tcsetpgrp");
 	ft_del_tab((void **)envp);
 	return (0);
 }
@@ -116,10 +118,9 @@ int		child_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	set_signal_child();
 	do_dup(process);
 	setpgid(process->pid, job->pgid); 		//not do if !fg ??
-	 /*
-	  *if (job->fg)
-	  *    tcsetpgrp(STDIN_FILENO, job->pgid);
-	  */
+	 if (job->fg)
+		if (tcsetpgrp(STDIN_FILENO, job->pgid))
+			perror("[CHILD PROCESS] error tcsetpgrp");
 
 	printf("\t[CHILD PROCESS EXEC] \t[%s]\n\n\n", process->av[0]);
 	if ((execve(process->path, process->av, envp)) == -1)
@@ -168,6 +169,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	//https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
 
 	printf("\t[RUN JOB]  PID 21SH = [%d]\n", shell->pid);
+
 	while (process)
 	{
 		routine_set_pipe(process, &job->pipe);
@@ -180,7 +182,8 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	if (job->fg)
 	{
 		wait_process(job);
-		//tcsetpgrp(STDIN_FILENO, shell->pid);
+		if (tcsetpgrp(STDIN_FILENO, shell->pid))
+			perror("[run job] error tcsetpgrp");
 	}
 
 	/*
