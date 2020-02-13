@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:24:34 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "struct.h"
 
 void	set_term(int tty, int init, char *prompt, struct termios *new_term)
 {
@@ -45,9 +46,9 @@ void	unset_term(struct termios *old_term)
 
 	if ((cs = cs_master(NULL, 0)))
 	{
-		ft_clear(0);
-		tputs(tgoto(tgetstr("cm", NULL), cs->min_col, cs->min_row),
-				1, &my_putchar);
+		//ft_clear(0);
+		//tputs(tgoto(tgetstr("cm", NULL), cs->min_col, cs->min_row),
+		//		1, &my_putchar);
 		//tputs(tgetstr("ve", NULL), 1, &my_putchar);
 		tcsetattr(cs->tty, 0, old_term);
 		signal(SIGWINCH, SIG_DFL);

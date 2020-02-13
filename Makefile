@@ -35,6 +35,8 @@ SRCS += signals.c
 SRCS += term_init.c
 SRCS += utils.c
 SRCS += cursor.c
+SRCS += history.c
+SRCS += move_word.c
 
 
 ## EVAL ##
@@ -90,11 +92,11 @@ OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
 all : $(NAME)
 
 $(NAME) : $(LIB) $(PATHO) $(OBJS)
-	$(CC) -lncurses -o $@ $(OBJS) $<
+	$(CC) -g -fsanitize=address -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
 $(OBJS) : $(PATHO)%.o : %.c
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(COMPILE) -g $(CFLAGS) $< -o $@
 
 $(PATHO) :
 	$(MKDIR) $@
