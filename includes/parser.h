@@ -1,51 +1,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-typedef struct			s_assignment
-{
-	char			*var;
-	char			*val;
-}				t_assignment;
-
-typedef struct			s_redir
-{
-	int			io_num;
-	t_token_type		type; // enum
-	char			*file;
-}				t_redir;
-
-typedef struct			s_simple_cmd
-{
-	char			*cmd_name;
-	t_list			*args;
-	char			**av;
-	t_list			*redir;
-	t_list			*curr_redir;
-	t_list			*assign;
-	t_list			*curr_assign;
-}				t_simple_cmd;
-
-typedef struct			s_and_or
-{
-	t_list			*s_cmd;
-	t_list			*curr_s_cmd;
-	t_token_type		type; //enum
-	int			background;
-}				t_and_or;
-
-typedef struct			s_cmd_table
-{
-	t_list			*and_or;
-	t_list			*curr_and_or;
-}				t_cmd_table;
-
-typedef struct			s_parser
-{
-	int			state;
-	int			prev_state;
-	t_list			*table;
-	t_list			*curr_table;
-}				t_parser;
+# include "struct.h"
 
 int				ft_parser(t_lexer *lexer, t_parser *parser);
 

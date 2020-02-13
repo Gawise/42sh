@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 19:38:21 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "struct.h"
 
 void	set_term(int tty, int init, char *prompt, struct termios *new_term)
 {

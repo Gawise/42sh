@@ -6,12 +6,13 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 
 /*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 22:11:30 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:52:40 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "line_edition.h"
+#include "struct.h"
 
 void	cs_set(void)
 {

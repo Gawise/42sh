@@ -6,13 +6,14 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:31:14 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:08:05 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:45 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "line_edition.h"
 #include "libft.h"
+#include "struct.h"
 
 int		my_putchar(int c)
 {

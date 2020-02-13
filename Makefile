@@ -22,12 +22,11 @@ SRCS += init.c
 SRCS += word.c
 SRCS += redir.c
 SRCS += assign.c
+SRCS += args_tab.c
 SRCS += and_or.c
 SRCS += cmd.c
 SRCS += amp.c
 SRCS += newline.c
-SRCS += args_tab.c
-SRCS += lst_to_tab.c
 SRCS += parserdb.c
 SRCS += ft_prompt.c
 SRCS += keys.c
@@ -38,6 +37,22 @@ SRCS += utils.c
 SRCS += cursor.c
 SRCS += history.c
 SRCS += move_word.c
+
+
+## EVAL ##
+SRCS += launcher.c
+SRCS += pipe.c
+SRCS += exec_type.c
+SRCS += tools_env.c
+SRCS += setenv.c
+SRCS += init_shell.c
+SRCS += cleaner.c
+SRCS += building_struct.c
+SRCS += leveling.c
+SRCS +=
+
+
+
 
 vpath %.c srcs
 vpath %.c srcs/line_edition

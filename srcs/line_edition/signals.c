@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 23:14:33 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:24 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "struct.h"
 
 void	size_handler(int sig)
 {

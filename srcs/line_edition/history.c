@@ -6,12 +6,13 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 20:32:03 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 22:59:05 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:04 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "line_edition.h"
+#include "struct.h"
 
 t_dlist	*init_history(void)
 {

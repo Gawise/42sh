@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 17:01:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 13:55:00 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:45:13 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 #include "line_edition.h"
 #include <time.h>
 #include <stdio.h>
+#include "struct.h"
 
 void	read_input(void)
 {
 	int		len;
 	int		stop;
 	char	*buf;
+	int		ret;
 	t_cs_line	*cs;
 
 	stop = 0;
@@ -37,7 +39,8 @@ void	read_input(void)
 			continue ;
 		if (cs->sig_int == 1 || !(buf = ft_strnew(len + 1)))
 			break ;
-		if (buf[0] == EOF || read(cs->tty, buf, len) != len)
+		if ((ret = read(cs->tty, buf, len)) != len
+			|| (buf[0] == 4 && buf[1] == '\0'))
 			stop = -1;
 		stop = (stop >= 0 ? check_keys(buf) : stop);
 		ft_strdel(&buf);
@@ -80,6 +83,7 @@ char	*ft_prompt(char *prompt, t_dlist **lst)
 	t_cs_line	*cs;
 
 	ret = NULL;
+	cs = NULL;
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{
 		cs->sig_int = 0;
@@ -91,16 +95,15 @@ char	*ft_prompt(char *prompt, t_dlist **lst)
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
 		ret = cs->input;
-		if (ret && ret[0])
+		if (cs->sig_int == 0 && ret && ret[0])
 			cs->history->data = ft_strdup(ret);
-		else
+		else if (cs->sig_int == 0)
 		{
-			while (cs && cs->history && cs->history->next)
-				cs->history = cs->history->next;
+		//	while (cs && cs->history && cs->history->next)
+		//		cs->history = cs->history->next;
 			ft_dlstdelone(&cs->history);
+			ret = NULL;
 		}
 	}
-//	if (!ret)
-//		ret = ft_strnew(0);
-	return (ret);
+	return (((cs && cs->sig_int) || !ret ? ft_strnew(0) : ret));
 }

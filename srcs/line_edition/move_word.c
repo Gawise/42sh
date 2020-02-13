@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:08:56 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 15:09:20 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:53:15 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include "libft.h"
 #include <sys/ioctl.h>
+#include "struct.h"
 
 void	mv_word_left(t_cs_line *cs)
 {

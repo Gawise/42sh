@@ -147,7 +147,7 @@ void		p_init_redir_state(int (*table_builder[6][22])(t_token *, t_parser *))
 	table_builder[3][WORD]		=	p_file_name;
 	table_builder[3][ASSIGNMENT_WORD] =	p_file_name;
 	table_builder[3][NEWLINE]	=	syn_err;
-	table_builder[3][IO_NUMBER]	=	syn_err;
+	table_builder[3][IO_NUMBER]	=	p_file_name;
 	table_builder[3][AND_IF]	=	syn_err;
 	table_builder[3][AMP]		=	syn_err;
 	table_builder[3][OR_IF]		=	syn_err;
@@ -253,6 +253,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
 	int	(*table_builder[6][22])(t_token *, t_parser *);
 
+	ft_printf("\n----------- parsing -----------\n\n");
 	if (!lexer || !parser)
 		return (0);
 	init_parser(parser);
@@ -262,7 +263,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	parser->curr_table = parser->table;
 	p_init_state_machine(table_builder);
 	p_tokeniter(lexer->token_lst, parser, table_builder);
-//	print_parser(parser);
+	print_parser(parser);
 	p_make_args_tab(parser);
 	return (1);
 }

@@ -6,11 +6,12 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 15:37:53 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/13 15:52:18 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "line_edition.h"
+#include "struct.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "libft.h"
