@@ -78,6 +78,7 @@ EVALSRCS += init_shell.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
+EVALSRCS += wait.c
 
 ## DEBUG ##
 
