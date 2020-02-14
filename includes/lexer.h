@@ -181,4 +181,6 @@ void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char));
 */
 
 int	ft_lexer(char *str, t_lexer *lexer);
+int	lex_err(t_lexer *lexer, char c);
+
 #endif

@@ -74,7 +74,6 @@ EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
 EVALSRCS += tools_env.c
 EVALSRCS += setenv.c
-EVALSRCS += init_shell.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
@@ -86,6 +85,7 @@ DBSRCS += lexer.c
 DBSRCS += parser.c
 
 SRC += main.c
+SRC += init_shell.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
@@ -118,7 +118,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-#WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address
