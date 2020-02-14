@@ -14,52 +14,90 @@ PURPLE=\033[0;35m
 CYAN=\033[0;36m
 WHITE=\033[0;37m
 
+## LINE EDITION ##
 
-SRCS += main.c
-SRCS += lexer.c
-SRCS += parser.c
-SRCS += init.c
-SRCS += word.c
-SRCS += redir.c
-SRCS += assign.c
-SRCS += args_tab.c
-SRCS += and_or.c
-SRCS += cmd.c
-SRCS += amp.c
-SRCS += newline.c
-SRCS += parserdb.c
-SRCS += ft_prompt.c
-SRCS += keys.c
-SRCS += keys2.c
-SRCS += signals.c
-SRCS += term_init.c
-SRCS += utils.c
-SRCS += cursor.c
-SRCS += history.c
-SRCS += move_word.c
+LESRCS += cursor.c
+LESRCS += ft_prompt.c
+LESRCS += history.c
+LESRCS += keys.c
+LESRCS += keys2.c
+LESRCS += move_word.c
+LESRCS += signals.c
+LESRCS += term_init.c
+LESRCS += utils.c
 
+## LEXER ##
+
+LEXSRCS += buffer.c
+LEXSRCS += control.c
+LEXSRCS += digit.c
+LEXSRCS += equ.c
+LEXSRCS += exp.c
+LEXSRCS += flag.c
+LEXSRCS += heredoc.c
+LEXSRCS += inhib.c
+LEXSRCS += lexer.c
+LEXSRCS += newline.c
+LEXSRCS += quote.c
+LEXSRCS += redir.c
+LEXSRCS += token.c
+LEXSRCS += tools.c
+LEXSRCS += type.c
+LEXSRCS += word.c
+LEXSRCS += state/control.c
+LEXSRCS += state/exp.c
+LEXSRCS += state/flag.c
+LEXSRCS += state/hdbody.c
+LEXSRCS += state/ionumber.c
+LEXSRCS += state/redir.c
+LEXSRCS += state/start.c
+LEXSRCS += state/word.c
+
+## PARSER ##
+
+PARSRCS += amp.c
+PARSRCS += and_or.c
+PARSRCS += args_tab.c
+PARSRCS += assign.c
+PARSRCS += cmd.c
+PARSRCS += init.c
+PARSRCS += lst_to_tab.c
+PARSRCS += newline.c
+PARSRCS += parser.c
+PARSRCS += redir.c
+PARSRCS += word.c
 
 ## EVAL ##
-SRCS += launcher.c
-SRCS += pipe.c
-SRCS += exec_type.c
-SRCS += tools_env.c
-SRCS += setenv.c
-SRCS += init_shell.c
-SRCS += cleaner.c
-SRCS += building_struct.c
-SRCS += leveling.c
-SRCS +=
 
+EVALSRCS += launcher.c
+EVALSRCS += pipe.c
+EVALSRCS += exec_type.c
+EVALSRCS += tools_env.c
+EVALSRCS += setenv.c
+EVALSRCS += init_shell.c
+EVALSRCS += cleaner.c
+EVALSRCS += building_struct.c
+EVALSRCS += leveling.c
 
+## DEBUG ##
 
+DBSRCS += lexer.c
+DBSRCS += parser.c
 
-vpath %.c srcs
-vpath %.c srcs/line_edition
-vpath %.c srcs/lexer
-vpath %.c srcs/parser
-vpath %.c srcs/evaluator
-vpath %.c srcs/debug
+SRC += main.c
+SRC += $(addprefix line_edition/,$(LESRCS))
+SRC += $(addprefix lexer/,$(LEXSRCS))
+SRC += $(addprefix parser/,$(PARSRCS))
+SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix debug/,$(DBSRCS))
+
+OPATHS += $(OPATH)line_edition
+OPATHS += $(OPATH)lexer
+OPATHS += $(OPATH)lexer/state
+OPATHS += $(OPATH)parser
+OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)debug
+
 vpath %.h includes
 
 CC = clang
@@ -71,8 +109,7 @@ CLEANUP = rm -rf
 
 DSYN = $(NAMEDB).dSYM
 
-
-PATHO = objs/
+OPATH = objs/
 SPATH = srcs/
 IPATH = includes/
 LPATH = libft/
@@ -80,25 +117,27 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -Wall -Werror -Wextra
+#WFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address
 
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
-OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
+SRCS = $(addprefix $(SPATH),$(SRC))
 
+OBJS = $(addprefix $(OPATH),$(OBJ))
 
 all : $(NAME)
 
-$(NAME) : $(LIB) $(PATHO) $(OBJS)
-	$(CC) -g -fsanitize=address -lncurses -o $@ $(OBJS) $<
+$(NAME) : $(LIB) $(OPATHS) $(OBJS)
+	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-$(OBJS) : $(PATHO)%.o : %.c
-	$(COMPILE) -g $(CFLAGS) $< -o $@
+$(OBJS) : $(OPATH)%.o : $(SPATH)%.c
+	$(COMPILE) $(CFLAGS) $< -o $@
 
-$(PATHO) :
+$(OPATHS) :
 	$(MKDIR) $@
 
 $(LIB) :
@@ -107,21 +146,20 @@ $(LIB) :
 $(LIBDB) :
 	$(MAKE) -C $(LPATH) debug
 
-
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ srcs/*.c srcs/**/*.c
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ $(SRCS)
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
 
 clean :
 	$(MAKE) -C $(LPATH) clean
 	$(CLEANUP) $(OBJS)
-	$(CLEANUP) $(PATHO)
+	$(CLEANUP) $(OPATH)
 	$(CLEANUP) $(DSYN)
 	printf "$(RED)Directory $(NAME) is clean\n$(NC)"
 
 fclean : clean
 	$(MAKE) -C $(LPATH) fclean
-	$(CLEANUP) $(PATHO)
+	$(CLEANUP) $(OPATH)
 	$(CLEANUP) $(NAME)
 	$(CLEANUP) $(NAMEDB)
 	printf "$(RED)$(NAME) is delete\n$(NC)"
@@ -129,10 +167,10 @@ fclean : clean
 re : fclean all
 
 norme:
-	norminette srcs
-	norminette includes
-	norminette libft/srcs
-	norminette libft/includes
+	norminette $(SPATH)
+	norminette $(IPATH)
+	norminette $(LPATH)/$(SPATH)
+	norminette $(LPATH)/$(IPATH)
 
 .PHONY: all clean fclean norme re debug
 .SILENT:
