@@ -77,7 +77,7 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt)
+char	*ft_prompt(char *prompt, t_dlist **lst)
 {
 	char		*ret;
 	t_cs_line	*cs;
@@ -98,7 +98,7 @@ char	*ft_prompt(char *prompt)
 		ft_putstr_fd("\n", cs->tty);
 		ret = ft_strdup(cs->input);
 		update_history(hs);
-        ft_dlstdel(&hs);
+    ft_dlstdel(&hs);
 	}
 	return (((cs && cs->sig_int) || !ret ? ft_strnew(0) : ret));
 }
