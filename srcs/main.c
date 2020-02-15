@@ -7,6 +7,7 @@
 #include "parser.h"
 #include "line_edition.h"
 #include "exec.h"
+#include "sh.h"
 
 void	print_debug(t_list *elem);
 
@@ -52,6 +53,7 @@ int		main(int ac, char **av, char **env)
 	{
 		if (ft_strequ("exit", line))
 			exit(0);
+		set_signal_ign();
 		init_lexer(lexer);
 		ft_lexer(line, lexer);
 		ft_lstiter(lexer->token_lst, print_debug);
