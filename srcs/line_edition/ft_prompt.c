@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 17:01:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 18:45:13 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/15 16:31:57 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,33 +77,28 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt, t_dlist **lst)
+char	*ft_prompt(char *prompt)
 {
 	char		*ret;
 	t_cs_line	*cs;
+	t_dlist		*hs;
 
 	ret = NULL;
 	cs = NULL;
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{
+		hs = get_history();
 		cs->sig_int = 0;
 		get_cs_line_position(&cs->min_col, &cs->min_row);
 		cs->history = ft_dlstnew(cs->input, 1);
-		ft_dlstaddtail(lst, cs->history);
+		ft_dlstaddtail(&hs, cs->history);
 		read_input();
 		init_signals();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
-		ret = cs->input;
-		if (cs->sig_int == 0 && ret && ret[0])
-			cs->history->data = ft_strdup(ret);
-		else if (cs->sig_int == 0)
-		{
-		//	while (cs && cs->history && cs->history->next)
-		//		cs->history = cs->history->next;
-			ft_dlstdelone(&cs->history);
-			ret = NULL;
-		}
+		ret = ft_strdup(cs->input);
+		update_history(hs);
+        ft_dlstdel(&hs);
 	}
 	return (((cs && cs->sig_int) || !ret ? ft_strnew(0) : ret));
 }
