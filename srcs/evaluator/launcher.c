@@ -13,6 +13,25 @@ void	ex(char *s)
 }
 
 #include <signal.h>
+void	sig(int i)
+{
+	printf("sig detect = [%d]\n", i);
+}
+
+#include "sh.h"
+void	signal_debug_printf(void)
+{
+	signal(SIGHUP, sig);
+	signal(SIGINT, sig);
+	signal(SIGQUIT, sig);
+	signal(SIGPIPE, sig);
+	signal(SIGCHLD, sig);
+	signal(SIGTSTP, SIG_DFL);
+	signal(SIGCONT, sig);
+	signal(SIGTTIN, sig);
+	signal(SIGTTOU, sig);
+}
+
 void	set_signal_child(void)
 {
 	signal(SIGHUP, SIG_DFL);
@@ -153,7 +172,7 @@ int		run_process(t_cfg *shell, t_job *job, t_process *process)
 	int debug = process_type(job->var, process); //return (127 si pas trouver)
 	if (debug == 127) //pour eviter de lancer vide pour le moment
 		return (1);
-	//printf("process_type retour = [%d]\n", debug);
+//	printf("process_type retour = [%d]\n", debug);
 	return (fork_process(job, process));
 }
 
@@ -169,7 +188,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	//https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
 
 	printf("\t[RUN JOB]  PID 21SH = [%d]\n", shell->pid);
-
+	
 	while (process)
 	{
 		routine_set_pipe(process, &job->pipe);

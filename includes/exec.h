@@ -19,7 +19,7 @@
 # define LOCATED 0x0032		/* # define UNFOUND ? */
 
 # define ENV 1
-# define LOCAL 2
+# define LOCAL 2 /* usesless si local intern a sa propre list ? */
 # define TMP 4
 
 # define RUNNING 0x001  	/* # define PENDING */

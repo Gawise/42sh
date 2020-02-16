@@ -2,14 +2,14 @@
 #include "libft.h"
 
 
-int			ft_lstis(t_list *lst, int (*f)(t_list *elem)) // mettre dans lib
+int			ft_lsthave(t_list *lst, int (*f)(t_list *elem)) // mettre dans lib
 {
 	int		nb;
 
 	nb = 0;
 	while (lst)
 	{
-		nb = f(lst);
+		nb += f(lst);
 		lst = lst->next;
 	}
 	return (nb);
@@ -39,8 +39,9 @@ t_process	*find_process_by_pid(t_list *lst, pid_t child)
 	return (NULL);
 }
 
-int		aplylyse_wstatus(t_process *p, int wstatus)
+int		aplylyse_wstatus(t_job *j, t_process *p, int wstatus)
 {
+	// pour sigint ou sigtstp definir directement dans job ou parcourir la list pour update
 	if (WIFEXITED(wstatus))
 	{
 		p->status = SUCCES;
@@ -53,7 +54,7 @@ int		aplylyse_wstatus(t_process *p, int wstatus)
 	}
 	else if (WIFSTOPPED(wstatus))
 	{
-		p->status = FAILED;
+		p->status = STOPPED ; // anakyser en fonction du signal
 		p->retour = WSTOPSIG(wstatus);
 	}
 	return (0);
@@ -76,18 +77,21 @@ int		wait_process(t_job *job)
 	int			wstatus;
 
 	printf("\t[WAIT PROCESS]\t pgid = [%d]\n", job->pgid);
-//	signal(SIGCHLD, test); //besoin de voir la gestion des signaux sur exec
-	while (ft_lstis(job->process, has_running))
+	while (ft_lsthave(job->process, has_running))
 	{
 		wstatus = 0;
+		printf("dans wait\n");
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
 			ex("[WAIT_PROCESS] error waitpid");
-		update_process(job->process, pid_child, wstatus);
+		update_process(job, job->process, pid_child, wstatus);
 	}
+
+
 	/* DEBUG  */
 		t_process *process;
 		t_list *j = job->process;
+		printf("\n\n");
 		while (j)
 		{
 			process = j->data;
