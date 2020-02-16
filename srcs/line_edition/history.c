@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 20:32:03 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/15 16:16:16 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/16 17:39:30 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	update_history(t_dlist *hs)
 	t_cs_line	*cs;
 
 	path = ft_strjoin(2, getenv("HOME"), "/");
-    tmp = path;
-    path = ft_strjoin(2, path, ".42sh_history");
+	tmp = path;
+	path = ft_strjoin(2, path, ".42sh_history");
 	ft_strdel(&tmp);
 	cs = cs_master(NULL, 0);
 	if (hs && cs && path && cs->input && cs->input[0]
-		&& (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
+			&& (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
 	{
 		ft_putstr_fd(cs->input, fd);
 		ft_putstr_fd("\n", fd);
@@ -68,9 +68,12 @@ void	history_up(t_cs_line *cs)
 	{
 		if (cs->history->prev && cs->history->prev->data)
 		{
+			ft_clear(1);
+			cs->clipb = (t_point){-1, -1};
 			cs->history = cs->history->prev;
 			cs->input = (char *)cs->history->data;
 			cs->line_col = ft_strlen(cs->input);
+			set_scroll(cs);
 			print_cmdline(cs);
 		}
 	}
@@ -78,22 +81,25 @@ void	history_up(t_cs_line *cs)
 
 void    history_down(t_cs_line *cs)
 {
-    if (cs)
-    {
-        if (cs->history->next && cs->history->next->data)
-        {
-            cs->history = cs->history->next;
-            cs->input = (char *)cs->history->data;
-            cs->line_col = ft_strlen(cs->input);
-            print_cmdline(cs);
-        }
-    }
+	if (cs)
+	{
+		if (cs->history->next && cs->history->next->data)
+		{
+			ft_clear(1);
+			cs->clipb = (t_point){-1, -1};
+			cs->history = cs->history->next;
+			cs->input = (char *)cs->history->data;
+			cs->line_col = ft_strlen(cs->input);
+			set_scroll(cs);
+			print_cmdline(cs);
+		}
+	}
 }
 
 t_dlist *init_history(void)
 {
-    t_dlist *hist;
+	t_dlist *hist;
 
-    hist = get_history();
-    return (hist);
+	hist = get_history();
+	return (hist);
 }

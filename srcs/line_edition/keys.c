@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 15:52:18 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/16 17:41:30 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,48 +20,26 @@
 t_point	trim_input(t_cs_line *cs)
 {
 	t_point z;
+	t_point	i;
 	int		line;
-	int		i;
-	int		i3;
-	int		ew;
-	char	*more;
-	char	*tmp;
 
-	z.x = 0;
-	z.y = (int)ft_strlen(cs->input);
-	if (cs)
+	z = (t_point){0, 0};
+	if (cs && cs->input && (z.y = (int)ft_strlen(cs->input)) >= 0)
 	{
-		i3 = 0;
-		ew = 0;
-		i = 0;
+		i = (t_point){0, 0};
 		line = 0;
-		tmp = cs->input;
-		while (tmp[i])
+		while (cs->input[i.x])
 		{
-			i3++;
-			if (i3 == cs->screen.x || (line == 0 && i3
-						+ cs->min_col >= cs->screen.x - 1))
-			{
-				i3 = 0;
-				line++;
-			}
-			if ((cs->scroll > 0 && line > cs->scroll && ew == 0))
-			{
-				more = "^";
-				ft_putstr_fd("\e[0;31m\e[47m", cs->tty);
-				ft_putstr_fd("\e[1m\e[4m\e[7m", cs->tty);
-				ft_putstr_fd(more, cs->tty);
-				ft_putstr_fd("\e[0m", cs->tty);
-				ft_putstr_fd("\n", cs->tty);
-				ew = 1;
-				z.x = i + 1;
-			}
-			if (line - cs->scroll + cs->min_row + 1 > cs->screen.y)
-			{
-				z.y = i - 1;
+			i.y++;
+			if (((line == 0 && i.y + cs->min_col >= cs->screen.x - 1)
+				|| i.y == cs->screen.x) && ++line)
+				i.y = 0;
+			if (cs->scroll > 0 && line > cs->scroll && !z.x && (z.x = i.x + 1))
+				ft_putstr_fd("\e[0;31m\e[47m\e[1m\e[4m\e[7m^\e[0m\n", cs->tty);
+			if (line - cs->scroll + cs->min_row + 1 > cs->screen.y
+				&& (z.y = i.x - 1) >= 0)
 				break ;
-			}
-			i++;
+			i.x++;
 		}
 	}
 	return (z);
@@ -82,27 +60,51 @@ void	print_prompt(t_cs_line *cs)
 	}
 }
 
+void	cmdline_printer(t_cs_line *cs, t_point start, t_point end)
+{
+	char	oc;
+
+	if (cs)
+	{
+		oc = cs->input[start.y];
+		cs->input[start.y] = '\0';
+		ft_putstr_fd(&cs->input[start.x], cs->tty);
+		cs->input[start.y] = oc;
+		if (cs->clipb.x != -1 && cs->clipb.y != -1 && cs->clipb.x != cs->clipb.y)
+			tputs(tgetstr("mr", NULL), 1, &my_putchar);
+		oc = cs->input[end.y];
+		cs->input[end.y] = '\0';
+		ft_putstr_fd(&cs->input[start.y], cs->tty);
+		cs->input[end.y] = oc;
+		if (cs->clipb.x != -1 && cs->clipb.y != -1 && cs->clipb.x != cs->clipb.y)
+			tputs(tgetstr("me", NULL), 1, &my_putchar);
+		oc = cs->input[end.x];
+		cs->input[end.x] = '\0';
+		ft_putstr_fd(&cs->input[end.y], cs->tty);
+		cs->input[end.x] = oc;
+	}
+}
+
 void	print_cmdline(t_cs_line *cs)
 {
-	int			z;
-	int			start;
-	int			end;
-	char		oc;
+	t_point		z;
+	t_point		start;
+	t_point		end;
 
 	ft_clear(1);
 	if (cs && cs->input && cs->line_col >= 0)
 	{
 		print_prompt(cs);
-		z = 0;
-		t_point z = trim_input(cs);
-		start = z.x;
-		end = z.y;
-		if (end < (int)ft_strlen(cs->input))
-			end++;
-		oc = cs->input[end];
-		cs->input[end] = '\0';
-		ft_putstr_fd(&cs->input[start], cs->tty);
-		cs->input[end] = oc;
+		z = trim_input(cs);
+		start.x = z.x;
+		end.x = z.y;
+		if (end.x < (int)ft_strlen(cs->input))
+			end.x++;
+		start.y = (cs->clipb.x >= start.x && cs->clipb.x <= end.x)
+			? cs->clipb.x : start.x;
+		end.y = (cs->clipb.y >= start.x && cs->clipb.y <= end.x)
+			? cs->clipb.y : end.x;
+		cmdline_printer(cs, start, end);
 		move_cs(&cs);
 	}
 }
@@ -115,9 +117,8 @@ void	join_input(t_cs_line *cs, char *input)
 
 	if (cs && input)
 	{
-		if ((int)ft_strlen(cs->input) == cs->line_col)
+		if ((int)ft_strlen(cs->input) == cs->line_col && (tmp = cs->input))
 		{
-			tmp = cs->input;
 			cs->input = ft_strjoin(2, cs->input, input);
 			ft_strdel(&tmp);
 		}
@@ -139,105 +140,73 @@ void	join_input(t_cs_line *cs, char *input)
 
 void	line_master(t_cs_line *cs, char *input)
 {
-	int	i;
-	int	row_prompt;
-	int	scroll_add;
-
 	if (input && cs)
 	{
 		join_input(cs, input);
 		cs->line_col += (int)ft_strlen(input);
 		cs->max_scroll = (int)ft_strlen(cs->input) / cs->screen.x
 			- (cs->screen.y - cs->min_row);
-		i = 0;
-		cs->cr = get_line(cs);
-		row_prompt = PROMPT_SIZE / cs->screen.x;
-		if (cs->cr + cs->min_row >= cs->screen.y && cs->min_row > row_prompt)
-		{
-			scroll_add = cs->cr + cs->min_row - cs->screen.y + 1;
-			while (cs->min_row - scroll_add < 0)
-				scroll_add--;
-			cs->min_row -= scroll_add;
-			tputs(tgoto(tgetstr("SF", NULL), 0, scroll_add), 1, &my_putchar);
-		}
-		if (cs->cr - cs->scroll + cs->min_row >= cs->screen.y)
-			cs->scroll = cs->cr - (cs->screen.y - cs->min_row - 1);
-		if (cs->scroll < 0)
-			cs->scroll = 0;
+		set_scroll(cs);
 		cs->history->data = cs->input;
+		cs->clipb = (t_point){-1, -1};
 	}
 }
 
 t_point	cs_pos(t_cs_line *cs)
 {
-	t_point	ew;
-	int i = 0;
-	int cr = 0;
-	int i3 = 0;
+	t_point	pos;
+	t_point	i;
+	int		cr;
 
-	ew.x = 0;
-	ew.y = 0;
+	i = (t_point){0, 0};
+	pos = (t_point){0, 0};
+	cr = 0;
 	if (cs && cs->input && cs->input[0])
 	{
-		if (cs->screen.x > (int)ft_strlen(cs->prompt))
-			cs->min_col = (int)ft_strlen(cs->prompt);
-		else
+		cs->min_col = (int)ft_strlen(cs->prompt);
+		if (cs->screen.x <= (int)ft_strlen(cs->prompt))
 			cs->min_col = (cs->screen.x > 3 ? 2 : 0);
-		while (i < cs->line_col || (i == cs->line_col && cs->scroll > 0
+		while (i.x < cs->line_col || (i.x == cs->line_col && cs->scroll > 0
 					&& cs->screen.x > 2))
 		{
-			if (cs->input[i] == '\n' || i3 == cs->screen.x
-					|| (cr == 0 && i3 + cs->min_col >= cs->screen.x))
-			{
-				i3 = 0;
-				cr++;
-			}
-			i3++;
-			i++;
+			if ((cs->input[i.x] == '\n' || i.y == cs->screen.x
+				|| (cr == 0 && i.y + cs->min_col >= cs->screen.x)) && ++cr)
+				i.y = 0;
+			i = (t_point){i.x + 1, i.y + 1};
 		}
-		if (i3 > cs->line_col)
-			i3 = cs->line_col;
-		ew.x = i3 + (cr == 0 ? cs->min_col : 0);
-		ew.y = cr - cs->scroll + cs->min_row + (cs->screen.x > 2 ? 0 : 1);
+		i.y = (i.y > cs->line_col ? cs->line_col : i.y);
+		pos.x = i.y + (cr == 0 ? cs->min_col : 0);
+		pos.y = cr - cs->scroll + cs->min_row + (cs->screen.x > 2 ? 0 : 1);
 	}
-	return (ew);
+	return (pos);
 }
 
 int		get_line(t_cs_line *cs)
 {
-	int i = 0;
-	int cr = 0;
-	int i3 = 0;
-	int i4 = cs->line_col;
-	int	cr2 = 0;
+	t_point	i;
+	t_point	cr;
 
 	if (cs->input && cs->input[0])
 	{
-		while (cs->input[i4] && cr == 0)
+		cr = (t_point){0, 0};
+		i = (t_point){cs->line_col, 0};
+		while (cs->input[i.x] && cr.x == 0 && i.y++ >= 0)
 		{
-			i3++;
-			if (cs->input[i4] == '\n' || i3 == cs->screen.x)
-			{
-				i3 = 0;
-				cr++;
-			}
-			i4++;
+			if ((cs->input[i.x] == '\n' || i.y == cs->screen.x) && ++cr.x)
+				i.y = 0;
+			i.x++;
 		}
-		i3 = 0;
-		cr2 = cr;
-		while (i <= cs->line_col)
+		i = (t_point){0, 0};
+		cr.y = cr.x;
+		while (i.x <= cs->line_col && i.y++ >= 0)
 		{
-			i3++;
-			if (cs->input[i] == '\n' || i3 == cs->screen.x
-					|| (cr2 == cr && i3 + cs->min_col >= cs->screen.x))
-			{
-				i3 = 0;
-				cr++;
-			}
-			i++;
+			if (((cr.y == cr.x && i.y + cs->min_col >= cs->screen.x)
+				|| cs->input[i.x] == '\n' || i.y == cs->screen.x) && ++cr.x)
+				i.y = 0;
+			i.x++;
 		}
 	}
-	return (cr);
+	return (cr.x);
 }
 
 void	arrow_up(t_cs_line *cs)
