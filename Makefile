@@ -25,7 +25,7 @@ LESRCS += move_word.c
 LESRCS += signals.c
 LESRCS += term_init.c
 LESRCS += utils.c
-
+LESRCS += clipboard.c
 ## LEXER ##
 
 LEXSRCS += buffer.c

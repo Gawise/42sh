@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 22:08:56 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/02/16 18:24:52 by ambelghi         ###   ########.fr       */
 /*   Updated: 2020/02/13 15:53:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -104,7 +104,7 @@ int		term_check(struct termios *new_term, struct termios *old_term, int tty)
 int		term_init(int init, char *prompt)
 {
 	struct termios			new_term;
-	static struct termios	old_term = {0};
+	static struct termios	old_term;
 	int						tty;
 
 	tty = ttyslot();
