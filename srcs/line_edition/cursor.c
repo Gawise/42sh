@@ -4,7 +4,6 @@
 /*   cursor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-
 /*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
 /*   Updated: 2020/02/17 14:03:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */

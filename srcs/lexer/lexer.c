@@ -74,18 +74,31 @@ int	ft_lexer(char *str, t_lexer *lexer)
 {
 	char	c;
 	int	(*token_builder[8][11])(t_lexer *, char);
+	t_lexer_flag	flag;
 
 	lexer->src = str;
 	lexer->curr = str;
 	init_lexer_states(token_builder);
 	while ((c = l_get_char(lexer)))
 	{
+		flag = l_get_last_flag(lexer);
 		if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 			lex_err(lexer, c);
 		if (c == '\n')
-			ft_printf("->\t%s\t%s\n\n", "\\n", get_state_str(lexer));
+			ft_printf("->\t%s\t%20s\t%s\n\n",
+					"\\n",
+					get_state_str(lexer),
+					get_flag_name(flag));
 		else
-			ft_printf("->\t%c\t%s\n", c, get_state_str(lexer));
+			ft_printf("->\t%c\t%20s\t%s\n",
+					c,
+					get_state_str(lexer),
+					get_flag_name(flag));
+	}
+	if (l_get_last_flag(lexer))
+	{
+		printf("chaine non-terminee ----> ft_prompt\n");
+		exit(1);
 	}
 	if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 		lex_err(lexer, c);

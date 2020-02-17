@@ -76,14 +76,14 @@ typedef enum			e_lexer_flag
 
 typedef enum			e_lexer_state
 {
-	S_TK_START, // Debut de token	0
-	S_HD_BODY, // Body de Heredoc	1
-	S_AMP_PIPE, // Token avec & | ;	2
-	S_TK_REDIR, // Token avec < >	3
-	S_EXP, // Expansion en cours	4
-	S_TK_WORD, // Token word	5
-	S_IO_NUMBER, // io_number token	6
-	S_FLAG // Flag en cours		7
+	S_TK_START, // Debut de token		0
+	S_HD_BODY, // Body de Heredoc		1
+	S_AMP_PIPE, // Token avec & | ;		2
+	S_TK_REDIR, // Token avec < >		3
+	S_EXP, // Expansion en cours		4
+	S_TK_WORD, // Token word		5
+	S_IO_NUMBER, // io_number token		6
+	S_FLAG // Flag en cours			7
 }				t_lexer_state;
 
 
@@ -203,9 +203,9 @@ typedef struct	s_cs_line
     int             sig_int;
     int             cr;
     char            *prompt;
-	char			*clipboard;
+	  char			*clipboard;
     t_dlist         *history;
-	t_point			clipb; //start et end de la selection
+	  t_point			clipb; //start et end de la selection
 }				t_cs_line;
 
 

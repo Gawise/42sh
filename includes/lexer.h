@@ -95,6 +95,7 @@ int	l_hd_body_flush(t_lexer *lexer, char c);
 void	print_debug(t_list *elem);
 void	print_flag_queue(t_list *elem);
 char	*get_state_str(t_lexer *lexer);
+char	*get_flag_name(t_lexer_flag flag);
 
 /*
 **	tools.c

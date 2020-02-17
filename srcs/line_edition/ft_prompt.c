@@ -77,7 +77,7 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt)
+char	*ft_prompt(char *prompt, t_dlist **lst)
 {
 	char		*ret;
 	t_cs_line	*cs;

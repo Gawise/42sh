@@ -48,7 +48,8 @@ int		main(int ac, char **av, char **env)
 	(void)av;
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
-	while ((line = ft_prompt("21sh-1.0$ ")))
+	hist = init_history();
+	while ((line = ft_prompt("21sh-1.0$ ", &hist)))
 	{
 		if (ft_strequ("exit", line))
 			exit(0);
