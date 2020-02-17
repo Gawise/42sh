@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:47:25 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 18:57:18 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 23:24:13 by ambelghi         ###   ########.fr       */
 /*   Updated: 2020/02/11 21:06:53 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -84,7 +84,7 @@ void			end_key(t_cs_line *cs);
 void			maj_arrow_down(t_cs_line *cs);
 void			maj_arrow_up(t_cs_line *cs);
 int				get_line(t_cs_line *cs);
-char			*ft_prompt(char *prompt, t_dlist **lst);
+char			*ft_prompt(char *prompt);
 int				get_col(t_cs_line *cs);
 t_point			cs_pos(t_cs_line *cs);
 void			ft_utoa(char **str);
