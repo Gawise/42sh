@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:47:25 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 15:54:00 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/16 18:57:18 by ambelghi         ###   ########.fr       */
 /*   Updated: 2020/02/11 21:06:53 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -95,5 +95,17 @@ void			history_down(t_cs_line *cs);
 t_dlist			*init_history(void);
 void			mv_word_left(t_cs_line *cs);
 void			mv_word_right(t_cs_line *cs);
+void			update_history(t_dlist *hs);
+t_dlist			*get_history(void);
+void			clip_arrow_right(t_cs_line *cs);
+void			clip_arrow_left(t_cs_line *cs);
+void			clip_arrow_up(t_cs_line *cs);
+void			set_scroll(t_cs_line *cs);
+void			cmdline_printer(t_cs_line *cs, t_point start, t_point end);
+void			clip_arrow_down(t_cs_line *cs);
+void			copy_clip(t_cs_line *cs);
+void			paste_clip(t_cs_line *cs);
+void			cut_clip(t_cs_line *cs);
+
 
 #endif

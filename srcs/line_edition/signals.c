@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/13 15:53:24 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 22:28:31 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void	size_handler(int sig)
 		ft_clear(1);
 		cs_set();
 		int cr = get_line(cs);
-		if (cs->screen.x > (int)ft_strlen(cs->prompt))
+		if (cs->screen.x > (int)ft_strlen(cs->prompt) + (cs->scroll ? 1 : 0))
             cs->min_col = (int)ft_strlen(cs->prompt);
         else
-            cs->min_col = (cs->screen.x > 3 ? 2 : 0);
+            cs->min_col = 0;//(cs->scroll ? 0 : cs->screen.x - 1);
 		cs->min_row = 0;
 		cr = get_line(cs);
 		cs->cr = cr;
@@ -66,13 +66,12 @@ void	sig_handler(int sig)
 
 	if (sig >= 0 && (cs = cs_master(NULL, 0)))
 	{
-	//	ft_clear(0);
 		term_init(0, NULL);
-		cs->line_col = ft_strlen(cs->input);
-		move_cs(&cs);
-		while (cs && cs->history && cs->history->next)
-			cs->history = cs->history->next;
-		ft_dlstdelone(&cs->history);
+		ft_clear(1);
+		ft_putstr_fd(cs->input, cs->tty);
+		ft_strdel(&cs->input);
+		if (cs->history)
+			cs->history->data = NULL;
 		cs->sig_int = 1;
 	}
 }

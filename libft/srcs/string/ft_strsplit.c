@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:52:54 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 18:52:54 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/02/17 22:52:48 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 static int	parser(char const *s, char *c)
 {
-	while (ft_strchr(c, *s) && *s)
+	while (s && *s && ft_strchr(c, *s))
 		s++;
-	if (*s == '\0')
+	if (!s || *s == '\0')
 		return (0);
-	while (!ft_strchr(c, *s) && *s)
+	while (s && *s && !ft_strchr(c, *s))
 		s++;
 	return (1 + parser(s, c));
 }

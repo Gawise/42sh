@@ -121,7 +121,6 @@ char	*get_state_str(t_lexer *lexer)
 	else if (lexer->state == S_IO_NUMBER)
 		return (ft_strdup("S_IO_NUMBER"));
 	else if (lexer->state == S_FLAG)
-
 		return (ft_strdup("S_FLAG"));
 	return (NULL);
 }

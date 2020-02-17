@@ -59,8 +59,6 @@ int		main(int ac, char **av, char **env)
 		ft_lstiter(lexer->token_lst, print_debug);
 		ft_parser(lexer, &parser);
 		ft_eval(&shell, parser.table);
-
-		//ft_printf("$> ");
 	}
 	ft_dlstdel(&hist);
 	return (0);
