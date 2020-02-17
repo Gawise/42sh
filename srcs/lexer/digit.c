@@ -15,5 +15,6 @@ int	l_build_digit(t_lexer *lexer, char c)
 	if (lexer->state == S_TK_START && !l_create_token(lexer))
 		return (0);
 	lexer->state = S_IO_NUMBER;
+	lexer->curr_token->type = IO_NUMBER;
 	return (1);
 }

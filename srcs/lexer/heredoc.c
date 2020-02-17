@@ -4,9 +4,14 @@
 
 int		l_create_flag_queue(t_lexer *lexer)
 {
+	if (!(lexer->curr_flag = (t_lexer_flag *)ft_memalloc(sizeof(t_lexer_flag))))
+	{
+		ft_printf("erreur malloc create_flag_queue 1\n");
+		exit(1);
+	}
 	if (!ft_lstpush(&lexer->flag_queue, lexer->curr_flag, sizeof(t_lexer_flag)))
 	{
-		ft_printf("erreur malloc create_flag_queue\n");
+		ft_printf("erreur malloc create_flag_queue 2\n");
 		exit(1);
 	}
 	return (1);
