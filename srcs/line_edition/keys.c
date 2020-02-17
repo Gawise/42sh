@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 17:41:30 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 20:45:06 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,19 @@ t_point	trim_input(t_cs_line *cs)
 
 void	print_prompt(t_cs_line *cs)
 {
+	int	len;
+
 	if (cs)
 	{
 		tputs(tgoto(tgetstr("cm", NULL), 0, cs->min_row),
 				1, &my_putchar);
-		if (cs->screen.x <= (int)ft_strlen(cs->prompt))
-			ft_putstr_fd("$ ", cs->tty);
-		else if (cs->screen.x == 1)
-			ft_putstr_fd("$", cs->tty);
+		if (cs->screen.x <= (len = (int)ft_strlen(cs->prompt) + (cs->scroll ? 1 : 0)))
+		{
+			len = len - cs->screen.x;
+			if (cs->scroll > 0)
+				ft_putstr_fd(&cs->prompt[len], cs->tty);
+			//ft_putstr_fd((cs->scroll && cs->screen.x == 1 ? "$" : "$ "), cs->tty);
+		}
 		else
 			ft_putstr_fd(cs->prompt, cs->tty);
 	}
@@ -164,10 +169,10 @@ t_point	cs_pos(t_cs_line *cs)
 	if (cs && cs->input && cs->input[0])
 	{
 		cs->min_col = (int)ft_strlen(cs->prompt);
-		if (cs->screen.x <= (int)ft_strlen(cs->prompt))
-			cs->min_col = (cs->screen.x > 3 ? 2 : 0);
+		if (cs->screen.x <= (int)ft_strlen(cs->prompt) + (cs->scroll ? 1 : 0))
+			cs->min_col = 0;
 		while (i.x < cs->line_col || (i.x == cs->line_col && cs->scroll > 0
-					&& cs->screen.x > 2))
+					&& cs->screen.x > 0))
 		{
 			if ((cs->input[i.x] == '\n' || i.y == cs->screen.x
 				|| (cr == 0 && i.y + cs->min_col >= cs->screen.x)) && ++cr)
@@ -176,7 +181,8 @@ t_point	cs_pos(t_cs_line *cs)
 		}
 		i.y = (i.y > cs->line_col ? cs->line_col : i.y);
 		pos.x = i.y + (cr == 0 ? cs->min_col : 0);
-		pos.y = cr - cs->scroll + cs->min_row + (cs->screen.x > 2 ? 0 : 1);
+		pos.y = cr - cs->scroll + cs->min_row
+				- (cs->scroll && cs->screen.x == 1 ? 1 : 0);
 	}
 	return (pos);
 }

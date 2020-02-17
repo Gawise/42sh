@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 
 /*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 18:24:23 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:03:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.history = NULL;
 		cs.clipb.x = -1;
 		cs.clipb.y = -1;
+		cs.clipboard = NULL;
 	}
 	return (&cs);
 }

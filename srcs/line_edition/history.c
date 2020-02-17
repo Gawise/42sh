@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 20:32:03 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 17:39:30 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 15:26:32 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	history_up(t_cs_line *cs)
 			cs->history = cs->history->prev;
 			cs->input = (char *)cs->history->data;
 			cs->line_col = ft_strlen(cs->input);
+			cs->scroll = 0;
 			set_scroll(cs);
 			print_cmdline(cs);
 		}
@@ -90,6 +91,7 @@ void    history_down(t_cs_line *cs)
 			cs->history = cs->history->next;
 			cs->input = (char *)cs->history->data;
 			cs->line_col = ft_strlen(cs->input);
+			cs->scroll = 0;
 			set_scroll(cs);
 			print_cmdline(cs);
 		}

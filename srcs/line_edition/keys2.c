@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 12:58:26 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 19:03:52 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 19:48:03 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 
 void	set_scroll(t_cs_line *cs)
 {
-	int	row_prompt;
+	//int	row_prompt;
 	int	scroll_add;
 
 	if (cs)
 	{
 		cs->cr = get_line(cs);
-		row_prompt = ft_strlen(cs->prompt) / cs->screen.x;
-		if (cs->cr + cs->min_row >= cs->screen.y && cs->min_row > row_prompt)
+	//	row_prompt = ft_strlen(cs->prompt) / cs->screen.x;
+		if (cs->cr + cs->min_row >= cs->screen.y && cs->min_row > (cs->scroll ? 1 : 0))
 		{
 			scroll_add = cs->cr + cs->min_row - cs->screen.y + 1;
 			while (cs->min_row - scroll_add < 0)

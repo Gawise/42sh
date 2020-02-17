@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 19:22:49 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 19:00:32 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:36:20 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void    clip_arrow_right(t_cs_line *cs)
 {
 
-	if (cs)
+	if (cs && cs->input && cs->input[0])
 	{
 		if (cs->line_col < (int)ft_strlen(cs->input))
 			cs->line_col += 1;
@@ -37,7 +37,7 @@ void    clip_arrow_right(t_cs_line *cs)
 void    clip_arrow_left(t_cs_line *cs)
 {
 
-	if (cs)
+	if (cs && cs->input && cs->input[0])
 	{
 		if (cs->line_col > 0)
 			cs->line_col -= 1;
@@ -56,7 +56,7 @@ void    clip_arrow_left(t_cs_line *cs)
 void    clip_arrow_up(t_cs_line *cs)
 {
 
-	if (cs)
+	if (cs && cs->input && cs->input[0])
 	{
 		if (cs->line_col > cs->screen.x)
 		{
@@ -87,7 +87,7 @@ void    clip_arrow_down(t_cs_line *cs)
 {
 	int scroll;
 
-	if (cs)
+	if (cs && cs->input && cs->input[0])
 	{
 		scroll = cs->scroll;
 		if (cs->line_col + cs->screen.x <= (int)ft_strlen(cs->input))
@@ -103,7 +103,7 @@ void    clip_arrow_down(t_cs_line *cs)
 		if (cs->cr - cs->scroll + cs->min_row >= cs->screen.y)
 		{
 			cs->scroll = cs->scroll = cs->cr - (cs->screen.y - (cs->min_row
-						+ (cs->screen.x > 2 ? 0 : 1) + (cs->scroll > 0 ? 1 : 0)) - 1);
+				+ (cs->screen.x > 2 ? 0 : 1) + (cs->scroll > 0 ? 1 : 0)) - 1);
 		}
 		if (cs->scroll < 0)
 			cs->scroll = 0;
@@ -115,10 +115,10 @@ void	copy_clip(t_cs_line *cs)
 {
 	if (cs)
 	{
-		if (cs->clipb.x != -1 && cs->clipb.y != -1 && cs->clipb.x != cs->clipb.y)
+		if (cs->clipb.x > -1 && cs->clipb.y > -1 && cs->clipb.y - cs->clipb.x > 0)
 		{
 			ft_strdel(&cs->clipboard);
-			cs->clipboard = ft_strsub(cs->input, cs->clipb.x, cs->clipb.y);
+			cs->clipboard = ft_strsub(cs->input, cs->clipb.x, cs->clipb.y - cs->clipb.x);
 		}
 	}
 }
@@ -140,17 +140,20 @@ void	cut_clip(t_cs_line *cs)
 	char	oc;
 
 	copy_clip(cs);
-	if (cs->clipb.x != -1 && cs->clipb.y != -1 && cs->clipb.x != cs->clipb.y)
+	if (cs->clipb.x != -1 && cs->clipb.y != -1 && cs->clipb.y - cs->clipb.x > 0)
     {
+		ft_clear(1);
 		oc = cs->input[cs->clipb.x];
 		cs->input[cs->clipb.x] = '\0';
 		cut = ft_strdup(cs->input);
 		cs->input[cs->clipb.x] = oc;
 		tmp = cut;
-		cut = ft_strjoin(2, cut, &cs->input[cs->clipb.y + 1]);
+		cs->line_col = cs->clipb.x;
+		cut = ft_strjoin(2, cut, &cs->input[cs->clipb.y]);
 		ft_strdel(&tmp);
 		ft_strdel(&cs->input);
 		cs->input = cut;
+		cs->clipb = (t_point){-1, -1};
 		print_cmdline(cs);
 	}
 }
