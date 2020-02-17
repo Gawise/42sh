@@ -1,6 +1,7 @@
 #include "exec.h"
 #include "libft.h"
-
+#include <sys/types.h>
+#include <sys/wait.h>
 
 int			ft_lstis(t_list *lst, int (*f)(t_list *elem)) // mettre dans lib
 {

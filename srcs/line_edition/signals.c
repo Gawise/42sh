@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/17 20:17:17 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 22:28:31 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	sig_handler(int sig)
 		ft_clear(1);
 		ft_putstr_fd(cs->input, cs->tty);
 		ft_strdel(&cs->input);
-		cs->history->data = NULL;
+		if (cs->history)
+			cs->history->data = NULL;
 		cs->sig_int = 1;
 	}
 }
