@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 17:01:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/15 16:58:39 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/18 15:16:54 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt, t_dlist **lst)
+char	*ft_prompt(char *prompt)
 {
 	char		*ret;
 	t_cs_line	*cs;
