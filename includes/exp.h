@@ -1,6 +1,7 @@
 #ifndef EXP_H
 # define EXP_H
-# define EXP_BSIZE 32
+# define EXP_BSIZE 255
+# include <pwd.h>
 
 typedef struct		s_exp
 {

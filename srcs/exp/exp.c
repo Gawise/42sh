@@ -2,17 +2,13 @@
 #include "parser.h"
 #include "exp.h"
 
-t_exp	*init_exp()
+void	init_exp(t_exp *exp)
 {
-	t_exp	*exp;
-
-	if (!(exp = memalloc(sizeof(t_exp *))))
-		exit(EXIT_FAILURE);
 	ft_bzero(exp->buf, EXP_BSIZE);
 	exp->i = 0;
 	exp->res = NULL;
 	exp->quote = 0;
-	return (exp);
+	exp->bs = 0;
 }
 
 void	exp_flush_buf(t_exp *exp)
@@ -28,11 +24,11 @@ void	exp_flush_buf(t_exp *exp)
 	else if (!(exp->res = ft_strjoin(exp->res, exp->buf)))
 		exit(EXIT_FAILURE);
 	free(tmp);
-	ft_bzero(exp->buf, EXP_BSIZE);
+	ft_bzero(exp->buf, exp->i);
 	exp->i = 0;
 }
 
-void	exp_dispatch(char **str, char buf[EXP_BSIZE], int *i, char **res)
+void	exp_dispatch(char **str, t_exp *exp)
 {
 
 	if (**str == '\'' && exp->quote < 2)
@@ -55,25 +51,18 @@ void	exp_dispatch(char **str, char buf[EXP_BSIZE], int *i, char **res)
 //		return ;
 }
 
-void	resolve_expansions(t_list *word)
+void	exp_main(t_list *word, int assign)
 {
-	t_exp		*exp;
-	char		*str;
+	t_exp		exp;
 
-	if (!word || !word->data)
-		return ;
-	exp = init_exp(word);
-	str = (char*)word->data;
-	while (*str)
-	{
-		if (ft_strchr("\'\"${(", *str) && *(str - 1) != '\\')
-			exp_dispatch(&str, exp);
-		if (exp->i >= EXP_BSIZE - 1)
-			exp_flush_buf(exp);
-		exp->buf[exp->i] = *str;
-		str++;
-		i++;
-	}
-
-	free_exp();
+	init_exp(&exp);
+	if (assign)
+		find_tilde_exp_assign(word, exp);
+	else
+		find_tilde_exp(word, exp);
+	parameter_exp(word, exp);
+	ft_bzero(exp->buf, EXP_BSIZE);
+	
+	ft_bzero(exp->buf, EXP_BSIZE);
 }
+

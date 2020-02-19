@@ -34,3 +34,26 @@ void		parameter_exp(char **word, t_exp *exp)
 	
 	
 }
+
+void	parse_param_exp(t_list *word, t_exp exp)
+{
+	char		*str;
+	int		nb;
+
+	if (!word || !word->data)
+		return ;
+	str = (char*)word->data;
+	nb = 0;
+	while (*str)
+	{
+		if (*str == '$' ft_strchr("\'\"$", *str) && nb && *(str - 1) != '\\')
+			exp_dispatch(&str, &exp);
+		if (exp.i >= EXP_BSIZE - 1)
+			exp_flush_buf(&exp);
+		exp.buf[exp.i] = *str;
+		str++;
+		exp.i++;
+		nb++;
+	}
+	free_exp_content()
+}
