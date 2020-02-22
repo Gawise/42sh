@@ -49,7 +49,7 @@ int		main(int ac, char **av, char **env)
 	ret = 0;
 	while ((line = ft_prompt("21sh-1.0$ ")))
 	{
-		if (ft_strequ("exit", line))
+		if (ft_strequ("exit\n", line))
 			exit(0);
 		set_signal_ign();
 		init_lexer(lexer);

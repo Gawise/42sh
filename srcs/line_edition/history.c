@@ -32,7 +32,6 @@ void	update_history(t_dlist *hs)
 			&& (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
 	{
 		ft_putstr_fd(cs->input, fd);
-		ft_putstr_fd("\n", fd);
 		close(fd);
 	}
 	ft_strdel(&path);
