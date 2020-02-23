@@ -52,6 +52,7 @@ SRCS += ft_isprint.c
 SRCS += ft_strcat.c
 SRCS += ft_strchr.c
 SRCS += ft_strchri.c
+SRCS += ft_strclnjoin.c
 SRCS += ft_strclr.c
 SRCS += ft_strcmp.c
 SRCS += ft_strcpy.c

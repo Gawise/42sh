@@ -67,7 +67,7 @@ void	init_signals(void)
 	{
 		if (i == SIGCONT || i == SIGTSTP || i == SIGSTOP || i == SIGTTOU
 				|| i == SIGTTIN)
-			signal(i, pause_handler);
+			signal(i, SIG_IGN);
 		else if (i == SIGWINCH)
 			signal(i, size_handler);
 		i++;

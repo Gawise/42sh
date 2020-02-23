@@ -11,7 +11,7 @@ void	init_heredoc_body_state(int (*token_builder[8][11])(t_lexer *, char))
 	token_builder[S_HD_BODY][C_DIGIT] = l_buffer_add;
 	token_builder[S_HD_BODY][C_EXP] = l_buffer_add;
 	token_builder[S_HD_BODY][C_BLANK] = l_buffer_add;
-	token_builder[S_HD_BODY][C_EOI] = l_do_nothing;
+	token_builder[S_HD_BODY][C_EOI] = l_complete_str;
 	token_builder[S_HD_BODY][C_BRACK] = l_buffer_add;
 	token_builder[S_HD_BODY][C_EQU] = l_buffer_add;
 	token_builder[S_HD_BODY][C_OTHER] = l_buffer_add;

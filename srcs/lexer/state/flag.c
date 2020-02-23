@@ -11,7 +11,7 @@ void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char))
 	token_builder[S_FLAG][C_DIGIT] = l_flag_state_add;
 	token_builder[S_FLAG][C_EXP] = l_flag_state_add;
 	token_builder[S_FLAG][C_BLANK] = l_flag_state_add;
-	token_builder[S_FLAG][C_EOI] = l_flag_state_add;
+	token_builder[S_FLAG][C_EOI] = l_complete_str;
 	token_builder[S_FLAG][C_BRACK] = l_delim_flag;
 	token_builder[S_FLAG][C_EQU] = l_flag_state_add;
 	token_builder[S_FLAG][C_OTHER] = l_flag_state_add;

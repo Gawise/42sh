@@ -70,15 +70,11 @@ void	init_lexer_states(int (*token_builder[8][11])(t_lexer *, char))
 	init_flag_state(token_builder);
 }
 
-int	ft_lexer(char *str, t_lexer *lexer)
+int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 {
 	char	c;
-	int	(*token_builder[8][11])(t_lexer *, char);
 	t_lexer_flag	flag;
 
-	lexer->src = str;
-	lexer->curr = str;
-	init_lexer_states(token_builder);
 	while ((c = l_get_char(lexer)))
 	{
 		flag = l_get_last_flag(lexer);
@@ -95,12 +91,20 @@ int	ft_lexer(char *str, t_lexer *lexer)
 					get_state_str(lexer),
 					get_flag_name(flag));
 	}
-	if (l_get_last_flag(lexer))
-	{
-		printf("chaine non-terminee ----> ft_prompt\n");
-		exit(1);
-	}
 	if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 		lex_err(lexer, c);
+	return (1);
+}
+
+int	ft_lexer(char *str, t_lexer *lexer)
+{
+	int	(*token_builder[8][11])(t_lexer *, char);
+
+	lexer->src = str;
+	lexer->curr = str;
+	init_lexer_states(token_builder);
+	do_lexing(lexer, token_builder);
+	while (l_get_last_flag(lexer) || l_get_flag(lexer, F_HEREDOC))
+		do_lexing(lexer, token_builder);
 	return (1);
 }

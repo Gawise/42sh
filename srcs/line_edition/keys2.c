@@ -114,19 +114,23 @@ int		check_keys(char *caps)
 	if (ft_strcmp(caps, "\e[1;6C") == 0 && (ret = 1))
 		clip_arrow_right(cs);
 	if (ft_strcmp(caps, "\e[1;6D") == 0 && (ret = 1))
-        clip_arrow_left(cs);
+        	clip_arrow_left(cs);
 	if (ft_strcmp(caps, "\e[1;6A") == 0 && (ret = 1))
-        clip_arrow_up(cs);
+	        clip_arrow_up(cs);
 	if (ft_strcmp(caps, "\e[1;6B") == 0 && (ret = 1))
-        clip_arrow_down(cs);
+        	clip_arrow_down(cs);
 	if (caps[0] == (char)11)
 		copy_clip(cs);
 	if (caps[0] == (char)16)
 		paste_clip(cs);
 	if (caps[0] == (char)12)
-        cut_clip(cs);
+        	cut_clip(cs);
 	if (ft_strcmp(caps, "\n") == 0 || ft_strcmp(caps, "\eEOF") == 0)
+	{
 		ret = -1;
+		if (ft_strcmp(caps, "\n") == 0)
+			line_master(cs, caps);
+	}
 	if (ft_strcmp(caps, "\033[6n") == 0 || caps[0] == '[')
 		ret = -1;
 	if (caps[0] != 127 && ret == 0 && caps[0] != '\033' && caps[0] >= 32
