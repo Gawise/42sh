@@ -105,7 +105,7 @@ void	l_set_flag(t_lexer *lexer, t_lexer_flag flag);
 void	l_unset_flag(t_lexer *lexer, t_lexer_flag flag);
 int	l_get_flag(t_lexer *lexer, t_lexer_flag flag);
 int	l_do_nothing(t_lexer *lexer, char c);
-int	l_complete_flag(t_lexer *lexer, char c);
+int	l_complete_str(t_lexer *lexer, char c);
 
 /*
 **	quote.c

@@ -65,8 +65,13 @@ int	l_hd_body_flush(t_lexer *lexer, char c)
 			lexer->curr_here = lexer->here_queue->data;
 			lexer->curr_token = lexer->curr_here->token;
 		}
+		else
+			lexer->curr_here = NULL;
 		if (!lexer->curr_here)
+		{
 			lexer->state = S_TK_START;
+			l_unset_flag(lexer, F_HEREDOC);
+		}
 	}
 	else
 	{

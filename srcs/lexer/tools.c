@@ -25,7 +25,7 @@ int	l_do_nothing(t_lexer *lexer, char c)
 	return (1);
 }
 
-int	l_complete_flag(t_lexer *lexer,  char c)
+int	l_complete_str(t_lexer *lexer,  char c)
 {
 	size_t	pos;
 	char	*new;
@@ -39,6 +39,5 @@ int	l_complete_flag(t_lexer *lexer,  char c)
 		exit(1);
 	}
 	lexer->curr = lexer->src + pos;
-	ft_printf("reste de la string=\'%s\'\n", lexer->curr);
 	return (1);
 }
