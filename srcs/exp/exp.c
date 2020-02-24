@@ -28,29 +28,6 @@ void	exp_flush_buf(t_exp *exp)
 	exp->i = 0;
 }
 
-void	exp_dispatch(char **str, t_exp *exp)
-{
-
-	if (**str == '\'' && exp->quote < 2)
-	{
-		exp->quote = exp->quote == 1 ? 0 : 1;
-		*str++;
-	}
-	else if (**str == '\"' && exp->quote != 1)
-	{
-		exp->quote = exp->quote == 2 ? 0 : 2;
-		*str++;
-	}
-	else if (**str == '$' && exp->quote != 1)
-		parameter_exp(str, exp);
-
-
-//	else if (**str == '{')
-//		return ;
-//	else if (**str == '(')
-//		return ;
-}
-
 void	exp_main(t_list *word, int assign)
 {
 	t_exp		exp;

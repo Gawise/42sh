@@ -19,8 +19,6 @@ void		parameter_exp(char **word, t_exp *exp)
 
 
 
-
-
 	while (*str)
 	{
 		if (ft_strchr("\'\"}", *str) && *(str - 1) != '\\')
@@ -33,6 +31,24 @@ void		parameter_exp(char **word, t_exp *exp)
 	}
 	
 	
+}
+
+void	exp_dispatch(char **str, t_exp *exp)
+{
+
+	if (**str == '\'' && exp->quote < 2)
+	{
+		exp->quote = exp->quote == 1 ? 0 : 1;
+		*str++;
+	}
+	else if (**str == '\"' && exp->quote != 1)
+	{
+		exp->quote = exp->quote == 2 ? 0 : 2;
+		*str++;
+	}
+	else if (**str == '$' && exp->quote != 1)
+		parameter_exp(str, exp);
+
 }
 
 void	parse_param_exp(t_list *word, t_exp exp)
