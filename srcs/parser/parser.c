@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "parser.h"
+#include "line_edition.h"
 
 int		syn_err(t_token *token, t_parser *parser)
 {
@@ -100,7 +101,7 @@ void		p_init_cmd_wait_state(int (*table_builder[6][22])(t_token *, t_parser *))
 	table_builder[1][TOKEN]		=	syn_err;
 	table_builder[1][WORD]		=	p_cmd_name;
 	table_builder[1][ASSIGNMENT_WORD] =	p_add_assign;
-	table_builder[1][NEWLINE]	=	p_add_table;
+	table_builder[1][NEWLINE]	=	p_skip;
 	table_builder[1][IO_NUMBER]	=	p_add_io_num;
 	table_builder[1][AND_IF]	=	p_add_and_or;
 	table_builder[1][AMP]		=	p_add_amp;
@@ -249,6 +250,15 @@ void	p_init_state_machine(int (*table_builder[6][22])(t_token *, t_parser *))
 	p_init_io_nbr_state(table_builder);
 }
 
+void		del_token(void *data, size_t size)
+{
+	t_token		*token;
+
+	(void)size;
+	token = (t_token *)data;
+	ft_strdel(&token->str);
+}
+
 int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
 	int	(*table_builder[6][22])(t_token *, t_parser *);
@@ -263,6 +273,12 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	parser->curr_table = parser->table;
 	p_init_state_machine(table_builder);
 	p_tokeniter(lexer->token_lst, parser, table_builder);
+	while (parser->state == 1)
+	{
+		ft_lstdel(&lexer->token_lst, del_token);
+		ft_lexer(ft_prompt("> "), lexer);
+		p_tokeniter(lexer->token_lst, parser, table_builder);
+	}
 	print_parser(parser);
 	p_make_args_tab(parser);
 	return (1);
