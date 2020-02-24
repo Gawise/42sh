@@ -35,7 +35,6 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		*lexer;
 	t_parser	parser;
-	t_dlist		*hist;
 
 	(void)ac;
 	(void)av;
@@ -48,10 +47,9 @@ int		main(int ac, char **av, char **env)
 	(void)av;
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
-	hist = init_history();
-	while ((line = ft_prompt("21sh-1.0$ ", &hist)))
+	while ((line = ft_prompt("21sh-1.0$ ")))
 	{
-		if (ft_strequ("exit", line))
+		if (ft_strequ("exit\n", line))
 			exit(0);
 		set_signal_ign();
 		init_lexer(lexer);
@@ -59,10 +57,7 @@ int		main(int ac, char **av, char **env)
 		ft_lstiter(lexer->token_lst, print_debug);
 		ft_parser(lexer, &parser);
 		ft_eval(&shell, parser.table);
-
-		//ft_printf("$> ");
 	}
-	ft_dlstdel(&hist);
 	return (0);
 }
 
