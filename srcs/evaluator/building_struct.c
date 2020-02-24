@@ -40,6 +40,7 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.std[0] = STDIN_FILENO;
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
+		process.status = WAITING;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
 		i++;

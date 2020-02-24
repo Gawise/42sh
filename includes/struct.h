@@ -234,8 +234,6 @@ typedef struct	s_process
 	char **av;                  /* for exec */
 	char *path;					/* path's exec */
 	pid_t pid;                  /* process ID */
-	uint8_t completed;          /* true if process has completed */
-	uint8_t stopped;            /* true if process has stopped */
 	uint8_t retour;				/* WEXITSTATUS  */
 	int status;                 /* reported status value */
 	uint8_t std[3];				/* stdin out err*/
@@ -250,7 +248,8 @@ typedef struct	s_job
 	pid_t		pgid;               /* process group ID */
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
-	char 		notified;           /* true if user told about stopped job */
+	uint8_t 	status;          	/* reported status value */
+	uint8_t		retour;				/* retour last process */
 	uint8_t		std[3];				/* stdin out err*/
 	struct		termios tmodes;     /* saved terminal modes */
 } 				t_job;

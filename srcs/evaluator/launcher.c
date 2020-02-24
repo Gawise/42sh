@@ -187,7 +187,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	//exec_type ?
 	//https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
 
-	printf("\t[RUN JOB]  PID 21SH = [%d]\n", shell->pid);
+	printf("\n\t[RUN JOB]  PID 21SH = [%d]\n", shell->pid);
 	
 	while (process)
 	{

@@ -16,7 +16,8 @@
 # define EXEC 0x004
 # define BUILTIN 0x008		/*rajouter un # define PIPE_ON ?*/
 # define FUNCTION 0x016
-# define LOCATED 0x0032		/* # define UNFOUND ? */
+# define LOCATED 0x0032
+# define UNFOUND 0x0064
 
 # define ENV 1
 # define LOCAL 2 /* usesless si local intern a sa propre list ? */
@@ -27,6 +28,7 @@
 # define STOPPED 0x004
 # define KILLED 0x08
 # define FAILED 0x16
+# define COMPLETED 0x32
 
 
 /*		debug	*/
