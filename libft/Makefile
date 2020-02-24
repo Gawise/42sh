@@ -52,6 +52,7 @@ SRCS += ft_isprint.c
 SRCS += ft_strcat.c
 SRCS += ft_strchr.c
 SRCS += ft_strchri.c
+SRCS += ft_strclnjoin.c
 SRCS += ft_strclr.c
 SRCS += ft_strcmp.c
 SRCS += ft_strcpy.c
@@ -102,7 +103,10 @@ SRCS += ft_lstaddtail.c
 SRCS += ft_lstgettail.c
 SRCS += ft_lstdeltail.c
 SRCS += ft_lstdelhead.c
-
+SRCS += ft_dlstaddtail.c
+SRCS += ft_dlstnew.c
+SRCS += ft_dlstdel.c
+SRCS += ft_dlstdelone.c
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c
 SRCS += ft_itoa.c

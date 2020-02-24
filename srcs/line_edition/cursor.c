@@ -4,14 +4,14 @@
 /*   cursor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-
 /*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/11 17:07:24 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:03:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "line_edition.h"
+#include "struct.h"
 
 void	cs_set(void)
 {
@@ -44,7 +44,7 @@ void	move_cs(t_cs_line **cs)
 
 t_cs_line	*cs_master(char *prompt, int init)
 {
-	static t_cs_line	cs = {0};
+	static t_cs_line	cs;
 
 	if (init == 1)
 	{
@@ -56,6 +56,10 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.max_scroll = 0;
 		cs.input = ft_strnew(0);
 		cs.prompt = prompt;
+		cs.history = NULL;
+		cs.clipb.x = -1;
+		cs.clipb.y = -1;
+		cs.clipboard = NULL;
 	}
 	return (&cs);
 }

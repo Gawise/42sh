@@ -1,37 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_dlstnew.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/12 18:44:42 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/02/17 22:27:17 by ambelghi         ###   ########.fr       */
+/*   Created: 2020/01/12 18:48:26 by hmerieux          #+#    #+#             */
+/*   Updated: 2020/02/11 22:35:55 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
-{
-	int i;
-	int s;
-	int r;
+#include "../../includes/libft.h"
 
-	i = 0;
-	s = 1;
-	r = 0;
-	while (str && str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\r'
-			|| str[i] == '\v' || str[i] == '\f' || str[i] == ' '))
-		++i;
-	if (str && (str[i] == '+' || str[i] == '-'))
+t_dlist	*ft_dlstnew(void *content, size_t content_size)
+{
+	t_dlist	*lstnew;
+
+	if (!(lstnew = (t_dlist *)malloc(sizeof(t_dlist))))
+		return (NULL);
+	if (content == NULL)
 	{
-		if (str[i] == '-')
-			s *= -1;
-		i += 1;
+		lstnew->data = NULL;
+		lstnew->size = 0;
 	}
-	while (str && str[i] && str[i] >= 48 && str[i] <= 57)
+	else
 	{
-		r = r * 10 + (str[i] - 48);
-		i++;
+		lstnew->data = content;
+		lstnew->size = content_size;
 	}
-	return (r * s);
+	lstnew->prev = NULL;
+	lstnew->next = NULL;
+	return (lstnew);
 }

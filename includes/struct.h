@@ -5,12 +5,11 @@
 # include <sys/types.h>
 # include <termios.h>
 
-
 # define L_BUFF_SIZE	256
 
 
 typedef struct s_list	t_list;
-
+typedef struct s_dlist	t_dlist;
 
 
 typedef struct	s_cfg
@@ -77,14 +76,14 @@ typedef enum			e_lexer_flag
 
 typedef enum			e_lexer_state
 {
-	S_TK_START, // Debut de token	0
-	S_HD_BODY, // Body de Heredoc	1
-	S_AMP_PIPE, // Token avec & | ;	2
-	S_TK_REDIR, // Token avec < >	3
-	S_EXP, // Expansion en cours	4
-	S_TK_WORD, // Token word	5
-	S_IO_NUMBER, // io_number token	6
-	S_FLAG // Flag en cours		7
+	S_TK_START, // Debut de token		0
+	S_HD_BODY, // Body de Heredoc		1
+	S_AMP_PIPE, // Token avec & | ;		2
+	S_TK_REDIR, // Token avec < >		3
+	S_EXP, // Expansion en cours		4
+	S_TK_WORD, // Token word		5
+	S_IO_NUMBER, // io_number token		6
+	S_FLAG // Flag en cours			7
 }				t_lexer_state;
 
 
@@ -191,19 +190,22 @@ typedef struct	s_line_lst
 
 typedef struct	s_cs_line
 {
-	int				line_col;
-	int				col;
-	int				row;
-	int				min_col;
-	int				min_row;
-	int				scroll;
-	int				max_scroll;
-	int				tty;
-	t_point			screen;
-	char			*input;
-	int				sig_int;
-	int				cr;
-	char			*prompt;
+	int             line_col;
+    int             col;
+    int             row;
+    int             min_col;
+    int             min_row;
+    int             scroll;
+    int             max_scroll;
+    int             tty;
+    t_point         screen;
+    char            *input;
+    int             sig_int;
+    int             cr;
+    char            *prompt;
+	  char			*clipboard;
+    t_dlist         *history;
+	  t_point			clipb; //start et end de la selection
 }				t_cs_line;
 
 
@@ -222,7 +224,7 @@ typedef struct	s_var
 
 typedef struct	s_pipe
 {
-	int32_t	fd[2];
+	int32_t		fd[2];
 	uint8_t		tmp;
 }				t_pipe;
 
@@ -232,8 +234,9 @@ typedef struct	s_process
 	char **av;                  /* for exec */
 	char *path;					/* path's exec */
 	pid_t pid;                  /* process ID */
-	uint8_t completed;             /* true if process has completed */
-	uint8_t stopped;               /* true if process has stopped */
+	uint8_t completed;          /* true if process has completed */
+	uint8_t stopped;            /* true if process has stopped */
+	uint8_t retour;				/* WEXITSTATUS  */
 	int status;                 /* reported status value */
 	uint8_t std[3];				/* stdin out err*/
 	uint8_t setup;
@@ -241,15 +244,15 @@ typedef struct	s_process
 
 typedef struct	s_job
 {
-	char *command;              /* command line, used for messages */
-	t_list *process;     		/* list of processes in this job */
-	t_list *var;				/* VAR env | locale | tmp */
-	pid_t pgid;                 /* process group ID */
-	uint8_t fg;					/* foreground */
-	t_pipe	pipe;
-	int  wstatus;				/* return of waitpid */
-	char notified;              /* true if user told about stopped job */
-	struct termios tmodes;      /* saved terminal modes */
+	char		*command;           /* command line, used for messages */
+	t_list		*process;     		/* list of processes in this job */
+	t_list		*var;				/* VAR env | locale | tmp */
+	pid_t		pgid;               /* process group ID */
+	uint8_t		fg;					/* foreground */
+	t_pipe		pipe;				/* pipeline */
+	char 		notified;           /* true if user told about stopped job */
+	uint8_t		std[3];				/* stdin out err*/
+	struct		termios tmodes;     /* saved terminal modes */
 } 				t_job;
 
 #endif

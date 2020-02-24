@@ -1,6 +1,8 @@
 #ifndef EXEC_H
 # define EXEC_H
 
+
+	#include <stdio.h>				//debug
 # include "struct.h"
 
 # define TRUE 1
@@ -12,14 +14,19 @@
 # define RIGHT 0x002
 # define MID 0x003
 # define EXEC 0x004
-# define BUILTIN 0x008
+# define BUILTIN 0x008		/*rajouter un # define PIPE_ON ?*/
 # define FUNCTION 0x016
-# define LOCATED 0x0032
+# define LOCATED 0x0032		/* # define UNFOUND ? */
 
 # define ENV 1
 # define LOCAL 2
 # define TMP 4
 
+# define RUNNING 0x001  	/* # define PENDING */
+# define WAITING 0x002
+# define STOPPED 0x004
+# define KILLED 0x08
+# define FAILED 0x16
 
 
 /*		debug	*/
@@ -39,6 +46,13 @@ int		condition_respectee(void);
 
 int		cmd_to_job(t_job *job, t_list *s_cmd);
 int		routine_clean_job(t_job *j);
+
+
+/*	wait */
+
+int		wait_process(t_job *job);
+
+
 
 /*	env	*/
 
