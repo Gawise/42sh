@@ -82,14 +82,10 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 			lex_err(lexer, c);
 		if (c == '\n')
 			ft_printf("->\t%s\t%20s\t%s\n\n",
-					"\\n",
-					get_state_str(lexer),
-					get_flag_name(flag));
+			"\\n", get_state_str(lexer), get_flag_name(flag));
 		else
 			ft_printf("->\t%c\t%20s\t%s\n",
-					c,
-					get_state_str(lexer),
-					get_flag_name(flag));
+			c, get_state_str(lexer), get_flag_name(flag));
 	}
 	if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 		lex_err(lexer, c);
