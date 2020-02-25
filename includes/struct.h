@@ -129,7 +129,8 @@ typedef enum			e_parser_state
 	S_PARSER_CMD_ARGS,	// En attente d'args
 	S_PARSER_REDIR,		// Redirection en attente de filename
 	S_PARSER_ASSIGN,	// Assignation en attente de valeur
-	S_PARSER_IO_NUMBER	// Io_number en attente de redirection
+	S_PARSER_IO_NUMBER,	// Io_number en attente de redirection
+	S_PARSER_DELIM		// Redirectiion DLESS en attente de delim
 }				t_parser_state;
 
 typedef struct			s_assignment
@@ -140,6 +141,7 @@ typedef struct			s_assignment
 
 typedef struct			s_redir
 {
+	char			*delim;
 	int			io_num;
 	t_token_type		type; // enum
 	char			*file;

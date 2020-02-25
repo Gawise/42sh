@@ -60,6 +60,9 @@ int	p_add_redir(t_token *token, t_parser *parser)
 	redir->type = token->type;
 	if (parser->state != S_PARSER_IO_NUMBER)
 		parser->prev_state = parser->state;
-	parser->state = S_PARSER_REDIR;
+	if (token->type == DLESS || token->type == DLESSDASH)
+		parser->state = S_PARSER_DELIM;
+	else
+		parser->state = S_PARSER_REDIR;
 	return (1);
 }
