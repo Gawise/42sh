@@ -44,7 +44,6 @@ typedef enum			e_token_type
 	LESSAND,		// <&
 	GREATAND,		// >&
 	DLESSDASH,		// <<-
-	/* Reserved word */
 }				t_token_type;
 
 typedef enum			e_char_type
@@ -74,6 +73,17 @@ typedef enum			e_lexer_flag
 	F_HD_DELIM	// 64
 }				t_lexer_flag;
 
+/*
+** LEXER
+*/
+
+typedef struct			s_token
+{
+	char			*str;
+	t_token_type		type;
+	size_t			len;
+}				t_token;
+
 typedef enum			e_lexer_state
 {
 	S_TK_START, // Debut de token		0
@@ -85,17 +95,6 @@ typedef enum			e_lexer_state
 	S_IO_NUMBER, // io_number token		6
 	S_FLAG // Flag en cours			7
 }				t_lexer_state;
-
-
-
-/*LEXER*/
-
-typedef struct			s_token
-{
-	char			*str;
-	t_token_type		type;
-	size_t			len;
-}				t_token;
 
 typedef struct			s_here_queue
 {
@@ -119,9 +118,19 @@ typedef struct			s_lexer
 	t_lexer_flag		*curr_flag;
 }				t_lexer;
 
+/*
+** PARSER
+*/
 
-
-/*PARSER_H*/
+typedef enum			e_parser_state
+{
+	S_PARSER_TABLE_START,	// Debut de cmd_table
+	S_PARSER_CMD_START,	// En attente de cmd_name
+	S_PARSER_CMD_ARGS,	// En attente d'args
+	S_PARSER_REDIR,		// Redirection en attente de filename
+	S_PARSER_ASSIGN,	// Assignation en attente de valeur
+	S_PARSER_IO_NUMBER	// Io_number en attente de redirection
+}				t_parser_state;
 
 typedef struct			s_assignment
 {
@@ -169,9 +178,9 @@ typedef struct			s_parser
 	t_list			*curr_table;
 }				t_parser;
 
-
-
-/*SELEC*/
+/*
+** SELECT
+*/
 
 typedef struct	s_point
 {
@@ -208,13 +217,9 @@ typedef struct	s_cs_line
 	  t_point			clipb; //start et end de la selection
 }				t_cs_line;
 
-
-
-
-
-
-
-/*EXEC*/
+/*
+** EXEC
+*/
 
 typedef struct	s_var
 {
