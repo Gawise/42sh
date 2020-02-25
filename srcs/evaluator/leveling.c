@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "exec.h"
 #include "parser.h"
+#include "sh.h"
 
 
 #include <stdio.h>   //debug
@@ -60,6 +61,8 @@ int		ft_eval(t_cfg *shell, t_list *cmd_table)
 {
 
 	printf("\n\n----------- eval -----------\n\n\n\n");
+	set_signal_ign();
+	signal(SIGCHLD, SIG_DFL);
 	lvl_cmd_table(shell, cmd_table);
 	printf("----------- eval -----------\n\n");
 	return (0);

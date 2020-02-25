@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h> //perror !!!!]]
 
+#include "ft_printf.h"
 
 #include <stdlib.h>
 void	ex(char *s)
@@ -26,7 +27,8 @@ void	signal_debug_printf(void)
 	signal(SIGQUIT, sig);
 	signal(SIGPIPE, sig);
 	signal(SIGCHLD, sig);
-	signal(SIGTSTP, SIG_DFL);
+	signal(SIGTSTP, sig);
+	signal(SIGTSTP, sig);
 	signal(SIGCONT, sig);
 	signal(SIGTTIN, sig);
 	signal(SIGTTOU, sig);
@@ -86,9 +88,7 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	if (job->pgid == 0)
 		job->pgid = process->pid;
 	process->status = RUNNING;
-
 	setpgid(process->pid, job->pgid);
-
 	if (job->fg)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
 			perror("[PARENT PROCESS] error tcsetpgrp");
@@ -105,16 +105,15 @@ int		child_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			ex("[child process] close error:");
+	set_signal_child();
 	process->pid = getpid();
 	if (job->pgid == 0)
 		job->pgid = process->pid;
-	set_signal_child();
-	do_dup(process);
 	setpgid(process->pid, job->pgid); 		//not do if !fg ??
 	 if (job->fg)
-		if (tcsetpgrp(STDIN_FILENO, job->pgid))
+		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
-
+	do_dup(process);
 	if ((execve(process->path, process->av, envp)) == -1)
 		ex("execve:");
 	return (0);
@@ -163,7 +162,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	if (job->fg)
 	{
 		wait_process(job);
-		if (tcsetpgrp(STDIN_FILENO, shell->pid))
+		if (tcsetpgrp(STDIN_FILENO, shell->pid) == -1)
 			perror("[run job] error tcsetpgrp");
 	}
 
