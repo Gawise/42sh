@@ -30,12 +30,12 @@ int	l_delim_token(t_lexer *lexer, char c)
 {
 	if (l_get_flag(lexer, F_HD_DELIM))
 	{
-		if (!(l_create_token(lexer)))
+		l_unset_flag(lexer, F_HD_DELIM);
+		l_flush_delim(lexer);
+		if (!l_create_token(lexer))
 			return (0);
 		lexer->curr_here->token = lexer->curr_token;
 		lexer->curr_token->type = WORD;
-		l_unset_flag(lexer, F_HD_DELIM);
-		l_flush_delim(lexer);
 		lexer->state = S_TK_START;
 		return (1);
 	}

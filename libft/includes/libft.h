@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:43:11 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/02/11 21:14:42 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/02/25 16:11:31 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int				ft_memcmp(const void *s1, const void *s2, size_t n);
 int				ft_strequ(char const *s1, char const *s2);
 int				ft_strnequ(char const *s1, char const *s2, size_t n);
 int				ft_getopt(int *ac, int *i, char **const av, char *flags);
+char			**ft_tabdup(char **t);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
 char			*ft_strdup(const char *s1);
@@ -106,6 +107,7 @@ void			ft_putnbr_fd(int n, int fd);
 void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
+int				ft_lsthave(t_list *lst, int (*f)(t_list *elem));
 void			ft_print_bits(unsigned char nb);
 void			ft_del_tab(void **tabi);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
@@ -124,7 +126,7 @@ int				ft_strichr(char *s, int c);
 t_list			*ft_lstpush(t_list **alst, void *data, size_t size);
 char			*ft_strndup(const char *s1, size_t n);
 void			ft_lstaddtail(t_list **alst, t_list *new);
-t_list			*ft_lstgettail(t_list **alst);
+t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 char			*ft_strclnjoin(char const *s1, char const *s2);

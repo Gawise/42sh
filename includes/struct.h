@@ -44,7 +44,6 @@ typedef enum			e_token_type
 	LESSAND,		// <&
 	GREATAND,		// >&
 	DLESSDASH,		// <<-
-	/* Reserved word */
 }				t_token_type;
 
 typedef enum			e_char_type
@@ -74,15 +73,16 @@ typedef enum			e_lexer_flag
 	F_HD_DELIM	// 64
 }				t_lexer_flag;
 
-typedef enum			e_err_flag
+/*
+** LEXER
+*/
+
+typedef struct			s_token
 {
-	E_OK = 0,
-	E_NAMETOOLONG,	// 1
-	E_NOENT,	// 2
-	E_LOOP,		// 3
-	E_NOTDIR,	// 4
-	E_ACCES,	// 5
-}				t_err_flag;
+	char			*str;
+	t_token_type		type;
+	size_t			len;
+}				t_token;
 
 typedef enum			e_lexer_state
 {
@@ -95,17 +95,6 @@ typedef enum			e_lexer_state
 	S_IO_NUMBER, // io_number token		6
 	S_FLAG // Flag en cours			7
 }				t_lexer_state;
-
-
-
-/*LEXER*/
-
-typedef struct			s_token
-{
-	char			*str;
-	t_token_type		type;
-	size_t			len;
-}				t_token;
 
 typedef struct			s_here_queue
 {
@@ -129,9 +118,20 @@ typedef struct			s_lexer
 	t_lexer_flag		*curr_flag;
 }				t_lexer;
 
+/*
+** PARSER
+*/
 
-
-/*PARSER_H*/
+typedef enum			e_parser_state
+{
+	S_PARSER_TABLE_START,	// Debut de cmd_table
+	S_PARSER_CMD_START,	// En attente de cmd_name
+	S_PARSER_CMD_ARGS,	// En attente d'args
+	S_PARSER_REDIR,		// Redirection en attente de filename
+	S_PARSER_ASSIGN,	// Assignation en attente de valeur
+	S_PARSER_IO_NUMBER,	// Io_number en attente de redirection
+	S_PARSER_DELIM		// Redirectiion DLESS en attente de delim
+}				t_parser_state;
 
 typedef struct			s_assignment
 {
@@ -141,6 +141,7 @@ typedef struct			s_assignment
 
 typedef struct			s_redir
 {
+	char			*delim;
 	int			io_num;
 	t_token_type		type; // enum
 	char			*file;
@@ -179,9 +180,9 @@ typedef struct			s_parser
 	t_list			*curr_table;
 }				t_parser;
 
-
-
-/*SELEC*/
+/*
+** SELECT
+*/
 
 typedef struct	s_point
 {
@@ -218,13 +219,19 @@ typedef struct	s_cs_line
 	  t_point			clipb; //start et end de la selection
 }				t_cs_line;
 
+/*
+** EXEC
+*/
 
-
-
-
-
-
-/*EXEC*/
+typedef enum			e_err_flag
+{
+	E_OK = 0,
+	E_NAMETOOLONG,	// 1
+	E_NOENT,	// 2
+	E_LOOP,		// 3
+	E_NOTDIR,	// 4
+	E_ACCES,	// 5
+}				t_err_flag;
 
 typedef struct	s_var
 {
@@ -244,12 +251,10 @@ typedef struct	s_process
 	char **av;                  /* for exec */
 	char *path;					/* path's exec */
 	pid_t pid;                  /* process ID */
-	uint8_t completed;          /* true if process has completed */
-	uint8_t stopped;            /* true if process has stopped */
-	uint8_t retour;				/* WEXITSTATUS  */
+	uint8_t ret;				/* WEXITSTATUS  */
 	int status;                 /* reported status value */
 	uint8_t std[3];				/* stdin out err*/
-	uint8_t setup;
+	uint8_t setup;				/* info du process */
 }				t_process;
 
 typedef struct	s_job
@@ -260,7 +265,8 @@ typedef struct	s_job
 	pid_t		pgid;               /* process group ID */
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
-	char 		notified;           /* true if user told about stopped job */
+	uint8_t 	status;          	/* reported status value */
+	uint8_t		ret;				/* retour last process */
 	uint8_t		std[3];				/* stdin out err*/
 	struct		termios tmodes;     /* saved terminal modes */
 } 				t_job;

@@ -13,26 +13,41 @@ int		builtin_search(void)
 	return (0);
 }
 
+int		find_type(t_list *var, t_process *p)
+{
+	if (builtin_search())
+		p->setup += BUILTIN;
+	/*
+	 *-> if utility {}
+	 *-> if function {}
+	 */
+	else if ((p->path = ft_which(ft_getenv(var, "PATH"), p->cmd)))
+		p->setup += EXEC;
+	else
+		return (p->setup += UNFOUND);
+	return (0);
+}
+
+
 int		any_slash(t_list *var, t_process *p)
 {
-		if (builtin_search())
-			p->setup += BUILTIN;
-									/*
-										 *-> if utility {}
-										 *-> if function {}
-									 */
-		else if ((p->path = ft_which(ft_getenv(var, "PATH"), p->cmd)))
-			p->setup += EXEC;
-		else
-			return (127);
-		return (0);
+	if (find_type(var, p))
+		p->ret = 127;
+	return(0);
 }
+
+int		with_slash(t_process *p)
+{
+	p->setup += LOCATED;
+	//verifier si il existe
+	return(0);
+}
+
 
 int		process_type(t_list *var, t_process *p)
 {
 	if (!ft_strchr(p->cmd, '/'))
-		return (any_slash(var, p));
-	p->setup += LOCATED;
+		any_slash(var, p);
 	/* 127 NOT FOUND
 	 * 126 NOT EXEC
 	 * */
