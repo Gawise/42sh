@@ -8,7 +8,8 @@ int	p_add_and_or(t_token *token, t_parser * parser)
 	t_and_or	*and_or;
 	t_list		*new;
 
-	(void)token;
+	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
+		return (0);
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	and_or->type = token->type;
@@ -17,6 +18,6 @@ int	p_add_and_or(t_token *token, t_parser * parser)
 		return (0);
 	table->curr_and_or->next = new;
 	table->curr_and_or = new;
-	parser->state = 0;
+	parser->state = S_PARSER_CMD_START;
 	return (1);
 }

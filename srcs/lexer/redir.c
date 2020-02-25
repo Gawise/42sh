@@ -44,3 +44,13 @@ int	l_delim_redir(t_lexer *lexer, char c)
 	l_build_redir(lexer, c);
 	return (1);
 }
+
+int	l_add_hyphen_redir(t_lexer *lexer, char c)
+{
+	if (ft_strnequ("<<", lexer->buffer, 2))
+	{
+		l_buffer_add(lexer, c);
+		lexer->curr_token->type = DLESSDASH;
+	}
+	return (1);
+}

@@ -44,11 +44,14 @@ void	del_here_queue(void *data, size_t size)
 
 void	l_flush_delim(t_lexer *lexer)
 {
-	if (!(lexer->curr_here->delim = ft_strndup(lexer->buffer, lexer->buff_i)))
+	if (!(lexer->curr_here->delim = ft_strndup(lexer->buffer, lexer->buff_i))
+	|| !l_create_token(lexer)
+	|| !(lexer->curr_token->str = ft_strndup(lexer->buffer, lexer->buff_i)))
 	{
 		ft_printf("erreur malloc flush_delim 1\n");
 		exit(1);
 	}
+	lexer->curr_token->type = WORD;
 	ft_bzero(lexer->buffer, L_BUFF_SIZE);
 	lexer->buff_i = 0;
 }
