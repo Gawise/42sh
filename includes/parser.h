@@ -50,7 +50,7 @@ int				p_add_io_num(t_token *token, t_parser *parser);
 
 // newline.c
 
-int				p_add_table(t_token *token, t_parser *parser);
+int				p_add_table(t_parser *parser);
 
 // amp.c
 

@@ -2,13 +2,14 @@
 #include "lexer.h"
 #include "parser.h"
 
-int	p_add_table(t_token *token, t_parser *parser)
+int	p_add_table(t_parser *parser)
 {
-	(void)token;
-	if (!(parser->curr_table->next = ft_lstnew(NULL, 0))
-	|| !(parser->curr_table->next->data = init_cmd_table()))
+	t_cmd_table	*table;
+
+	if (!(table = init_cmd_table()))
 		return (0);
-	parser->curr_table = parser->curr_table->next;
-	parser->state = 0;
+	if (!ft_lstpush(&parser->table, table, sizeof(t_cmd_table)))
+		return (0);
+	parser->curr_table = ft_lstgettail(&parser->table);
 	return (1);
 }
