@@ -74,6 +74,16 @@ typedef enum			e_lexer_flag
 	F_HD_DELIM	// 64
 }				t_lexer_flag;
 
+typedef enum			e_err_flag
+{
+	E_OK = 0,
+	E_NAMETOOLONG,	// 1
+	E_NOENT,	// 2
+	E_LOOP,		// 3
+	E_NOTDIR,	// 4
+	E_ACCES,	// 5
+}				t_err_flag;
+
 typedef enum			e_lexer_state
 {
 	S_TK_START, // Debut de token		0

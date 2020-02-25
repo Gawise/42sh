@@ -9,6 +9,8 @@ void	init_exp(t_exp *exp)
 	exp->res = NULL;
 	exp->quote = 0;
 	exp->bs = 0;
+	exp->start = 0;
+	exp->end = 0;
 }
 
 void	exp_flush_buf(t_exp *exp)

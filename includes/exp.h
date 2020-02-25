@@ -9,6 +9,8 @@ typedef struct		s_exp
 	int		i;
 	char		*res;
 	int		quote;
+	int		start;
+	int		end;
 }			t_exp;
 
 
