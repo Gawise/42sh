@@ -5,7 +5,7 @@
 	#include <stdio.h>				//debug
 # include "struct.h"
 
-# define TRUE 1
+# define TRUE 0
 # define FALSE -1
 # define FAILURE -1
 # define SUCCES 0
@@ -16,10 +16,11 @@
 # define EXEC 0x004
 # define BUILTIN 0x008		/*rajouter un # define PIPE_ON ?*/
 # define FUNCTION 0x016
-# define LOCATED 0x0032		/* # define UNFOUND ? */
+# define LOCATED 0x0032
+# define UNFOUND 0x0064
 
 # define ENV 1
-# define LOCAL 2
+# define LOCAL 2 /* usesless si local intern a sa propre list ? */
 # define TMP 4
 
 # define RUNNING 0x001  	/* # define PENDING */
@@ -27,6 +28,7 @@
 # define STOPPED 0x004
 # define KILLED 0x08
 # define FAILED 0x16
+# define COMPLETED 0x32
 
 
 /*		debug	*/
@@ -41,8 +43,6 @@ int		do_dup(t_process *p);
 int		process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
-
-int		condition_respectee(void);
 
 int		cmd_to_job(t_job *job, t_list *s_cmd);
 int		routine_clean_job(t_job *j);

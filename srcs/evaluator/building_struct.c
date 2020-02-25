@@ -2,27 +2,6 @@
 #include "exec.h"
 #include "parser.h"
 
-char	**ft_tabdup(char **t) //mettre dans lib
-{
-	char	**dup;
-	int		i;
-
-	dup = NULL;
-	if (t)
-	{
-		i = 0;
-		while (t[i])
-			i++;
-		if (!(dup = (char **)malloc(sizeof(char*) * (i + 1))))
-			ex("error malloc");
-		dup[i] = NULL;
-		while (i-- > 0)
-			dup[i] = ft_strdup(t[i]);
-	}
-	return (dup);
-}
-
-
 int		cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	int				i;
@@ -40,6 +19,7 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.std[0] = STDIN_FILENO;
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
+		process.status = WAITING;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
 		i++;

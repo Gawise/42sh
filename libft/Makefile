@@ -86,6 +86,7 @@ SRCS += ft_tolower.c
 SRCS += ft_toupper.c
 SRCS += ft_wcharlen.c
 SRCS += ft_wstrlen.c
+SRCS += ft_tabdup.c
 
 #-------------------------List-----------------------------#
 SRCS += ft_lstadd.c
@@ -107,6 +108,8 @@ SRCS += ft_dlstaddtail.c
 SRCS += ft_dlstnew.c
 SRCS += ft_dlstdel.c
 SRCS += ft_dlstdelone.c
+SRCS += ft_lsthave.c
+
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c
 SRCS += ft_itoa.c
