@@ -32,13 +32,15 @@ int		find_type(t_list *var, t_process *p)
 int		any_slash(t_list *var, t_process *p)
 {
 	if (find_type(var, p))
-		p->retour = 127;
+		p->ret = 127;
+	return(0);
 }
 
 int		with_slash(t_process *p)
 {
 	p->setup += LOCATED;
 	//verifier si il existe
+	return(0);
 }
 
 

@@ -53,17 +53,17 @@ int		aplylyse_wstatus(t_process *p, int wstatus)
 	if (WIFEXITED(wstatus))
 	{
 		p->status = COMPLETED;
-		p->retour = WEXITSTATUS(wstatus);
+		p->ret = WEXITSTATUS(wstatus);
 	}
 	else if (WIFSIGNALED(wstatus))
 	{
 		p->status = KILLED; //en attendant de config toutes les possibilites;
-		p->retour = WTERMSIG(wstatus);
+		p->ret = WTERMSIG(wstatus);
 	}
 	else if (WIFSTOPPED(wstatus))
 	{
 		p->status = STOPPED ; // anakyser en fonction du signal
-		p->retour = WSTOPSIG(wstatus);
+		p->ret = WSTOPSIG(wstatus);
 	}
 	return (p->status);
 }
@@ -86,10 +86,10 @@ void		update_job(t_job *j)
 	{
 		if (!(lst = ft_lstgettail(j->process)))
 			return ; // en attendant qu un job ne peut etre lancer vide
-		j->retour = ((t_process *)(lst->data))->retour;
+		j->ret = ((t_process *)(lst->data))->ret;
 	}
 	if (j->status == KILLED)
-		j->retour = 130;
+		j->ret = 130;
 	if (j->status == STOPPED)
 		call_jobcontroler(j);
 }
@@ -110,6 +110,9 @@ int		wait_process(t_job *job)
 	}
 	update_job(job);
 
+
+
+
 	/* DEBUG  */
 		t_process *process;
 		t_list *j = job->process;
@@ -117,10 +120,10 @@ int		wait_process(t_job *job)
 		while (j)
 		{
 			process = j->data;
-			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->retour, process->status);
+			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
 			j = j->next;
 		}
-		printf("JOB status = [%d]\t  JOB return= [%d]\n", job->status, job->retour);
+		printf("JOB status = [%d]\t  JOB return= [%d]\n", job->status, job->ret);
 	/*		*/
 	printf("sort du wait\n");
 	return (0);

@@ -90,10 +90,6 @@ void	set_signal_child(void)
 
 
 
-int		condition_respectee(void)
-{
-	return (0);
-}
 
 int		builtin_process(void)
 {

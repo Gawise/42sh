@@ -5,9 +5,21 @@
 
 #include <stdio.h>   //debug
 
+int		condition_respectee(t_and_or *andor, int8_t lr)
+{
+	if (andor->type == AND_IF)
+		return (lr == TRUE ? 1 : 0);
+//		lr == TRUE ? return (1) : return (0);
+	if (andor->type == OR_IF)
+		return (lr == TRUE ? 0 : 1);
+	return (FAILURE);
+//		lr == TRUE ? return (0) : return (1);
+}
+
 int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
 {
-	t_job job;
+	uint8_t		tmp;
+	t_job		job;
 
 	cmd_to_job(&job, s_cmd);
 	job.fg = fg;
@@ -15,17 +27,20 @@ int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
 	job.var = env_list_cpy(shell->var); //refaire cette fonction en triant var
 
 	run_job(shell, &job, job.process);
+	tmp = job.ret;				//en attendant var intern? 
 	routine_clean_job(&job);
-	return (0);
+	return (tmp);
 }
 
 int		lvl_and_or(t_cfg *shell, t_list *lst)
 {
-	t_and_or *andor;
+	uint8_t		lr;				//en attendant var intern ?
+	t_and_or	*andor;
+
 
 	andor = lst->data;
-	lvl_simple_cmd(shell, andor->s_cmd, !andor->background);
-	if (lst->next && condition_respectee())
+	lr = lvl_simple_cmd(shell, andor->s_cmd, !andor->background);
+	if (lst->next && condition_respectee(andor, lr))
 		lvl_and_or(shell, lst->next);
 	return (0);
 }
