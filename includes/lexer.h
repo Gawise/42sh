@@ -53,6 +53,7 @@ int	l_delim_newline(t_lexer *lexer, char c);
 int	l_is_duplicable_redir(t_lexer *lexer);
 int	l_build_redir(t_lexer *lexer, char c);
 int	l_delim_redir(t_lexer *lexer, char c);
+int	l_add_hyphen_redir(t_lexer *lexer, char c);
 
 /*
 **	word.c

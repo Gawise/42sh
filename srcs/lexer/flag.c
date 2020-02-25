@@ -66,10 +66,10 @@ int	l_delim_flag(t_lexer *lexer, char c)
 	flag = l_get_last_flag(lexer);
 	if (flag == F_BSLASH)
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
-	else if (c == '\'' && flag != F_SQUOTE)
-		l_add_flag(lexer, c);
 	else if (c == '\'' && flag == F_SQUOTE)
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+	else if (c == '\'' && flag != F_DQUOTE)
+		l_add_flag(lexer, c);
 	else if (c == '\"' && flag == F_DQUOTE)
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
 	else if (c == '\\' && flag != F_SQUOTE)

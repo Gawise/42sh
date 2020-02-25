@@ -28,6 +28,8 @@ int	p_add_io_num(t_token *token, t_parser *parser)
 	t_redir		*redir;
 
 	(void)token;
+	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
+		return (0);
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
@@ -36,7 +38,7 @@ int	p_add_io_num(t_token *token, t_parser *parser)
 	redir = (t_redir *)cmd->curr_redir->data;
 	redir->io_num = ft_atoi(token->str);
 	parser->prev_state = parser->state;
-	parser->state = 5;
+	parser->state = S_PARSER_IO_NUMBER;
 	return (1);
 }
 
@@ -47,16 +49,20 @@ int	p_add_redir(t_token *token, t_parser *parser)
 	t_simple_cmd	*cmd;
 	t_redir		*redir;
 
-	(void)token;
+	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
+		return (0);
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
-	if (parser->state != 5 && !p_create_redir(cmd))
+	if (parser->state != S_PARSER_IO_NUMBER && !p_create_redir(cmd))
 		return (0);
 	redir = (t_redir *)cmd->curr_redir->data;
 	redir->type = token->type;
-	if (parser->state != 5)
+	if (parser->state != S_PARSER_IO_NUMBER)
 		parser->prev_state = parser->state;
-	parser->state = 3;
+	if (token->type == DLESS || token->type == DLESSDASH)
+		parser->state = S_PARSER_DELIM;
+	else
+		parser->state = S_PARSER_REDIR;
 	return (1);
 }
