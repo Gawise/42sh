@@ -5,7 +5,7 @@
 	#include <stdio.h>				//debug
 # include "struct.h"
 
-# define TRUE 1
+# define TRUE 0
 # define FALSE -1
 # define FAILURE -1
 # define SUCCES 0
@@ -43,8 +43,6 @@ int		do_dup(t_process *p);
 int		process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
-
-int		condition_respectee(void);
 
 int		cmd_to_job(t_job *job, t_list *s_cmd);
 int		routine_clean_job(t_job *j);

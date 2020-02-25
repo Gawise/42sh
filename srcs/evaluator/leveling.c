@@ -9,11 +9,9 @@ int		condition_respectee(t_and_or *andor, int8_t lr)
 {
 	if (andor->type == AND_IF)
 		return (lr == TRUE ? 1 : 0);
-//		lr == TRUE ? return (1) : return (0);
 	if (andor->type == OR_IF)
 		return (lr == TRUE ? 0 : 1);
 	return (FAILURE);
-//		lr == TRUE ? return (0) : return (1);
 }
 
 int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
@@ -61,7 +59,7 @@ int		lvl_cmd_table(t_cfg *shell, t_list *lst)
 int		ft_eval(t_cfg *shell, t_list *cmd_table)
 {
 
-	printf("\n\n----------- eval -----------\n\n");
+	printf("\n\n----------- eval -----------\n\n\n\n");
 	lvl_cmd_table(shell, cmd_table);
 	printf("----------- eval -----------\n\n");
 	return (0);

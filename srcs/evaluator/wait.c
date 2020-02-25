@@ -9,18 +9,6 @@ void	call_jobcontroler(t_job *j)
 	printf("[nb job] Stopped(SIGTSTP)  ->commande line used for message\n");
 }
 
-int			ft_lsthave(t_list *lst, int (*f)(t_list *elem)) // mettre dans lib
-{
-	int		nb;
-
-	nb = 0;
-	while (lst)
-	{
-		nb += f(lst);
-		lst = lst->next;
-	}
-	return (nb);
-}
 
 int			has_running(t_list *lst)
 {
@@ -48,8 +36,6 @@ t_process	*find_process_by_pid(t_list *lst, pid_t child)
 
 int		aplylyse_wstatus(t_process *p, int wstatus)
 {
-	// pour sigint ou sigtstp definir directement dans job ou parcourir la list pour update
-	// les deux ? 
 	if (WIFEXITED(wstatus))
 	{
 		p->status = COMPLETED;
@@ -73,8 +59,6 @@ int		update_process(t_list *lst, pid_t child, int wstatus)
 	t_process *p;
 
 	p = find_process_by_pid(lst, child);
-	if (!(p))                          //debug
-		ex("[Update Process] PID Non Trouve");
 	return (aplylyse_wstatus(p, wstatus));
 }
 
@@ -84,14 +68,16 @@ void		update_job(t_job *j)
 
 	if (j->status == COMPLETED)
 	{
-		if (!(lst = ft_lstgettail(j->process)))
-			return ; // en attendant qu un job ne peut etre lancer vide
+		lst = ft_lstgettail(j->process);
 		j->ret = ((t_process *)(lst->data))->ret;
 	}
 	if (j->status == KILLED)
 		j->ret = 130;
 	if (j->status == STOPPED)
+	{
+		j->ret = 146;
 		call_jobcontroler(j);
+	}
 }
 
 int		wait_process(t_job *job)
@@ -99,7 +85,6 @@ int		wait_process(t_job *job)
 	pid_t		pid_child;
 	int			wstatus;
 
-	printf("\t[WAIT PROCESS]\t pgid = [%d]\n", job->pgid);
 	while (ft_lsthave(job->process, has_running))
 	{
 		wstatus = 0;
@@ -116,16 +101,16 @@ int		wait_process(t_job *job)
 	/* DEBUG  */
 		t_process *process;
 		t_list *j = job->process;
-		printf("\n\n --> INFO JOB before leave\n");
+		printf("\n\n ----------------------\n--> [INFO PROCESS] \n");
 		while (j)
 		{
 			process = j->data;
 			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
 			j = j->next;
 		}
-		printf("JOB status = [%d]\t  JOB return= [%d]\n", job->status, job->ret);
+		printf("--> [INFO JOB] \n");
+		printf("\tJOB status = [%d]\t  JOB return = [%d]\n ----------------------\n\n", job->status, job->ret);
 	/*		*/
-	printf("sort du wait\n");
 	return (0);
 }
 
