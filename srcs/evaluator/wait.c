@@ -38,8 +38,9 @@ int		aplylyse_wstatus(t_process *p, int wstatus)
 {
 	if (WIFEXITED(wstatus))
 	{
-		p->status = COMPLETED;
 		p->ret = WEXITSTATUS(wstatus);
+		p->status = (p->ret == (126 || 127)) ? FAILED : COMPLETED;
+//		p->status = COMPLETED;
 	}
 	else if (WIFSIGNALED(wstatus))
 	{

@@ -9,9 +9,9 @@
 int		condition_respectee(t_and_or *andor, int8_t lr)
 {
 	if (andor->type == AND_IF)
-		return (lr == TRUE ? 1 : 0);
+		return (lr == SUCCESS ? 1 : 0);
 	if (andor->type == OR_IF)
-		return (lr == TRUE ? 0 : 1);
+		return (lr == SUCCESS ? 0 : 1);
 	return (FAILURE);
 }
 

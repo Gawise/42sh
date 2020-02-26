@@ -244,7 +244,7 @@ typedef struct	s_process
 	uint8_t ret;				/* WEXITSTATUS  */
 	int status;                 /* reported status value */
 	uint8_t std[3];				/* stdin out err*/
-	uint8_t setup;				/* info du process */
+	uint16_t setup;				/* info du process */
 }				t_process;
 
 typedef struct	s_job
