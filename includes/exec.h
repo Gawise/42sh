@@ -6,9 +6,9 @@
 # include "struct.h"
 
 # define SUCCESS 0
+# define FAILURE 1
 # define TRUE 1
 # define FALSE -1
-# define FAILURE -1
 
 # define LEFT 1
 # define RIGHT 2
@@ -51,7 +51,7 @@ int		lvl_cmd_table(t_cfg *shell, t_list *lst);
 int		routine_set_pipe(t_list *process, t_pipe *fd);
 int		do_dup(t_process *p);
 
-uint8_t		process_type(t_list *var, t_process *p);
+void	process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
 

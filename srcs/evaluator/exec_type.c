@@ -8,12 +8,12 @@
  *https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
  */
 
-static int		builtin_search(void)
+static int			builtin_search(void)
 {
 	return (0);
 }
 
-static uint16_t	find_type(t_list *var, t_process *p)
+static uint16_t		find_type(t_list *var, t_process *p)
 {
 	if (builtin_search())
 		p->setup |= BUILTIN;
@@ -29,38 +29,36 @@ static uint16_t	find_type(t_list *var, t_process *p)
 }
 
 
-static uint8_t	any_slash(t_list *var, t_process *p)
+static void		any_slash(t_list *var, t_process *p)
 {
-	 if (find_type(var, p) == SUCCESS)
-		return (SUCCESS);
-	return (1);
+	if (find_type(var, p))
+		return ;
+	p->setup |= path_errors(p->path);
 }
 
 static void		with_slash(t_process *p)
 {
+	char		*buf;
+	char		*tmp;
+
 	p->setup |= SLASH;
 	p->path = ft_strdup(p->cmd);
+	if (*p->path == '/')
+		p->setup |= path_errors(p->path);
+	else
+	{
+		if (!(buf = getcwd(0, 0)))
+			ex("getcwd");
+		tmp = ft_strjoin(3, buf, "/", p->path);
+		p->setup |= path_errors(tmp);
+		ft_strdel(&buf);
+		ft_strdel(&tmp);
+	}
 }
 
-
-uint8_t		process_type(t_list *var, t_process *p)
+void	process_type(t_list *var, t_process *p)
 {
-	uint16_t	error;
-
 	if (ft_strchr(p->cmd, '/'))
 		with_slash(p);
-	else if (any_slash(var, p))
-		return (FAILURE);
-	if ((error = path_errors(p->path)))
-		p->setup |= error;
-	printf("p->setup = [%d]\n", p->setup);
-	printf("path = [%s]\n", p->path);
-	//rajouter PWD dans PATH ou seulement dans checkPATH ????
-
-
-
-	/* 127 NOT FOUND
-	 * 126 NOT EXEC
-	 * */
-	return (0);
+	else (any_slash(var, p));
 }
