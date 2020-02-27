@@ -6,7 +6,7 @@
 void	call_jobcontroler(t_job *j)
 {
 	(void)j;
-	printf("[nb job] Stopped(SIGTSTP)  ->commande line used for message\n");
+	printf("[var intern] Stopped(SIGTSTP)  ->commande line used for message\n");
 }
 
 
@@ -34,12 +34,12 @@ t_process	*find_process_by_pid(t_list *lst, pid_t child)
 	return (NULL);
 }
 
-int		aplylyse_wstatus(t_process *p, int wstatus)
+static void		aplylyse_wstatus(t_process *p, int wstatus)
 {
 	if (WIFEXITED(wstatus))
 	{
-		p->status = COMPLETED;
 		p->ret = WEXITSTATUS(wstatus);
+		p->status = p->ret & (126 | 127) ? FAILED : COMPLETED;
 	}
 	else if (WIFSIGNALED(wstatus))
 	{
@@ -51,10 +51,9 @@ int		aplylyse_wstatus(t_process *p, int wstatus)
 		p->status = STOPPED ; // anakyser en fonction du signal
 		p->ret = WSTOPSIG(wstatus);
 	}
-	return (p->status);
 }
 
-int		update_process(t_list *lst, pid_t child, int wstatus)
+static void		update_process(t_list *lst, pid_t child, int wstatus)
 {
 	t_process *p;
 
@@ -66,14 +65,13 @@ void		update_job(t_job *j)
 {
 	t_list		*lst;
 
-	if (j->status == COMPLETED)
-	{
-		lst = ft_lstgettail(j->process);
+	lst = ft_lstgettail(j->process);
+	j->status = ((t_process *)(lst->data))->status;
+	if (j->status & (COMPLETED | FAILED))
 		j->ret = ((t_process *)(lst->data))->ret;
-	}
-	if (j->status == KILLED)
+	else if (j->status & KILLED)
 		j->ret = 130;
-	if (j->status == STOPPED)
+	else if (j->status & STOPPED)
 	{
 		j->ret = 146;
 		call_jobcontroler(j);
@@ -91,7 +89,7 @@ int		wait_process(t_job *job)
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
 			ex("[WAIT_PROCESS] error waitpid");
-		job->status = update_process(job->process, pid_child, wstatus);
+		update_process(job->process, pid_child, wstatus);
 	}
 	update_job(job);
 

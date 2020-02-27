@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "exec.h"
 #include "parser.h"
+#include "sh.h"
 
 
 #include <stdio.h>   //debug
@@ -8,9 +9,9 @@
 int		condition_respectee(t_and_or *andor, int8_t lr)
 {
 	if (andor->type == AND_IF)
-		return (lr == TRUE ? 1 : 0);
+		return (lr == SUCCESS ? 1 : 0);
 	if (andor->type == OR_IF)
-		return (lr == TRUE ? 0 : 1);
+		return (lr == SUCCESS ? 0 : 1);
 	return (FAILURE);
 }
 
@@ -60,6 +61,8 @@ int		ft_eval(t_cfg *shell, t_list *cmd_table)
 {
 
 	printf("\n\n----------- eval -----------\n\n\n\n");
+	set_signal_ign();
+	signal(SIGCHLD, SIG_DFL);
 	lvl_cmd_table(shell, cmd_table);
 	printf("----------- eval -----------\n\n");
 	return (0);
