@@ -142,7 +142,7 @@ typedef struct			s_assignment
 typedef struct			s_redir
 {
 	char			*delim;
-	int			io_num;
+	char			*io_num;
 	t_token_type		type; // enum
 	char			*file;
 }				t_redir;
@@ -160,6 +160,7 @@ typedef struct			s_simple_cmd
 
 typedef struct			s_and_or
 {
+	char			*str;
 	t_list			*s_cmd;
 	t_list			*curr_s_cmd;
 	t_token_type		type; //enum

@@ -39,17 +39,23 @@ static void		as_flush(t_printf *data)
 	if (!*(data->str))
 	{
 		if (!(*data->str = ft_strnew(data->buf_len + 1)))
+		{
 			data->ret = -1;
+			return ;
+		}
 		ft_strncpy(*(data->str), data->buf, data->buf_len);
 	}
 	else
 	{
 		len = ft_strlen(*(data->str));
 		if (!(new = ft_strnew(len + data->buf_len + 1)))
+		{
 			data->ret = -1;
+			return ;
+		}
 		ft_strcpy(new, *(data->str));
 		free(*(data->str));
-		ft_strncat(new, data->buf, len + data->buf_len);
+		ft_strncat(new, data->buf, data->buf_len);
 		*(data->str) = new;
 	}
 }
