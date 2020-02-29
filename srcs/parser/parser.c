@@ -6,7 +6,8 @@
 
 int		syn_err(t_token *token, t_parser *parser)
 {
-	ft_printf("syntax error: %4d %s\n", parser->state, token->str);
+	ft_printf("syntax error near unexpected token `%s\' state=%d\n", token->str, parser->state);
+	parser->state = S_PARSER_SYNTAX_ERROR;
 	return (1);
 }
 
@@ -41,7 +42,7 @@ int		p_add_redir_delim(t_token* token, t_parser *parser)
 	return (1);
 }
 
-void		p_init_start_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_start_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_TABLE_START][TOKEN] = syn_err;
 	table_builder[S_PARSER_TABLE_START][WORD] = p_cmd_name;
@@ -62,7 +63,7 @@ void		p_init_start_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_TABLE_START][DLESSDASH] = p_add_redir;
 }
 
-void		p_init_cmd_wait_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_cmd_wait_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_CMD_START][TOKEN] = syn_err;
 	table_builder[S_PARSER_CMD_START][WORD] = p_cmd_name;
@@ -83,11 +84,11 @@ void		p_init_cmd_wait_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_CMD_START][DLESSDASH] = p_add_redir;
 }
 
-void		p_init_args_wait_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_args_wait_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_CMD_ARGS][TOKEN] = syn_err;
 	table_builder[S_PARSER_CMD_ARGS][WORD] = p_add_arg;
-	table_builder[S_PARSER_CMD_ARGS][ASSIGNMENT_WORD] = p_add_arg;
+	table_builder[S_PARSER_CMD_ARGS][ASSIGNMENT_WORD] = p_add_assign_arg;
 	table_builder[S_PARSER_CMD_ARGS][NEWLINE] = p_set_start_state;
 	table_builder[S_PARSER_CMD_ARGS][IO_NUMBER] = p_add_io_num;
 	table_builder[S_PARSER_CMD_ARGS][AND_IF] = p_add_and_or;
@@ -104,7 +105,7 @@ void		p_init_args_wait_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_CMD_ARGS][DLESSDASH] = p_add_redir;
 }
 
-void		p_init_redir_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_redir_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_REDIR][TOKEN] = syn_err;
 	table_builder[S_PARSER_REDIR][WORD] = p_file_name;
@@ -125,7 +126,7 @@ void		p_init_redir_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_REDIR][DLESSDASH] = syn_err;
 }
 
-void		p_init_assign_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_assign_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_ASSIGN][TOKEN] = syn_err;
 	table_builder[S_PARSER_ASSIGN][WORD] = p_assign_val;
@@ -146,7 +147,7 @@ void		p_init_assign_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_ASSIGN][DLESSDASH] = syn_err;
 }
 
-void		p_init_io_nbr_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_io_nbr_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_IO_NUMBER][TOKEN] = syn_err;
 	table_builder[S_PARSER_IO_NUMBER][WORD] = syn_err;
@@ -167,7 +168,7 @@ void		p_init_io_nbr_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_IO_NUMBER][DLESSDASH] = p_add_redir;
 }
 
-void		p_init_delim_state(int (*table_builder[7][17])(t_token *, t_parser *))
+void		p_init_delim_state(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_DELIM][TOKEN] = syn_err;
 	table_builder[S_PARSER_DELIM][WORD] = p_add_redir_delim;
@@ -188,6 +189,69 @@ void		p_init_delim_state(int (*table_builder[7][17])(t_token *, t_parser *))
 	table_builder[S_PARSER_DELIM][DLESSDASH] = syn_err;
 }
 
+void		p_init_arg_assign_state(int (*table_builder[10][17])(t_token *, t_parser *))
+{
+	table_builder[S_PARSER_ARG_ASSIGN][TOKEN] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][WORD] = p_assign_join;
+	table_builder[S_PARSER_ARG_ASSIGN][ASSIGNMENT_WORD] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][NEWLINE] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][IO_NUMBER] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][AND_IF] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][AMP] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][OR_IF] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][PIPE] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][SEMI] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][LESS] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][DLESS] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][GREAT] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][DGREAT] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][LESSAND] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][GREATAND] = syn_err;
+	table_builder[S_PARSER_ARG_ASSIGN][DLESSDASH] = syn_err;
+}
+
+void		p_init_andif_pipe_state(int (*table_builder[10][17])(t_token *, t_parser *))
+{
+	table_builder[S_PARSER_ANDIF_PIPE][TOKEN] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][WORD] = p_cmd_name;
+	table_builder[S_PARSER_ANDIF_PIPE][ASSIGNMENT_WORD] = p_add_assign;
+	table_builder[S_PARSER_ANDIF_PIPE][NEWLINE] = p_skip;
+	table_builder[S_PARSER_ANDIF_PIPE][IO_NUMBER] = p_add_io_num;
+	table_builder[S_PARSER_ANDIF_PIPE][AND_IF] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][AMP] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][OR_IF] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][PIPE] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][SEMI] = syn_err;
+	table_builder[S_PARSER_ANDIF_PIPE][LESS] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][DLESS] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][GREAT] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][DGREAT] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][LESSAND] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][GREATAND] = p_add_redir;
+	table_builder[S_PARSER_ANDIF_PIPE][DLESSDASH] = p_add_redir;
+}
+
+void		p_init_syn_err_state(int (*table_builder[10][17])(t_token *, t_parser *))
+{
+	table_builder[S_PARSER_SYNTAX_ERROR][TOKEN] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][WORD] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][ASSIGNMENT_WORD] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][NEWLINE] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][IO_NUMBER] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][AND_IF] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][AMP] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][OR_IF] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][PIPE] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][SEMI] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][LESS] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][DLESS] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][GREAT] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][DGREAT] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][LESSAND] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][GREATAND] = p_skip;
+	table_builder[S_PARSER_SYNTAX_ERROR][DLESSDASH] = p_skip;
+}
+
 void		init_parser(t_parser *parser)
 {
 	parser->state = S_PARSER_TABLE_START;
@@ -196,7 +260,7 @@ void		init_parser(t_parser *parser)
 	parser->curr_table = NULL;
 }
 
-int	p_process_token(t_token *token, t_parser *parser, int (*table_builder[7][17])(t_token *, t_parser *))
+int	p_process_token(t_token *token, t_parser *parser, int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	if (!table_builder[parser->state][token->type](token, parser))
 	{
@@ -206,7 +270,7 @@ int	p_process_token(t_token *token, t_parser *parser, int (*table_builder[7][17]
 	return (1);
 }
 
-int	p_tokeniter(t_list *token, t_parser *parser, int (*table_builder[7][17])(t_token *, t_parser *))
+int	p_tokeniter(t_list *token, t_parser *parser, int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	while (token)
 	{
@@ -217,7 +281,7 @@ int	p_tokeniter(t_list *token, t_parser *parser, int (*table_builder[7][17])(t_t
 	return (1);
 }
 
-void	p_init_state_machine(int (*table_builder[7][17])(t_token *, t_parser *))
+void	p_init_state_machine(int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	p_init_start_state(table_builder);
 	p_init_cmd_wait_state(table_builder);
@@ -226,6 +290,10 @@ void	p_init_state_machine(int (*table_builder[7][17])(t_token *, t_parser *))
 	p_init_assign_state(table_builder);
 	p_init_io_nbr_state(table_builder);
 	p_init_delim_state(table_builder);
+	p_init_assign_state(table_builder);
+	p_init_arg_assign_state(table_builder);
+	p_init_andif_pipe_state(table_builder);
+	p_init_syn_err_state(table_builder);
 }
 
 void		del_token(void *data, size_t size)
@@ -468,7 +536,7 @@ int		p_set_jobs_str(t_parser *parser)
 
 int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
-	int	(*table_builder[7][17])(t_token *, t_parser *);
+	int	(*table_builder[10][17])(t_token *, t_parser *);
 
 	ft_printf("\n----------- parsing -----------\n\n");
 	if (!lexer || !parser)
@@ -476,13 +544,12 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	init_parser(parser);
 	p_init_state_machine(table_builder);
 	p_tokeniter(lexer->token_lst, parser, table_builder);
-	while (parser->state == S_PARSER_CMD_START)
+	while (parser->state == S_PARSER_ANDIF_PIPE)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
 		ft_lexer(ft_prompt("> "), lexer);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
-	print_parser(parser);
 	p_make_args_tab(parser);
 	if (!p_set_jobs_str(parser))
 			return (0);

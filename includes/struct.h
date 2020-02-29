@@ -124,13 +124,16 @@ typedef struct			s_lexer
 
 typedef enum			e_parser_state
 {
+	S_PARSER_SYNTAX_ERROR,	// Syntax error rencontree
 	S_PARSER_TABLE_START,	// Debut de cmd_table
 	S_PARSER_CMD_START,	// En attente de cmd_name
 	S_PARSER_CMD_ARGS,	// En attente d'args
 	S_PARSER_REDIR,		// Redirection en attente de filename
 	S_PARSER_ASSIGN,	// Assignation en attente de valeur
 	S_PARSER_IO_NUMBER,	// Io_number en attente de redirection
-	S_PARSER_DELIM		// Redirectiion DLESS en attente de delim
+	S_PARSER_DELIM,		// Redirection DLESS en attente de delim
+	S_PARSER_ARG_ASSIGN,	// Completion d'arg apres ASSIGNMENT_WORD
+	S_PARSER_ANDIF_PIPE	// Debut de pipe ou and_or
 }				t_parser_state;
 
 typedef struct			s_assignment
