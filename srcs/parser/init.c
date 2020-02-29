@@ -15,7 +15,7 @@ t_redir		*init_redir(void)
 	t_redir		*redir;
 
 	redir = (t_redir *)ft_memalloc(sizeof(t_redir));
-	redir->io_num = -1;
+	redir->io_num = NULL;
 	return (redir);
 }
 

@@ -19,6 +19,7 @@ t_redir				*init_redir(void);
 int				p_cmd_name(t_token *token, t_parser *parser);
 int				p_file_name(t_token *token, t_parser *parser);
 int				p_add_arg(t_token *token, t_parser *parser);
+int				p_add_assign_arg(t_token *token, t_parser *parser);
 
 // redir.c
 
@@ -30,6 +31,7 @@ int				p_add_redir(t_token *token, t_parser *parser);
 
 int				p_add_assign(t_token *token, t_parser *parser);
 int				p_assign_val(t_token *token, t_parser *parser);
+int				p_assign_join(t_token *token, t_parser *parser);
 
 // and_or.c
 

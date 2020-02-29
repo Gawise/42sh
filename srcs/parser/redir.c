@@ -36,7 +36,8 @@ int	p_add_io_num(t_token *token, t_parser *parser)
 	if (!p_create_redir(cmd))
 		return (0);
 	redir = (t_redir *)cmd->curr_redir->data;
-	redir->io_num = ft_atoi(token->str);
+	if (!(redir->io_num = ft_strdup(token->str)))
+		return (0);
 	parser->prev_state = parser->state;
 	parser->state = S_PARSER_IO_NUMBER;
 	return (1);

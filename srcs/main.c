@@ -56,7 +56,11 @@ int		main(int ac, char **av, char **env)
 		ft_lexer(line, lexer);
 		ft_lstiter(lexer->token_lst, print_debug);
 		ft_parser(lexer, &parser);
-		ft_eval(&shell, parser.table);
+		if (parser.state != S_PARSER_SYNTAX_ERROR)
+		{
+			print_parser(&parser);
+			ft_eval(&shell, parser.table);
+		}
 	}
 	return (0);
 }

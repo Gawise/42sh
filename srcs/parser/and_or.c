@@ -18,6 +18,6 @@ int	p_add_and_or(t_token *token, t_parser * parser)
 		return (0);
 	table->curr_and_or->next = new;
 	table->curr_and_or = new;
-	parser->state = S_PARSER_CMD_START;
+	parser->state = S_PARSER_ANDIF_PIPE;
 	return (1);
 }
