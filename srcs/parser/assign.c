@@ -56,7 +56,7 @@ int		p_assign_join(t_token *token, t_parser *parser)
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
-	lst = ft_lstgettail(&cmd->args);
+	lst = ft_lstgettail(cmd->args);
 	if (!(lst->data = ft_strlclnjoin((char *)lst->data, token->str)))
 		return (0);
 	return (1);
