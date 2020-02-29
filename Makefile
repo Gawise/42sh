@@ -79,6 +79,8 @@ EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
+EVALSRCS += path_err.c
+EVALSRCS += path_err_tools.c
 
 ## DEBUG ##
 

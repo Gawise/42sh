@@ -13,10 +13,8 @@ void		set_signal_ign(void)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
-	//signal(SIGTTOU, SIG_DFL);
 	signal(SIGTTOU, SIG_IGN);
-	signal(SIGCHLD, SIG_DFL);  //only for exec ?
-	//signal(SIGCHLD, SIG_IGN);
+	signal(SIGCHLD, SIG_IGN);
 }
 
 void		init_cfg(t_cfg *cfg, char **env)
@@ -24,6 +22,7 @@ void		init_cfg(t_cfg *cfg, char **env)
 	ft_bzero(cfg, sizeof(t_cfg));
 	cfg->pid = getpid();
 	create_lst_env(&cfg->var, env);
+	// faire liste de variables interne ??
 }
 
 void		init_shell(t_cfg *cfg, char **env)

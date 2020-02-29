@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h> //perror !!!!]]
 
+#include "ft_printf.h"
 
 #include <stdlib.h>
 void	ex(char *s)
@@ -13,6 +14,26 @@ void	ex(char *s)
 }
 
 #include <signal.h>
+void	sig(int i)
+{
+	printf("sig detect = [%d]\n", i);
+}
+
+#include "sh.h"
+void	signal_debug_printf(void)
+{
+	signal(SIGHUP, sig);
+	signal(SIGINT, sig);
+	signal(SIGQUIT, sig);
+	signal(SIGPIPE, sig);
+	signal(SIGCHLD, sig);
+	signal(SIGTSTP, sig);
+	signal(SIGTSTP, sig);
+	signal(SIGCONT, sig);
+	signal(SIGTTIN, sig);
+	signal(SIGTTOU, sig);
+}
+
 void	set_signal_child(void)
 {
 	signal(SIGHUP, SIG_DFL);
@@ -40,27 +61,6 @@ void	set_signal_child(void)
  *}
  */
 
-/*
- *t_list		*create_pipe_list(int nb)
- *{
- *    t_list *new;
- *    t_rdir	elem;
- *
- *    new = NULL;
- *    elem.fd[0] = -1;
- *    elem.fd[1] = -1;
- *
- *    while (nb--)
- *        ft_lst_push_back(&new, &elem, sizeof(t_rdir))
- *            ;
- *    return (new);
- *}
- */
-
-
-
-
-
 
 /*					    ^        										*/
 /*					    |        										*/
@@ -71,10 +71,6 @@ void	set_signal_child(void)
 
 
 
-int		condition_respectee(void)
-{
-	return (0);
-}
 
 int		builtin_process(void)
 {
@@ -82,20 +78,36 @@ int		builtin_process(void)
 	return (0);
 }
 
+uint8_t	error_handling(t_process *p)
+{
+	/* faire tableau avec hash*/
+	if (!(p->setup & ERROR))
+		return (SUCCESS);
+	p->setup &= ~ERROR;
+	if (p->setup & E_UNFOUND)
+		ft_dprintf(2, "[var interne]: %s: command not found\n", p->cmd);
+	if (p->setup & E_ISDIR)
+		ft_dprintf(2, "[var interne]: %s: is a directory\n", p->path );
+	if (p->setup & E_NOENT)
+		ft_dprintf(2, "[var interne]: %s: No such file or directory\n", p->path);
+	if (p->setup & E_ACCES)
+		ft_dprintf(2, "[var interne]: %s: Permission denied\n", p->path);
+	if (p->setup & E_LOOP)
+		ft_dprintf(2, "[var interne]: %s: Too many links\n", p->path);
+	if (p->setup & E_NTL)
+		ft_dprintf(2, "[var intern]: %s: File name too long\n", p->path);
+	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
+	return (FAILURE);
+}
 
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
-
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			ex("[Parent process] close error:");
 	if (job->pgid == 0)
 		job->pgid = process->pid;
-	process->status = RUNNING;
-
-	printf("\t[PARANT PROCESS]  PID  = %d\t PGID = %d \n", process->pid, job->pgid);
 	setpgid(process->pid, job->pgid);
-
 	if (job->fg)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
 			perror("[PARENT PROCESS] error tcsetpgrp");
@@ -103,57 +115,47 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	return (0);
 }
 
-int		child_process(t_job *job, t_process *process, int fd_pipe, char **envp)
+int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
-	//set signal:
-	//https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html#Signal-Handling
 	// Belek interractif or not
-
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			ex("[child process] close error:");
-	process->pid = getpid();
+	p->pid = getpid();
 	if (job->pgid == 0)
-		job->pgid = process->pid;
-	set_signal_child();
-	do_dup(process);
-	setpgid(process->pid, job->pgid); 		//not do if !fg ??
+		job->pgid = p->pid;
+	setpgid(p->pid, job->pgid); 		//not do if !fg ??
 	 if (job->fg)
-		if (tcsetpgrp(STDIN_FILENO, job->pgid))
+		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
-
-	printf("\t[CHILD PROCESS EXEC] \t[%s]\n\n\n", process->av[0]);
-	if ((execve(process->path, process->av, envp)) == -1)
+	do_dup(p);
+	set_signal_child();
+	if (error_handling(p) == FAILURE)
+		exit(p->ret);
+	if ((execve(p->path, p->av, envp)) == -1)
 		ex("execve:");
 	return (0);
 }
 
-int		fork_process(t_job *job, t_process *process)
+int		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
-	printf("\t[FORK PROCESS] [%s]\n", process->path);
 	envp = create_tab_env(job->var, 0); //problematique, a voir ac l'assignement
-	if ((process->pid = fork()) == -1)
+	p->status = RUNNING;
+	if ((p->pid = fork()) == -1)
 		ex("fork:");
-	if (!(process->pid))
-		return (child_process(job, process, job->pipe.fd[0], envp));
-	if (process->pid)
-		return (parent_process(job, process, job->pipe.fd[1], envp));
+	if (!(p->pid))
+		return (child_process(job, p, job->pipe.fd[0], envp));
+	if (p->pid)
+		return (parent_process(job, p, job->pipe.fd[1], envp));
 	return (0);
 }
 
-int		run_process(t_cfg *shell, t_job *job, t_process *process)
+int		run_process(t_job *job, t_process *process)
 {
-
-	//type_process ??
 	//faire les redir et open
-	printf("\t[RUN PROCESS]\n");
-	(void)shell;
-	int debug = process_type(job->var, process); //return (127 si pas trouver)
-	if (debug == 127) //pour eviter de lancer vide pour le moment
-		return (1);
-	//printf("process_type retour = [%d]\n", debug);
+	process_type(job->var, process);
 	return (fork_process(job, process));
 }
 
@@ -161,19 +163,12 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	//set le terminal et sauv ?
 	//https://www.gnu.org/software/libc/manual/html_node/Functions-for-Job-Control.html#Functions-for-Job-Control
-	//faire les pipes ?
-	//envoyer les process
-	//wait ici ?
 	//https://www.gnu.org/software/libc/manual/html_node/Process-Completion.html#Process-Completion
-	//exec_type ?
 	//https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
-
-	printf("\t[RUN JOB]  PID 21SH = [%d]\n", shell->pid);
-
 	while (process)
 	{
 		routine_set_pipe(process, &job->pipe);
-		run_process(shell, job, process->data);
+		run_process(job, process->data);
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
@@ -182,7 +177,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 	if (job->fg)
 	{
 		wait_process(job);
-		if (tcsetpgrp(STDIN_FILENO, shell->pid))
+		if (tcsetpgrp(STDIN_FILENO, shell->pid) == -1)
 			perror("[run job] error tcsetpgrp");
 	}
 
