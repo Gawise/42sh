@@ -1,6 +1,8 @@
 #include "libft.h"
 #include "parser.h"
 #include "exec.h"
+#include "var.h"
+#include "sh.h"
 
 
 /*
@@ -21,7 +23,7 @@ static uint16_t		find_type(t_list *var, t_process *p)
 	 *-> if utility {}
 	 *-> if function {}
 	 */
-	else if ((p->path = ft_which(ft_getenv(var, "PATH"), p->cmd)))
+	else if ((p->path = ft_which(find_var_value(var, "PATH"), p->cmd)))
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);

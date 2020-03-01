@@ -30,6 +30,6 @@ int		routine_clean_job(t_job *j)
 {
 	ft_strdel(&j->command);
 	ft_lstdel(&j->process, del_struct_process);
-	ft_lstdel(&j->var, del_struct_tvar);
+	ft_lstdel(&j->env, del_struct_tvar);
 	return (0);
 }

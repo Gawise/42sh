@@ -7,6 +7,17 @@
 #include <unistd.h>
 #include <signal.h>
 
+struct termios *term_create_origin(void)
+{
+	struct termios *term;
+
+	if (!(term = malloc(sizeof(struct termios))))
+		ex("[TERM ORIGIN] ERROR MALLOC");
+	if ((tcgetattr(STDIN_FILENO, term) == FALSE))
+		ex("[TERM ORIGIN] ERROR TCGETATTR");
+	return (term);
+}
+
 void		set_signal_ign(void)
 {
 	signal(SIGINT, SIG_IGN);
@@ -14,36 +25,36 @@ void		set_signal_ign(void)
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
-	signal(SIGCHLD, SIG_IGN);
+//	signal(SIGCHLD, SIG_IGN); //for job control
 }
 
-void		init_cfg(t_cfg *cfg, char **env)
+
+t_cfg		*cfg_shell(void)
 {
-	ft_bzero(cfg, sizeof(t_cfg));
-	cfg->pid = getpid();
-	create_lst_env(&cfg->var, env);
-	// faire liste de variables interne ??
+	static t_cfg shell;
+
+	return (&shell);
 }
 
-void		init_shell(t_cfg *cfg, char **env)
+
+void		init_shell(char **env, char **av)
 {
 	uint8_t	shell_terminal;
 	pid_t	shell_pgid;
+	t_cfg	*shell;
 
 	shell_terminal = STDIN_FILENO;
-	init_cfg(cfg, env);
-	if ((cfg->interactive = isatty(shell_terminal)))
+	shell = init_cfg(env, av);
+	if ((shell->interactive = isatty(shell_terminal)))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);
 		set_signal_ign();
-		if (setpgid(cfg->pid, cfg->pid) < 0)
+		if (setpgid(shell->pid, shell->pid) < 0)
 			ex("[INIT SHELL] error setpgid");
-		if (tcsetpgrp(STDIN_FILENO, cfg->pid))
-			perror("[INIT SHELL] error tcsetpgrp");
-		tcgetattr(STDIN_FILENO, &cfg->term_origin);
+		if (tcsetpgrp(STDIN_FILENO, shell->pid))
+			ex("[INIT SHELL] error tcsetpgrp");
+		shell->term_origin = term_create_origin();
 	}
-
-// faire partie non interactive !!
-
+	//else
 }
