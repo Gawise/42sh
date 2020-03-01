@@ -20,10 +20,10 @@ int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
 	uint8_t		tmp;
 	t_job		job;
 
-	cmd_to_job(&job, s_cmd);
+	cmd_to_job(shell, &job, s_cmd);
 	job.fg = fg;
 
-	job.var = env_list_cpy(shell->var); //refaire cette fonction en triant var
+	job.var = env_list_cpy(shell->env); //refaire cette fonction en triant var
 
 	run_job(shell, &job, job.process);
 	tmp = job.ret;				//en attendant var intern? 
@@ -57,12 +57,13 @@ int		lvl_cmd_table(t_cfg *shell, t_list *lst)
 	return (0);
 }
 
-int		ft_eval(t_cfg *shell, t_list *cmd_table)
+int		ft_eval(t_list *cmd_table)
 {
+	t_cfg *shell;
 
+	shell = cfg_shell();
 	printf("\n\n----------- eval -----------\n\n\n\n");
 	set_signal_ign();
-	signal(SIGCHLD, SIG_DFL);
 	lvl_cmd_table(shell, cmd_table);
 	printf("----------- eval -----------\n\n");
 	return (0);

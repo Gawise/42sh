@@ -14,12 +14,12 @@ typedef struct s_dlist	t_dlist;
 
 typedef struct	s_cfg
 {
-	struct termios term_origin;      /* origin terminal modes */
-	struct termios term_eval;   		/*last exec tmodes */
+	struct termios *term_origin;      /* origin terminal modes */
 	uint8_t interactive;		/*True Or False*/
-	uint8_t lr;					/* last return */
 	pid_t	pid;				/* pid's 21	*/
-	t_list	*var;
+	t_list	*env;
+	t_list	*intern;
+	t_list	*job;
 }				t_cfg;
 
 
@@ -258,7 +258,7 @@ typedef struct	s_job
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
 	uint8_t		std[3];				/* stdin out err*/
-	struct		termios tmodes;     /* saved terminal modes */
+	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 
 #endif

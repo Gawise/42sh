@@ -47,6 +47,7 @@ void	ex(char *s);
 
 
 /*				*/
+
 int		lvl_cmd_table(t_cfg *shell, t_list *lst);
 int		routine_set_pipe(t_list *process, t_pipe *fd);
 int		do_dup(t_process *p);
@@ -55,7 +56,7 @@ void	process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
 
-int		cmd_to_job(t_job *job, t_list *s_cmd);
+int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd);
 int		routine_clean_job(t_job *j);
 
 
@@ -78,9 +79,7 @@ t_list	*setenv_find(t_list *lst, char *var);
 t_list		*env_list_cpy(t_list *lst);
 
 
-/* externe a l exec */
-void	init_shell(t_cfg *cfg, char **env);
-int		ft_eval(t_cfg *shell, t_list *cmd_table);
+int		ft_eval(t_list *cmd_table);
 
 
 #endif

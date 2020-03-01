@@ -70,10 +70,10 @@ void		update_job(t_job *j)
 	if (j->status & (COMPLETED | FAILED))
 		j->ret = ((t_process *)(lst->data))->ret;
 	else if (j->status & KILLED)
-		j->ret = 130;
+		j->ret = 128 + ((t_process*)(lst->data))->ret;
 	else if (j->status & STOPPED)
 	{
-		j->ret = 146;
+		j->ret = 128 + ((t_process*)(lst->data))->ret;
 		call_jobcontroler(j);
 	}
 }
