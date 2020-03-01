@@ -131,6 +131,7 @@ t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 char			*ft_strclnjoin(char const *s1, char const *s2);
+char			*ft_strlclnjoin(char const *s1, char const *s2);
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 char			*ft_fcvt(double val, int ndigits, int *decpt, char *buf);
 double			ft_modf(double val, double *integral);

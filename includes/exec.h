@@ -4,6 +4,7 @@
 
 	#include <stdio.h>				//debug
 # include "struct.h"
+# include "signal.h"
 
 # define SUCCESS 0
 # define FAILURE 1
