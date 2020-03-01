@@ -1,13 +1,10 @@
 #include "libft.h"
 #include "exec.h"
 #include "parser.h"
+#include "var.h"
 
 void	term_create_eval(struct termios *origin, struct termios *eval)
 {
-	/*
-	 *if (!(eval = malloc(sizeof(struct termios))))
-	 *    ex("[TERM CREATE EVAL] ERROR MALLOC");
-	 */
 	ft_memcpy(eval, origin, sizeof(struct termios));
 	eval->c_lflag &= ~TOSTOP;
 }
@@ -37,6 +34,7 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 	return (i);   /*i useless sans create_pipe_list ???*/
 }
 
+
 int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd)
 {
 	int		nb_p;
@@ -47,6 +45,8 @@ int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd)
 	job->std[1] = STDOUT_FILENO;
 	job->std[2] = STDERR_FILENO;
 	term_create_eval(shell->term_origin, &job->term_eval);
+	job->env = ft_lstdup(shell->env, shell->env->size, cpy_var_list);
+
 //	job->pipe = create_pipe_list(nb_p);
 
 	return (0);

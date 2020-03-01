@@ -43,7 +43,6 @@
 
 
 /*		debug	*/
-void	ex(char *s);
 
 
 /*				*/
@@ -67,19 +66,13 @@ uint8_t		c_enotdir(char *path);
 
 int		wait_process(t_job *job);
 
+/*		term*/
+
+void		set_termios(struct termios *term);
 
 
-/*	env	*/
 
-int		ft_setenv(t_list **lst, char *var, char *value, uint8_t overw);
-char	*ft_getenv(t_list *env, char *name);
-void	create_lst_env(t_list **lst, char **env);
-char	**create_tab_env(t_list *list, int count);
-t_list	*setenv_find(t_list *lst, char *var);
-t_list		*env_list_cpy(t_list *lst);
-
-
-int		ft_eval(t_list *cmd_table);
+	int		ft_eval(t_list *cmd_table);
 
 
 #endif

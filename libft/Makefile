@@ -109,6 +109,7 @@ SRCS += ft_dlstnew.c
 SRCS += ft_dlstdel.c
 SRCS += ft_dlstdelone.c
 SRCS += ft_lsthave.c
+SRCS += ft_lstdup.c
 
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c

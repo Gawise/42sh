@@ -1,5 +1,7 @@
 #include "libft.h"
-#include "exec.h"
+#include "var.h"
+#include "struct.h"
+#include "sh.h"
 
 
 static void	setenv_update(t_list *lst, char *value)
@@ -17,42 +19,30 @@ static int	setenv_add(t_list **lst, char *var, char *value)
 	new.ctab[0] = ft_strdup(var);
 	new.ctab[1] = ft_strdup(value);
 	new.ctab[2] = NULL;
+	new.rd = 0;
 	ft_lst_push_back(lst, &new, sizeof(new));
 	return (0);
 }
 
-int			ft_setenv(t_list **lst, char *var, char *value, uint8_t overw)
+int			ft_setvar(t_list **lst, char *name, char *value, uint8_t overw)
 {
 	t_list *find;
+	t_var	*var;
 
 	find = NULL;
-	if (ft_strchr(var, '=') || ft_strchr(value, '='))
+	if (ft_strchr(name, '=') || ft_strchr(value, '='))
 		return (1);
-	if ((find = setenv_find(*lst, var)))
+	if ((find = find_var(*lst, name)))
 	{
-		if (overw)
+		var = find->data;
+		if (overw && !var->rd)
 			setenv_update(find, value);
 		return (0);
 	}
-	return (setenv_add(lst, var, value));
+	return (setenv_add(lst, name, value));
 }
 
-
-/*
- *                 useles ? if not, have to update
- *int			ft_call_setenv(t_msh *msh)
- *{
- *    char	*value;
- *    char	*var;
- *
- *    if (!msh->input[1])
- *        return (0);
- *    if ((value = ft_strchr(msh->input[1], '=')))
- *    {
- *        *value = '\0';
- *        value++;
- *    }
- *    var = msh->input[1];
- *    return (ft_setenv(&msh->env_var, var, value, 1));
- *}
- */
+int			ft_setenv(t_list **lst, char *name, char *value, uint8_t overw)
+{
+	return (ft_setvar(lst, name, value, overw));
+}

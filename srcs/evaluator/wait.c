@@ -1,5 +1,6 @@
 #include "exec.h"
 #include "libft.h"
+#include "sh.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -97,6 +98,9 @@ int		wait_process(t_job *job)
 
 
 	/* DEBUG  */
+	t_cfg *shell = cfg_shell();
+	if (shell->debug)
+	{
 		t_process *process;
 		t_list *j = job->process;
 		printf("\n\n ----------------------\n--> [INFO PROCESS] \n");
@@ -108,6 +112,7 @@ int		wait_process(t_job *job)
 		}
 		printf("--> [INFO JOB] \n");
 		printf("\tJOB status = [%d]\t  JOB return = [%d]\n ----------------------\n\n", job->status, job->ret);
+	}
 	/*		*/
 	return (0);
 }

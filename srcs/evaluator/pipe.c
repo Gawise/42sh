@@ -1,5 +1,6 @@
 #include "exec.h"
 #include "libft.h"
+#include "sh.h"
 #include <unistd.h>
 
 int		do_dup(t_process *p)

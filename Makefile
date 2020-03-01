@@ -73,7 +73,7 @@ PARSRCS += word.c
 EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_env.c
+EVALSRCS += tools_var.c
 EVALSRCS += setenv.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
@@ -89,6 +89,7 @@ DBSRCS += parser.c
 
 SRC += main.c
 SRC += init_shell.c
+SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))

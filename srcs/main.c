@@ -37,12 +37,11 @@ int		main(int ac, char **av, char **env)
 	t_parser	parser;
 	
 	
-	init_shell(env);
+	init_shell(env, av);
 	(void)ac;
-	(void)av;
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
-	while ((line = ft_prompt(NAME_SH)))
+	while ((line = ft_prompt(NAME_SH)))  //recup PS1
 	{
 		if (ft_strequ("exit\n", line))
 			exit(0);

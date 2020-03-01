@@ -5,9 +5,11 @@
 
 typedef struct	s_cfg t_cfg;
 
-void	set_signal_ign(void);
-void	init_shell(char **env);
-t_cfg		*cfg_shell(void);
+void	ex(char *s); //pour la gestion des erreurs amenant a quiter
 
+void	set_signal_ign(void);
+void	init_shell(char **env, char **av);
+t_cfg	*init_cfg(char **env, char **av);
+t_cfg	*cfg_shell(void);
 
 #endif

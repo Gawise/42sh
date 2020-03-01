@@ -7,16 +7,6 @@
 #include <unistd.h>
 #include <signal.h>
 
-void		set_signal_ign(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-//	signal(SIGCHLD, SIG_IGN); //for job control
-}
-
 struct termios *term_create_origin(void)
 {
 	struct termios *term;
@@ -28,6 +18,17 @@ struct termios *term_create_origin(void)
 	return (term);
 }
 
+void		set_signal_ign(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+//	signal(SIGCHLD, SIG_IGN); //for job control
+}
+
+
 t_cfg		*cfg_shell(void)
 {
 	static t_cfg shell;
@@ -36,27 +37,14 @@ t_cfg		*cfg_shell(void)
 }
 
 
-t_cfg		*init_cfg(char **env)
-{
-	t_cfg	*shell;
-
-	shell = cfg_shell();
-	ft_bzero(shell, sizeof(t_cfg));
-	shell->pid = getpid();
-	create_lst_env(&shell->env, env);
-	return (shell);
-}
-
-
-
-void		init_shell(char **env)
+void		init_shell(char **env, char **av)
 {
 	uint8_t	shell_terminal;
 	pid_t	shell_pgid;
 	t_cfg	*shell;
 
 	shell_terminal = STDIN_FILENO;
-	shell = init_cfg(env);
+	shell = init_cfg(env, av);
 	if ((shell->interactive = isatty(shell_terminal)))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
@@ -68,7 +56,5 @@ void		init_shell(char **env)
 			ex("[INIT SHELL] error tcsetpgrp");
 		shell->term_origin = term_create_origin();
 	}
-
-// faire partie non interactive !!
-
+	//else
 }

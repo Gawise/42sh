@@ -20,6 +20,7 @@ typedef struct	s_cfg
 	t_list	*env;
 	t_list	*intern;
 	t_list	*job;
+	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
 
 
@@ -226,7 +227,7 @@ typedef struct	s_cs_line
 typedef struct	s_var
 {
 	char		**ctab;
-	uint8_t		type;
+	uint8_t		rd;
 }				t_var;
 
 typedef struct	s_pipe
@@ -251,7 +252,7 @@ typedef struct	s_job
 {
 	char		*command;           /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
-	t_list		*var;				/* VAR env | locale | tmp */
+	t_list		*env;				/* VAR env  */
 	pid_t		pgid;               /* process group ID */
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
