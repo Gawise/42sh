@@ -37,7 +37,7 @@ t_cfg		*cfg_shell(void)
 }
 
 
-void		init_shell(char **env, char **av)
+uint8_t		init_shell(char **env, char **av)
 {
 	uint8_t	shell_terminal;
 	pid_t	shell_pgid;
@@ -57,4 +57,5 @@ void		init_shell(char **env, char **av)
 		shell->term_origin = term_create_origin();
 	}
 	//else
+	return (shell->debug);
 }

@@ -23,8 +23,6 @@ int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
 	cmd_to_job(shell, &job, s_cmd);
 	if ((job.fg = fg))
 		set_termios(&job.term_eval);
-
-
 	run_job(shell, &job, job.process);
 	tmp = job.ret;				//en attendant var intern? 
 	routine_clean_job(&job);

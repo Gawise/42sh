@@ -35,9 +35,9 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		*lexer;
 	t_parser	parser;
-	
-	
-	init_shell(env, av);
+	uint8_t		debug;
+
+	debug = init_shell(env, av);
 	(void)ac;
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
@@ -48,12 +48,14 @@ int		main(int ac, char **av, char **env)
 		set_signal_ign();
 		init_lexer(lexer);
 		ft_lexer(line, lexer);
-		ft_lstiter(lexer->token_lst, print_debug);
+		if (debug)
+			ft_lstiter(lexer->token_lst, print_debug);
 		ft_parser(lexer, &parser);
 		if (parser.state != S_PARSER_SYNTAX_ERROR)
 		{
-			print_parser(&parser);
-			ft_eval(&shell, parser.table);
+			if (debug)
+				print_parser(&parser);
+			ft_eval(parser.table);
 		}
 	}
 	return (0);

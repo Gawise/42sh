@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "line_edition.h"
+#include "sh.h"
 
 int		syn_err(t_token *token, t_parser *parser)
 {
@@ -538,7 +539,8 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
 	int	(*table_builder[10][17])(t_token *, t_parser *);
 
-	ft_printf("\n----------- parsing -----------\n\n");
+	if (cfg_shell()->debug)
+		ft_printf("\n----------- parsing -----------\n\n");
 	if (!lexer || !parser)
 		return (0);
 	init_parser(parser);
