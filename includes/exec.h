@@ -56,13 +56,14 @@ void	process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
 
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd);
+int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 int		routine_clean_job(t_job *j);
 
 
-int			path_errors(char *path);
+char		*create_abs_path(char *s);
+int			path_errors(char *path, uint8_t check_it);
 uint8_t		c_enametoolong(char *path);
-uint8_t		c_enotdir(char *path);
+uint8_t		c_isdir(char *path);
 /*	wait */
 
 int		wait_process(t_job *job);
@@ -71,9 +72,13 @@ int		wait_process(t_job *job);
 
 void		set_termios(struct termios *term);
 
+/* redir */
+
+int		process_redir(t_process *p, t_list *redir);
 
 
-	int		ft_eval(t_list *cmd_table);
+
+int		ft_eval(t_list *cmd_table);
 
 
 #endif

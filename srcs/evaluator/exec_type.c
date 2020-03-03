@@ -35,25 +35,34 @@ static void		any_slash(t_list *var, t_process *p)
 {
 	if (find_type(var, p))
 		return ;
-	p->setup |= path_errors(p->path);
+	p->setup |= path_errors(p->path, 1);
+}
+
+
+char		*create_abs_path(char *s)
+{
+	char		*buf;
+	char		*tmp;
+
+	if (!(buf = getcwd(0, 0)))
+		ex("getcwd");
+	tmp = ft_strjoin(3, buf, "/", s);
+	ft_strdel(&buf);
+	return (tmp);
 }
 
 static void		with_slash(t_process *p)
 {
-	char		*buf;
 	char		*tmp;
 
 	p->setup |= SLASH;
 	p->path = ft_strdup(p->cmd);
 	if (*p->path == '/')
-		p->setup |= path_errors(p->path);
+		p->setup |= path_errors(p->path, 1);
 	else
 	{
-		if (!(buf = getcwd(0, 0)))
-			ex("getcwd");
-		tmp = ft_strjoin(3, buf, "/", p->path);
-		p->setup |= path_errors(tmp);
-		ft_strdel(&buf);
+		tmp = create_abs_path(p->path);
+		p->setup |= path_errors(tmp, 1);
 		ft_strdel(&tmp);
 	}
 }

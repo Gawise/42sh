@@ -71,7 +71,7 @@ void	print_redir(t_list *redirection)
 	redir = (t_redir *)redirection->data;
 	operator = get_redir_op(redir->type);
 	if (redir->io_num >= 0)
-		ft_printf("\t\t| %7d | %6s | %10s |\n", redir->io_num, operator, redir->file);
+		ft_printf("\t\t| %7s | %6s | %10s |\n", redir->io_num, operator, redir->file);
 	else
 		ft_printf("\t\t| %7c | %6s | %10s |\n", '-', operator, redir->file);
 	free(operator);

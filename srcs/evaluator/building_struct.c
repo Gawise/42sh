@@ -27,6 +27,7 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
 		process.status = WAITING;
+		process.redir = cmd->redir;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
 		i++;
@@ -35,12 +36,13 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 }
 
 
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd)
+int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 {
 	int		nb_p;
 
 	ft_bzero(job, sizeof(t_job));   /*set t_pipe a 0. Besoin d etre a -1?*/
 	nb_p = cmd_to_process(&job->process, s_cmd);
+	job->cmd = ft_strdup(cmd);
 	job->std[0] = STDIN_FILENO;
 	job->std[1] = STDOUT_FILENO;
 	job->std[2] = STDERR_FILENO;

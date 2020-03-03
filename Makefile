@@ -81,6 +81,7 @@ EVALSRCS += leveling.c
 EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
+EVALSRCS += redir.c
 
 ## DEBUG ##
 

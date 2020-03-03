@@ -59,7 +59,7 @@ int			c_eloop(char *path)
 	return (1);
 }
 
-int			path_errors(char *path)
+int			path_errors(char *path, uint8_t check_it)
 {
 	char			*idx;
 	int				ret;
@@ -68,7 +68,7 @@ int			path_errors(char *path)
 	ret = 0;
 	if (!c_enametoolong(path))
 		return (E_NTL);
-	if (c_enotdir(path))
+	if (c_isdir(path) & check_it)
 		return (E_ISDIR);
 	while (1)
 	{

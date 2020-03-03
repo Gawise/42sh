@@ -78,6 +78,7 @@ SRCS += ft_strnequ.c
 SRCS += ft_strnew.c
 SRCS += ft_strnstr.c
 SRCS += ft_strrchr.c
+SRCS += ft_strrchri.c
 SRCS += ft_strselect.c
 SRCS += ft_strsplit.c
 SRCS += ft_strstr.c

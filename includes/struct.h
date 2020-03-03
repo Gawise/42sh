@@ -147,7 +147,7 @@ typedef struct			s_redir
 {
 	char			*delim;
 	char			*io_num;
-	t_token_type		type; // enum
+	t_token_type	type; // enum
 	char			*file;
 }				t_redir;
 
@@ -242,19 +242,20 @@ typedef struct	s_pipe
 
 typedef struct	s_process
 {
-	char *cmd;                  /* cmd name */
-	char **av;                  /* for exec */
-	char *path;					/* path's exec */
-	pid_t pid;                  /* process ID */
-	uint8_t ret;				/* WEXITSTATUS  */
-	uint8_t status;             /* reported status value */
-	uint8_t std[3];				/* stdin out err*/
-	uint16_t setup;				/* info du process */
+	char 		*cmd;                /* cmd name */
+	char 		**av;                /* for exec */
+	char 		*path;				/* path's exec */
+	pid_t 		pid;                /* process ID */
+	uint8_t 	ret;				/* WEXITSTATUS  */
+	uint8_t 	status;             /* reported status value */
+	uint8_t 	std[3];				/* stdin out err*/
+	uint16_t	setup;				/* info du process */
+	t_list		*redir;				/* list of redirs */
 }				t_process;
 
 typedef struct	s_job
 {
-	char		*command;           /* command line, used for messages */
+	char		*cmd;		        /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
 	t_list		*env;				/* VAR env  */
 	pid_t		pgid;               /* process group ID */
