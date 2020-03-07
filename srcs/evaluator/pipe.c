@@ -24,8 +24,14 @@ int		do_dup(t_process *p)
 		if (close(p->std[1]) == -1)
 			ex("[do_pipe] close error:");
 	}
-	/*>		stderr 	*/
-	return (0);
+	if (p->std[2] != STDERR_FILENO)
+	{
+		if (dup2(p->std[2], STDERR_FILENO) == -1)
+			ex("[do_pipe] dup2 error:");
+		if (close(p->std[2]) == -1)
+			ex("[do_pipe] close error:");
+	}
+	return (SUCCESS);
 }
 
 int		routine_set_pipe(t_list *process, t_pipe *fd)

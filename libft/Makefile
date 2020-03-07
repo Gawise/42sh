@@ -59,7 +59,6 @@ SRCS += ft_strcpy.c
 SRCS += ft_strdel.c
 SRCS += ft_strdup.c
 SRCS += ft_strequ.c
-SRCS += ft_strichr.c
 SRCS += ft_striter.c
 SRCS += ft_striteri.c
 SRCS += ft_strjoin.c

@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/16 18:24:52 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/06 21:29:52 by hmerieux         ###   ########.fr       */
 /*   Updated: 2020/02/13 15:53:35 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -53,7 +53,7 @@ void	unset_term(struct termios *old_term)
 		//tputs(tgetstr("ve", NULL), 1, &my_putchar);
 		tcsetattr(cs->tty, 0, old_term);
 		signal(SIGWINCH, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
+		//signal(SIGINT, SIG_DFL);
 	//	signal(SIGINT, handle_sigint);
 	}
 }

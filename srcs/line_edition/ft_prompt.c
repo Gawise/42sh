@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 17:01:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/02 13:07:50 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/03/06 21:44:18 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ char	*ft_prompt(char *prompt)
 		ret = ft_strdup(cs->input);
 		update_history(hs);
     ft_dlstdel(&hs);
+	cs->history = 0;
 	}
 	return (((cs && cs->sig_int) || !ret ? ft_strnew(0) : ret));
 }

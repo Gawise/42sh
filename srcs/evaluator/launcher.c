@@ -165,7 +165,8 @@ int		run_process(t_job *job, t_process *process)
 {
 	//faire les redir et open
 	process_type(job->env, process);
-	process_redir(process, process->redir);
+	if (process_redir(process, process->redir) == FAILURE)
+		return (FAILURE);
 	return (fork_process(job, process));
 }
 

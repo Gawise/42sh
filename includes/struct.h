@@ -38,9 +38,9 @@ typedef enum			e_token_type
 	PIPE,			// |
 	SEMI,			// ;
 	/* Redirection Operators */
-	LESS,			// <
+	LESS,			// < 10
 	DLESS,			// <<
-	GREAT,			// >
+	GREAT,			// > 12
 	DGREAT,			// >>
 	LESSAND,		// <&
 	GREATAND,		// >&
