@@ -217,6 +217,7 @@ typedef struct	s_cs_line
     t_point         screen;
     char            *input;
     int             sig_int;
+	int				sig_eof;
     int             cr;
     char            *prompt;
 	  char			*clipboard;

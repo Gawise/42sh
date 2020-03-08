@@ -19,14 +19,19 @@ WHITE=\033[0;37m
 LESRCS += cursor.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
-LESRCS += keys.c
+LESRCS += print_cmd.c
 LESRCS += keys2.c
 LESRCS += move_word.c
 LESRCS += signals.c
 LESRCS += term_init.c
 LESRCS += utils.c
 LESRCS += clipboard.c
-
+LESRCS += cursor_position.c
+LESRCS += input.c
+LESRCS += arrow_keys.c
+LESRCS += maj_arrow_keys.c
+LESRCS += del_keys.c
+LESRCS += other_keys.c
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -122,7 +127,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -g -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address
