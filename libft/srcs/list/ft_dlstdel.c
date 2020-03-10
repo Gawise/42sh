@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_dlstdel.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/12 18:47:58 by hmerieux          #+#    #+#             */
+/*   Updated: 2020/03/10 16:20:47 by hmerieux         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 void	ft_dlstdel(t_dlist **alst)
@@ -12,10 +24,10 @@ void	ft_dlstdel(t_dlist **alst)
 		while (tmp)
 		{
 			tmp2 = tmp->next;
-			if (tmp2)
-				tmp2->prev = NULL;
 			ft_memdel((void **)&tmp->data);
 			ft_memdel((void **)&tmp);
+			if (tmp2)
+                tmp2->prev = NULL;
 			tmp = tmp2;
 		}
 		alst = NULL;

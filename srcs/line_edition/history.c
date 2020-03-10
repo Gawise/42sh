@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 20:32:03 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/17 15:26:32 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/08 17:17:59 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,21 @@ void	update_history(t_dlist *hs)
 	char		*tmp;
 	t_cs_line	*cs;
 
-	path = ft_strjoin(2, getenv("HOME"), "/");
-	tmp = path;
-	path = ft_strjoin(2, path, ".42sh_history");
-	ft_strdel(&tmp);
 	cs = cs_master(NULL, 0);
-	if (hs && cs && path && cs->input && cs->input[0]
-			&& (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
+	if (hs && cs && cs->history)
 	{
-		ft_putstr_fd(cs->input, fd);
-		close(fd);
+		path = ft_strjoin(2, getenv("HOME"), "/");
+		tmp = path;
+		path = ft_strjoin(2, path, ".42sh_history");
+		ft_strdel(&tmp);
+		if (hs && cs && path && cs->input && cs->input[0] && cs->input[0]
+			!= '\n' && (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
+		{
+			ft_putstr_fd(cs->input, fd);
+			close(fd);
+		}
+		ft_strdel(&path);
 	}
-	ft_strdel(&path);
 }
 
 t_dlist	*get_history(void)
@@ -79,7 +82,7 @@ void	history_up(t_cs_line *cs)
 	}
 }
 
-void    history_down(t_cs_line *cs)
+void	history_down(t_cs_line *cs)
 {
 	if (cs)
 	{
@@ -97,7 +100,7 @@ void    history_down(t_cs_line *cs)
 	}
 }
 
-t_dlist *init_history(void)
+t_dlist	*init_history(void)
 {
 	t_dlist *hist;
 

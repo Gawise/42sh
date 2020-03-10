@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   term_init.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/13 14:23:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/06 21:29:52 by hmerieux         ###   ########.fr       */
-/*   Updated: 2020/02/13 15:53:35 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <signal.h>
 #include <termios.h>
 #include <term.h>
@@ -26,6 +13,7 @@ void	set_term(int tty, int init, char *prompt, struct termios *new_term)
 {
 	t_cs_line			*cs;
 
+	signal(SIGINT, sig_handler);
 	(*new_term).c_lflag &= ~(ICANON);
 	(*new_term).c_lflag &= ~ECHO;
 	(*new_term).c_cc[VMIN] = 1;
@@ -35,7 +23,6 @@ void	set_term(int tty, int init, char *prompt, struct termios *new_term)
 	cs = cs_master(NULL, 0);
 	if (init == 2 && cs)
 		get_cs_line_position(&cs->min_col, &cs->min_row);
-	cs->min_col = 0;
 	cs_set();
 	cs->tty = tty;
 	move_cs(&cs);
@@ -47,32 +34,8 @@ void	unset_term(struct termios *old_term)
 
 	if ((cs = cs_master(NULL, 0)))
 	{
-		//ft_clear(0);
-		//tputs(tgoto(tgetstr("cm", NULL), cs->min_col, cs->min_row),
-		//		1, &my_putchar);
-		//tputs(tgetstr("ve", NULL), 1, &my_putchar);
 		tcsetattr(cs->tty, 0, old_term);
-		signal(SIGWINCH, SIG_DFL);
-		//signal(SIGINT, SIG_DFL);
-	//	signal(SIGINT, handle_sigint);
 	}
-}
-
-void	init_signals(void)
-{
-	int	i;
-
-	i = 0;
-	while (i <= 32)
-	{
-		if (i == SIGCONT || i == SIGTSTP || i == SIGSTOP || i == SIGTTOU
-				|| i == SIGTTIN)
-			signal(i, SIG_IGN);
-		else if (i == SIGWINCH)
-			signal(i, size_handler);
-		i++;
-	}
-	signal(SIGINT, sig_handler);
 }
 
 int		term_check(struct termios *new_term, struct termios *old_term, int tty)
