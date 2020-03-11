@@ -41,10 +41,12 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	lexer = (t_lexer *)ft_memalloc(sizeof(t_lexer));
 	ret = 0;
-	while ((line = ft_prompt(NAME_SH)))  //recup PS1
+	while (1)  //recup PS1
 	{
-		if (ft_strequ("exit\n", line))
-			exit(0);
+		if (!(line = ft_prompt(NAME_SH, COLOR_SH)))
+			continue ;
+		else if (line && (!line[0] || ft_strcmp("exit\n", line) == 0))
+			break ;
 		set_signal_ign();
 		init_lexer(lexer);
 		ft_lexer(line, lexer);
@@ -58,6 +60,6 @@ int		main(int ac, char **av, char **env)
 			ft_eval(parser.table);
 		}
 	}
-	return (0);
+	ft_putendl("\e[0;31m exit\e[0;0m");
+	exit(0);
 }
-
