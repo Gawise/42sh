@@ -2,6 +2,8 @@
 # define SH_H
 
 # define NAME_SH "21sh-1.0$ "
+# define COLOR_SH "\e[0;32m"
+# define COLOR_SUBPROMPT "\e[0;31m"
 
 # include <stdint.h>
 

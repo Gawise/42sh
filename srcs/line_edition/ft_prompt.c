@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 17:15:04 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 17:16:45 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:23:43 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-char	*ft_prompt(char *prompt)
+char	*ft_prompt(char *prompt, char *color)
 {
 	char		*ret;
 	t_cs_line	*cs;
@@ -92,6 +92,8 @@ char	*ft_prompt(char *prompt)
 	cs = NULL;
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{
+		cs->prompt_color = color;
+		print_prompt(cs);
 		ft_clear(0);
 		hs = get_history();
 		cs->sig_int = 0;
@@ -100,8 +102,7 @@ char	*ft_prompt(char *prompt)
 		read_input();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
-		ret = ft_strdup(cs->input);
-		if (!cs->sig_int)
+		if ((ret = ft_strdup(cs->input)) >= 0 && !cs->sig_int)
 		{
 			update_history(hs);
 			ft_dlstdel(&cs->history);

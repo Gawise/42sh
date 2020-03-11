@@ -220,8 +220,9 @@ typedef struct	s_cs_line
 	int				sig_eof;
     int             cr;
     char            *prompt;
-	  char			*clipboard;
-    t_dlist         *history;
+	char			*prompt_color;
+	char			*clipboard;
+	t_dlist         *history;
 	  t_point			clipb; //start et end de la selection
 }				t_cs_line;
 

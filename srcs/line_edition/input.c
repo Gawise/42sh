@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 16:15:48 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 17:20:06 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/11 15:29:45 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,18 @@ void	join_input(t_cs_line *cs, char *input)
 
 void	line_master(t_cs_line *cs, char *input)
 {
+	char	*tmp;
+
 	if (input && cs)
 	{
-		join_input(cs, input);
+		if (ft_strcmp(input, "\n") == 0)
+		{
+			tmp = cs->input;
+			cs->input = ft_strjoin(2, tmp, "\n");
+			ft_strdel(&tmp);
+		}
+		else
+			join_input(cs, input);
 		cs->line_col += (int)ft_strlen(input);
 		cs->max_scroll = (int)ft_strlen(cs->input) / cs->screen.x
 			- (cs->screen.y - cs->min_row);
