@@ -45,6 +45,7 @@ int				p_add_cmd(t_token *token, t_parser *parser);
 
 void				print_cmd_table(t_list *table);
 void				print_parser(t_parser *parser);
+int				syn_err(t_token *token, t_parser *parser);
 
 // io_number.c
 
@@ -65,5 +66,9 @@ void				p_make_args_tab(t_parser *parser);
 // lst_to_tab.c
 
 void				**lst_to_tab(t_list *lst);
+
+// tools.c
+
+int				is_digitstr(char *str);
 
 #endif

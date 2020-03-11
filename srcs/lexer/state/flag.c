@@ -7,7 +7,7 @@ void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char))
 	token_builder[S_FLAG][C_INHIBITOR] = l_delim_flag;
 	token_builder[S_FLAG][C_CONTROL] = l_flag_state_add;
 	token_builder[S_FLAG][C_REDIR] = l_flag_state_add;
-	token_builder[S_FLAG][C_NEWLINE] = l_flag_state_add;
+	token_builder[S_FLAG][C_NEWLINE] = l_do_nothing;
 	token_builder[S_FLAG][C_DIGIT] = l_flag_state_add;
 	token_builder[S_FLAG][C_EXP] = l_flag_state_add;
 	token_builder[S_FLAG][C_BLANK] = l_flag_state_add;
