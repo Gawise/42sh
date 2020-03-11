@@ -63,4 +63,3 @@ int		main(int ac, char **av, char **env)
 	ft_putendl("\e[0;31m exit\e[0;0m");
 	exit(0);
 }
-
