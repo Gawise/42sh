@@ -48,7 +48,8 @@ int	l_flag_state_add(t_lexer *lexer, char c)
 		else
 			l_buffer_add(lexer, c);
 	}
-	else if (flag == F_BRACKEXP && c == '}')
+	else if ((flag == F_BRACKEXP && c == '}')
+	|| flag == F_BSLASH)
 	{
 		l_buffer_add(lexer, c);
 		lexer->state = S_TK_WORD;

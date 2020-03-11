@@ -71,6 +71,7 @@ PARSRCS += lst_to_tab.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
+PARSRCS += tools.c
 PARSRCS += word.c
 
 ## EVAL ##
