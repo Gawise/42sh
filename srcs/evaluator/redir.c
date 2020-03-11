@@ -48,6 +48,16 @@
  */
 
 /*
+   rdonly 0
+   wronly 1
+   creat 512
+   append 8
+   trunc 1024
+   r_ok 4
+   w_ok 2
+ *
+ */ 
+/*
  *    LESS,			// <
  *    DLESS,			// <<
  *    GREAT,			// >
@@ -86,7 +96,6 @@ int		check_access(char *path, int right)
 	char	*tmp;
 
 	tmp = NULL;
-
 	if (access(path, F_OK) == SUCCESS)
 	{
 		if (c_isdir(path))
@@ -95,7 +104,7 @@ int		check_access(char *path, int right)
 			return (E_ACCES);
 		return (TRUE);
 	}
-
+	printf("check access 2 \n");
 	tmp = remove_file_name(path);
 	if (access(tmp, F_OK))
 	{
@@ -110,13 +119,19 @@ int		check_access(char *path, int right)
 	return (SUCCESS);
 }
 
-int		path_engine(t_redir *r, char **path, int right)
+int		path_gearing(t_redir *r, char **path, int right)
 {
-	int		exist;
+	int32_t		exist;
+	int32_t		r_or_w;
 
+	r_or_w = (right & O_WRONLY) ? W_OK : R_OK;
+	printf("r_or_w = [%d]\n", r_or_w);
+	printf("right2 = [%d]\n", right);
 	*path = (*r->file == '/') ? ft_strdup(r->file) : create_abs_path(r->file);
-	if (((exist = check_access(*path, right)) & (E_ACCES | E_NOENT)))
+	if (((exist = check_access(*path, r_or_w)) & (E_ACCES | E_NOENT | E_ISDIR)))
 		return (exist);
+	if (r->type == LESS && access(*path, F_OK)) //boff boff
+		return (2);
 	return (SUCCESS);
 }
 
@@ -127,14 +142,14 @@ static uint8_t		error_handling(t_process *p, t_redir *r, int error)
 
 	ft_dprintf(p->std[2], "-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
 	ft_printf("-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
-    return (FAILURE);
+	return (FAILURE);
 }
 
 
 int		bad_fd(int fd)
 {
 	struct stat buf;
-	
+
 	if (fstat(fd, &buf))
 	{
 		perror("fstat: ");
@@ -143,31 +158,20 @@ int		bad_fd(int fd)
 	return (SUCCESS);
 }
 
-int		do_change(int *target, int source)
+int		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 {
-	if (*target > 2)   // regle builtin ??
-		if (close(*target) == -1)
-			perror("close: ");
-	*target = source;
-	return (SUCCESS);
-}
-
-int		redir_great(t_process *p, t_redir *r)
-{
-	int		target;
-	int		source;
-	int		error;
-	char	*path;
+	int32_t		source;
+	int32_t		error;
+	char		*path;
 
 	path = NULL;
 	error = 1;
-	target = (*r->io_num) ? ft_atoi(r->io_num) : 1;
 	printf("target = [%d]\n", target);
-	if ((target > 255) || (error = path_engine(r, &path, W_OK)))
+	if ((error = path_gearing(r, &path, right)))
 		return (error_handling(p, r, error));
 
 	printf("path = [%s]\n", path);
-	if ((source = open(path, O_CREAT | O_TRUNC | O_RDWR, 0644)) == -1)
+	if ((source = open(path, right, 0644)) == -1)
 		perror("la open");
 	if (target > 2)
 	{
@@ -186,15 +190,63 @@ int		redir_great(t_process *p, t_redir *r)
 	return (SUCCESS);
 }
 
-int		find_ft_redir(t_process *p, t_redir *r)
+int		redir_file(t_process *p, t_redir *r)
 {
-	int	 (*tabft[7])(t_process *, t_redir *);
+	uint32_t	target;
+	uint32_t	right;
+	uint8_t		io;
 
-	tabft[2] = &redir_great;
+	io = (r->type == GREAT || r->type == DGREAT) ? 1 : 0;
+	right = (io == 1) ? (O_WRONLY | O_CREAT) : O_RDONLY;
+	target = (*r->io_num) ? ft_atoi(r->io_num) : io;
+	printf("right 1 = [%d]\n", right);
+	if (target > 255)
+		return (error_handling(p, r, 1));
+	if (r->type == GREAT)
+		right |= O_TRUNC;
+	else if (r->type == DGREAT)
+		right |= O_APPEND;
+	return (redir_gear(p, r, target, right));
+}
 
-	printf("type = [%d]\n", r->type);
-	return (tabft[r->type - 10](p, r));
+int		redir_fd(t_process *p, t_redir *r)
+{
+	uint8_t		io;
+	uint32_t	target;
+	int32_t		source;
 
+	io = (r->type == LESSAND) ? 0 : 1;
+	target = (*r->io_num) ? ft_atoi(r->io_num) : io;
+	source = (*r->file == '-') ? -1 : ft_atoi(r->file);
+	if (target > 255)
+		return (error_handling(p, r, 1));
+	printf("source = %d\n", source);
+	printf("target = %d\n", target);
+	if (source == -1 && target > 2)
+	{
+		close(target);
+		return (SUCCESS);
+	}
+	if (source != -1 && bad_fd(source))
+		return (error_handling(p, r, 1));
+	if (target > 2)
+	{
+		dup2(source, target);
+	}
+	else
+	{
+		p->std[target] = source;
+	}
+	return (SUCCESS);
+}
+
+
+int		redir_gearing(t_process *p, t_redir *r)
+{
+	if (r->type != LESSAND && r->type != GREATAND)
+		return (redir_file(p, r));
+	else
+		return (redir_fd(p, r));
 }
 
 int		process_redir(t_process *p, t_list *redir)
@@ -203,7 +255,8 @@ int		process_redir(t_process *p, t_list *redir)
 
 	while (redir)
 	{
-		set = find_ft_redir(p, redir->data);
+		printf("[0] = %d\n[1] = %d\n[2] = %d\n", p->std[0], p->std[1], p->std[2]);
+		set = redir_gearing(p, redir->data);
 		printf("set = %d\n", set);
 		if (set)
 		{
@@ -219,30 +272,3 @@ int		process_redir(t_process *p, t_list *redir)
 
 
 
-/*
- *int		init_redir(t_process *p, t_redir *r, uint8_t *set)
- *{
- *    char	*path;
- *    int		err;
- *
- *    path = NULL;
- *    if ((*set = setting(r)) & 1)
- *        err = (*set & 2 ) ? path_engine(r, path, W_OK) : path_engine(r, path, R_OK);
- *    else
- *        err = fd_engine(p, r, set);
- *    ft_strdel(&path);
- *    if (err)
- *        return (error_handling(p, r, err)); //failure
- *}
- *int		setting(t_redir *r)
- *{
- *    uint8_t i;
- *
- *    i = 0;
- *    if (r->type != LEESAND && r_type != GREATAND)  //fd or file
- *        i = 1;	//file
- *    if (r->type == GREAT || r->type == DGREAT || r->type == GREATAND)  //input or output
- *        i += 2; //input
- *    return (i);
- *}
- */

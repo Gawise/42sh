@@ -50,7 +50,7 @@
 
 int		lvl_cmd_table(t_cfg *shell, t_list *lst);
 int		routine_set_pipe(t_list *process, t_pipe *fd);
-int		do_dup(t_process *p);
+int		do_pipe(t_process *p);
 
 void	process_type(t_list *var, t_process *p);
 

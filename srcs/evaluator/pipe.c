@@ -3,33 +3,33 @@
 #include "sh.h"
 #include <unistd.h>
 
-int		do_dup(t_process *p)
+int		do_pipe(t_process *p)
 {
 	/* Apply all redirection's child
 	 * shall be call after set std[3] with all process : pipe > < 
-	*/
+	 */
 
-	//implique de jamais fermer 0 et 1 si non risque de new fd avec des nb;
+	printf("[0] = %d\n[1] = %d\n[2] = %d\n", p->std[0], p->std[1], p->std[2]);
 	if (p->std[0] != STDIN_FILENO)
 	{
 		if (dup2(p->std[0], STDIN_FILENO) == -1)
-			ex("[do_pipe] dup2 error:");
+			perror("[do_pipe]1 dup2 error:");
 		if (close(p->std[0]) == -1)
-			ex("[do_pipe] close error:");
+			perror("[do_pipe]1 close error:");
 	}
 	if (p->std[1] != STDOUT_FILENO)
 	{
 		if (dup2(p->std[1], STDOUT_FILENO) == -1)
-			ex("[do_pipe] dup2 error:");
+			ex("[do_pipe]2 dup2 error:");
 		if (close(p->std[1]) == -1)
-			ex("[do_pipe] close error:");
+			perror("[do_pipe]2 close error:");
 	}
 	if (p->std[2] != STDERR_FILENO)
 	{
 		if (dup2(p->std[2], STDERR_FILENO) == -1)
-			ex("[do_pipe] dup2 error:");
+			ex("[do_pipe]3 dup2 error:");
 		if (close(p->std[2]) == -1)
-			ex("[do_pipe] close error:");
+			perror("[do_pipe]3 close error:");
 	}
 	return (SUCCESS);
 }

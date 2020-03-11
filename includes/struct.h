@@ -249,7 +249,7 @@ typedef struct	s_process
 	pid_t 		pid;                /* process ID */
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
-	uint8_t 	std[3];				/* stdin out err*/
+	int8_t 	std[3];				/* stdin out err*/
 	uint16_t	setup;				/* info du process */
 	t_list		*redir;				/* list of redirs */
 }				t_process;
