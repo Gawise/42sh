@@ -8,8 +8,6 @@ int		do_pipe(t_process *p)
 	/* Apply all redirection's child
 	 * shall be call after set std[3] with all process : pipe > < 
 	 */
-
-	printf("[0] = %d\n[1] = %d\n[2] = %d\n", p->std[0], p->std[1], p->std[2]);
 	if (p->std[0] != STDIN_FILENO)
 	{
 		if (dup2(p->std[0], STDIN_FILENO) == -1)
@@ -23,13 +21,6 @@ int		do_pipe(t_process *p)
 			ex("[do_pipe]2 dup2 error:");
 		if (close(p->std[1]) == -1)
 			perror("[do_pipe]2 close error:");
-	}
-	if (p->std[2] != STDERR_FILENO)
-	{
-		if (dup2(p->std[2], STDERR_FILENO) == -1)
-			ex("[do_pipe]3 dup2 error:");
-		if (close(p->std[2]) == -1)
-			perror("[do_pipe]3 close error:");
 	}
 	return (SUCCESS);
 }

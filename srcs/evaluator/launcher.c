@@ -127,7 +127,6 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	// Belek interractif or not
-	printf("child fd= %d\n", fd_pipe);
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			ex("[child process] close error:");
@@ -139,6 +138,8 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
+	if (process_redir(p, p->redir))
+		exit(1);
 	set_signal_child();
 	if (error_handling(p) == FAILURE)
 		exit(p->ret);
@@ -179,7 +180,6 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 		routine_set_pipe(process, &job->pipe);
 		run_process(job, process->data);
 		process = process->next;
-		printf("job->pipe -> %d\n", job->pipe.tmp);
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
 				ex("[check and do pipe] close error:");

@@ -140,6 +140,8 @@ int		path_gearing(t_redir *r, char **path, int right)
 static uint8_t		error_handling(t_process *p, t_redir *r, int error)
 {
 
+	p->ret = 1;
+	p->status = FAILED;
 	ft_dprintf(p->std[2], "-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
 	ft_printf("-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
 	return (FAILURE);
@@ -166,26 +168,14 @@ int		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 
 	path = NULL;
 	error = 1;
-	printf("target = [%d]\n", target);
 	if ((error = path_gearing(r, &path, right)))
 		return (error_handling(p, r, error));
-
-	printf("path = [%s]\n", path);
 	if ((source = open(path, right, 0644)) == -1)
 		perror("la open");
-	if (target > 2)
-	{
-		if ((dup2(source, target) == -1))
-			perror("dup2");
-		if ((close(source) == -1))
-			perror("close");
-	}
-	else
-	{
-		p->std[target] = source;
-		ft_strdel(&r->io_num);
-		r->io_num = ft_itoa(source);
-	}
+	if ((dup2(source, target) == -1))
+		perror("dup2");
+	if ((close(source) == -1))
+		perror("close");
 	printf("source = [%d]\ntarget = [%d]\n", source, target);
 	return (SUCCESS);
 }
@@ -222,21 +212,15 @@ int		redir_fd(t_process *p, t_redir *r)
 		return (error_handling(p, r, 1));
 	printf("source = %d\n", source);
 	printf("target = %d\n", target);
-	if (source == -1 && target > 2)
+	if (source == -1)
 	{
 		close(target);
 		return (SUCCESS);
 	}
-	if (source != -1 && bad_fd(source))
+	if (bad_fd(source))
 		return (error_handling(p, r, 1));
-	if (target > 2)
-	{
-		dup2(source, target);
-	}
-	else
-	{
-		p->std[target] = source;
-	}
+	if (dup2(source, target) == -1)
+		perror("dup2 redir fd:");
 	return (SUCCESS);
 }
 
@@ -255,7 +239,6 @@ int		process_redir(t_process *p, t_list *redir)
 
 	while (redir)
 	{
-		printf("[0] = %d\n[1] = %d\n[2] = %d\n", p->std[0], p->std[1], p->std[2]);
 		set = redir_gearing(p, redir->data);
 		printf("set = %d\n", set);
 		if (set)
@@ -265,7 +248,7 @@ int		process_redir(t_process *p, t_list *redir)
 		}
 		redir = redir->next;
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 
