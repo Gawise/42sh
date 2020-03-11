@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "line_edition.h"
+#include "sh.h"
 
 void	l_set_flag(t_lexer *lexer, t_lexer_flag flag)
 {
@@ -32,7 +33,7 @@ int	l_complete_str(t_lexer *lexer,  char c)
 
 	(void)c;
 	pos = lexer->curr - lexer->src;
-	new = ft_prompt("> ");
+	new = ft_prompt("> ", COLOR_SUBPROMPT);
 	if (!(lexer->src = ft_strclnjoin(lexer->src, new)))
 	{
 		ft_printf("erreur malloc complete_flag\n");

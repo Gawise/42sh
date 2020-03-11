@@ -43,7 +43,7 @@ int		main(int ac, char **av, char **env)
 	ret = 0;
 	while (1)  //recup PS1
 	{
-		if (!(line = ft_prompt(NAME_SH)))
+		if (!(line = ft_prompt(NAME_SH, COLOR_SH)))
 			continue ;
 		else if (line && (!line[0] || ft_strcmp("exit\n", line) == 0))
 			break ;
@@ -60,6 +60,6 @@ int		main(int ac, char **av, char **env)
 			ft_eval(parser.table);
 		}
 	}
-	ft_putendl("exit");
+	ft_putendl("\e[0;31m exit\e[0;0m");
 	exit(0);
 }

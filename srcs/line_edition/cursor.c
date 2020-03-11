@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 17:09:02 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 17:09:44 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:25:55 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void		cs_set(void)
 		cs->screen.x = size.ws_col;
 		cs->screen.y = size.ws_row;
 		cs->tty = ttyslot();
-		print_prompt(cs);
 	}
 }
 

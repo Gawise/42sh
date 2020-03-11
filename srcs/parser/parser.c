@@ -549,7 +549,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	while (parser->state == S_PARSER_ANDIF_PIPE)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
-		ft_lexer(ft_prompt("> "), lexer);
+		ft_lexer(ft_prompt("> ", COLOR_SUBPROMPT), lexer);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
 	p_make_args_tab(parser);
