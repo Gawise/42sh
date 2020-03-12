@@ -53,6 +53,7 @@ int		l_complete_str(t_lexer *lexer,  char c)
 	char	*pmt_prefix;
 
 	(void)c;
+	new = NULL;
 	pos = lexer->curr - lexer->src;
 	if (!(pmt_prefix = l_get_prompt_prefix(lexer))
 	|| ft_printf("%s", pmt_prefix) == -1

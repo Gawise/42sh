@@ -103,7 +103,8 @@ int	ft_lexer(char *str, t_lexer *lexer)
 	lexer->src = str;
 	lexer->curr = str;
 	init_lexer_states(token_builder);
-	do_lexing(lexer, token_builder);
+	if (!do_lexing(lexer, token_builder))
+		return (0);
 	while (l_get_last_flag(lexer) || l_get_flag(lexer, F_HEREDOC))
 		if (!do_lexing(lexer, token_builder))
 			return (0);
