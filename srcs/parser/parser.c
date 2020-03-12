@@ -567,7 +567,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 		|| ft_printf("%s", pmt_prefix) == -1
 		|| !(pmt = ft_prompt(find_var_value(cfg_shell()->intern, "PS2")
 		, COLOR_SUBPROMPT)))
-			exit(1);
+			return (0);
 		ft_lexer(pmt, lexer);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
