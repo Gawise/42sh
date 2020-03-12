@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "parser.h"
+#include "var.h"
 #include "line_edition.h"
 #include "sh.h"
 
@@ -535,9 +536,22 @@ int		p_set_jobs_str(t_parser *parser)
 	return (1);
 }
 
+char	*p_get_prompt_prefix(t_parser *parser)
+{
+	if (parser->pmt_prefix == AND_IF)
+		return (ft_strdup("cmdand"));
+	else if (parser->pmt_prefix == OR_IF)
+		return (ft_strdup("cmdor"));
+	else if (parser->pmt_prefix == PIPE)
+		return (ft_strdup("pipe"));
+	return (ft_strdup(""));
+}
+
 int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
 	int	(*table_builder[10][17])(t_token *, t_parser *);
+	char	*pmt;
+	char	*pmt_prefix;
 
 	if (cfg_shell()->debug)
 		ft_printf("\n----------- parsing -----------\n\n");
@@ -549,7 +563,12 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	while (parser->state == S_PARSER_ANDIF_PIPE)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
-		ft_lexer(ft_prompt("> ", COLOR_SUBPROMPT), lexer);
+		if (!(pmt_prefix = p_get_prompt_prefix(parser))
+		|| ft_printf("%s", pmt_prefix) == -1
+		|| !(pmt = ft_prompt(find_var_value(cfg_shell()->intern, "PS2")
+		, COLOR_SUBPROMPT)))
+			exit(1);
+		ft_lexer(pmt, lexer);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
 	p_make_args_tab(parser);
