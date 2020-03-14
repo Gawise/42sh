@@ -49,10 +49,12 @@ int		main(int ac, char **av, char **env)
 			break ;
 		set_signal_ign();
 		init_lexer(lexer);
-		ft_lexer(line, lexer);
+		if (!ft_lexer(line, lexer))
+			continue ;
 		if (debug)
 			ft_lstiter(lexer->token_lst, print_debug);
-		ft_parser(lexer, &parser);
+		if (!ft_parser(lexer, &parser))
+			continue ;
 		if (parser.state != S_PARSER_SYNTAX_ERROR)
 		{
 			if (debug)
