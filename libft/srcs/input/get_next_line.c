@@ -26,6 +26,7 @@ static int			ft_return(char *tmp, char **buff, char **line)
 	if ((*line)[0] || n)
 		return (1);
 	free(*buff);
+	ft_strdel(line);
 	*buff = NULL;
 	return (0);
 }

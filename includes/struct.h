@@ -105,7 +105,7 @@ typedef struct			s_here_queue
 
 typedef struct			s_lexer
 {
-	char			*src;
+	char			**src;
 	char			*curr;
 	t_lexer_state		state;
 	t_list			*token_lst;

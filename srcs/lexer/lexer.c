@@ -96,16 +96,16 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 	return (1);
 }
 
-int	ft_lexer(char *str, t_lexer *lexer)
+int	ft_lexer(char **str, t_lexer *lexer)
 {
 	int	(*token_builder[8][11])(t_lexer *, char);
 
 	lexer->src = str;
-	lexer->curr = str;
+	lexer->curr = *str;
 	init_lexer_states(token_builder);
 	if (!do_lexing(lexer, token_builder))
 		return (0);
-	while (l_get_last_flag(lexer) || l_get_flag(lexer, F_HEREDOC))
+	while (l_get_last_flag(lexer) || l_get_last_here(lexer))
 		if (!do_lexing(lexer, token_builder))
 			return (0);
 	return (1);

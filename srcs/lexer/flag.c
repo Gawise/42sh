@@ -4,7 +4,6 @@
 
 t_lexer_flag	l_get_last_flag(t_lexer *lexer)
 {
-
 	t_list		*flag;
 
 	flag = ft_lstgettail(lexer->flag_queue);
