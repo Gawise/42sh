@@ -4,19 +4,12 @@
 
 t_lexer_flag	l_get_last_flag(t_lexer *lexer)
 {
-
 	t_list		*flag;
 
 	flag = ft_lstgettail(lexer->flag_queue);
 	if (flag && flag->data)
-	{
-		//ft_printf("----------flag_queue---------\n");
-		//ft_lstiter(lexer->flag_queue, print_flag_queue);
-		//ft_printf("-----------------------------\n");
 		return (*((t_lexer_flag *)flag->data));
-	}
-	else
-		return (0);
+	return (0);
 }
 
 int	l_add_flag(t_lexer *lexer, char c)
@@ -39,7 +32,14 @@ int	l_flag_state_add(t_lexer *lexer, char c)
 	t_lexer_flag	flag;
 
 	flag = l_get_last_flag(lexer);
-	if (flag == F_DQUOTE)
+	if (flag == F_BSLASH)
+	{
+		l_buffer_add(lexer, c);
+		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+		if (!l_get_last_flag(lexer))
+			lexer->state = S_TK_WORD;
+	}
+	else if (flag == F_DQUOTE)
 	{
 		if (c == '$')
 			l_build_exp(lexer, c);
@@ -48,8 +48,7 @@ int	l_flag_state_add(t_lexer *lexer, char c)
 		else
 			l_buffer_add(lexer, c);
 	}
-	else if ((flag == F_BRACKEXP && c == '}')
-	|| flag == F_BSLASH)
+	else if ((flag == F_BRACKEXP && c == '}'))
 	{
 		l_buffer_add(lexer, c);
 		lexer->state = S_TK_WORD;

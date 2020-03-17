@@ -71,4 +71,12 @@ void				**lst_to_tab(t_list *lst);
 
 int				is_digitstr(char *str);
 
+// free.c
+
+void	del_assign(void *data, size_t size);
+void	del_redir(void *data, size_t size);
+void	del_simple_cmd(void *data, size_t size);
+void	del_and_or(void *data, size_t size);
+void	del_cmd_table(void *data, size_t size);
+
 #endif
