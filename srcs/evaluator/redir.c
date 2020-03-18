@@ -2,6 +2,8 @@
 #include "libft.h"
 #include "struct.h"
 #include "ft_printf.h"
+#include "var.h"
+#include "sh.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -104,7 +106,6 @@ int		check_access(char *path, int right)
 			return (E_ACCES);
 		return (TRUE);
 	}
-	printf("check access 2 \n");
 	tmp = remove_file_name(path);
 	if (access(tmp, F_OK))
 	{
@@ -125,40 +126,48 @@ int		path_gearing(t_redir *r, char **path, int right)
 	int32_t		r_or_w;
 
 	r_or_w = (right & O_WRONLY) ? W_OK : R_OK;
-	printf("r_or_w = [%d]\n", r_or_w);
-	printf("right2 = [%d]\n", right);
 	*path = (*r->file == '/') ? ft_strdup(r->file) : create_abs_path(r->file);
 	if (((exist = check_access(*path, r_or_w)) & (E_ACCES | E_NOENT | E_ISDIR)))
 		return (exist);
-	if (r->type == LESS && access(*path, F_OK)) //boff boff
-		return (2);
+	if (r->type == LESS && !exist)
+		return (E_NOENT);
 	return (SUCCESS);
 }
 
 //						target>&source 
 
-static uint8_t		error_handling(t_process *p, t_redir *r, int error)
-{
-
-	p->ret = 1;
-	p->status = FAILED;
-	ft_dprintf(p->std[2], "-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
-	ft_printf("-->error redir<--   type = [%d]   error = [%d]\n", r->type, error);
-	return (FAILURE);
-}
-
-
 int		bad_fd(int fd)
 {
 	struct stat buf;
 
-	if (fstat(fd, &buf))
-	{
-		perror("fstat: ");
+	if (fstat(fd, &buf) == FALSE)
 		return (FAILURE);
-	}
 	return (SUCCESS);
 }
+
+static uint8_t		error_handling(t_process *p, uint32_t error, char *info, int32_t fd)
+{
+	char 	*namesh;
+
+	error &= ~ERROR;
+	namesh = find_var_value((cfg_shell())->intern, "PS1");
+	if (!namesh)
+		namesh = "21sh";
+	p->ret = 1;
+	p->status = FAILED;
+	if (fd)
+		ft_dprintf(STDERR_FILENO, "%s: %d: Bad file descriptor\n", namesh, fd);
+	else if (error & E_ISDIR)
+		ft_dprintf(STDERR_FILENO, "%s: %s: is a directory\n", namesh, info);
+	else if (error & E_NOENT)
+		ft_dprintf(STDERR_FILENO, "%s: %s: No such file or directory\n", namesh, info);
+	else if (error & E_ACCES)
+		ft_dprintf(STDERR_FILENO, "%s: %s: Permission denied\n", namesh, info);
+	ft_strdel(&info);
+	return (FAILURE);
+}
+
+
 
 int		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 {
@@ -167,16 +176,15 @@ int		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 	char		*path;
 
 	path = NULL;
-	error = 1;
 	if ((error = path_gearing(r, &path, right)))
-		return (error_handling(p, r, error));
+		return (error_handling(p, error, path, 0));
 	if ((source = open(path, right, 0644)) == -1)
 		perror("la open");
 	if ((dup2(source, target) == -1))
 		perror("dup2");
 	if ((close(source) == -1))
 		perror("close");
-	printf("source = [%d]\ntarget = [%d]\n", source, target);
+	ft_strdel(&path);
 	return (SUCCESS);
 }
 
@@ -189,9 +197,8 @@ int		redir_file(t_process *p, t_redir *r)
 	io = (r->type == GREAT || r->type == DGREAT) ? 1 : 0;
 	right = (io == 1) ? (O_WRONLY | O_CREAT) : O_RDONLY;
 	target = (*r->io_num) ? ft_atoi(r->io_num) : io;
-	printf("right 1 = [%d]\n", right);
 	if (target > 255)
-		return (error_handling(p, r, 1));
+		return (error_handling(p, 0, 0, target));
 	if (r->type == GREAT)
 		right |= O_TRUNC;
 	else if (r->type == DGREAT)
@@ -209,25 +216,41 @@ int		redir_fd(t_process *p, t_redir *r)
 	target = (*r->io_num) ? ft_atoi(r->io_num) : io;
 	source = (*r->file == '-') ? -1 : ft_atoi(r->file);
 	if (target > 255)
-		return (error_handling(p, r, 1));
-	printf("source = %d\n", source);
-	printf("target = %d\n", target);
+		return (error_handling(p, 0, 0, target));
 	if (source == -1)
 	{
 		close(target);
 		return (SUCCESS);
 	}
 	if (bad_fd(source))
-		return (error_handling(p, r, 1));
+		return (error_handling(p, 0, 0, source));
 	if (dup2(source, target) == -1)
 		perror("dup2 redir fd:");
 	return (SUCCESS);
 }
 
+int		redir_heredoc(t_process *p, t_redir *r)
+{
+	int		fd;
+	char	*path;
+
+	path = NULL;
+	ft_asprintf(&path, "/tmp/21-42sh-heredoc-%p", &fd);
+	if (((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1))
+		ex("redir_heredoc open failled");
+	if (write(fd, r->file, ft_strlen(r->file)) == -1)
+		perror("write redir_heredoc");
+	close(fd);
+	ft_strdel(&r->file);
+	r->file = path;
+	return (redir_file(p, r));
+}
 
 int		redir_gearing(t_process *p, t_redir *r)
 {
-	if (r->type != LESSAND && r->type != GREATAND)
+	if (r->type == DLESS || r->type == DLESSDASH)
+		return (redir_heredoc(p, r));
+	else if (r->type != LESSAND && r->type != GREATAND)
 		return (redir_file(p, r));
 	else
 		return (redir_fd(p, r));
@@ -235,23 +258,11 @@ int		redir_gearing(t_process *p, t_redir *r)
 
 int		process_redir(t_process *p, t_list *redir)
 {
-	uint8_t	set;
-
 	while (redir)
 	{
-		set = redir_gearing(p, redir->data);
-		printf("set = %d\n", set);
-		if (set)
-		{
-			p->status = FAILED;
+		if (redir_gearing(p, redir->data))
 			return (FAILURE);
-		}
 		redir = redir->next;
 	}
 	return (SUCCESS);
 }
-
-
-
-
-

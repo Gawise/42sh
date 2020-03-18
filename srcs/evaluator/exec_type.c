@@ -10,8 +10,16 @@
  *https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
  */
 
-static int			builtin_search(void)
+static int			builtin_search(t_process *p)
 {
+	// si strcmp remplacer p->cmd par un nb pour le tab de (*f)
+	if (ft_strcmp(p->cmd, "echo")
+		|| ft_strcmp(p->cmd, "exit")
+		|| ft_strcmp(p->cmd, "setenv")
+		|| ft_strcmp(p->cmd, "unsetenv")
+		|| ft_strcmp(p->cmd, "env")
+		|| ft_strcmp(p->cmd, "cd")
+		return (TRUE);
 	return (0);
 }
 

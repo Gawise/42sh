@@ -126,14 +126,13 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 
 int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
-	// Belek interractif or not
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			ex("[child process] close error:");
 	p->pid = getpid();
 	if (job->pgid == 0)
 		job->pgid = p->pid;
-	setpgid(p->pid, job->pgid); 		//not do if !fg ??
+	setpgid(p->pid, job->pgid);
 	if (job->fg)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
@@ -171,10 +170,6 @@ int		run_process(t_job *job, t_process *process)
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
-	//set le terminal et sauv ?
-	//https://www.gnu.org/software/libc/manual/html_node/Functions-for-Job-Control.html#Functions-for-Job-Control
-	//https://www.gnu.org/software/libc/manual/html_node/Process-Completion.html#Process-Completion
-	//https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
 	while (process)
 	{
 		routine_set_pipe(process, &job->pipe);
@@ -183,7 +178,6 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
 				ex("[check and do pipe] close error:");
-		printf("------------process ->next \n");
 	}
 	if (job->fg)
 	{
