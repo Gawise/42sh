@@ -6,11 +6,11 @@ void	init_exp(t_exp *exp)
 {
 	ft_bzero(exp->buf, EXP_BSIZE);
 	exp->i = 0;
-	exp->res = NULL;
 	exp->quote = 0;
 	exp->bs = 0;
-	exp->start = 0;
-	exp->end = 0;
+	exp->param = NULL;
+	exp->word = NULL;
+	exp->res = NULL;
 }
 
 void	exp_flush_buf(t_exp *exp)
@@ -30,7 +30,7 @@ void	exp_flush_buf(t_exp *exp)
 	exp->i = 0;
 }
 
-void	exp_main(t_list *word, int assign)
+void	exp_main(char **word, int type, int assign)
 {
 	t_exp		exp;
 

@@ -48,9 +48,9 @@ int	parse_tilde_exp(char *str, t_exp *exp, int assign)
 	return (i);
 }
 
-void	tilde_assign_dispatch(char **str, t_exp *exp, int state)
+void	tilde_assign_dispatch(char **str, t_exp *exp, int *state)
 {
-	if (state == 0 && **str == '~')
+	if (*state == 0 && **str == '~')
 	{
 		exp_flush_buf(exp)
 		*str += parse_tilde_exp(*str, exp, 1);
@@ -68,7 +68,7 @@ void	tilde_assign_dispatch(char **str, t_exp *exp, int state)
 		state = 1;
 	}
 	else if (**str == ':')
-		state = -1;
+		*state = -1;
 }
 
 void		find_tilde_exp_assign(t_list *word, t_exp exp)
@@ -83,7 +83,7 @@ void		find_tilde_exp_assign(t_list *word, t_exp exp)
 	while (*str)
 	{
 		if (!exp->bs && ft_strchr("~\'\"\\:", *str))
-			tilde_assign_dispatch(str, &exp, state);
+			tilde_assign_dispatch(str, &exp, &state);
 		if (exp.i >= EXP_BSIZE - 1)
 			exp_flush_buf(&exp);
 		exp.buf[exp.i] = *str;
