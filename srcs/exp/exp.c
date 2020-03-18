@@ -30,7 +30,7 @@ void	exp_flush_buf(t_exp *exp)
 	exp->i = 0;
 }
 
-void	exp_main(char **word, int type, int assign)
+void	exp_main(char **word, int assign)
 {
 	t_exp		exp;
 
@@ -39,9 +39,7 @@ void	exp_main(char **word, int type, int assign)
 		find_tilde_exp_assign(word, exp);
 	else
 		find_tilde_exp(word, exp);
-	parameter_exp(word, exp);
-	ft_bzero(exp->buf, EXP_BSIZE);
-	
-	ft_bzero(exp->buf, EXP_BSIZE);
+//	ft_bzero(exp->buf, EXP_BSIZE);
+//	parameter_exp(word, exp);
 }
 

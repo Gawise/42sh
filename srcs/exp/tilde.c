@@ -18,14 +18,19 @@ int	get_tilde_exp(t_exp *exp)
 int	get_home_val(t_exp *exp)
 {
 	char	*tilde;
+	char	*var;
 
-	if (!tilde = get_tilde()) // need the HOME variable
-		return (0);
+	if (!(var = find_var_value(cfg_shell()->env, "HOME")) 
+	&& !(tilde = ft_strnew(0)))
+		exit(EXIT_FAILURE);
+	else if (var && !(tilde = ft_strdup(var)))
+		exit(EXIT_FAILURE);
 	if (exp->res && !(exp->res = ft_sjoin1(&exp->res, tilde)))
 		exit(EXIT_FAILURE);
 	else if (!exp->res && !(exp->res = ft_strdup(tilde)))
 		exit(EXIT_FAILURE);
-	return 1;
+	free(tilde);
+	return (1);
 }
 
 int	parse_tilde_exp(char *str, t_exp *exp, int assign)
