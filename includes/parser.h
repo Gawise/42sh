@@ -19,6 +19,7 @@ t_redir				*init_redir(void);
 int				p_cmd_name(t_token *token, t_parser *parser);
 int				p_file_name(t_token *token, t_parser *parser);
 int				p_add_arg(t_token *token, t_parser *parser);
+int				p_add_assign_arg(t_token *token, t_parser *parser);
 
 // redir.c
 
@@ -30,6 +31,7 @@ int				p_add_redir(t_token *token, t_parser *parser);
 
 int				p_add_assign(t_token *token, t_parser *parser);
 int				p_assign_val(t_token *token, t_parser *parser);
+int				p_assign_join(t_token *token, t_parser *parser);
 
 // and_or.c
 
@@ -43,6 +45,7 @@ int				p_add_cmd(t_token *token, t_parser *parser);
 
 void				print_cmd_table(t_list *table);
 void				print_parser(t_parser *parser);
+int				syn_err(t_token *token, t_parser *parser);
 
 // io_number.c
 
@@ -63,5 +66,17 @@ void				p_make_args_tab(t_parser *parser);
 // lst_to_tab.c
 
 void				**lst_to_tab(t_list *lst);
+
+// tools.c
+
+int				is_digitstr(char *str);
+
+// free.c
+
+void	del_assign(void *data, size_t size);
+void	del_redir(void *data, size_t size);
+void	del_simple_cmd(void *data, size_t size);
+void	del_and_or(void *data, size_t size);
+void	del_cmd_table(void *data, size_t size);
 
 #endif

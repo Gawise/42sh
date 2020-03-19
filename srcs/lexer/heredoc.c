@@ -2,6 +2,16 @@
 #include "ft_printf.h"
 #include "lexer.h"
 
+t_here_queue	*l_get_last_here(t_lexer *lexer)
+{
+	t_list		*here;
+
+	here = ft_lstgettail(lexer->here_queue);
+	if (here && here->data)
+		return ((t_here_queue *)here->data);
+	return (NULL);
+}
+
 int		l_create_flag_queue(t_lexer *lexer)
 {
 	if (!(lexer->curr_flag = (t_lexer_flag *)ft_memalloc(sizeof(t_lexer_flag))))

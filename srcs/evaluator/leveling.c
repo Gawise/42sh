@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "exec.h"
 #include "parser.h"
+#include "sh.h"
 
 
 #include <stdio.h>   //debug
@@ -8,9 +9,9 @@
 int		condition_respectee(t_and_or *andor, int8_t lr)
 {
 	if (andor->type == AND_IF)
-		return (lr == TRUE ? 1 : 0);
+		return (lr == SUCCESS ? 1 : 0);
 	if (andor->type == OR_IF)
-		return (lr == TRUE ? 0 : 1);
+		return (lr == SUCCESS ? 0 : 1);
 	return (FAILURE);
 }
 
@@ -19,11 +20,9 @@ int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
 	uint8_t		tmp;
 	t_job		job;
 
-	cmd_to_job(&job, s_cmd);
-	job.fg = fg;
-
-	job.var = env_list_cpy(shell->var); //refaire cette fonction en triant var
-
+	cmd_to_job(shell, &job, s_cmd);
+	if ((job.fg = fg))
+		set_termios(&job.term_eval);
 	run_job(shell, &job, job.process);
 	tmp = job.ret;				//en attendant var intern? 
 	routine_clean_job(&job);
@@ -56,11 +55,16 @@ int		lvl_cmd_table(t_cfg *shell, t_list *lst)
 	return (0);
 }
 
-int		ft_eval(t_cfg *shell, t_list *cmd_table)
+int		ft_eval(t_list *cmd_table)
 {
+	t_cfg *shell;
 
-	printf("\n\n----------- eval -----------\n\n\n\n");
+	shell = cfg_shell();
+	if (shell->debug)
+		printf("\n\n----------- eval -----------\n\n\n\n");
+	set_signal_ign();
 	lvl_cmd_table(shell, cmd_table);
-	printf("----------- eval -----------\n\n");
+	if (shell->debug)
+		printf("----------- eval -----------\n\n");
 	return (0);
 }

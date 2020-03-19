@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/31 18:00:30 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/02/10 17:02:29 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/03/01 15:48:38 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@
  *            return (env_erro(msh->input[ac][i]));
  *    ret = env_creat_lst_env(msh->input, &(fresh.env_var), ac);
  *    if (ac == 1)
- *        ft_lst_join(env_list_cpy(msh->env_var), &(fresh.env_var), 1);
+ *        ft_lst_join(var_list_cpy(msh->env_var), &(fresh.env_var), 1);
  *    tmp = ft_ctab_to_str((msh->input + ret));
  *    if (!(msh->input[ret]))
  *        ft_print_env_lst(fresh.env_var);

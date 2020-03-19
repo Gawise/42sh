@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
+#include "sh.h"
 
 /*
  *	0: Inhibiteurs	" ' \
@@ -79,28 +80,33 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 	{
 		flag = l_get_last_flag(lexer);
 		if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
-			lex_err(lexer, c);
-		if (c == '\n')
-			ft_printf("->\t%s\t%20s\t%s\n\n",
-			"\\n", get_state_str(lexer), get_flag_name(flag));
-		else
-			ft_printf("->\t%c\t%20s\t%s\n",
-			c, get_state_str(lexer), get_flag_name(flag));
+			return (0);
+		if (cfg_shell()->debug)
+		{
+			if (c == '\n')
+				ft_printf("->\t%s\t%20s\t%s\n\n",
+						"\\n", get_state_str(lexer), get_flag_name(flag));
+			else
+				ft_printf("->\t%c\t%20s\t%s\n",
+						c, get_state_str(lexer), get_flag_name(flag));
+		}
 	}
 	if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
-		lex_err(lexer, c);
+		return (0);
 	return (1);
 }
 
-int	ft_lexer(char *str, t_lexer *lexer)
+int	ft_lexer(char **str, t_lexer *lexer)
 {
 	int	(*token_builder[8][11])(t_lexer *, char);
 
 	lexer->src = str;
-	lexer->curr = str;
+	lexer->curr = *str;
 	init_lexer_states(token_builder);
-	do_lexing(lexer, token_builder);
-	while (l_get_last_flag(lexer) || l_get_flag(lexer, F_HEREDOC))
-		do_lexing(lexer, token_builder);
+	if (!do_lexing(lexer, token_builder))
+		return (0);
+	while (l_get_last_flag(lexer) || l_get_last_here(lexer))
+		if (!do_lexing(lexer, token_builder))
+			return (0);
 	return (1);
 }

@@ -65,6 +65,7 @@ SRCS += ft_striteri.c
 SRCS += ft_strjoin.c
 SRCS += ft_strjoinfree.c
 SRCS += ft_strlcat.c
+SRCS += ft_strlclnjoin.c
 SRCS += ft_strlen.c
 SRCS += ft_strmap.c
 SRCS += ft_strmapi.c
@@ -109,6 +110,7 @@ SRCS += ft_dlstnew.c
 SRCS += ft_dlstdel.c
 SRCS += ft_dlstdelone.c
 SRCS += ft_lsthave.c
+SRCS += ft_lstdup.c
 
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c

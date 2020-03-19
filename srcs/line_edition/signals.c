@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/17 22:28:31 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/08 17:29:12 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 #include <stdlib.h>
 #include "libft.h"
 #include "struct.h"
+#include "sh.h"
 
 void	size_handler(int sig)
 {
-	t_cs_line			*cs;
+	t_cs_line	*cs;
+	int			cr;
 
 	if (sig == SIGWINCH && (cs = cs_master(NULL, 0)))
 	{
@@ -30,12 +32,6 @@ void	size_handler(int sig)
 		cs->min_col = 0;
 		ft_clear(1);
 		cs_set();
-		int cr = get_line(cs);
-		if (cs->screen.x > (int)ft_strlen(cs->prompt) + (cs->scroll ? 1 : 0))
-            cs->min_col = (int)ft_strlen(cs->prompt);
-        else
-            cs->min_col = 0;//(cs->scroll ? 0 : cs->screen.x - 1);
-		cs->min_row = 0;
 		cr = get_line(cs);
 		cs->cr = cr;
 		cs->scroll = cs->cr - (cs->screen.y - cs->min_row - 1);
@@ -45,33 +41,38 @@ void	size_handler(int sig)
 	}
 }
 
-void	pause_handler(int sig)
+void	sig_handler(int sig)
 {
 	t_cs_line	*cs;
 
-	if ((sig == SIGTSTP || sig == SIGTTIN || sig == SIGTTOU || sig == SIGSTOP)
-			&& (cs = cs_master(NULL, 0)))
+	if (sig >= 0 && (cs = cs_master(NULL, 0)))
 	{
-		signal(SIGTSTP, SIG_DFL);
-		signal(SIGTTIN, SIG_DFL);
-		signal(SIGTTOU, SIG_DFL);
-		signal(SIGSTOP, SIG_DFL);
-		ioctl(cs->tty, TIOCSTI, "\x1A");
+		cs->sig_int = 1;
+		end_key(cs);
+		ft_strdel(&cs->input);
+		if (cs->history)
+		{
+			cs->history->data = NULL;
+			ft_dlstdel(&cs->history);
+			cs->input = NULL;
+			cs->history = NULL;
+		}
 	}
 }
 
-void	sig_handler(int sig)
+void	init_signals(void)
 {
-	t_cs_line *cs;
+	int	i;
 
-	if (sig >= 0 && (cs = cs_master(NULL, 0)))
+	i = 0;
+	while (i <= 32)
 	{
-		term_init(0, NULL);
-		ft_clear(1);
-		ft_putstr_fd(cs->input, cs->tty);
-		ft_strdel(&cs->input);
-		if (cs->history)
-			cs->history->data = NULL;
-		cs->sig_int = 1;
+		if (i == SIGCONT || i == SIGTSTP || i == SIGSTOP || i == SIGTTOU
+				|| i == SIGTTIN)
+			signal(i, SIG_IGN);
+		else if (i == SIGWINCH)
+			signal(i, size_handler);
+		i++;
 	}
+	signal(SIGINT, sig_handler);
 }

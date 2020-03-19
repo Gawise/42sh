@@ -19,14 +19,19 @@ WHITE=\033[0;37m
 LESRCS += cursor.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
-LESRCS += keys.c
+LESRCS += print_cmd.c
 LESRCS += keys2.c
 LESRCS += move_word.c
 LESRCS += signals.c
 LESRCS += term_init.c
 LESRCS += utils.c
 LESRCS += clipboard.c
-
+LESRCS += cursor_position.c
+LESRCS += input.c
+LESRCS += arrow_keys.c
+LESRCS += maj_arrow_keys.c
+LESRCS += del_keys.c
+LESRCS += other_keys.c
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -35,6 +40,7 @@ LEXSRCS += digit.c
 LEXSRCS += equ.c
 LEXSRCS += exp.c
 LEXSRCS += flag.c
+LEXSRCS += free.c
 LEXSRCS += heredoc.c
 LEXSRCS += inhib.c
 LEXSRCS += lexer.c
@@ -61,11 +67,13 @@ PARSRCS += and_or.c
 PARSRCS += args_tab.c
 PARSRCS += assign.c
 PARSRCS += cmd.c
+PARSRCS += free.c
 PARSRCS += init.c
 PARSRCS += lst_to_tab.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
+PARSRCS += tools.c
 PARSRCS += word.c
 
 ## EVAL ##
@@ -73,12 +81,14 @@ PARSRCS += word.c
 EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_env.c
+EVALSRCS += tools_var.c
 EVALSRCS += setenv.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
+EVALSRCS += path_err.c
+EVALSRCS += path_err_tools.c
 
 ## DEBUG ##
 
@@ -87,6 +97,7 @@ DBSRCS += parser.c
 
 SRC += main.c
 SRC += init_shell.c
+SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))

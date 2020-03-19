@@ -45,3 +45,19 @@ int		p_add_assign(t_token *token, t_parser *parser)
 	parser->state = S_PARSER_ASSIGN;
 	return (1);
 }
+
+int		p_assign_join(t_token *token, t_parser *parser)
+{
+	t_cmd_table	*table;
+	t_and_or	*and_or;
+	t_simple_cmd	*cmd;
+	t_list		*lst;
+	
+	table = (t_cmd_table *)parser->curr_table->data;
+	and_or = (t_and_or *)table->curr_and_or->data;
+	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
+	lst = ft_lstgettail(cmd->args);
+	if (!(lst->data = ft_strlclnjoin((char *)lst->data, token->str)))
+		return (0);
+	return (1);
+}

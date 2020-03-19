@@ -40,7 +40,7 @@ int	l_delim_token(t_lexer *lexer, char c)
 		return (1);
 	}
 	l_buffer_flush(lexer);
-	if (lexer->curr_token->type == IO_NUMBER)
+	if (lexer->curr_token->type == IO_NUMBER && !ft_strchr("<>", c))
 		lexer->curr_token->type = WORD;
 	else if (lexer->curr_token->type == TOKEN)
 		l_set_token_type(lexer, c);

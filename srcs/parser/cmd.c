@@ -15,6 +15,7 @@ int	p_add_cmd(t_token *token, t_parser *parser)
 	|| !ft_lstpush(&and_or->s_cmd, cmd, sizeof(t_simple_cmd)))
 		return (0);
 	and_or->curr_s_cmd = and_or->curr_s_cmd->next;
-	parser->state = S_PARSER_CMD_START;
+	parser->state = S_PARSER_ANDIF_PIPE;
+	parser->pmt_prefix = token->type;
 	return (1);
 }

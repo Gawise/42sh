@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:43:11 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/02/25 16:11:31 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/03/01 20:06:26 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 int				ft_lsthave(t_list *lst, int (*f)(t_list *elem));
+t_list	*ft_lstdup(t_list *lst, size_t size, void (*cplst)(void *, void *));
 void			ft_print_bits(unsigned char nb);
 void			ft_del_tab(void **tabi);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
@@ -130,6 +131,7 @@ t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 char			*ft_strclnjoin(char const *s1, char const *s2);
+char			*ft_strlclnjoin(char const *s1, char const *s2);
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 char			*ft_fcvt(double val, int ndigits, int *decpt, char *buf);
 double			ft_modf(double val, double *integral);

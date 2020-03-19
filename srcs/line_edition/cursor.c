@@ -4,8 +4,9 @@
 /*   cursor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*   Created: 2020/01/13 16:11:17 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/02/17 14:03:35 by ambelghi         ###   ########.fr       */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/08 17:09:02 by ambelghi          #+#    #+#             */
+/*   Updated: 2020/03/11 17:25:55 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -13,10 +14,10 @@
 #include "line_edition.h"
 #include "struct.h"
 
-void	cs_set(void)
+void		cs_set(void)
 {
 	struct winsize	size;
-	t_cs_line			*cs;
+	t_cs_line		*cs;
 
 	if ((cs = cs_master(NULL, 0)))
 	{
@@ -24,11 +25,10 @@ void	cs_set(void)
 		cs->screen.x = size.ws_col;
 		cs->screen.y = size.ws_row;
 		cs->tty = ttyslot();
-		print_prompt(cs);
 	}
 }
 
-void	move_cs(t_cs_line **cs)
+void		move_cs(t_cs_line **cs)
 {
 	t_cs_line	*tmp;
 	t_point		pos;
@@ -60,6 +60,8 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.clipb.x = -1;
 		cs.clipb.y = -1;
 		cs.clipboard = NULL;
+		cs.sig_int = 0;
+		cs.sig_eof = 0;
 	}
 	return (&cs);
 }

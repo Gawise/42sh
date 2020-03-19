@@ -35,6 +35,14 @@ int	p_add_arg(t_token *token, t_parser *parser)
 	return (1);
 }
 
+int	p_add_assign_arg(t_token *token, t_parser *parser)
+{
+	if (!p_add_arg(token, parser))
+		return (0);
+	parser->state = S_PARSER_ARG_ASSIGN;
+	return (1);
+}
+
 int	p_file_name(t_token *token, t_parser *parser)
 {
 	t_cmd_table	*table;
@@ -46,8 +54,15 @@ int	p_file_name(t_token *token, t_parser *parser)
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
 	redir = (t_redir *)cmd->curr_redir->data;
+	if ((redir->type == GREATAND || redir->type == LESSAND)
+	&& !ft_strequ(token->str, "-") && !is_digitstr(token->str))
+		syn_err(token, parser);
 	if (!(redir->file = ft_strdup(token->str)))
 		return (0);
-	parser->state = parser->prev_state;
+	if (parser->prev_state == S_PARSER_ANDIF_PIPE
+	|| parser->prev_state == S_PARSER_TABLE_START)
+		parser->state = S_PARSER_CMD_START;
+	else
+		parser->state = parser->prev_state;
 	return (1);
 }
