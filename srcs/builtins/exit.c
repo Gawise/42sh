@@ -11,12 +11,11 @@ uint8_t		ft_exit(t_job *j, t_process *p)
 	uint8_t 		ret;
 	t_cfg		*shell;
 
-
 	(void)j;
 	shell = cfg_shell();
 	if (shell->job && !protect_job)
 	{
-		ft_dprintf(STDERR_FILENO,"have job running or stopped ! \n");
+		ft_dprintf(STDERR_FILENO,"have job running or stopped !\n");
 		protect_job++;
 		return (FAILURE);
 	}
