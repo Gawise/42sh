@@ -82,13 +82,16 @@ EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
 EVALSRCS += tools_var.c
+EVALSRCS += env.c
 EVALSRCS += setenv.c
+EVALSRCS += unsetenv.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
+EVALSRCS += redir.c
 
 ## DEBUG ##
 
@@ -115,7 +118,7 @@ vpath %.h includes
 
 CC = clang
 COMPILE = $(CC) -c
-COMPILEDB = $(CC) -g
+COMPILEDB = $(CC) -g3
 
 MKDIR = mkdir -p
 CLEANUP = rm -rf
@@ -160,8 +163,9 @@ $(LIBDB) :
 	$(MAKE) -C $(LPATH) debug
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ $(SRCS)
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $(SRCS) $^
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
+
 
 clean :
 	$(MAKE) -C $(LPATH) clean

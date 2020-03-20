@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:43:11 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/03/01 20:06:26 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/03/05 20:07:19 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int				ft_getopt(int *ac, int *i, char **const av, char *flags);
 char			**ft_tabdup(char **t);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
+int		ft_strrchri(const char *s, int c);
 char			*ft_strdup(const char *s1);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
@@ -123,7 +124,6 @@ int				ft_lstdelif(t_list **begin, void *data,
 size_t			ft_wcharlen(unsigned wc);
 size_t			ft_wstrlen(unsigned *str);
 void			ft_ftoa(double val, int prec, char res[CVTBUFSZ]);
-int				ft_strichr(char *s, int c);
 t_list			*ft_lstpush(t_list **alst, void *data, size_t size);
 char			*ft_strndup(const char *s1, size_t n);
 void			ft_lstaddtail(t_list **alst, t_list *new);

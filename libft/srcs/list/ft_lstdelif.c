@@ -20,7 +20,7 @@ static	int		manage_elem(t_list **begin, t_list *target, t_list *previus,
 	else
 		previus->next = target->next;
 	ft_lstdelone(&target, del);
-	return (1);
+	return (0);
 }
 
 int				ft_lstdelif(t_list **begin, void *data,
@@ -38,6 +38,6 @@ int				ft_lstdelif(t_list **begin, void *data,
 		tmp = tmp->next;
 	}
 	if (!tmp)
-		return (0);
+		return (1);
 	return (manage_elem(begin, tmp, previus, del));
 }
