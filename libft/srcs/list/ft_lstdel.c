@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ft_printf.h"
 
 void	ft_lstdel(t_list **alst, void (*del)(void *, size_t size))
 {
