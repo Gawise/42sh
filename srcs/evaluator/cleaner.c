@@ -28,7 +28,7 @@ void	del_struct_tvar(void *del, size_t u)
 
 int		routine_clean_job(t_job *j)
 {
-	ft_strdel(&j->command);
+	ft_strdel(&j->cmd);
 	ft_lstdel(&j->process, del_struct_process);
 	ft_lstdel(&j->env, del_struct_tvar);
 	return (0);

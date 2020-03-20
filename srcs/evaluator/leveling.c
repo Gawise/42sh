@@ -15,12 +15,12 @@ int		condition_respectee(t_and_or *andor, int8_t lr)
 	return (FAILURE);
 }
 
-int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, uint8_t fg)
+int		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, char *cmd, uint8_t fg)
 {
 	uint8_t		tmp;
 	t_job		job;
 
-	cmd_to_job(shell, &job, s_cmd);
+	cmd_to_job(shell, &job, s_cmd, cmd);
 	if ((job.fg = fg))
 		set_termios(&job.term_eval);
 	run_job(shell, &job, job.process);
@@ -34,11 +34,14 @@ int		lvl_and_or(t_cfg *shell, t_list *lst)
 	uint8_t		lr;				//en attendant var intern ?
 	t_and_or	*andor;
 
-
+	if (!lst)
+		return (0);
 	andor = lst->data;
-	lr = lvl_simple_cmd(shell, andor->s_cmd, !andor->background);
+	lr = lvl_simple_cmd(shell, andor->s_cmd, andor->str, !andor->background);
 	if (lst->next && condition_respectee(andor, lr))
-		lvl_and_or(shell, lst->next);
+		lvl_and_or(shell, lst->next); //continue
+	else if (lst->next)
+		lvl_and_or(shell, lst->next->next);
 	return (0);
 }
 

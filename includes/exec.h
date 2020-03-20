@@ -12,7 +12,7 @@
 # define FALSE -1
 
 # define LEFT 1
-# define RIGHT 2
+# define PIPE_ON 2
 # define MID 3
 # define EXEC 4
 # define BUILTIN 8		/*rajouter un # define PIPE_ON ?*/
@@ -26,9 +26,20 @@
 # define E_LOOP 2112
 # define E_NTL	4160	/*name too long*/
 
+# define B_ECHO 8192
+# define B_EXIT 24576
+# define B_CD 40960
+# define B_ENV 57344
+# define B_SETENV 73728
+# define B_UNSETENV 90112
 
-
-
+/*
+# define B_EXIT 16384
+# define B_CD 32768
+# define B_ENV 65536
+# define B_SETENV 131072
+# define B_UNSETENV 262144
+*/
 
 
 # define ENV 1
@@ -50,19 +61,20 @@
 
 int		lvl_cmd_table(t_cfg *shell, t_list *lst);
 int		routine_set_pipe(t_list *process, t_pipe *fd);
-int		do_dup(t_process *p);
+int		do_pipe(t_process *p);
 
 void	process_type(t_list *var, t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
 
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd);
+int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 int		routine_clean_job(t_job *j);
 
 
-int			path_errors(char *path);
+char		*create_abs_path(char *s);
+int			path_errors(char *path, uint8_t check_it);
 uint8_t		c_enametoolong(char *path);
-uint8_t		c_enotdir(char *path);
+uint8_t		c_isdir(char *path);
 /*	wait */
 
 int		wait_process(t_job *job);
@@ -71,9 +83,13 @@ int		wait_process(t_job *job);
 
 void		set_termios(struct termios *term);
 
+/* redir */
+
+int		process_redir(t_process *p, t_list *redir);
 
 
-	int		ft_eval(t_list *cmd_table);
+
+int		ft_eval(t_list *cmd_table);
 
 
 #endif

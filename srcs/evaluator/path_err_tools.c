@@ -32,7 +32,7 @@ uint8_t			c_enametoolong(char *path)
 	return (1);
 }
 
-uint8_t			c_enotdir(char *path)
+uint8_t			c_isdir(char *path)
 {
 	struct stat		buf;
 
