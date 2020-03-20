@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -93,6 +94,11 @@ EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
 
+## BUILTIN ##
+
+BTSRCS += exit.c
+
+
 ## DEBUG ##
 
 DBSRCS += lexer.c
@@ -105,6 +111,7 @@ SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
 OPATHS += $(OPATH)line_edition
@@ -112,6 +119,7 @@ OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
 
 vpath %.h includes

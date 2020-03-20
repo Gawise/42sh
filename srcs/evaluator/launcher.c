@@ -93,14 +93,6 @@ static uint8_t		ft_cd(t_job *j, t_process *p)
 		return (0);
 }
 
-static uint8_t		ft_exit(t_job *j, t_process *p)
-{
-		printf("EXIT builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
-
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[6])(t_job *, t_process *);
@@ -201,7 +193,7 @@ int		run_process(t_job *j, t_process *p)
 {
 	process_type(j->env, p);
 
-	if (p->setup & BUILTIN && p->setup ^ PIPE_ON)
+	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
 		return (builtin_process(j, p));
 	return (fork_process(j, p));
 }

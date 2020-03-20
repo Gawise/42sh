@@ -42,7 +42,7 @@ int		main(int ac, char **av, char **env)
 	{
 		if (!(line = ft_prompt(NAME_SH, COLOR_SH)))
 			continue ;
-		else if (line && (!line[0] || ft_strcmp("exit\n", line) == 0))
+		else if (line && (!line[0]))
 			break ;
 		set_signal_ign();
 		init_lexer(&lexer);

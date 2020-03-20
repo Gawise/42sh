@@ -6,14 +6,8 @@
 # include "struct.h"
 # include "signal.h"
 
-# define SUCCESS 0
-# define FAILURE 1
-# define TRUE 1
-# define FALSE -1
 
-# define LEFT 1
 # define PIPE_ON 2
-# define MID 3
 # define EXEC 4
 # define BUILTIN 8		/*rajouter un # define PIPE_ON ?*/
 # define SLASH 16
@@ -55,6 +49,15 @@
 
 
 /*		debug	*/
+
+
+
+/*		BUILTIN	*/
+
+uint8_t			ft_setenv(t_job *j, t_process *p);
+uint8_t			ft_unsetenv(t_job *j, t_process *p);
+uint8_t			ft_env(t_job *j, t_process *p);
+uint8_t			ft_exit(t_job *j, t_process *p);
 
 
 /*				*/
