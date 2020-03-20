@@ -115,7 +115,7 @@ vpath %.h includes
 
 CC = clang
 COMPILE = $(CC) -c
-COMPILEDB = $(CC) -g
+COMPILEDB = $(CC) -g3
 
 MKDIR = mkdir -p
 CLEANUP = rm -rf
@@ -160,8 +160,9 @@ $(LIBDB) :
 	$(MAKE) -C $(LPATH) debug
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ $(SRCS)
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $(SRCS) $^
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
+
 
 clean :
 	$(MAKE) -C $(LPATH) clean
