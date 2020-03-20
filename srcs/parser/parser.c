@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "parser.h"
+#include "var.h"
 #include "line_edition.h"
 #include "sh.h"
 
@@ -297,19 +298,11 @@ void	p_init_state_machine(int (*table_builder[10][17])(t_token *, t_parser *))
 	p_init_syn_err_state(table_builder);
 }
 
-void		del_token(void *data, size_t size)
-{
-	t_token		*token;
-
-	(void)size;
-	token = (t_token *)data;
-	ft_strdel(&token->str);
-}
-
 char		*get_args_str(char **args)
 {
 	int	i;
 	char	*str;
+	char	*tmp;
 
 	if (args && args[0])
 	{
@@ -324,11 +317,13 @@ char		*get_args_str(char **args)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_asprintf(&str, "%s %s", str, args[i]) == -1)
+		if (ft_asprintf(&tmp, "%s %s", str, args[i]) == -1)
 		{
 			ft_printf("erreur get_args str\n");
 			exit(1);
 		}
+		ft_strdel(&str);
+		str = tmp;
 		i++;
 	}
 	return (str);
@@ -388,34 +383,43 @@ char		*get_redir_str(t_list *redir_lst)
 	char	*res;
 	char	*fmt;
 	char	*str;
+	char	*tmp;
 
 	if (!redir_lst || !redir_lst->data)
 		return (NULL);
 	redir = (t_redir *)redir_lst->data;
-	if (ft_asprintf(&res, get_redir_fmt(redir), redir->io_num,
-	get_redir_type_str(redir->type), redir->delim, redir->file) == -1)
+	if (ft_asprintf(&res, (fmt = get_redir_fmt(redir)), redir->io_num,
+	(tmp = get_redir_type_str(redir->type)), redir->delim, redir->file) == -1)
 	{
 		ft_printf("erreur asprintf get_redir_str\n");
 		exit(1);
 	}
+	ft_strdel(&tmp);
+	ft_strdel(&fmt);
 	redir_lst = redir_lst->next;
 	while (redir_lst && redir_lst->data)
 	{
 		redir = (t_redir *)redir_lst->data;
 		if (!(fmt = get_redir_fmt(redir)))
 			return (NULL);
-		if (ft_asprintf(&str, get_redir_fmt(redir), redir->io_num,
-		get_redir_type_str(redir->type), redir->delim, redir->file) == -1)
+		if (ft_asprintf(&str, fmt, redir->io_num,
+		(tmp = get_redir_type_str(redir->type)),
+		redir->delim, redir->file) == -1)
 		{
 			ft_printf("erreur asprintf get_redir_str\n");
 			exit(1);
 		}
+		ft_strdel(&fmt);
+		ft_strdel(&tmp);
 		redir_lst = redir_lst->next;
-		if (ft_asprintf(&res, "%s %s", res, str) == -1)
+		if (ft_asprintf(&tmp, "%s %s", res, str) == -1)
 		{
 			ft_printf("erreur asprintf get_redir_str\n");
 			exit(1);
 		}
+		ft_strdel(&res);
+		ft_strdel(&str);
+		res = tmp;
 	}
 	return (res);
 }
@@ -425,6 +429,7 @@ char		*get_assign_str(t_list *assign_lst)
 	t_assignment	*assign;
 	char		*new;
 	char		*res;
+	char		*tmp;
 
 	if (!assign_lst || !assign_lst->data)
 		return (NULL);
@@ -443,13 +448,45 @@ char		*get_assign_str(t_list *assign_lst)
 			ft_printf("erreur asprintf get_assign_str\n");
 			exit(1);
 		}
-		if (ft_asprintf(&res, "%s %s", res, new) == -1)
+		if (ft_asprintf(&tmp, "%s %s", res, new) == -1)
 		{
 			ft_printf("erreur asprintf get_assign_str 2\n");
 			exit(1);
 		}
+		ft_strdel(&res);
+		ft_strdel(&new);
+		res = tmp;
 		assign_lst = assign_lst->next;
 	}
+	return (res);
+}
+
+char		*add_str_to_job(char **str, char **new)
+{
+	char	*res;
+
+	res = NULL;
+	if (!str || !new)
+		return (NULL);
+	if (!*str && *new)
+	{
+		if (!(res = ft_strdup(*new)))
+			return (NULL);
+	}
+	else if (*str && *new)
+	{
+		if (ft_asprintf(&res, "%s %s", *str, *new) == -1)
+			return (NULL);
+	}
+	else if (*str && !*new)
+	{
+		if (!(res = ft_strdup(*str)))
+			return (NULL);
+	}
+	if (*new)
+		ft_strdel(new);
+	if (*str)
+		ft_strdel(str);
 	return (res);
 }
 
@@ -462,30 +499,11 @@ char		*get_cmd_str(t_simple_cmd *cmd)
 
 	str = NULL;
 	assign = get_assign_str(cmd->assign);
+	str = add_str_to_job(&str, &assign);
 	args = get_args_str(cmd->av);
+	str = add_str_to_job(&str, &args);
 	redir = get_redir_str(cmd->redir);
-	if (assign && !(str = ft_strdup(assign)))
-		return (NULL);
-	if (!str && args)
-	{
-		if (!(str = ft_strdup(args)))
-			return (NULL);
-	}
-	else if (str && args)
-	{
-		if (ft_asprintf(&str, "%s %s", str, args) == -1)
-			return (NULL);
-	}
-	if (!str && redir)
-	{
-		if (!ft_strdup(redir))
-			return (NULL);
-	}
-	else if (str && redir)
-	{
-		if (ft_asprintf(&str, "%s %s", str, redir) == -1)
-			return (NULL);
-	}
+	str = add_str_to_job(&str, &redir);
 	return (str);
 }
 
@@ -494,6 +512,7 @@ int		p_and_or_job_str(t_and_or *and_or)
 	t_list	*cmd_lst;
 	char	*str;
 	char	*res;
+	char	*tmp;
 
 	res = NULL;
 	cmd_lst = and_or->s_cmd;
@@ -504,8 +523,11 @@ int		p_and_or_job_str(t_and_or *and_or)
 	{
 		if (cmd_lst->data && !(str = get_cmd_str((t_simple_cmd *)cmd_lst->data)))
 			return (0);
-		if (cmd_lst->data && ft_asprintf(&res, "%s | %s", res, str) == -1)
+		if (cmd_lst->data && ft_asprintf(&tmp, "%s | %s", res, str) == -1)
 			return (0);
+		ft_strdel(&str);
+		ft_strdel(&res);
+		res = tmp;
 		cmd_lst = cmd_lst->next;
 	}
 	and_or->str = res;
@@ -535,9 +557,22 @@ int		p_set_jobs_str(t_parser *parser)
 	return (1);
 }
 
+char	*p_get_prompt_prefix(t_parser *parser)
+{
+	if (parser->pmt_prefix == AND_IF)
+		return (ft_strdup("cmdand"));
+	else if (parser->pmt_prefix == OR_IF)
+		return (ft_strdup("cmdor"));
+	else if (parser->pmt_prefix == PIPE)
+		return (ft_strdup("pipe"));
+	return (ft_strdup(""));
+}
+
 int		ft_parser(t_lexer *lexer, t_parser *parser)
 {
 	int	(*table_builder[10][17])(t_token *, t_parser *);
+	char	*pmt;
+	char	*pmt_prefix;
 
 	if (cfg_shell()->debug)
 		ft_printf("\n----------- parsing -----------\n\n");
@@ -549,11 +584,19 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	while (parser->state == S_PARSER_ANDIF_PIPE)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
-		ft_lexer(ft_prompt("> "), lexer);
+		if (!(pmt_prefix = p_get_prompt_prefix(parser))
+		|| ft_printf("%s", pmt_prefix) == -1
+		|| !(pmt = ft_prompt(find_var_value(cfg_shell()->intern, "PS2")
+		, COLOR_SUBPROMPT)))
+			return (0);
+		ft_lexer(&pmt, lexer);
+		ft_strdel(&pmt);
+		ft_strdel(&pmt_prefix);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
 	p_make_args_tab(parser);
-	if (!p_set_jobs_str(parser))
-			return (0);
+	if (parser->state != S_PARSER_SYNTAX_ERROR
+	&& !p_set_jobs_str(parser))
+		return (0);
 	return (1);
 }

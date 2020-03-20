@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.c                                             :+:      :+:    :+:   */
+/*   print_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 16:43:55 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/11 16:43:15 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	print_prompt(t_cs_line *cs)
 
 	if (cs)
 	{
+		ft_putstr_fd(cs->prompt_color, cs->tty);
 		if (cs->screen.x <= (len = (int)ft_strlen(cs->prompt)
 			+ (cs->scroll ? 1 : 0)))
 		{
@@ -39,6 +40,7 @@ void	print_prompt(t_cs_line *cs)
 				1, &my_putchar);
 			ft_putstr_fd(cs->prompt, cs->tty);
 		}
+		ft_putstr_fd("\e[0;0m", cs->tty);
 	}
 }
 

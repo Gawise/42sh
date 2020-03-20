@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 12:58:26 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 17:21:28 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/03/11 15:27:43 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ int		check_keys(char *caps)
 	else if (ft_strcmp(caps, "\n") == 0)
 	{
 		ret = -1;
-		if (ft_strcmp(caps, "\n") == 0)
-			line_master(cs, caps);
+		line_master(cs, caps);
 	}
 	else if (ft_strcmp(caps, "\033[6n") == 0)
 		ret = -1;

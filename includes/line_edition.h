@@ -50,7 +50,7 @@ void			end_key(t_cs_line *cs);
 void			maj_arrow_down(t_cs_line *cs);
 void			maj_arrow_up(t_cs_line *cs);
 int				get_line(t_cs_line *cs);
-char			*ft_prompt(char *prompt);
+char			*ft_prompt(char *prompt, char *color);
 int				get_col(t_cs_line *cs);
 t_point			cs_pos(t_cs_line *cs);
 void			ft_utoa(char **str);

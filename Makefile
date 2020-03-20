@@ -40,6 +40,7 @@ LEXSRCS += digit.c
 LEXSRCS += equ.c
 LEXSRCS += exp.c
 LEXSRCS += flag.c
+LEXSRCS += free.c
 LEXSRCS += heredoc.c
 LEXSRCS += inhib.c
 LEXSRCS += lexer.c
@@ -66,11 +67,13 @@ PARSRCS += and_or.c
 PARSRCS += args_tab.c
 PARSRCS += assign.c
 PARSRCS += cmd.c
+PARSRCS += free.c
 PARSRCS += init.c
 PARSRCS += lst_to_tab.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
+PARSRCS += tools.c
 PARSRCS += word.c
 
 ## EVAL ##

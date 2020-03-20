@@ -1,4 +1,5 @@
 #include "exec.h"
+#include "var.h"
 #include "sh.h"
 #include "struct.h"
 #include "libft.h"
@@ -6,16 +7,19 @@
 #include <termios.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/stat.h>
 
-struct termios *term_create_origin(void)
+static int	check_terminal(t_cfg *cfg, uint8_t tty)
 {
-	struct termios *term;
-
-	if (!(term = malloc(sizeof(struct termios))))
-		ex("[TERM ORIGIN] ERROR MALLOC");
-	if ((tcgetattr(STDIN_FILENO, term) == FALSE))
-		ex("[TERM ORIGIN] ERROR TCGETATTR");
-	return (term);
+	if (cfg && (cfg->interactive = isatty(tty)))
+	{
+		if (!(cfg->term_origin = malloc(sizeof(struct termios))))
+			ex("[TERM ORIGIN] ERROR MALLOC");
+		if ((tcgetattr(tty, cfg->term_origin) == FALSE))
+			ex("[TERM ORIGIN] ERROR TCGETATTR");
+		return (1);
+	}
+	return (0);
 }
 
 void		set_signal_ign(void)
@@ -39,23 +43,23 @@ t_cfg		*cfg_shell(void)
 
 uint8_t		init_shell(char **env, char **av)
 {
-	uint8_t	shell_terminal;
-	pid_t	shell_pgid;
-	t_cfg	*shell;
+	uint8_t		shell_terminal;
+	pid_t		shell_pgid;
+	t_cfg		*shell;
+	struct stat	stat;
 
-	shell_terminal = STDIN_FILENO;
+	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
+		exit(1);
 	shell = init_cfg(env, av);
-	if ((shell->interactive = isatty(shell_terminal)))
+	if (check_terminal(shell, shell_terminal))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);
 		set_signal_ign();
 		if (setpgid(shell->pid, shell->pid) < 0)
 			ex("[INIT SHELL] error setpgid");
-		if (tcsetpgrp(STDIN_FILENO, shell->pid))
+		if (tcsetpgrp(shell_terminal, shell->pid))
 			ex("[INIT SHELL] error tcsetpgrp");
-		shell->term_origin = term_create_origin();
 	}
-	//else
 	return (shell->debug);
 }
