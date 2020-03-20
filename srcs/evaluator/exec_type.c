@@ -12,20 +12,24 @@
 
 static int			builtin_search(t_process *p)
 {
-	// si strcmp remplacer p->cmd par un nb pour le tab de (*f)
-	if (ft_strcmp(p->cmd, "echo")
-		|| ft_strcmp(p->cmd, "exit")
-		|| ft_strcmp(p->cmd, "setenv")
-		|| ft_strcmp(p->cmd, "unsetenv")
-		|| ft_strcmp(p->cmd, "env")
-		|| ft_strcmp(p->cmd, "cd")
-		return (TRUE);
+	if (!ft_strcmp(p->cmd, "echo"))
+		return (p->setup |= B_ECHO);
+	if (!ft_strcmp(p->cmd, "setenv"))
+		return (p->setup |= B_SETENV);
+	if (!ft_strcmp(p->cmd, "unsetenv"))
+		return (p->setup |= B_UNSETENV);
+	if (!ft_strcmp(p->cmd, "env"))
+		return (p->setup |= B_ENV);
+	if (!ft_strcmp(p->cmd, "cd"))
+		return (p->setup |= B_CD);
+	if (!ft_strcmp(p->cmd, "exit"))
+		return (p->setup |= B_EXIT);
 	return (0);
 }
 
 static uint16_t		find_type(t_list *var, t_process *p)
 {
-	if (builtin_search())
+	if (builtin_search(p))
 		p->setup |= BUILTIN;
 	/*
 	 *-> if utility {}
@@ -35,13 +39,14 @@ static uint16_t		find_type(t_list *var, t_process *p)
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);
+
 	return (SUCCESS);
 }
 
 
 static void		any_slash(t_list *var, t_process *p)
 {
-	if (find_type(var, p))
+	if (find_type(var, p) || p->setup & BUILTIN)
 		return ;
 	p->setup |= path_errors(p->path, 1);
 }

@@ -12,7 +12,7 @@
 # define FALSE -1
 
 # define LEFT 1
-# define RIGHT 2
+# define PIPE_ON 2
 # define MID 3
 # define EXEC 4
 # define BUILTIN 8		/*rajouter un # define PIPE_ON ?*/
@@ -26,9 +26,20 @@
 # define E_LOOP 2112
 # define E_NTL	4160	/*name too long*/
 
+# define B_ECHO 8192
+# define B_EXIT 24576
+# define B_CD 40960
+# define B_ENV 57344
+# define B_SETENV 73728
+# define B_UNSETENV 90112
 
-
-
+/*
+# define B_EXIT 16384
+# define B_CD 32768
+# define B_ENV 65536
+# define B_SETENV 131072
+# define B_UNSETENV 262144
+*/
 
 
 # define ENV 1

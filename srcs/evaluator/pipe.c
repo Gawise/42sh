@@ -40,10 +40,10 @@ int		routine_set_pipe(t_list *process, t_pipe *fd)
 		ex("pipe:");
 	manage = process->data;
 	manage->std[1] = fd->fd[1];
-	manage->setup += LEFT;		/*Useless now    */
+	manage->setup += PIPE_ON;		/*Useless now    */
 	manage = process->next->data;
 	manage->std[0] = fd->fd[0];
-	manage->setup += RIGHT;  /*Useless now    */
+	manage->setup += PIPE_ON;  /*Useless now    */
 	return (0);
 }
 

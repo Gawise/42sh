@@ -77,10 +77,45 @@ void		set_termios(struct termios *term)
 }
 
 
-int		builtin_process(void)
+static uint8_t		ft_echo(t_job *j, t_process *p)
 {
+		printf("ECHO builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
 
-	return (0);
+static uint8_t		ft_cd(t_job *j, t_process *p)
+{
+		printf("CD builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+static uint8_t		ft_exit(t_job *j, t_process *p)
+{
+		printf("EXIT builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+uint8_t		builtin_process(t_job *j, t_process *p)
+{
+	uint8_t		(*tab_f[6])(t_job *, t_process *);
+
+	tab_f[0] = ft_echo;
+	tab_f[1] = ft_exit;
+	tab_f[2] = ft_cd;
+	tab_f[3] = ft_env;
+	tab_f[4] = ft_setenv;
+	tab_f[5] = ft_unsetenv;
+	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
+		p->status = FAILED;
+	else
+		p->status = COMPLETED;
+	return (p->ret);
 }
 
 uint8_t	error_handling(t_process *p)
@@ -106,7 +141,7 @@ uint8_t	error_handling(t_process *p)
 	if (p->setup & E_NTL)
 		ft_dprintf(2, "%s: %s: File name too long\n", namesh, p->path);
 	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
-	return (FAILURE);
+	exit(p->ret);
 }
 
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
@@ -137,14 +172,14 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
-	if (process_redir(p, p->redir))
-		exit(1);
+	process_redir(p, p->redir);
 	set_signal_child();
-	if (error_handling(p) == FAILURE)
-		exit(p->ret);
+	error_handling(p);
+	if (p->setup & BUILTIN)
+		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
 		ex("execve:");
-	return (0);
+	exit(1);
 }
 
 int		fork_process(t_job *job, t_process *p)
@@ -162,10 +197,13 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-int		run_process(t_job *job, t_process *process)
+int		run_process(t_job *j, t_process *p)
 {
-	process_type(job->env, process);
-	return (fork_process(job, process));
+	process_type(j->env, p);
+
+	if (p->setup & BUILTIN && p->setup ^ PIPE_ON)
+		return (builtin_process(j, p));
+	return (fork_process(j, p));
 }
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process)

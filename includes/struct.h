@@ -250,7 +250,7 @@ typedef struct	s_process
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
 	int8_t 	std[3];				/* stdin out err*/
-	uint16_t	setup;				/* info du process */
+	uint32_t	setup;				/* info du process */
 	t_list		*redir;				/* list of redirs */
 }				t_process;
 

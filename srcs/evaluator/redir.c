@@ -261,7 +261,7 @@ int		process_redir(t_process *p, t_list *redir)
 	while (redir)
 	{
 		if (redir_gearing(p, redir->data))
-			return (FAILURE);
+			exit(1);
 		redir = redir->next;
 	}
 	return (SUCCESS);

@@ -28,7 +28,6 @@ void	cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.redir = cmd->redir;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
-		i++;
 	}
 	return ;   /*i useless sans create_pipe_list ???*/
 }
