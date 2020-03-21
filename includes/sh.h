@@ -16,6 +16,7 @@ typedef struct	s_cfg t_cfg;
 
 void	ex(char *s); //pour la gestion des erreurs amenant a quiter
 
+void	ft_ex(char *error);
 void	set_signal_ign(void);
 uint8_t	init_shell(char **env, char **av);
 t_cfg	*init_cfg(char **env, char **av);

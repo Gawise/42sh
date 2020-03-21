@@ -93,6 +93,7 @@ EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
+EVALSRCS += tools_redir.c
 
 ## BUILTIN ##
 

@@ -31,5 +31,8 @@ int		routine_clean_job(t_job *j)
 	ft_strdel(&j->cmd);
 	ft_lstdel(&j->process, del_struct_process);
 	ft_lstdel(&j->env, del_struct_tvar);
+	close(j->std[0]);
+	close(j->std[1]);
+	close(j->std[2]);
 	return (0);
 }

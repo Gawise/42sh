@@ -89,7 +89,7 @@ int		wait_process(t_job *job)
 		wstatus = 0;
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
-			ex("[WAIT_PROCESS] error waitpid");
+			perror("[WAIT_PROCESS] error waitpid");
 		update_process(job->process, pid_child, wstatus);
 	}
 	update_job(job);

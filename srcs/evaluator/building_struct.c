@@ -38,9 +38,9 @@ int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 	ft_bzero(job, sizeof(t_job));   /*set t_pipe a 0. Besoin d etre a -1?*/
 	cmd_to_process(&job->process, s_cmd);
 	job->cmd = ft_strdup(cmd);
-	job->std[0] = STDIN_FILENO;
-	job->std[1] = STDOUT_FILENO;
-	job->std[2] = STDERR_FILENO;
+	job->std[0] = dup(STDIN_FILENO);
+	job->std[1] = dup(STDOUT_FILENO);
+	job->std[2] = dup(STDERR_FILENO);
 	term_create_eval(shell->term_origin, &job->term_eval);
 	job->env = ft_lstdup(shell->env, shell->env->size, cpy_var_list);
 	return (0);

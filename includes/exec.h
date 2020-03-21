@@ -89,7 +89,7 @@ void		set_termios(struct termios *term);
 /* redir */
 
 int		process_redir(t_process *p, t_list *redir);
-
+void	do_my_dup2(uint8_t fd1, uint8_t fd2);
 
 
 int		ft_eval(t_list *cmd_table);
