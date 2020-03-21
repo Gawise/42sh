@@ -18,7 +18,7 @@ int		do_pipe(t_process *p)
 	if (p->std[1] != STDOUT_FILENO)
 	{
 		if (dup2(p->std[1], STDOUT_FILENO) == -1)
-			ex("[do_pipe]2 dup2 error:");
+			perror("[do_pipe]2 dup2 error:");
 		if (close(p->std[1]) == -1)
 			perror("[do_pipe]2 close error:");
 	}
@@ -37,7 +37,7 @@ int		routine_set_pipe(t_list *process, t_pipe *fd)
 	if (!process->next)
 		return (0);
 	if (pipe(fd->fd) == -1)
-		ex("pipe:");
+		perror("pipe:");
 	manage = process->data;
 	manage->std[1] = fd->fd[1];
 	manage->setup += PIPE_ON;		/*Useless now    */

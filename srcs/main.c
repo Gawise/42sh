@@ -11,6 +11,12 @@
 
 void	print_debug(t_list *elem);
 
+void	ft_ex(char *error)
+{
+	ft_dprintf(STDERR_FILENO,"%s", error);
+	exit(EXIT_FAILURE);
+}
+
 void	init_lexer(t_lexer *lexer)
 {
 	lexer->src = NULL;
