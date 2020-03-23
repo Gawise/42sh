@@ -59,6 +59,7 @@ int		p_assign_join(t_token *token, t_parser *parser)
 	lst = ft_lstgettail(cmd->args);
 	if (!(lst->data = ft_strlclnjoin((char *)lst->data, token->str)))
 		return (0);
-	parser->state = S_PARSER_CMD_ARGS;
+	if (token->type == WORD)
+		parser->state = S_PARSER_CMD_ARGS;
 	return (1);
 }
