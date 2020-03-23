@@ -75,6 +75,16 @@ PARSRCS += parser.c
 PARSRCS += redir.c
 PARSRCS += tools.c
 PARSRCS += word.c
+PARSRCS += state/andif_pipe.c
+PARSRCS += state/arg_assign.c
+PARSRCS += state/assign.c
+PARSRCS += state/cmd_args.c
+PARSRCS += state/cmd_start.c
+PARSRCS += state/delim.c
+PARSRCS += state/error.c
+PARSRCS += state/io_number.c
+PARSRCS += state/redir.c
+PARSRCS += state/table_start.c
 
 ## EVAL ##
 
@@ -93,6 +103,16 @@ EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
 
+## INCLUDES ##
+
+INCLUDES += exec.h
+INCLUDES += lexer.h
+INCLUDES += line_edition.h
+INCLUDES += parser.h
+INCLUDES += sh.h
+INCLUDES += struct.h
+INCLUDES += var.h
+
 ## DEBUG ##
 
 DBSRCS += lexer.c
@@ -107,14 +127,14 @@ SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
+
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
+OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)debug
-
-vpath %.h includes
 
 CC = clang
 COMPILE = $(CC) -c
@@ -144,13 +164,15 @@ SRCS = $(addprefix $(SPATH),$(SRC))
 
 OBJS = $(addprefix $(OPATH),$(OBJ))
 
+INCS = $(addprefix $(IPATH),$(INCLUDES))
+
 all : $(NAME)
 
-$(NAME) : $(LIB) $(OPATHS) $(OBJS)
+$(NAME) : $(LIB) $(OPATHS) $(OBJS) Makefile
 	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-$(OBJS) : $(OPATH)%.o : $(SPATH)%.c
+$(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(OPATHS) :

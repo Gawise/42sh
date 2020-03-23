@@ -79,4 +79,25 @@ void	del_simple_cmd(void *data, size_t size);
 void	del_and_or(void *data, size_t size);
 void	del_cmd_table(void *data, size_t size);
 
+// state/
+
+void		p_init_start_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_start_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_args_wait_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_redir_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_assign_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_io_nbr_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_delim_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_arg_assign_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_syn_err_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_andif_pipe_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_cmd_wait_state(int (*table_builder[10][17])(t_token *, t_parser *));
+
+// parser.c
+
+int			p_set_start_state(t_token *token, t_parser *parser);
+int			p_skip(t_token *token, t_parser *parser);
+int			p_add_redir_delim(t_token* token, t_parser *parser);
+
+
 #endif
