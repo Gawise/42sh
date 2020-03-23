@@ -5,9 +5,10 @@
 #include "get_next_line.h"
 #include "lexer.h"
 #include "parser.h"
-#include "line_edition.h"
 #include "exec.h"
 #include "sh.h"
+#include "var.h"
+#include "line_edition.h"
 
 void	print_debug(t_list *elem);
 
@@ -62,9 +63,31 @@ int		parser_routine(t_lexer *lexer,t_parser *parser)
 	return (1);
 }
 
+int		line_edition_routine(char **line)
+{
+	if (!(*line = ft_prompt(find_var_value(cfg_shell()->intern, "PS1")
+	, COLOR_SH)))
+		return (0);
+	else if (*line && (!line[0][0]))
+		return (-1);
+	return (1);
+}
+
+int		eval_routine(t_parser *parser)
+{
+	if (parser->state != S_PARSER_SYNTAX_ERROR)
+	{
+		if (cfg_shell()->debug)
+			print_parser(parser);
+		ft_eval(parser->table);
+	}
+	ft_lstdel(&parser->table, del_cmd_table);
+	return (1);
+}
+
 int		main(int ac, char **av, char **env)
 {
-	ssize_t		ret;
+	int		ret;
 	char		*line;
 	t_lexer		lexer;
 	t_parser	parser;
@@ -72,25 +95,21 @@ int		main(int ac, char **av, char **env)
 
 	debug = init_shell(env, av);
 	(void)ac;
-	ret = 0;
 	while (1)  //recup PS1
 	{
-		if (!(line = ft_prompt(NAME_SH, COLOR_SH)))
-			continue ;
-		else if (line && (!line[0]))
-			break ;
-		if (!lexer_routine(&line, &lexer)
-		|| !parser_routine(&lexer, &parser))
-			continue ;
-		if (parser.state != S_PARSER_SYNTAX_ERROR)
+		if ((ret = line_edition_routine(&line)) <= 0
+		|| (ret = lexer_routine(&line, &lexer)) <= 0
+		|| (ret = parser_routine(&lexer, &parser)) <= 0
+		|| (ret = eval_routine(&parser)) <= 0)
 		{
-			if (debug)
-				print_parser(&parser);
-			ft_eval(parser.table);
+			if (ret == -1)
+			{
+				ft_putendl("\e[0;31m exit\e[0;0m");
+				break ;
+			}
+			else if (ret == 0)
+				continue ;
 		}
-		ft_lstdel(&parser.table, del_cmd_table);
-		ft_strdel(&line);
 	}
-	ft_putendl("\e[0;31m exit\e[0;0m");
 	exit(0);
 }
