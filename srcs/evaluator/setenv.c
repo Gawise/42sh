@@ -17,7 +17,7 @@ static int	setenv_add(t_list **lst, char *var, char *value)
 	t_var	new;
 
 	if (!(new.ctab = (char **)malloc(sizeof(char *) * 3)))
-		ex("ERROR Malloc");
+		ft_ex("[Fatal Error] MALLOC\nexit\n");
 	new.ctab[0] = ft_strdup(var);
 	new.ctab[1] = ft_strdup(value);
 	new.ctab[2] = NULL;

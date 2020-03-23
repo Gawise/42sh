@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -102,6 +103,12 @@ EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
+EVALSRCS += tools_redir.c
+
+## BUILTIN ##
+
+BTSRCS += exit.c
+
 
 ## INCLUDES ##
 
@@ -125,6 +132,7 @@ SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
 
@@ -134,6 +142,7 @@ OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
 
 CC = clang

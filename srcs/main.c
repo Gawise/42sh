@@ -11,6 +11,12 @@
 
 void	print_debug(t_list *elem);
 
+void	ft_ex(char *error)
+{
+	ft_dprintf(STDERR_FILENO,"%s", error);
+	exit(EXIT_FAILURE);
+}
+
 void	init_lexer(t_lexer *lexer)
 {
 	lexer->src = NULL;
@@ -71,7 +77,7 @@ int		main(int ac, char **av, char **env)
 	{
 		if (!(line = ft_prompt(NAME_SH, COLOR_SH)))
 			continue ;
-		else if (line && (!line[0] || ft_strcmp("exit\n", line) == 0))
+		else if (line && (!line[0]))
 			break ;
 		if (!lexer_routine(&line, &lexer)
 		|| !parser_routine(&lexer, &parser))

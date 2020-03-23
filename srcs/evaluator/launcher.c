@@ -8,11 +8,6 @@
 
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
-void	ex(char *s)
-{
-	perror(s);
-	exit(EXIT_FAILURE);
-}
 
 #include <signal.h>
 void	sig(int i)
@@ -73,7 +68,7 @@ void	set_signal_child(void)
 void		set_termios(struct termios *term)
 {
 	if (tcsetattr(STDIN_FILENO, TCSADRAIN, term) == -1)
-		ex("[RUN JOB] error tcsetattr");
+		perror("[RUN JOB] error tcsetattr");
 }
 
 
@@ -88,14 +83,6 @@ static uint8_t		ft_echo(t_job *j, t_process *p)
 static uint8_t		ft_cd(t_job *j, t_process *p)
 {
 		printf("CD builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
-
-static uint8_t		ft_exit(t_job *j, t_process *p)
-{
-		printf("EXIT builtin manquant\n");
 		(void)j;
 		(void)p;
 		return (0);
@@ -148,7 +135,7 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			ex("[Parent process] close error:");
+			perror("[Parent process] close error:");
 	if (job->pgid == 0)
 		job->pgid = process->pid;
 	setpgid(process->pid, job->pgid);
@@ -163,7 +150,7 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			ex("[child process] close error:");
+			perror("[child process] close error:");
 	p->pid = getpid();
 	if (job->pgid == 0)
 		job->pgid = p->pid;
@@ -178,7 +165,7 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
-		ex("execve:");
+		ft_ex("[Fatal Error] EXECVE\nexit\n");
 	exit(1);
 }
 
@@ -189,7 +176,7 @@ int		fork_process(t_job *job, t_process *p)
 	envp = create_tab_var(job->env, 0); //problematique, a voir ac l'assignement
 	p->status = RUNNING;
 	if ((p->pid = fork()) == -1)
-		ex("fork:");
+		perror("fork:");
 	if (!(p->pid))
 		return (child_process(job, p, job->pipe.fd[0], envp));
 	if (p->pid)
@@ -197,13 +184,21 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-int		run_process(t_job *j, t_process *p)
+void	run_process(t_job *j, t_process *p)
 {
 	process_type(j->env, p);
 
-	if (p->setup & BUILTIN && p->setup ^ PIPE_ON)
-		return (builtin_process(j, p));
-	return (fork_process(j, p));
+	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
+	{
+		process_redir(p, p->redir);
+		builtin_process(j, p);
+		do_my_dup2(j->std[0], STDIN_FILENO);
+		do_my_dup2(j->std[1], STDOUT_FILENO);
+		do_my_dup2(j->std[2], STDERR_FILENO);
+	}
+	else
+		fork_process(j, p);
+	return ;
 }
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process)
@@ -215,7 +210,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				ex("[check and do pipe] close error:");
+				perror("[check and do pipe] close error:");
 	}
 	if (job->fg)
 	{

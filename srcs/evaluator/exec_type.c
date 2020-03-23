@@ -58,7 +58,7 @@ char		*create_abs_path(char *s)
 	char		*tmp;
 
 	if (!(buf = getcwd(0, 0)))
-		ex("getcwd");
+		perror("getcwd");
 	tmp = ft_strjoin(3, buf, "/", s);
 	ft_strdel(&buf);
 	return (tmp);

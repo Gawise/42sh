@@ -180,8 +180,7 @@ int		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 		return (error_handling(p, error, path, 0));
 	if ((source = open(path, right, 0644)) == -1)
 		perror("la open");
-	if ((dup2(source, target) == -1))
-		perror("dup2");
+	do_my_dup2(source, target);
 	if ((close(source) == -1))
 		perror("close");
 	ft_strdel(&path);
@@ -224,8 +223,7 @@ int		redir_fd(t_process *p, t_redir *r)
 	}
 	if (bad_fd(source))
 		return (error_handling(p, 0, 0, source));
-	if (dup2(source, target) == -1)
-		perror("dup2 redir fd:");
+	do_my_dup2(source, target);
 	return (SUCCESS);
 }
 
@@ -237,7 +235,7 @@ int		redir_heredoc(t_process *p, t_redir *r)
 	path = NULL;
 	ft_asprintf(&path, "/tmp/21-42sh-heredoc-%p", &fd);
 	if (((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1))
-		ex("redir_heredoc open failled");
+		perror("redir_heredoc open failled");
 	if (write(fd, r->file, ft_strlen(r->file)) == -1)
 		perror("write redir_heredoc");
 	close(fd);

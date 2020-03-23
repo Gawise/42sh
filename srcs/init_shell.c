@@ -14,9 +14,9 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	if (cfg && (cfg->interactive = isatty(tty)))
 	{
 		if (!(cfg->term_origin = malloc(sizeof(struct termios))))
-			ex("[TERM ORIGIN] ERROR MALLOC");
+			ft_ex("[Fatal Error] MALLOC\nexit\n");
 		if ((tcgetattr(tty, cfg->term_origin) == FALSE))
-			ex("[TERM ORIGIN] ERROR TCGETATTR");
+			perror("[TERM ORIGIN] ERROR TCGETATTR");
 		return (1);
 	}
 	return (0);
@@ -49,7 +49,7 @@ uint8_t		init_shell(char **env, char **av)
 	struct stat	stat;
 
 	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
-		exit(1);
+		ft_ex("file descriptor stdin close\nbad file descriptor\nexit");
 	shell = init_cfg(env, av);
 	if (check_terminal(shell, shell_terminal))
 	{
@@ -57,9 +57,9 @@ uint8_t		init_shell(char **env, char **av)
 			kill(-shell_pgid, SIGTTIN);
 		set_signal_ign();
 		if (setpgid(shell->pid, shell->pid) < 0)
-			ex("[INIT SHELL] error setpgid");
+			perror("[INIT SHELL] error setpgid");
 		if (tcsetpgrp(shell_terminal, shell->pid))
-			ex("[INIT SHELL] error tcsetpgrp");
+			perror("[INIT SHELL] error tcsetpgrp");
 	}
 	return (shell->debug);
 }
