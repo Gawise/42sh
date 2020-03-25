@@ -87,6 +87,12 @@ PARSRCS += state/io_number.c
 PARSRCS += state/redir.c
 PARSRCS += state/table_start.c
 
+## ANALYZER ##
+
+ANASRCS += jobs_str/core.c
+ANASRCS += jobs_str/redir.c
+ANASRCS += heredoc.c
+
 ## EVAL ##
 
 EVALSRCS += launcher.c
@@ -112,6 +118,7 @@ BTSRCS += exit.c
 
 ## INCLUDES ##
 
+INCLUDES += analyzer.h
 INCLUDES += exec.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
@@ -131,16 +138,18 @@ SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
+SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
-
 
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
+OPATHS += $(OPATH)analyzer
+OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug

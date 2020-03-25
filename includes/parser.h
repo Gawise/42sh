@@ -98,6 +98,7 @@ void		p_init_cmd_wait_state(int (*table_builder[10][17])(t_token *, t_parser *))
 int			p_set_start_state(t_token *token, t_parser *parser);
 int			p_skip(t_token *token, t_parser *parser);
 int			p_add_redir_delim(t_token* token, t_parser *parser);
+void			init_parser(t_parser *parser);
 
 
 #endif

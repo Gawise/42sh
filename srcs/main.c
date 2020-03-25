@@ -5,6 +5,7 @@
 #include "get_next_line.h"
 #include "lexer.h"
 #include "parser.h"
+#include "analyzer.h"
 #include "exec.h"
 #include "sh.h"
 #include "var.h"
@@ -51,6 +52,9 @@ int		lexer_routine(char **line, t_lexer *lexer)
 
 int		parser_routine(t_lexer *lexer,t_parser *parser)
 {
+	if (cfg_shell()->debug)
+		ft_printf("\n----------- parsing -----------\n\n");
+	init_parser(parser);
 	if (!ft_parser(lexer, parser)
 	|| (parser->state == S_PARSER_TABLE_START
 	&& !parser->table))
@@ -85,6 +89,15 @@ int		eval_routine(t_parser *parser)
 	return (1);
 }
 
+int		analyzer_routine(t_parser *parser)
+{
+	if (parser->state != S_PARSER_SYNTAX_ERROR
+	&& !p_set_jobs_str(parser))
+		return (0);
+	a_remove_leading_tabs(parser);
+	return (1);
+}
+
 int		main(int ac, char **av, char **env)
 {
 	int		ret;
@@ -100,6 +113,7 @@ int		main(int ac, char **av, char **env)
 		if ((ret = line_edition_routine(&line)) <= 0
 		|| (ret = lexer_routine(&line, &lexer)) <= 0
 		|| (ret = parser_routine(&lexer, &parser)) <= 0
+		|| (ret = analyzer_routine(&parser)) <= 0
 		|| (ret = eval_routine(&parser)) <= 0)
 		{
 			if (ret == -1)
