@@ -1,3 +1,4 @@
+#include "exp.h"
 
 char	*resolve_parameter(char *str, int hash)
 {
@@ -8,41 +9,39 @@ char	*resolve_parameter(char *str, int hash)
 	if (!(ft_strlen(str) == 1 && (*str == '@' || *str == '*'
 	|| *str == '#' || *str == '?' || *str == '-' || *str == '$'
 	|| *str == '!' || ft_isdigit(*str)))
-	|| (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1)))
-		return (NULL);				// Bad Substitution
+	|| (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1))))
+		return (NULL);
 	if (!hash && !(res = find_var_value(cfg_shell()->env, str))
 	&& !(res = ft_strnew(0)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	else if (hash && !(res = find_var_value(cfg_shell()->env, str + 1))
 	&& !(res = ft_strnew(0)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	if (!res && !(res = ft_strdup(res)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	return (res);
 }
 
 int	resolve_colon_param(char **str, t_exp *exp, char *param)
 {
-	char	*s;
-
-	s = *str + 1;
-	if (ft_strchri("-=?+", *s) < 0			//
-	|| !(exp->param = resolve_parameter(param, 0)))	// Bad Substitution
-		return (-1);				//
+	*str++;
+	if (ft_strchri("-=?+", **str) < 0
+	|| !(exp->param = resolve_parameter(param, 0)))
+		return (-1);
 	if (exp->param[0])
 	{
-		if (*s == '+')
-			return (substitute_word(exp, str, s));
-		return (substitute_parameter(exp, str, s));
+		if (**str == '+')
+			return (substitute_word(exp, str));
+		return (substitute_parameter(exp, str));
 	}
-	else if (*s == '-')
-		return (substitute_word(exp, str, s));
-	else if (*s == '=')
-		return (assign_word(exp, str, s));
-	else if (*s == '?')
-		exit(EXIT_FAILURE);
+	else if (**str == '-')
+		return (substitute_word(exp, str));
+	else if (**str == '=')
+		return (assign_word(exp, str, param));
+	else if (**str == '?')
+		ft_ex("Cannot allocate memory\n");
 	else
-		return (substitute_null(exp, str, s));
+		return (substitute_null(exp, str));
 }
 
 int	resolve_brace_param(char **str, t_exp *exp, char *param)
@@ -52,12 +51,12 @@ int	resolve_brace_param(char **str, t_exp *exp, char *param)
 
 	*str++;
 	hash = *param == '#' ? 1 : 0;
-	if (!(exp->param = resolve_parameter(param, hash)))	// Bad
-		return (-1);					// Substitution
+	if (!(exp->param = resolve_parameter(param, hash)))
+		return (-1);
 	if (hash)
 	{
 		if (!(hashparam = ft_atoi(ft_strlen(exp->param))))
-			exit(EXIT_FAILURE);
+			ft_ex("Cannot allocate memory\n");
 		exp_substitute(exp, hashparam);
 		ft_strdel(&hashparam);
 	}
@@ -68,5 +67,16 @@ int	resolve_brace_param(char **str, t_exp *exp, char *param)
 
 int	resolve_pattern_param(char **str, t_exp *exp, char *param)
 {
+	int	type;
 
+	type = **str == '#' ? 0 : 1;
+	if (ft_strchr("#%", *(*str + 1)))
+		*str++;
+	str++;
+	if (!(exp->param = resolve_parameter(param, 0))
+	|| rec_word_parse(exp, str) < 0
+	|| exp_main(&exp->word, exp->assign) < 0)
+		return (-1);
+	substitute_pattern(exp, type);
+	return (1);
 }

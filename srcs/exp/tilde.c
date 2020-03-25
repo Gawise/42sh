@@ -9,9 +9,9 @@ int	get_tilde_exp(t_exp *exp)
 	if (!(pwd = getpwnam(exp->buf)))
 		return (0);
 	if (exp->res && !(exp->res = ft_sjoin1(&exp->res, pwd->pw_dir)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	else if (!exp->res && !(exp->res = ft_strdup(pwd->pw_dir)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	return (1);
 }
 
@@ -22,13 +22,13 @@ int	get_home_val(t_exp *exp)
 
 	if (!(var = find_var_value(cfg_shell()->env, "HOME")) 
 	&& !(tilde = ft_strnew(0)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	else if (var && !(tilde = ft_strdup(var)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	if (exp->res && !(exp->res = ft_sjoin1(&exp->res, tilde)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	else if (!exp->res && !(exp->res = ft_strdup(tilde)))
-		exit(EXIT_FAILURE);
+		ft_ex("Cannot allocate memory\n");
 	free(tilde);
 	return (1);
 }
@@ -57,7 +57,7 @@ void	tilde_assign_dispatch(char **str, t_exp *exp, int *state)
 {
 	if (*state == 0 && **str == '~')
 	{
-		exp_flush_buf(exp)
+		exp_flush_buf(exp, &exp->res)
 		*str += parse_tilde_exp(*str, exp, 1);
 		ft_bzero(exp->buf, EXP_BSIZE);
 		exp->i = 0;
@@ -76,21 +76,21 @@ void	tilde_assign_dispatch(char **str, t_exp *exp, int *state)
 		*state = -1;
 }
 
-void		find_tilde_exp_assign(t_list *word, t_exp exp)
+void		find_tilde_exp_assign(char **word, t_exp exp)
 {
 	char		*str;
 	int		state;
 
-	if (!word || !word->data)
+	if (!word || !*word)
 		return ;
-	str = (char*)word->data;
+	str = *word;
 	state = 0;
 	while (*str)
 	{
 		if (!exp->bs && ft_strchr("~\'\"\\:", *str))
 			tilde_assign_dispatch(str, &exp, &state);
 		if (exp.i >= EXP_BSIZE - 1)
-			exp_flush_buf(&exp);
+			exp_flush_buf(&exp, &exp->res);
 		exp.buf[exp.i] = *str;
 		if (exp.bs)
 			exp.bs--;
@@ -99,30 +99,30 @@ void		find_tilde_exp_assign(t_list *word, t_exp exp)
 		str++;
 		exp.i++;
 	}
-	exp_flush_buf(&exp);
-	free(word->data);
-	word->data = exp->res;
+	exp_flush_buf(&exp, &exp->res);
+	free(*word);
+	*word = exp->res;
 }
 
-void		find_tilde_exp(t_list *word, t_exp exp)
+void		find_tilde_exp(char **word, t_exp exp)
 {
 	char		*str;
 	int		i;
 
-	if (!word || !word->data)
+	if (!word || !*word)
 		return ;
-	str = (char*)word->data;
+	str = *word;
 	if (*str != '~' || !(i = parse_tilde_exp(str, &exp, 0)))
 		return ;
 	while (str[i])
 	{
 		if (exp.i >= EXP_BSIZE - 1)
-			exp_flush_buf(&exp);
+			exp_flush_buf(&exp, &exp->res);
 		exp.buf[exp.i] = *str;
 		str++;
 		exp.i++;
 	}
-	exp_flush_buf(&exp);
-	free(word->data);
-	word->data = exp->res;
+	exp_flush_buf(&exp, &exp->res);
+	free(*word);
+	*word = exp->res;
 }
