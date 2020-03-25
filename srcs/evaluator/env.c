@@ -1,16 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/31 18:00:30 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/03/01 15:48:38 by hmerieux         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
+#include "libft.h"
+#include "exec.h"
+#include "struct.h"
+#include "sh.h"
+#include "var.h"
+#include "ft_printf.h"
 
 
 /*								NEED UPDATE
@@ -82,3 +75,24 @@
  *    return (i);
  *}
  */
+
+
+static	void	ft_print_env_lst(t_list *lst)
+{
+	t_var	*env;
+
+	while (lst)
+    {
+		env = lst->data;
+        ft_printf("%s=%s\n", env->ctab[0], env->ctab[1]);
+        lst = lst->next;
+    }
+}
+
+
+uint8_t			ft_env(t_job *j, t_process *p)
+{
+	(void)p;
+	ft_print_env_lst(j->env);
+	return (SUCCESS);
+}

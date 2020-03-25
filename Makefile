@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -75,6 +76,16 @@ PARSRCS += parser.c
 PARSRCS += redir.c
 PARSRCS += tools.c
 PARSRCS += word.c
+PARSRCS += state/andif_pipe.c
+PARSRCS += state/arg_assign.c
+PARSRCS += state/assign.c
+PARSRCS += state/cmd_args.c
+PARSRCS += state/cmd_start.c
+PARSRCS += state/delim.c
+PARSRCS += state/error.c
+PARSRCS += state/io_number.c
+PARSRCS += state/redir.c
+PARSRCS += state/table_start.c
 
 ## EVAL ##
 
@@ -82,13 +93,32 @@ EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
 EVALSRCS += tools_var.c
+EVALSRCS += env.c
 EVALSRCS += setenv.c
+EVALSRCS += unsetenv.c
 EVALSRCS += cleaner.c
 EVALSRCS += building_struct.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
+EVALSRCS += redir.c
+EVALSRCS += tools_redir.c
+
+## BUILTIN ##
+
+BTSRCS += exit.c
+
+
+## INCLUDES ##
+
+INCLUDES += exec.h
+INCLUDES += lexer.h
+INCLUDES += line_edition.h
+INCLUDES += parser.h
+INCLUDES += sh.h
+INCLUDES += struct.h
+INCLUDES += var.h
 
 ## DEBUG ##
 
@@ -102,20 +132,22 @@ SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
+
 
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
+OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
-
-vpath %.h includes
 
 CC = clang
 COMPILE = $(CC) -c
-COMPILEDB = $(CC) -g
+COMPILEDB = $(CC) -g3
 
 MKDIR = mkdir -p
 CLEANUP = rm -rf
@@ -141,13 +173,15 @@ SRCS = $(addprefix $(SPATH),$(SRC))
 
 OBJS = $(addprefix $(OPATH),$(OBJ))
 
+INCS = $(addprefix $(IPATH),$(INCLUDES))
+
 all : $(NAME)
 
-$(NAME) : $(LIB) $(OPATHS) $(OBJS)
+$(NAME) : $(LIB) $(OPATHS) $(OBJS) Makefile
 	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-$(OBJS) : $(OPATH)%.o : $(SPATH)%.c
+$(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(OPATHS) :
@@ -160,8 +194,9 @@ $(LIBDB) :
 	$(MAKE) -C $(LPATH) debug
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ $(SRCS)
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $(SRCS) $^
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
+
 
 clean :
 	$(MAKE) -C $(LPATH) clean

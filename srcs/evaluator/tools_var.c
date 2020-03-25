@@ -4,32 +4,6 @@
 
 
 
-/*   NEED UPDATE
- *int			unsetenv_find(void *elem, void *var)
- *{
- *    if (ft_strcmp(((t_var *)elem)->tab[0], (char *)var) == 0)
- *        return (1);
- *    return (0);
- *}
- *
- *void		unsetenv_del(void *delete)
- *{
- *    ft_del_tab(((void **)((t_var *)delete)->tab));
- *    free(delete);
- *}
- *
- *   NEED UPDATE
- *int			ft_unsetenv(t_msh *msh)
- *{
- *    t_list	**lst;
- *    char	*var;
- *
- *    var = msh->input[1];
- *    lst = &(msh->env_var);
- *    ft_lstdelif(lst, var, unsetenv_find, unsetenv_del);
- *    return (0);
- *}
- */
 
 void	cpy_var_list(void *dst, void *src)
 {
@@ -55,7 +29,7 @@ char		**create_tab_var(t_list *lst, int count)
 	{
 		count++;
 		if (!(tab = (char **)malloc(sizeof(char *) * (count + 1))))
-			ex("ERROR MALLOC");
+			ft_ex("[Fatal Error] MALLOC\nexit\n");
 		tab[count] = NULL;
 	}
 	count--;

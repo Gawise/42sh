@@ -28,8 +28,11 @@ void	del_struct_tvar(void *del, size_t u)
 
 int		routine_clean_job(t_job *j)
 {
-	ft_strdel(&j->command);
+	ft_strdel(&j->cmd);
 	ft_lstdel(&j->process, del_struct_process);
 	ft_lstdel(&j->env, del_struct_tvar);
+	close(j->std[0]);
+	close(j->std[1]);
+	close(j->std[2]);
 	return (0);
 }

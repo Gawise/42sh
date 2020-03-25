@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:20:57 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/19 19:32:48 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/03/05 20:08:40 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		read_flags(t_printf *data)
 {
-	while ((data->f_index = ft_strichr("#0- +", *(data->fmt))) > -1)
+	while ((data->f_index = ft_strchri("#0- +", *(data->fmt))) > -1)
 	{
 		data->flags |= (1 << data->f_index);
 		(data->fmt)++;
@@ -104,9 +104,9 @@ void		read_conv_spec(t_printf *data)
 		data->flags &= ~F_ZERO;
 	if (*(data->fmt) == 'i')
 		disp[0](data);
-	else if ((i = ft_strichr("DOUFBCSX", *(data->fmt))) > -1)
+	else if ((i = ft_strchri("DOUFBCSX", *(data->fmt))) > -1)
 		disp[i](data);
-	else if ((i = ft_strichr("doufbcsxp%m{", *(data->fmt))) > -1)
+	else if ((i = ft_strchri("doufbcsxp%m{", *(data->fmt))) > -1)
 		disp[i](data);
 	else
 		buffer(data->err_ptr, data, (data->fmt - data->err_ptr));

@@ -10,7 +10,6 @@ typedef struct s_list t_list;
 
 
 
-int		ft_setenv(t_list **lst, char *var, char *value, uint8_t overw);
 
 
 t_list	*find_var(t_list *lst, char *var);

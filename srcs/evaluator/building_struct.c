@@ -9,13 +9,11 @@ void	term_create_eval(struct termios *origin, struct termios *eval)
 	eval->c_lflag &= ~TOSTOP;
 }
 
-int		cmd_to_process(t_list **lst, t_list *s_cmd)
+void	cmd_to_process(t_list **lst, t_list *s_cmd)
 {
-	int				i;
 	t_process		process;
 	t_simple_cmd	*cmd;
 
-	i = 0;
 	ft_bzero(&process, sizeof(t_process));
 	while (s_cmd)
 	{
@@ -27,27 +25,23 @@ int		cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
 		process.status = WAITING;
+		process.redir = cmd->redir;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
-		i++;
 	}
-	return (i);   /*i useless sans create_pipe_list ???*/
+	return ;   /*i useless sans create_pipe_list ???*/
 }
 
 
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd)
+int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 {
-	int		nb_p;
-
 	ft_bzero(job, sizeof(t_job));   /*set t_pipe a 0. Besoin d etre a -1?*/
-	nb_p = cmd_to_process(&job->process, s_cmd);
-	job->std[0] = STDIN_FILENO;
-	job->std[1] = STDOUT_FILENO;
-	job->std[2] = STDERR_FILENO;
+	cmd_to_process(&job->process, s_cmd);
+	job->cmd = ft_strdup(cmd);
+	job->std[0] = dup(STDIN_FILENO);
+	job->std[1] = dup(STDOUT_FILENO);
+	job->std[2] = dup(STDERR_FILENO);
 	term_create_eval(shell->term_origin, &job->term_eval);
 	job->env = ft_lstdup(shell->env, shell->env->size, cpy_var_list);
-
-//	job->pipe = create_pipe_list(nb_p);
-
 	return (0);
 }
