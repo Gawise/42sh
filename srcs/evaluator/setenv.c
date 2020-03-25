@@ -21,26 +21,36 @@ static int	setenv_add(t_list **lst, char *var, char *value)
 	new.ctab[0] = ft_strdup(var);
 	new.ctab[1] = ft_strdup(value);
 	new.ctab[2] = NULL;
-	new.rd = 0;
 	ft_lst_push_back(lst, &new, sizeof(new));
 	return (SUCCESS);
 }
 
-int			ft_setvar(t_list **lst, char *name, char *value, uint8_t overw)
+
+uint8_t		var_check_name(char *name)
+{
+	if (*name > 47 && *name < 58)
+		return (FAILURE);
+	while (*name)
+	{
+		if (*name != '_' && !ft_isalnum(*name))
+			return (FAILURE);
+		name++;
+	}
+	return (SUCCESS);
+}
+
+int			ft_setvar(t_list **lst, char *name, char *value)
 {
 	t_list *find;
 	t_var	*var;
 
 	find = NULL;
-	if (ft_strchr(name, '=') || ft_strchr(value, '='))
+	if (var_check_name(name))
 		return (FAILURE);
 	if ((find = find_var(*lst, name)))
 	{
 		var = find->data;
-		if (overw && !var->rd)
-			setenv_update(find, value);
-		else
-			return (FAILURE);
+		setenv_update(find, value);
 		return (SUCCESS);
 	}
 	return (setenv_add(lst, name, value));
@@ -81,7 +91,7 @@ uint8_t			ft_setenv(t_job *j, t_process *p)
 		value = NULL;
 		if ((tmp = ft_strchr(p->av[i], '=')) && (value = tmp +1))
 			*tmp = '\0';
-		if (ft_setvar(&cfg_shell()->env, p->av[i], value, 1) == FAILURE)
+		if (ft_setvar(&cfg_shell()->env, p->av[i], value) == FAILURE)
 			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n", p->av[i]);
 		if (tmp)
 			*tmp = '=';

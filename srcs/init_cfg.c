@@ -5,37 +5,22 @@
 
 
 
-static void	set_readonly(t_list *lst)
-{
-	int		i;
-	t_var	*var;
-
-	i = 0;
-	while (i++ < 9)
-	{
-		var = lst->data;
-		var->rd = 1;
-		lst = lst->next;
-	}
-}
-
 static void	set_var_intern(t_cfg *shell)
 {
 	char	*pid;
 
 	pid = ft_itoa(shell->pid);
-	ft_setvar(&shell->intern, "?", "0", 1);
-	ft_setvar(&shell->intern, "$", pid, 1);
-	ft_setvar(&shell->intern, "!", "0", 1);
-	ft_setvar(&shell->intern, "*", 0, 1);
-	ft_setvar(&shell->intern, "@", 0, 1);
-	ft_setvar(&shell->intern, "#", 0, 1);
-	ft_setvar(&shell->intern, "-", 0, 1);
-	ft_setvar(&shell->intern, "0", 0, 1);
-	ft_setvar(&shell->intern, "_", 0, 1);
-	ft_setvar(&shell->intern, "PS1", NAME_SH, 1);
-	ft_setvar(&shell->intern, "PS2", "> ", 1);
-	set_readonly(shell->intern);
+	ft_setvar(&shell->intern, "?", "0");
+	ft_setvar(&shell->intern, "$", pid);
+	ft_setvar(&shell->intern, "!", "0");
+	ft_setvar(&shell->intern, "*", 0);
+	ft_setvar(&shell->intern, "@", 0);
+	ft_setvar(&shell->intern, "#", 0);
+	ft_setvar(&shell->intern, "-", 0);
+	ft_setvar(&shell->intern, "0", 0);
+	ft_setvar(&shell->intern, "_", 0);
+	ft_setvar(&shell->intern, "PS1", NAME_SH);
+	ft_setvar(&shell->intern, "PS2", "> ");
 	ft_strdel(&pid);
 }
 

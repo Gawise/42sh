@@ -6,7 +6,7 @@
 
 int			unsetenv_find(void *elem, void *var)
  {
-	 if (ft_strcmp(((t_var *)elem)->ctab[0], (char *)var) == 0 && !((t_var *)elem)->rd)
+	 if (ft_strcmp(((t_var *)elem)->ctab[0], (char *)var) == 0)
         return (1);
     return (0);
 }
