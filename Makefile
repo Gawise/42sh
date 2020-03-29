@@ -45,6 +45,7 @@ LEXSRCS += free.c
 LEXSRCS += heredoc.c
 LEXSRCS += inhib.c
 LEXSRCS += lexer.c
+LEXSRCS += misc.c
 LEXSRCS += newline.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
@@ -56,6 +57,7 @@ LEXSRCS += state/control.c
 LEXSRCS += state/exp.c
 LEXSRCS += state/flag.c
 LEXSRCS += state/hdbody.c
+LEXSRCS += state/init.c
 LEXSRCS += state/ionumber.c
 LEXSRCS += state/redir.c
 LEXSRCS += state/start.c
@@ -71,6 +73,7 @@ PARSRCS += cmd.c
 PARSRCS += free.c
 PARSRCS += init.c
 PARSRCS += lst_to_tab.c
+PARSRCS += misc.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
@@ -83,9 +86,16 @@ PARSRCS += state/cmd_args.c
 PARSRCS += state/cmd_start.c
 PARSRCS += state/delim.c
 PARSRCS += state/error.c
+PARSRCS += state/init.c
 PARSRCS += state/io_number.c
 PARSRCS += state/redir.c
 PARSRCS += state/table_start.c
+
+## ANALYZER ##
+
+ANASRCS += jobs_str/core.c
+ANASRCS += jobs_str/redir.c
+ANASRCS += heredoc.c
 
 ## EVAL ##
 
@@ -109,6 +119,16 @@ EVALSRCS += tools_redir.c
 
 BTSRCS += exit.c
 
+## INCLUDES ##
+
+INCLUDES += analyzer.h
+INCLUDES += exec.h
+INCLUDES += lexer.h
+INCLUDES += line_edition.h
+INCLUDES += parser.h
+INCLUDES += sh.h
+INCLUDES += struct.h
+INCLUDES += var.h
 
 ## INCLUDES ##
 
@@ -131,6 +151,7 @@ SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
+SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
@@ -141,6 +162,8 @@ OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
+OPATHS += $(OPATH)analyzer
+OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
