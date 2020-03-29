@@ -45,6 +45,7 @@ LEXSRCS += free.c
 LEXSRCS += heredoc.c
 LEXSRCS += inhib.c
 LEXSRCS += lexer.c
+LEXSRCS += misc.c
 LEXSRCS += newline.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
@@ -56,6 +57,7 @@ LEXSRCS += state/control.c
 LEXSRCS += state/exp.c
 LEXSRCS += state/flag.c
 LEXSRCS += state/hdbody.c
+LEXSRCS += state/init.c
 LEXSRCS += state/ionumber.c
 LEXSRCS += state/redir.c
 LEXSRCS += state/start.c
@@ -71,6 +73,7 @@ PARSRCS += cmd.c
 PARSRCS += free.c
 PARSRCS += init.c
 PARSRCS += lst_to_tab.c
+PARSRCS += misc.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
@@ -83,6 +86,7 @@ PARSRCS += state/cmd_args.c
 PARSRCS += state/cmd_start.c
 PARSRCS += state/delim.c
 PARSRCS += state/error.c
+PARSRCS += state/init.c
 PARSRCS += state/io_number.c
 PARSRCS += state/redir.c
 PARSRCS += state/table_start.c
@@ -114,7 +118,6 @@ EVALSRCS += tools_redir.c
 ## BUILTIN ##
 
 BTSRCS += exit.c
-
 
 ## INCLUDES ##
 
@@ -171,7 +174,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -g -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address

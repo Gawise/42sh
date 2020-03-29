@@ -26,6 +26,7 @@ int				p_add_assign_arg(t_token *token, t_parser *parser);
 int				p_create_redir(t_simple_cmd *cmd);
 int				p_add_io_num(t_token *token, t_parser *parser);
 int				p_add_redir(t_token *token, t_parser *parser);
+int				p_add_redir_delim(t_token* token, t_parser *parser);
 
 // assign.c
 
@@ -92,6 +93,7 @@ void		p_init_arg_assign_state(int (*table_builder[10][17])(t_token *, t_parser *
 void		p_init_syn_err_state(int (*table_builder[10][17])(t_token *, t_parser *));
 void		p_init_andif_pipe_state(int (*table_builder[10][17])(t_token *, t_parser *));
 void		p_init_cmd_wait_state(int (*table_builder[10][17])(t_token *, t_parser *));
+void		p_init_state_machine(int (*table_builder[10][17])(t_token *, t_parser *));
 
 // parser.c
 
@@ -100,5 +102,11 @@ int			p_skip(t_token *token, t_parser *parser);
 int			p_add_redir_delim(t_token* token, t_parser *parser);
 void			init_parser(t_parser *parser);
 
+// misc.c
+
+int		syn_err(t_token *token, t_parser *parser);
+int		p_skip(t_token *token, t_parser *parser);
+int		p_set_start_state(t_token* token, t_parser *parser);
+char		*p_get_prompt_prefix(t_parser *parser);
 
 #endif
