@@ -140,14 +140,6 @@ void	tabfree(char **tab);
 void	del_str(void *data, size_t size);
 
 /*
-**	misc.c
-*/
-
-int		lex_err(t_lexer *lexer, char c);
-char	l_get_char(t_lexer *lexer);
-t_char_type	l_get_char_type(char c);
-
-/*
 **	state/start.c
 */
 
@@ -194,12 +186,6 @@ void	init_io_number_state(int (*token_builder[8][11])(t_lexer *, char));
 */
 
 void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char));
-
-/*
-**	state/flag.c
-*/
-
-void	init_lexer_states(int (*token_builder[8][11])(t_lexer *, char));
 
 /*
 **	lexer.c

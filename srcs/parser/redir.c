@@ -67,20 +67,3 @@ int	p_add_redir(t_token *token, t_parser *parser)
 		parser->state = S_PARSER_REDIR;
 	return (1);
 }
-
-int		p_add_redir_delim(t_token* token, t_parser *parser)
-{
-	t_cmd_table	*table;
-	t_and_or	*and_or;
-	t_simple_cmd	*cmd;
-	t_redir		*redir;
-
-	table = (t_cmd_table *)parser->curr_table->data;
-	and_or = (t_and_or *)table->curr_and_or->data;
-	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
-	redir = (t_redir *)cmd->curr_redir->data;
-	if (!(redir->delim = ft_strdup(token->str)))
-		return (0);
-	parser->state = S_PARSER_REDIR;
-	return (1);
-}

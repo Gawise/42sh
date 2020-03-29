@@ -60,10 +60,7 @@ int		l_complete_str(t_lexer *lexer,  char c)
 	if (!(pmt_prefix = l_get_prompt_prefix(lexer))
 	|| ft_printf("%s", pmt_prefix) == -1
 	|| !(new = ft_prompt(find_var_value(cfg_shell()->intern, "PS2"), COLOR_SUBPROMPT)))
-	{
-		ft_strdel(&pmt_prefix);
 		return (0);
-	}
 	if (!(*lexer->src = ft_strclnjoin(*lexer->src, new)))
 	{
 		ft_printf("erreur malloc complete_flag\n");
