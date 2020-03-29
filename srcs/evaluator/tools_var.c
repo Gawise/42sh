@@ -13,7 +13,6 @@ void	cpy_var_list(void *dst, void *src)
 	d = dst;
 	s = src;
 	d->ctab = ft_tabdup(s->ctab);
-	d->rd = s->rd;
 }
 
 char		**create_tab_var(t_list *lst, int count)
@@ -79,7 +78,6 @@ void		create_lst_var(t_list **lst, char **tab)
 	while (tab[i])
 	{
 		var.ctab = ft_strsplit(tab[i], "=");
-		var.rd = 0;
 		ft_lst_push_back(lst, &var, sizeof(t_var));
 		i++;
 	}

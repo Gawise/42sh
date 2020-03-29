@@ -130,6 +130,16 @@ INCLUDES += sh.h
 INCLUDES += struct.h
 INCLUDES += var.h
 
+## INCLUDES ##
+
+INCLUDES += exec.h
+INCLUDES += lexer.h
+INCLUDES += line_edition.h
+INCLUDES += parser.h
+INCLUDES += sh.h
+INCLUDES += struct.h
+INCLUDES += var.h
+
 ## DEBUG ##
 
 DBSRCS += lexer.c
@@ -145,6 +155,7 @@ SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
+
 
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)lexer

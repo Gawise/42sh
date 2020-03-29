@@ -234,7 +234,6 @@ typedef struct	s_cs_line
 typedef struct	s_var
 {
 	char		**ctab;
-	uint8_t		rd;
 }				t_var;
 
 typedef struct	s_pipe
