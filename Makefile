@@ -185,7 +185,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -g -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -fsanitize=address
