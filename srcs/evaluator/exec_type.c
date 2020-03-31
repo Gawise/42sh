@@ -24,10 +24,13 @@ static int			builtin_search(t_process *p)
 		return (p->setup |= B_CD);
 	if (!ft_strcmp(p->cmd, "exit"))
 		return (p->setup |= B_EXIT);
+	if (!ft_strcmp(p->cmd, "hash"))
+		return (p->setup |= B_HASH);
+
 	return (0);
 }
 
-static uint16_t		find_type(t_list *var, t_process *p)
+static uint16_t		find_type(t_list *env, t_process *p)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
@@ -35,7 +38,7 @@ static uint16_t		find_type(t_list *var, t_process *p)
 	 *-> if utility {}
 	 *-> if function {}
 	 */
-	else if ((p->path = ft_which(find_var_value(var, "PATH"), p->cmd)))
+	else if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);
@@ -44,9 +47,9 @@ static uint16_t		find_type(t_list *var, t_process *p)
 }
 
 
-static void		any_slash(t_list *var, t_process *p)
+static void		any_slash(t_list *env, t_process *p)
 {
-	if (find_type(var, p) || p->setup & BUILTIN)
+	if (find_type(env, p) || p->setup & BUILTIN)
 		return ;
 	p->setup |= path_errors(p->path, 1);
 }
@@ -80,9 +83,9 @@ static void		with_slash(t_process *p)
 	}
 }
 
-void	process_type(t_list *var, t_process *p)
+void	process_type(t_process *p)
 {
 	if (ft_strchr(p->cmd, '/'))
 		with_slash(p);
-	else (any_slash(var, p));
+	else (any_slash(p->env, p));
 }

@@ -44,6 +44,7 @@ t_cfg		*init_cfg(char **env, char **av)
 	ft_bzero(shell, sizeof(t_cfg));
 	shell->pid = getpid();
 	create_lst_var(&shell->env, env);
+	ft_setvar(&shell->env, "PROJECT", "21sh");
 	set_var_intern(shell);
 	shell->debug = set_debug(av);
 	return (shell);

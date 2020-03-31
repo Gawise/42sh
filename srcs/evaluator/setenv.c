@@ -76,25 +76,38 @@ static uint8_t		setenv_check_av(char **av)
 	return (SUCCESS);
 }
 
+
+uint8_t			several_setvar(t_list  **var, char *str)
+{
+	char		*value;
+	char		*tmp;
+	uint8_t		err;
+
+	value = NULL;
+	err = 0;
+	if ((tmp = ft_strchr(str, '=')) && (value = tmp +1))
+		*tmp = '\0';
+	if (ft_setvar(var, str, value) == FAILURE)
+		err = FAILURE;
+	if (tmp)
+		*tmp = '=';
+	return (err);
+}
+
 uint8_t			ft_setenv(t_job *j, t_process *p)
 {
-	char	*value;
-	char	*tmp;
 	int		i;
+	t_list	**env;
 
 	(void)j; //useles job pour tout le monde ????????????
 	i = 1;
+	env = &cfg_shell()->env;
 	if (setenv_check_av(&p->av[i]) == FAILURE)
 		return (FAILURE);
 	while (p->av[i])
 	{
-		value = NULL;
-		if ((tmp = ft_strchr(p->av[i], '=')) && (value = tmp +1))
-			*tmp = '\0';
-		if (ft_setvar(&cfg_shell()->env, p->av[i], value) == FAILURE)
+		if (several_setvar(env, p->av[i]) == FAILURE)
 			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n", p->av[i]);
-		if (tmp)
-			*tmp = '=';
 		i++;
 	}
 	return (SUCCESS);

@@ -88,9 +88,18 @@ static uint8_t		ft_cd(t_job *j, t_process *p)
 		return (0);
 }
 
+static uint8_t		ft_hash(t_job *j, t_process *p)
+{
+		printf("HASH builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
-	uint8_t		(*tab_f[6])(t_job *, t_process *);
+	uint8_t		(*tab_f[7])(t_job *, t_process *);
 
 	tab_f[0] = ft_echo;
 	tab_f[1] = ft_exit;
@@ -98,6 +107,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[3] = ft_env;
 	tab_f[4] = ft_setenv;
 	tab_f[5] = ft_unsetenv;
+	tab_f[6] = ft_hash;
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else
@@ -105,7 +115,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-uint8_t	error_handling(t_process *p)
+uint8_t		error_handling(t_process *p)
 {
 	char	*namesh;
 
@@ -117,15 +127,15 @@ uint8_t	error_handling(t_process *p)
 	p->setup &= ~ERROR;
 	if (p->setup & E_UNFOUND)
 		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
-	if (p->setup & E_ISDIR)
+	else if (p->setup & E_ISDIR)
 		ft_dprintf(2, "%s: %s: is a directory\n", namesh, p->path );
-	if (p->setup & E_NOENT)
+	else if (p->setup & E_NOENT)
 		ft_dprintf(2, "%s: %s: No such file or directory\n", namesh, p->path);
-	if (p->setup & E_ACCES)
+	else if (p->setup & E_ACCES)
 		ft_dprintf(2, "%s: %s: Permission denied\n", namesh, p->path);
-	if (p->setup & E_LOOP)
+	else if (p->setup & E_LOOP)
 		ft_dprintf(2, "%s: %s: Too many links\n", namesh, p->path);
-	if (p->setup & E_NTL)
+	else if (p->setup & E_NTL)
 		ft_dprintf(2, "%s: %s: File name too long\n", namesh, p->path);
 	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
 	exit(p->ret);
@@ -173,7 +183,7 @@ int		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
-	envp = create_tab_var(job->env, 0); //problematique, a voir ac l'assignement
+	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
 	p->status = RUNNING;
 	if ((p->pid = fork()) == -1)
 		perror("fork:");
@@ -186,8 +196,7 @@ int		fork_process(t_job *job, t_process *p)
 
 void	run_process(t_job *j, t_process *p)
 {
-	process_type(j->env, p);
-
+	process_type(p);
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
 	{
 		process_redir(p, p->redir);
@@ -205,7 +214,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	while (process)
 	{
-		routine_set_pipe(process, &job->pipe);
+		routine_process(shell, process, &job->pipe);
 		run_process(job, process->data);
 		process = process->next;
 		if (job->pipe.tmp)
