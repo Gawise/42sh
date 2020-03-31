@@ -1,6 +1,7 @@
 #include "exec.h"
 #include "libft.h"
 #include "sh.h"
+#include "var.h"
 #include <unistd.h>
 
 int		do_pipe(t_process *p)
@@ -25,12 +26,16 @@ int		do_pipe(t_process *p)
 	return (SUCCESS);
 }
 
-int		routine_set_pipe(t_list *process, t_pipe *fd)
+int		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 {
 	/*  Carefull : |&   not supported  */
 	/*  Need to check somewhere MAX_FD */
 	t_process	*manage;
+	t_list		*env;
 
+	env = shell->env;
+	manage = process->data;
+	manage->env = ft_lstdup(env, env->size, cpy_var_list);
 	fd->tmp = fd->fd[0];
 	fd->fd[0] = 0;				/* set a 0, voir si pas mieux a -1*/
 	fd->fd[1] = 0;
@@ -38,7 +43,6 @@ int		routine_set_pipe(t_list *process, t_pipe *fd)
 		return (0);
 	if (pipe(fd->fd) == -1)
 		perror("pipe:");
-	manage = process->data;
 	manage->std[1] = fd->fd[1];
 	manage->setup += PIPE_ON;		/*Useless now    */
 	manage = process->next->data;

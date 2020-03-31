@@ -2,6 +2,9 @@
 # define EXEC_H
 
 
+
+
+
 	#include <stdio.h>				//debug
 # include "struct.h"
 # include "signal.h"
@@ -20,12 +23,13 @@
 # define E_LOOP 2112
 # define E_NTL	4160	/*name too long*/
 
-# define B_ECHO 8192
-# define B_EXIT 24576
-# define B_CD 40960
-# define B_ENV 57344
-# define B_SETENV 73728
-# define B_UNSETENV 90112
+# define B_ECHO 8192		/* 0000.10000000000000 */
+# define B_EXIT 24576		/* 0001.10000000000000 */
+# define B_CD 40960			/* 0010.10000000000000 */
+# define B_ENV 57344		/* 0011.10000000000000 */
+# define B_SETENV 73728		/* 0100.10000000000000 */
+# define B_UNSETENV 90112 	/* 0101.10000000000000 */
+# define B_HASH 106496		/* 0110.10000000000000 */
 
 /*
 # define B_EXIT 16384
@@ -63,10 +67,10 @@ uint8_t			ft_exit(t_job *j, t_process *p);
 /*				*/
 
 int		lvl_cmd_table(t_cfg *shell, t_list *lst);
-int		routine_set_pipe(t_list *process, t_pipe *fd);
+int		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 int		do_pipe(t_process *p);
 
-void	process_type(t_list *var, t_process *p);
+void	process_type(t_process *p);
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process);
 
