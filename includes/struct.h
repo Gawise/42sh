@@ -10,16 +10,17 @@
 
 typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
-
+typedef struct s_hash_map	t_hash_map;
 
 typedef struct	s_cfg
 {
-	struct termios *term_origin;      /* origin terminal modes */
-	uint8_t interactive;		/*True Or False*/
-	pid_t	pid;				/* pid's 21	*/
-	t_list	*env;
-	t_list	*intern;
-	t_list	*job;
+	struct termios	*term_origin;      /* origin terminal modes */
+	uint8_t 	interactive;		/*True Or False*/
+	pid_t		pid;				/* pid's 21	*/
+	t_list		*env;
+	t_list		*intern;
+	t_list		*job;
+	t_hash_map	*map;
 	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
 

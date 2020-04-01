@@ -62,6 +62,7 @@ uint8_t			ft_setenv(t_job *j, t_process *p);
 uint8_t			ft_unsetenv(t_job *j, t_process *p);
 uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
+uint8_t			ft_hash(t_job *j, t_process *p);
 
 
 /*				*/
