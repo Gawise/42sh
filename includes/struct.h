@@ -244,7 +244,6 @@ typedef enum			e_err_flag
 typedef struct	s_var
 {
 	char		**ctab;
-	uint8_t		rd;
 }				t_var;
 
 typedef struct	s_pipe
@@ -261,16 +260,16 @@ typedef struct	s_process
 	pid_t 		pid;                /* process ID */
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
-	int8_t 	std[3];				/* stdin out err*/
+	int8_t 		std[3];				/* stdin out err*/
 	uint32_t	setup;				/* info du process */
 	t_list		*redir;				/* list of redirs */
+	t_list		*env;				/* VAR env  */
 }				t_process;
 
 typedef struct	s_job
 {
 	char		*cmd;		        /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
-	t_list		*env;				/* VAR env  */
 	pid_t		pgid;               /* process group ID */
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
