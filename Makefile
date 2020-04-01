@@ -87,6 +87,17 @@ PARSRCS += state/io_number.c
 PARSRCS += state/redir.c
 PARSRCS += state/table_start.c
 
+## EXPANSIONS ##
+
+EXPSRCS += exp.c
+EXPSRCS += exp_tools.c
+EXPSRCS += parameter.c
+EXPSRCS += param_resolve.c
+EXPSRCS += param_substitution.c
+EXPSRCS += recursive_parameter.c
+EXPSRCS += tilde.c
+EXPSRCS += word_parameter.c
+
 ## EVAL ##
 
 EVALSRCS += launcher.c
@@ -131,6 +142,7 @@ SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
+SRC += $(addprefix exp/,$(EXPSRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
@@ -141,6 +153,7 @@ OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
+OPATHS += $(OPATH)exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug

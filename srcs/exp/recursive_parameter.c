@@ -1,4 +1,5 @@
 #include "exp.h"
+#include "libft.h"
 
 int	rec_param_dispatch(char **str, t_exp *exp, char **param)
 {
@@ -22,7 +23,9 @@ int	rec_param_dispatch(char **str, t_exp *exp, char **param)
 	return (0);
 }
 
-int	rec_param_exp(char **str, t_exp *exp)
+#include <stdio.h>
+
+int	rec_param_exp(t_exp *exp, char **str)
 {
 	char	*param;
 	int	ret;

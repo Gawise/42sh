@@ -1,3 +1,5 @@
+#include "../../includes/libft.h"
+
 int	ft_isname(char *str)
 {
 	if (ft_isdigit(*str))

@@ -1,9 +1,12 @@
 #include "exp.h"
+#include "sh.h"
+#include "libft.h"
+#include "var.h"
 
 int	substitute_parameter(t_exp *exp, char **str)
 {
 	exp_substitute(exp, exp->param);
-	*str++;
+	(*str)++;
 	return (skip_word(exp, str));
 }
 
@@ -27,7 +30,7 @@ int	assign_word(t_exp *exp, char **str, char *param)
 
 int	substitute_null(t_exp *exp, char **str)
 {
-	*str++;
+	(*str)++;
 	return (skip_word(exp, str));
 }
 

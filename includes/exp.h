@@ -1,6 +1,7 @@
 #ifndef EXP_H
 # define EXP_H
 # define EXP_BSIZE 50
+# include "struct.h"
 # include <pwd.h>
 
 typedef struct		s_exp
@@ -18,6 +19,7 @@ typedef struct		s_exp
 
 // exp.c
 
+int	word_expansions(t_simple_cmd *cmd);
 int	exp_main(char **word, int assign);
 
 // parameter.c
@@ -41,7 +43,7 @@ void	substitute_pattern(t_exp *exp, int type);
 
 // recursive_parameter.c
 
-int	rec_param_exp(char **str, t_exp *exp);
+int	rec_param_exp(t_exp *exp, char **str);
 
 // word_parameter.c
 

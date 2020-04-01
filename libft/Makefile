@@ -88,6 +88,7 @@ SRCS += ft_toupper.c
 SRCS += ft_wcharlen.c
 SRCS += ft_wstrlen.c
 SRCS += ft_tabdup.c
+SRCS += ft_isname.c
 
 #-------------------------List-----------------------------#
 SRCS += ft_lstadd.c

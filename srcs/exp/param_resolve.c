@@ -1,4 +1,7 @@
 #include "exp.h"
+#include "sh.h"
+#include "libft.h"
+#include "var.h"
 
 char	*resolve_parameter(char *str, int hash)
 {
@@ -9,7 +12,7 @@ char	*resolve_parameter(char *str, int hash)
 	if (!(ft_strlen(str) == 1 && (*str == '@' || *str == '*'
 	|| *str == '#' || *str == '?' || *str == '-' || *str == '$'
 	|| *str == '!' || ft_isdigit(*str)))
-	|| (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1))))
+	&& (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1))))
 		return (NULL);
 	if (!hash && !(res = find_var_value(cfg_shell()->env, str))
 	&& !(res = ft_strnew(0)))
@@ -17,15 +20,17 @@ char	*resolve_parameter(char *str, int hash)
 	else if (hash && !(res = find_var_value(cfg_shell()->env, str + 1))
 	&& !(res = ft_strnew(0)))
 		ft_ex("Cannot allocate memory\n");
-	if (!res && !(res = ft_strdup(res)))
+	if (res && !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
 	return (res);
 }
 
+#include <stdio.h>
 int	resolve_colon_param(char **str, t_exp *exp, char *param)
 {
-	*str++;
-	if (ft_strchri("-=?+", **str) < 0
+	(*str)++;
+	printf("\nentree colon param str = [%s]\n", *str);
+	if (!ft_strchr("-=?+", **str)
 	|| !(exp->param = resolve_parameter(param, 0)))
 		return (-1);
 	if (exp->param[0])
@@ -42,6 +47,7 @@ int	resolve_colon_param(char **str, t_exp *exp, char *param)
 		ft_ex("Cannot allocate memory\n");
 	else
 		return (substitute_null(exp, str));
+	return (0);
 }
 
 int	resolve_brace_param(char **str, t_exp *exp, char *param)
@@ -49,13 +55,13 @@ int	resolve_brace_param(char **str, t_exp *exp, char *param)
 	int	hash;
 	char	*hashparam;
 
-	*str++;
+	(*str)++;
 	hash = *param == '#' ? 1 : 0;
 	if (!(exp->param = resolve_parameter(param, hash)))
 		return (-1);
 	if (hash)
 	{
-		if (!(hashparam = ft_atoi(ft_strlen(exp->param))))
+		if (!(hashparam = ft_itoa(ft_strlen(exp->param))))
 			ft_ex("Cannot allocate memory\n");
 		exp_substitute(exp, hashparam);
 		ft_strdel(&hashparam);
@@ -71,7 +77,7 @@ int	resolve_pattern_param(char **str, t_exp *exp, char *param)
 
 	type = **str == '#' ? 0 : 1;
 	if (ft_strchr("#%", *(*str + 1)))
-		*str++;
+		(*str)++;
 	str++;
 	if (!(exp->param = resolve_parameter(param, 0))
 	|| rec_word_parse(exp, str) < 0

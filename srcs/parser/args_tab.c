@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "lexer.h"
 #include "parser.h"
+#include "exp.h"
 
 void		**args_to_tab(t_list *lst, char *cmd)
 {
@@ -32,6 +33,7 @@ void	p_mat_s_cmd(t_list *s_cmd_lst)
 	t_simple_cmd	*cmd;
 
 	cmd = (t_simple_cmd *)s_cmd_lst->data;
+	word_expansions(cmd);
 	if (cmd->cmd_name)
 	{
 		if (!cmd->args)

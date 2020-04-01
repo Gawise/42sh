@@ -1,4 +1,5 @@
 #include "exp.h"
+#include "libft.h"
 
 int	word_dispatch(t_exp *exp, char **str, int *quote, int skip)
 {
