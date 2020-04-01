@@ -88,15 +88,6 @@ static uint8_t		ft_cd(t_job *j, t_process *p)
 		return (0);
 }
 
-static uint8_t		ft_hash(t_job *j, t_process *p)
-{
-		printf("HASH builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
-
-
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[7])(t_job *, t_process *);
