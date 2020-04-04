@@ -6,6 +6,8 @@
 #include "sh.h"
 #include <unistd.h>
 
+#include <termios.h>
+
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
@@ -141,10 +143,14 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			perror("[Parent process] close error:");
-	if (job->pgid == 0)
-		job->pgid = process->pid;
-	setpgid(process->pid, job->pgid);
-	if (job->fg)
+
+	if (cfg_shell()->interactive) //singelton obliger?
+	{
+		if (job->pgid == 0)
+			job->pgid = process->pid;
+		setpgid(process->pid, job->pgid);
+	}
+	if (job->fg)// pour tous les process ?
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
 			perror("[PARENT PROCESS] error tcsetpgrp");
 	ft_del_tab((void **)envp);
@@ -157,15 +163,18 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (close(fd_pipe) == -1)
 			perror("[child process] close error:");
 	p->pid = getpid();
-	if (job->pgid == 0)
-		job->pgid = p->pid;
-	setpgid(p->pid, job->pgid);
+	if (cfg_shell()->interactive) //singelton obliger?
+	{
+		if (job->pgid == 0)
+			job->pgid = p->pid;
+		setpgid(p->pid, job->pgid);
+		set_signal_child();
+	}
 	if (job->fg)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
 	process_redir(p, p->redir);
-	set_signal_child();
 	error_handling(p);
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
@@ -205,6 +214,26 @@ void	run_process(t_job *j, t_process *p)
 	return ;
 }
 
+void	routine_ending_job(t_cfg *shell, t_job *job)
+{
+	char	*ret;
+
+	if (!shell->interactive)
+	{
+		wait_process(job);
+	}
+	else if (job->fg)
+	{
+	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */
+		wait_process(job);
+		tcsetpgrp(STDIN_FILENO, shell->pid);
+		set_termios(TCSADRAIN, &shell->term_origin);
+	}
+/*	else  rien a faire pour bg ???? */
+	ret = ft_itoa(job->ret);
+	ft_setvar(&shell->intern, "$", ret);
+	ft_strdel(&ret);
+}
 
 int		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
@@ -217,13 +246,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 			if (close(job->pipe.tmp) == -1)
 				perror("[check and do pipe] close error:");
 	}
-	if (job->fg)
-	{
-		wait_process(job);
-		if (tcsetpgrp(STDIN_FILENO, shell->pid) == -1)
-			perror("[run job] error tcsetpgrp");
-		set_termios(&shell->term_origin);
-	}
+	routine_ending_job(shell, job);
 
 	/*
 	 *   if (!shell_is_interactive)

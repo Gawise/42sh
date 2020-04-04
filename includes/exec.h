@@ -67,7 +67,6 @@ uint8_t			ft_exit(t_job *j, t_process *p);
 
 /*		TERMIOS		*/
 
-void	set_termios(struct termios *term);
 void	term_create_eval(struct termios *origin, struct termios *eval);
 
 /*				*/
@@ -95,7 +94,7 @@ int		wait_process(t_job *job);
 
 /*		term*/
 
-void		set_termios(struct termios *term);
+void		set_termios(int32_t mode, struct termios *term);
 
 /* redir */
 

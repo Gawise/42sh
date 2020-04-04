@@ -12,7 +12,6 @@ int		do_pipe(t_process *p)
 	if (p->std[0] != STDIN_FILENO &&
 			p->std[0] != -1)
 	{
-		printf("rentrei cmd %s \n", p->cmd);
 		if (dup2(p->std[0], STDIN_FILENO) == -1)
 			perror("[do_pipe]1 dup2 error:");
 		if (close(p->std[0]) == -1)
@@ -21,7 +20,6 @@ int		do_pipe(t_process *p)
 	if (p->std[1] != STDOUT_FILENO &&
 			p->std[0] != -1)
 	{
-		printf("rentrei cmd %s \n", p->cmd);
 		if (dup2(p->std[1], STDOUT_FILENO) == -1)
 			perror("[do_pipe]2 dup2 error:");
 		if (close(p->std[1]) == -1)
