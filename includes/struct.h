@@ -14,7 +14,7 @@ typedef struct s_dlist	t_dlist;
 
 typedef struct	s_cfg
 {
-	struct termios *term_origin;      /* origin terminal modes */
+	struct termios term_origin;      /* origin terminal modes */
 	uint8_t interactive;		/*True Or False*/
 	pid_t	pid;				/* pid's 21	*/
 	t_list	*env;
@@ -265,7 +265,7 @@ typedef struct	s_job
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
-	uint8_t		std[3];				/* stdin out err*/
+	int8_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 

@@ -23,4 +23,5 @@ uint8_t		ft_exit(t_job *j, t_process *p)
 		ft_atoi(find_var_value(shell->intern, "?"));
 	ft_printf("exit\n");
 	exit(ret);
+	/* The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }

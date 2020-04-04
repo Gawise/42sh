@@ -102,7 +102,6 @@ ANASRCS += heredoc.c
 EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_var.c
 EVALSRCS += env.c
 EVALSRCS += setenv.c
 EVALSRCS += unsetenv.c
@@ -113,7 +112,9 @@ EVALSRCS += wait.c
 EVALSRCS += path_err.c
 EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
+EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
+EVALSRCS += tools_termios.c
 
 ## BUILTIN ##
 

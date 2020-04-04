@@ -258,6 +258,7 @@ int		process_redir(t_process *p, t_list *redir)
 {
 	while (redir)
 	{
+		printf("redir pr   %s\n", p->cmd);
 		if (redir_gearing(p, redir->data))
 			exit(1);
 		redir = redir->next;

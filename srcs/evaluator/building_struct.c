@@ -3,12 +3,6 @@
 #include "parser.h"
 #include "var.h"
 
-void	term_create_eval(struct termios *origin, struct termios *eval)
-{
-	ft_memcpy(eval, origin, sizeof(struct termios));
-	eval->c_lflag &= ~TOSTOP;
-}
-
 void	cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	t_process		process;
@@ -32,7 +26,6 @@ void	cmd_to_process(t_list **lst, t_list *s_cmd)
 	return ;   /*i useless sans create_pipe_list ???*/
 }
 
-
 int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 {
 	ft_bzero(job, sizeof(t_job));   /*set t_pipe a 0. Besoin d etre a -1?*/
@@ -41,6 +34,6 @@ int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 	job->std[0] = dup(STDIN_FILENO);
 	job->std[1] = dup(STDOUT_FILENO);
 	job->std[2] = dup(STDERR_FILENO);
-	term_create_eval(shell->term_origin, &job->term_eval);
+	term_create_eval(&shell->term_origin, &job->term_eval);
 	return (0);
 }

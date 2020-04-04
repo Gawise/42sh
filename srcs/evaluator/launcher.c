@@ -65,11 +65,6 @@ void	set_signal_child(void)
 
 
 
-void		set_termios(struct termios *term)
-{
-	if (tcsetattr(STDIN_FILENO, TCSADRAIN, term) == -1)
-		perror("[RUN JOB] error tcsetattr");
-}
 
 
 static uint8_t		ft_echo(t_job *j, t_process *p)
@@ -210,6 +205,7 @@ void	run_process(t_job *j, t_process *p)
 	return ;
 }
 
+
 int		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	while (process)
@@ -226,7 +222,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 		wait_process(job);
 		if (tcsetpgrp(STDIN_FILENO, shell->pid) == -1)
 			perror("[run job] error tcsetpgrp");
-		set_termios(shell->term_origin);
+		set_termios(&shell->term_origin);
 	}
 
 	/*

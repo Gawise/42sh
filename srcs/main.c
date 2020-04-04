@@ -90,9 +90,8 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		lexer;
 	t_parser	parser;
-	uint8_t		debug;
 
-	debug = init_shell(env, av);
+	init_shell(env, av);
 	(void)ac;
 	while (1)
 	{
@@ -110,4 +109,5 @@ int		main(int ac, char **av, char **env)
 		}
 	}
 	exit(0);
+	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }
