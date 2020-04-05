@@ -5,33 +5,48 @@
 
 int	substitute_parameter(t_exp *exp, char **str)
 {
+	int	ret;
+
 	exp_substitute(exp, exp->param);
 	(*str)++;
-	return (skip_word(exp, str));
+	ret = skip_word(exp, str);
+	if (**str == '}')
+		(*str)++;
+	return (ret);
 }
 
+#include <stdio.h>
 int	substitute_word(t_exp *exp, char **str)
 {
-	str++;
+	printf("debut substitute word\n");
+	(*str)++;
 	if (rec_word_parse(exp, str) < 0
 	|| exp_main(&exp->word, exp->assign) < 0)
 		return (-1);
+	if (**str == '}')
+		(*str)++;
 	exp_substitute(exp, exp->word);
+	printf("fin substitute word\n");
 	return (1);
 }
 
 int	assign_word(t_exp *exp, char **str, char *param)
 {
 	if (substitute_word(exp, str) < 0
-	|| ft_setvar(&cfg_shell()->env, param, exp->word, 1))
+	|| ft_setvar(&cfg_shell()->env, param, exp->word))
 		return (-1);
 	return (1);
 }
 
 int	substitute_null(t_exp *exp, char **str)
 {
+	int	ret;
+
 	(*str)++;
-	return (skip_word(exp, str));
+	ret = skip_word(exp, str);
+	if (**str == '}')
+		(*str)++;
+	return (ret);
 }
 
 void	substitute_pattern(t_exp *exp, int type)

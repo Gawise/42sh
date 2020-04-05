@@ -33,6 +33,7 @@ int	resolve_colon_param(char **str, t_exp *exp, char *param)
 	if (!ft_strchr("-=?+", **str)
 	|| !(exp->param = resolve_parameter(param, 0)))
 		return (-1);
+	printf("encore bon colon\n");
 	if (exp->param[0])
 	{
 		if (**str == '+')

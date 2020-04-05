@@ -75,7 +75,7 @@ int	parse_param_exp(char **word, t_exp exp)
 		if (exp.bs)
 			exp.bs--;
 	}
-	printf("sortie while ret = %d\n", ret);
+	printf("\nsortie while ret = %d\n", ret);
 	if (ret >= 0)
 	{
 		exp_flush_buf(&exp, &exp.res);

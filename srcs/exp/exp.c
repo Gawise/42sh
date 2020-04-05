@@ -34,7 +34,7 @@ int	exp_main(char **word, int assign)
 {
 	t_exp		exp;
 
-	printf("Entree exp main\nstr= {%s}\n\n", *word);
+	printf("Entree exp main\nstr= [%s]\n\n", *word);
 	init_exp(&exp);
 	if (assign)
 	{
@@ -50,9 +50,9 @@ int	exp_main(char **word, int assign)
 	if (parse_param_exp(word, exp) < 0)
 	{
 		ft_dprintf(2, "%s: Bad Substitution\n", *word);
-		ft_setvar(&cfg_shell()->env, "?", "1", 1);
-		return (0);
+		ft_setvar(&cfg_shell()->env, "?", "1");
+		return (-1);
 	}
-	printf("Sortie exp main\nstr= {%s}\n\n", *word);
+	printf("Sortie exp main\nstr= [%s]\n\n", *word);
 	return (1);
 }
