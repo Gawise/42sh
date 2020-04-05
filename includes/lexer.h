@@ -30,6 +30,7 @@ int	l_delim_equ(t_lexer *lexer, char c);
 int	l_delim_exp(t_lexer *lexer, char c);
 int	l_build_exp(t_lexer *lexer, char c);
 int	l_exp_brack(t_lexer *lexer, char c);
+int	l_exp_add(t_lexer *lexer, char c);
 
 /*
 **	inhib.c
