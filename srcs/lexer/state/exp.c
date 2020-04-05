@@ -14,5 +14,5 @@ void	init_exp_state(int (*token_builder[8][11])(t_lexer *, char))
 	token_builder[S_EXP][C_EOI] = l_delim_token;
 	token_builder[S_EXP][C_BRACK] = l_exp_brack;
 	token_builder[S_EXP][C_EQU] = l_buffer_add;
-	token_builder[S_EXP][C_OTHER] = l_buffer_add;
+	token_builder[S_EXP][C_OTHER] = l_exp_add;
 }
