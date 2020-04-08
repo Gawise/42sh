@@ -42,6 +42,7 @@ int	rec_param_exp(t_exp *exp, char **str)
 		if (exp->bs)
 			exp->bs--;
 	}
+	printf("\nsortie rec while ret = %d\nstr = [%s]\n", ret, *str);
 	ft_strdel(&param);
 	if (!ret)
 		return (-1);

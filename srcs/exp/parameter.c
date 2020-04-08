@@ -68,8 +68,8 @@ int	parse_param_exp(char **word, t_exp exp)
 	ret = 0;
 	while (*str)
 	{
-		if (!exp.bs && ft_strchr("\'\"\\$", *str)
-		&& (ret = param_dispatch(&exp, &str)) < 0)
+		if ((!exp.bs && ft_strchr("\'\"\\$", *str)
+		&& (ret = param_dispatch(&exp, &str)) < 0) || !*str)
 			break ;
 		exp_add_to_buf(&exp, &str, &exp.res);
 		if (exp.bs)

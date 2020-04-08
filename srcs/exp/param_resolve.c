@@ -2,6 +2,17 @@
 #include "sh.h"
 #include "libft.h"
 #include "var.h"
+#include "ft_printf.h"
+
+int	print_error_parameter(t_exp *exp, char **str, char *param)
+{
+	int	ret;
+
+	if ((ret = substitute_word(exp, str)) < 0)
+		return (ret);
+	ft_dprintf(2, "%s: %s", param, exp->word);
+	return (-2);
+}
 
 char	*resolve_parameter(char *str, int hash)
 {
@@ -45,7 +56,7 @@ int	resolve_colon_param(char **str, t_exp *exp, char *param)
 	else if (**str == '=')
 		return (assign_word(exp, str, param));
 	else if (**str == '?')
-		ft_ex("Cannot allocate memory\n");
+		return (print_error_parameter(exp, str, param));
 	else
 		return (substitute_null(exp, str));
 	return (0);
@@ -75,15 +86,23 @@ int	resolve_brace_param(char **str, t_exp *exp, char *param)
 int	resolve_pattern_param(char **str, t_exp *exp, char *param)
 {
 	int	type;
+	int	ret;
 
+	printf("resolve pattern str = [%s]\n", *str);
+	ret = -1;
 	type = **str == '#' ? 0 : 1;
+	(*str)++;
 	if (ft_strchr("#%", *(*str + 1)))
 		(*str)++;
-	str++;
+	printf("resolve pattern str = [%s]", *str);
 	if (!(exp->param = resolve_parameter(param, 0))
-	|| rec_word_parse(exp, str) < 0
-	|| exp_main(&exp->word, exp->assign) < 0)
-		return (-1);
+	|| (ret = rec_word_parse(exp, str)) < 0
+	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
+		return (ret);
+	printf("fin de recursive, str = [%s]\n", *str);
+	if (**str == '}')
+		(*str)++;
+	printf("\nfin resolve pattern,\nparam = [%s]\nword=[%s]\n", exp->param, exp->word);
 	substitute_pattern(exp, type);
 	return (1);
 }

@@ -18,11 +18,13 @@ int	substitute_parameter(t_exp *exp, char **str)
 #include <stdio.h>
 int	substitute_word(t_exp *exp, char **str)
 {
+	int	ret;
+
 	printf("debut substitute word\n");
 	(*str)++;
-	if (rec_word_parse(exp, str) < 0
-	|| exp_main(&exp->word, exp->assign) < 0)
-		return (-1);
+	if ((ret = rec_word_parse(exp, str)) < 0
+	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
+		return (ret);
 	if (**str == '}')
 		(*str)++;
 	exp_substitute(exp, exp->word);
@@ -32,9 +34,11 @@ int	substitute_word(t_exp *exp, char **str)
 
 int	assign_word(t_exp *exp, char **str, char *param)
 {
-	if (substitute_word(exp, str) < 0
-	|| ft_setvar(&cfg_shell()->env, param, exp->word))
-		return (-1);
+	int	ret;
+
+	if ((ret = substitute_word(exp, str)) < 0)
+		return (ret);
+	ft_setvar(&cfg_shell()->env, param, exp->word);
 	return (1);
 }
 
