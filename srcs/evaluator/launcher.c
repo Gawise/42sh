@@ -11,26 +11,8 @@
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
-#include <signal.h>
-void	sig(int i)
-{
-	printf("sig detect = [%d]\n", i);
-}
 
 #include "sh.h"
-void	signal_debug_printf(void)
-{
-	signal(SIGHUP, sig);
-	signal(SIGINT, sig);
-	signal(SIGQUIT, sig);
-	signal(SIGPIPE, sig);
-	signal(SIGCHLD, sig);
-	signal(SIGTSTP, sig);
-	signal(SIGTSTP, sig);
-	signal(SIGCONT, sig);
-	signal(SIGTTIN, sig);
-	signal(SIGTTOU, sig);
-}
 
 void	set_signal_child(void)
 {
@@ -112,31 +94,6 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-uint8_t		error_handling(t_process *p)
-{
-	char	*namesh;
-
-	if (!(namesh = find_var_value(cfg_shell()->intern, "PS1")))
-		namesh = "\0";
-	/* faire tableau avec hash*/
-	if (!(p->setup & ERROR))
-		return (SUCCESS);
-	p->setup &= ~ERROR;
-	if (p->setup & E_UNFOUND)
-		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
-	else if (p->setup & E_ISDIR)
-		ft_dprintf(2, "%s: %s: is a directory\n", namesh, p->path );
-	else if (p->setup & E_NOENT)
-		ft_dprintf(2, "%s: %s: No such file or directory\n", namesh, p->path);
-	else if (p->setup & E_ACCES)
-		ft_dprintf(2, "%s: %s: Permission denied\n", namesh, p->path);
-	else if (p->setup & E_LOOP)
-		ft_dprintf(2, "%s: %s: Too many links\n", namesh, p->path);
-	else if (p->setup & E_NTL)
-		ft_dprintf(2, "%s: %s: File name too long\n", namesh, p->path);
-	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
-	exit(p->ret);
-}
 
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
@@ -175,7 +132,7 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
 	process_redir(p, p->redir);
-	error_handling(p);
+	process_errors_handling(p);
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
@@ -214,7 +171,7 @@ void	run_process(t_job *j, t_process *p)
 	return ;
 }
 
-void	routine_ending_job(t_cfg *shell, t_job *job)
+uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 {
 	char	*ret;
 
@@ -229,13 +186,15 @@ void	routine_ending_job(t_cfg *shell, t_job *job)
 		tcsetpgrp(STDIN_FILENO, shell->pid);
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
-/*	else  rien a faire pour bg ???? */
+	else		//bg gerer son return pour cas particuler ? doit avoir un wait ?
+		return (0);
 	ret = ft_itoa(job->ret);
 	ft_setvar(&shell->intern, "$", ret);
 	ft_strdel(&ret);
+	return (job->ret);
 }
 
-int		run_job(t_cfg *shell, t_job *job, t_list *process)
+uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	while (process)
 	{
@@ -244,18 +203,7 @@ int		run_job(t_cfg *shell, t_job *job, t_list *process)
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				perror("[check and do pipe] close error:");
+				perror("[check and do pipe] close error:");  //perror
 	}
-	routine_ending_job(shell, job);
-
-	/*
-	 *   if (!shell_is_interactive)
-	 wait_for_job (j);
-	 else if (foreground)
-	 put_job_in_foreground (j, 0);
-	 else
-	 put_job_in_background (j, 0);
-https://www.gnu.org/software/libc/manual/html_node/Stopped-and-Terminated-Jobs.html#Stopped-and-Terminated-Jobs
-*/
-	return (0);
+	return (routine_ending_job(shell, job));
 }

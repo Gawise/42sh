@@ -3,7 +3,6 @@
 
 void	del_struct_tvar(void *del, size_t u)
 {
-
 	t_var	*v;
 
 	(void)u;
@@ -11,6 +10,7 @@ void	del_struct_tvar(void *del, size_t u)
 	ft_del_tab((void **)v->ctab);
 	free(v);
 }
+
 
 void	del_struct_process(void *del, size_t u)
 {
@@ -25,12 +25,23 @@ void	del_struct_process(void *del, size_t u)
 	free(del);
 }
 
-int		routine_clean_job(t_job *j)
+void	routine_clean_job(void *del, size_t u)
 {
+	t_job	*j;
+
+	j = del;
 	ft_strdel(&j->cmd);
 	ft_lstdel(&j->process, del_struct_process);
 	close(j->std[0]);
 	close(j->std[1]);
 	close(j->std[2]);
-	return (0);
+	ft_bzero(j, u);
+}
+
+void	clean_cfg(t_cfg *shell)
+{
+	ft_lstdel(&shell->env, del_struct_tvar);
+	ft_lstdel(&shell->intern, del_struct_tvar);
+	ft_lstdel(&shell->job, routine_clean_job);
+	ft_bzero(shell, sizeof(t_cfg));
 }

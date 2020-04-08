@@ -1,11 +1,23 @@
 #include "libft.h"
 #include "exec.h"
 #include "sh.h"
+#include "ft_printf.h"
 
 
+uint8_t		ft_print_env_lst(t_list *lst)
+{
+	t_var	*env;
 
+	while (lst)
+	{
+		env = lst->data;
+		ft_printf("%s=%s\n", env->ctab[0], env->ctab[1]);
+		lst = lst->next;
+	}
+	return (SUCCESS);
+}
 
-void	cpy_var_list(void *dst, void *src)
+void		cpy_var_list(void *dst, void *src)
 {
 	t_var *d;
 	t_var *s;
@@ -32,11 +44,6 @@ char		**create_tab_var(t_list *lst, int count)
 		tab[count] = NULL;
 	}
 	count--;
-	/*    plus besoin si strjoin valide avec stdarg
-	 *len0 = ft_strlen(((t_var *)(lst->data))->ctab[0]);
-	 *len1 = ft_strlen(((t_var *)(lst->data))->ctab[1]);
-	 *ctab[count] = ft_create_var_env(((t_var *)(lst->data))->ctab, len0, len1);
-	 */
 	var = lst->data;
 	tab[count] = ft_strjoin(3, var->ctab[0], "=", var->ctab[1]);
 	return (tab);
@@ -82,3 +89,7 @@ void		create_lst_var(t_list **lst, char **tab)
 		i++;
 	}
 }
+
+
+/*rajouter une fonction pour del une var ? voir unsetenv*/
+

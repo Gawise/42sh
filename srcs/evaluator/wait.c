@@ -11,7 +11,7 @@ void	call_jobcontroler(t_job *j)
 }
 
 
-int			has_running(t_list *lst)
+int32_t	has_running(t_list *lst)
 {
 	t_process *p;
 
@@ -79,10 +79,10 @@ void		update_job(t_job *j)
 	}
 }
 
-int		wait_process(t_job *job)
+void		wait_process(t_job *job)
 {
 	pid_t		pid_child;
-	int			wstatus;
+	int32_t			wstatus;
 
 	while (ft_lsthave(job->process, has_running))
 	{
@@ -107,13 +107,13 @@ int		wait_process(t_job *job)
 		while (j)
 		{
 			process = j->data;
-			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
+			printf("path = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
 			j = j->next;
 		}
 		printf("--> [INFO JOB] \n");
 		printf("\tJOB status = [%d]\t  JOB return = [%d]\n ----------------------\n\n", job->status, job->ret);
 	}
 	/*		*/
-	return (0);
+	return ;
 }
 

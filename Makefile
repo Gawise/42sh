@@ -102,23 +102,31 @@ ANASRCS += heredoc.c
 EVALSRCS += launcher.c
 EVALSRCS += pipe.c
 EVALSRCS += exec_type.c
-EVALSRCS += env.c
-EVALSRCS += setenv.c
-EVALSRCS += unsetenv.c
 EVALSRCS += cleaner.c
-EVALSRCS += building_struct.c
+EVALSRCS += constructor.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
-EVALSRCS += path_err.c
-EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
 EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
+EVALSRCS += setvar_add.c
+EVALSRCS += errors_handling.c
+
+
+## COMMUN TOOLS  ##
+
+TOOLSRCS += path_errors.c
+TOOLSRCS += tools_path.c
+
 
 ## BUILTIN ##
 
 BTSRCS += exit.c
+BTSRCS += env.c
+BTSRCS += setenv.c
+BTSRCS += unsetenv.c
+
 
 ## INCLUDES ##
 
@@ -155,6 +163,7 @@ SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
+SRC += $(addprefix tools/,$(TOOLSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
 
@@ -167,6 +176,7 @@ OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
+OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)debug
 
 CC = clang

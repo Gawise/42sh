@@ -56,7 +56,7 @@
 
 
 
-/*		BUILTIN	*/
+/*		BUILTIN		*/
 
 uint8_t			ft_setenv(t_job *j, t_process *p);
 uint8_t			ft_unsetenv(t_job *j, t_process *p);
@@ -64,45 +64,33 @@ uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 
 
+/*		REDIR		 */
+void		process_redir(t_process *p, t_list *redir);
+void		do_my_dup2(int8_t fd1, int8_t fd2);
+uint8_t		bad_fd(int fd);
+uint32_t	path_gearing(t_redir *r, char **path, int right);
 
 /*		TERMIOS		*/
-
-void	term_create_eval(struct termios *origin, struct termios *eval);
-
-/*				*/
-
-int		lvl_cmd_table(t_cfg *shell, t_list *lst);
-int		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
-int		do_pipe(t_process *p);
-
-void	process_type(t_process *p);
-
-int		run_job(t_cfg *shell, t_job *job, t_list *process);
-
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
-int		routine_clean_job(t_job *j);
-
-void	run_process(t_job *j, t_process *p);
-
-char		*create_abs_path(char *s);
-int			path_errors(char *path, uint8_t check_it);
-uint8_t		c_enametoolong(char *path);
-uint8_t		c_isdir(char *path);
-/*	wait */
-
-int		wait_process(t_job *job);
-
-/*		term*/
-
+void		term_create_eval(struct termios *origin, struct termios *eval);
 void		set_termios(int32_t mode, struct termios *term);
 
-/* redir */
+/*		ERROR HANDLING	*/
+uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd);
+uint8_t		process_errors_handling(t_process *p);
 
-int		process_redir(t_process *p, t_list *redir);
-void	do_my_dup2(int8_t fd1, int8_t fd2);
+/*		WAIT		*/
+void		wait_process(t_job *job);
 
-
-int		ft_eval(t_list *cmd_table);
+/*	 	STEP		*/
+uint8_t		ft_eval(t_list *cmd_table);
+void		lvl_cmd_table(t_cfg *shell, t_list *lst);
+void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
+uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
+void		run_process(t_job *j, t_process *p);
+void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
+void		do_pipe(t_process *p);
+void		process_type(t_process *p);
+void		routine_clean_job(void *del, size_t u);
 
 
 #endif
