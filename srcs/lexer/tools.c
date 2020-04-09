@@ -58,7 +58,7 @@ int		l_complete_str(t_lexer *lexer,  char c)
 	new = NULL;
 	pos = lexer->curr - *lexer->src;
 	if (!(pmt_prefix = l_get_prompt_prefix(lexer))
-	|| ft_printf("%s", pmt_prefix) == -1
+	|| ft_dprintf(0, "%s", pmt_prefix) == -1
 	|| !(new = ft_prompt(find_var_value(cfg_shell()->intern, "PS2"), COLOR_SUBPROMPT)))
 	{
 		ft_strdel(&pmt_prefix);
