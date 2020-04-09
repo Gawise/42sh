@@ -48,7 +48,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
 		if (!(pmt_prefix = p_get_prompt_prefix(parser))
-		|| ft_printf("%s", pmt_prefix) == -1
+		|| ft_dprintf(0, "%s", pmt_prefix) == -1
 		|| !(pmt = ft_prompt(find_var_value(cfg_shell()->intern, "PS2")
 		, COLOR_SUBPROMPT)))
 			return (0);

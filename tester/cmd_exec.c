@@ -21,12 +21,10 @@ int main (int argc, char *argv[])
 	int	i;
 	int	fd;
 	int	devno;
-	int	commandno;
 	int	newline;
 	int	mem_len;
 
 	devno = 1;
-	commandno = 2;
 	newline = 0;
 	nl = strdup("\n");
 	if (argc < 3)
@@ -34,7 +32,6 @@ int main (int argc, char *argv[])
 	if (argc > 3 && argv[1][0] == '-' && argv[1][1] == 'n')
 	{
 		devno = 2;
-		commandno = 3;
 		newline=1;
 	}
 	else if (argc > 3 && argv[1][0] == '-' && argv[1][1] != 'n')
@@ -48,24 +45,18 @@ int main (int argc, char *argv[])
 		perror("open DEVICE");
 		exit(1);
 	}
-	mem_len = 0;
-	i = commandno;
-	while (i < argc)
-	{
-		mem_len += strlen(argv[i]) + 2;
-		if (i > commandno)
-			cmd = (char *)realloc((void *)cmd, mem_len);
-		else
-			cmd = (char *)malloc(mem_len);
-		strcat(cmd, argv[i]);
-		strcat(cmd, " ");
-		i++;
-	}
+	mem_len = strlen(argv[devno + 1]) + 2;
+	cmd = (char *)malloc(mem_len);
+	strcat(cmd, argv[devno + 1]);
 	if (newline == 0)
 		usleep(225000);
 	i = 0;
 	while (cmd[i])
-		ioctl (fd, TIOCSTI, cmd + i++);
+	{
+		ioctl (fd, TIOCSTI, cmd + i);
+		if (cmd[i++] == '\n')
+			usleep(1000000);
+	}
 	if (newline == 1)
 		ioctl (fd, TIOCSTI, nl);
 	close(fd);

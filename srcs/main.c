@@ -104,7 +104,7 @@ int		main(int ac, char **av, char **env)
 		{
 			if (ret == -1)
 			{
-				ft_putendl("\e[0;31m exit\e[0;0m");
+				ft_dprintf(2, "\e[0;31m exit\e[0;0m");
 				break ;
 			}
 		}

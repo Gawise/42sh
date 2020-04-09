@@ -92,9 +92,9 @@ typedef enum			e_lexer_state
 	S_HD_BODY,		// Body de Heredoc		1
 	S_AMP_PIPE,		// Token avec & | ;		2
 	S_TK_REDIR,		// Token avec < >		3
-	S_EXP,			// Expansion en cours	4
+	S_EXP,			// Expansion en cours		4
 	S_TK_WORD,		// Token word			5
-	S_IO_NUMBER,	// io_number token		6
+	S_IO_NUMBER,		// io_number token		6
 	S_FLAG			// Flag en cours		7
 }				t_lexer_state;
 
