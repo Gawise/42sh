@@ -1,6 +1,7 @@
 #include "parser.h"
 
-void		p_init_cmd_wait_state(int (*table_builder[10][17])(t_token *, t_parser *))
+void	p_init_cmd_wait_state(
+		int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_CMD_START][TOKEN] = syn_err;
 	table_builder[S_PARSER_CMD_START][WORD] = p_cmd_name;

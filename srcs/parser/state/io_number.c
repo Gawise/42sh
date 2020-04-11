@@ -1,6 +1,7 @@
 #include "parser.h"
 
-void		p_init_io_nbr_state(int (*table_builder[10][17])(t_token *, t_parser *))
+void	p_init_io_nbr_state(
+		int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_IO_NUMBER][TOKEN] = syn_err;
 	table_builder[S_PARSER_IO_NUMBER][WORD] = syn_err;

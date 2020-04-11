@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:59:22 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/21 19:08:26 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:27:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,7 @@
 # include <inttypes.h>
 # include "libft.h"
 
-# define F_SHARP		(1 << 0)
-# define F_ZERO			(1 << 1)
-# define F_MINUS		(1 << 2)
-# define F_SPACE		(1 << 3)
-# define F_PLUS			(1 << 4)
-# define F_WWILD		(1 << 5)
-# define F_PWILD		(1 << 6)
-# define F_H			(1 << 7)
-# define F_HH			(1 << 8)
-# define F_L			(1 << 9)
-# define F_LL			(1 << 10)
-# define F_UPX			(1 << 11)
-# define F_PCONV		(1 << 12)
-# define F_Z			(1 << 13)
-# define F_J			(1 << 14)
-# define F_PGIVEN		(1 << 15)
 # define BUF_SIZE		100
-
-# define CH_SHARP(x)	(x & F_SHARP)
-# define CH_ZERO(x)		(x & F_ZERO)
-# define CH_MINUS(x)	(x & F_MINUS)
-# define CH_SPACE(x)	(x & F_SPACE)
-# define CH_PLUS(x)		(x & F_PLUS)
-# define CH_WWILD(x)	(x & F_WWILD)
-# define CH_PWILD(x)	(x & F_PWILD)
-# define CH_H(x)		(x & F_H)
-# define CH_HH(x)		(x & F_HH)
-# define CH_L(x)		(x & F_L)
-# define CH_LL(x)		(x & F_LL)
-# define CH_UPX(x)		(x & F_UPX)
-# define CH_PCONV(x)	(x & F_PCONV)
-# define CH_Z(x)		(x & F_Z)
-# define CH_J(x)		(x & F_J)
-# define CH_PGIVEN(x)	(x & F_PGIVEN)
 
 # define C_RED			"\033[0;31m"
 # define C_BRED			"\033[1;31m"

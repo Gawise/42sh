@@ -5,7 +5,7 @@
 
 int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 {
-	char	c;
+	char			c;
 	t_lexer_flag	flag;
 
 	while ((c = l_get_char(lexer)))

@@ -1,6 +1,7 @@
 #include "parser.h"
 
-void		p_init_andif_pipe_state(int (*table_builder[10][17])(t_token *, t_parser *))
+void	p_init_andif_pipe_state(
+		int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	table_builder[S_PARSER_ANDIF_PIPE][TOKEN] = syn_err;
 	table_builder[S_PARSER_ANDIF_PIPE][WORD] = p_cmd_name;

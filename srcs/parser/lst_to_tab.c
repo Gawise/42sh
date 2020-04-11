@@ -7,7 +7,7 @@ void		**lst_to_tab(t_list *lst)
 {
 	void	**tab;
 	t_list	*index;
-	int	i;
+	int		i;
 
 	if (!lst)
 		return (NULL);

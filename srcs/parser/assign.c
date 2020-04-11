@@ -5,8 +5,8 @@
 
 int		p_assign_val(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 	t_assignment	*assign;
 
@@ -22,11 +22,11 @@ int		p_assign_val(t_token *token, t_parser *parser)
 
 int		p_add_assign(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 	t_assignment	*assign;
-	t_list		*new;
+	t_list			*new;
 
 	(void)token;
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
@@ -48,11 +48,11 @@ int		p_add_assign(t_token *token, t_parser *parser)
 
 int		p_assign_join(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_list		*lst;
-	
+	t_list			*lst;
+
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;

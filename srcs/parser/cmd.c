@@ -4,8 +4,8 @@
 
 int	p_add_cmd(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 
 	(void)token;

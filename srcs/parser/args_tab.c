@@ -6,7 +6,7 @@ void		**args_to_tab(t_list *lst, char *cmd)
 {
 	void	**tab;
 	t_list	*index;
-	int	i;
+	int		i;
 
 	index = lst;
 	i = 1;
@@ -27,7 +27,7 @@ void		**args_to_tab(t_list *lst, char *cmd)
 	return (tab);
 }
 
-void	p_mat_s_cmd(t_list *s_cmd_lst)
+void		p_mat_s_cmd(t_list *s_cmd_lst)
 {
 	t_simple_cmd	*cmd;
 
@@ -47,7 +47,7 @@ void	p_mat_s_cmd(t_list *s_cmd_lst)
 		cmd->av = NULL;
 }
 
-void	p_mat_and_or(t_list *and_or_lst)
+void		p_mat_and_or(t_list *and_or_lst)
 {
 	t_and_or	*and_or;
 
@@ -55,7 +55,7 @@ void	p_mat_and_or(t_list *and_or_lst)
 	ft_lstiter(and_or->s_cmd, &p_mat_s_cmd);
 }
 
-void	p_mat_table(t_list *table_lst)
+void		p_mat_table(t_list *table_lst)
 {
 	t_cmd_table	*table;
 
@@ -63,7 +63,7 @@ void	p_mat_table(t_list *table_lst)
 	ft_lstiter(table->and_or, &p_mat_and_or);
 }
 
-void	p_make_args_tab(t_parser *parser)
+void		p_make_args_tab(t_parser *parser)
 {
 	ft_lstiter(parser->table, &p_mat_table);
 }

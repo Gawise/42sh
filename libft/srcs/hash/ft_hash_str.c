@@ -3,8 +3,8 @@
 uint32_t	ft_hash_str(t_hash_map *map, char *key)
 {
 	uint32_t	res;
-	int		i;
-	int		len;
+	int			i;
+	int			len;
 
 	res = 0;
 	i = 0;

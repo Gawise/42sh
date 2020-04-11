@@ -2,8 +2,7 @@
 #include "lexer.h"
 #include "parser.h"
 
-
-int	p_create_redir(t_simple_cmd *cmd)
+int		p_create_redir(t_simple_cmd *cmd)
 {
 	t_list		*lst;
 	t_redir		*redir;
@@ -20,12 +19,12 @@ int	p_create_redir(t_simple_cmd *cmd)
 	return (1);
 }
 
-int	p_add_io_num(t_token *token, t_parser *parser)
+int		p_add_io_num(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_redir		*redir;
+	t_redir			*redir;
 
 	(void)token;
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
@@ -43,12 +42,12 @@ int	p_add_io_num(t_token *token, t_parser *parser)
 	return (1);
 }
 
-int	p_add_redir(t_token *token, t_parser *parser)
+int		p_add_redir(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_redir		*redir;
+	t_redir			*redir;
 
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
 		return (0);
@@ -68,12 +67,12 @@ int	p_add_redir(t_token *token, t_parser *parser)
 	return (1);
 }
 
-int		p_add_redir_delim(t_token* token, t_parser *parser)
+int		p_add_redir_delim(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_redir		*redir;
+	t_redir			*redir;
 
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;

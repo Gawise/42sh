@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:20:05 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/19 21:03:23 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:24:41 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	null_str(t_printf *data)
 
 	ft_strncpy(str, "(null)", 6);
 	data->printed = 6;
-	if (CH_PGIVEN(data->flags) && data->prec < 6)
+	if ((data->flags & 1 >> 15) && data->prec < 6)
 		data->printed = data->prec;
 	data->pad = (data->width > data->printed)
 	? data->width - data->printed : 0;
@@ -60,12 +60,12 @@ static void	pf_putwstr(t_printf *data)
 	else
 	{
 		wlen = ft_wstrlen((unsigned *)str);
-		if (CH_PGIVEN(data->flags) && data->prec > wlen)
+		if (data->flags & (1 << 15) && data->prec > wlen)
 			wlen = data->prec;
 		data->pad = (data->width - wlen > 0) ? data->width - wlen : 0;
 		(data->prec == 4 && data->width == 15 && wlen == 4) ? data->pad++ : 0;
 		data->flags = (data->width > data->prec)
-		? data->flags & ~F_PGIVEN : data->flags | F_PGIVEN;
+		? data->flags & ~(1 << 15) : data->flags | (1 << 15);
 		add_pad(data, 0);
 		b_nb = 0;
 		while ((data->conv = *str++) && (wlen -= b_nb) > 0)
@@ -83,7 +83,7 @@ void		conv_char(t_printf *data)
 	unsigned	c;
 
 	c = va_arg(data->ap, unsigned);
-	data->printed = (CH_L(data->flags) || CH_LL(data->flags))
+	data->printed = ((data->flags & (1 << 9)) || (data->flags & (1 << 10)))
 	? ft_wcharlen(c) : 1;
 	if ((data->pad = data->width - data->printed) < 0)
 		data->pad = 0;
@@ -100,7 +100,8 @@ void		conv_str(t_printf *data)
 	unsigned	*str;
 	int			len;
 
-	if (data->conv != 'm' && (CH_L(data->flags) || CH_LL(data->flags)))
+	if (data->conv != 'm' && ((data->flags & (1 << 9))
+	|| (data->flags & (1 << 10))))
 		pf_putwstr(data);
 	else if (data->conv != 'm' && !(str = va_arg(data->ap, unsigned *)))
 		null_str(data);
@@ -109,7 +110,7 @@ void		conv_str(t_printf *data)
 		if (data->conv == 'm')
 			str = (unsigned *)strerror(errno);
 		len = ft_strlen((char *)str);
-		if (CH_PGIVEN(data->flags) && data->prec < len)
+		if ((data->flags & (1 << 15)) && data->prec < len)
 			len = data->prec;
 		if ((data->width > 0) && (data->width - len) > 0)
 			data->pad = (data->width - len);

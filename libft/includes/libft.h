@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:43:11 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/03/05 20:07:19 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/04/10 21:44:55 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 
 # define CVTBUFSZ 200
 
-typedef struct  s_dlist
+typedef struct	s_dlist
 {
-	void            *data;
+	void			*data;
 	size_t			size;
 	struct s_dlist	*next;
 	struct s_dlist	*prev;
@@ -45,8 +45,8 @@ typedef struct	s_hash_map
 
 typedef struct	s_hash_node
 {
-	char		*key;
-	void		*data;
+	char			*key;
+	void			*data;
 }				t_hash_node;
 
 typedef union	u_modf
@@ -63,6 +63,7 @@ char			*ft_fcvt(double val, int ndigits, int *decpt, char *buf);
 double			ft_modf(double val, double *integral);
 int				ft_recursive_power(int nb, int pw);
 int				ft_sqrt(int nb);
+char			*ft_itoa(int n);
 
 /*
 ** CONVERSION
@@ -76,15 +77,15 @@ char			*ft_itoa(int n);
 ** HASH
 */
 
-t_hash_map	*ft_hash_init(uint32_t size);
-uint32_t	ft_hash_str(t_hash_map *map, char *key);
-int		ft_hash_add(t_hash_map *map, char *key, void *value);
-t_hash_node	*ft_hash_get_node(t_hash_map *map, char *key);
-void		*ft_hash_lookup(t_hash_map *map, char *key);
-t_list		*ft_hash_get_list(t_hash_map *map, char *key);
-void		ft_hash_delone(t_hash_map *map, char *key, void (*del)(void *));
-void		ft_hash_del_list(t_list **lst, void (*del)(void *));
-void		ft_hash_del_map(t_hash_map **map, void (*del)(void *data));
+t_hash_map		*ft_hash_init(uint32_t size);
+uint32_t		ft_hash_str(t_hash_map *map, char *key);
+int				ft_hash_add(t_hash_map *map, char *key, void *value);
+t_hash_node		*ft_hash_get_node(t_hash_map *map, char *key);
+void			*ft_hash_lookup(t_hash_map *map, char *key);
+t_list			*ft_hash_get_list(t_hash_map *map, char *key);
+void			ft_hash_delone(t_hash_map *map, char *key, void (*del)(void *));
+void			ft_hash_del_list(t_list **lst, void (*del)(void *));
+void			ft_hash_del_map(t_hash_map **map, void (*del)(void *data));
 
 /*
 ** INPUT
@@ -108,7 +109,8 @@ void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 int				ft_lsthave(t_list *lst, int (*f)(t_list *elem));
-t_list	*ft_lstdup(t_list *lst, size_t size, void (*cplst)(void *, void *));
+t_list			*ft_lstdup(t_list *lst, size_t size,
+		void (*cplst)(void *, void *));
 void			ft_lst_push_front(t_list **begin, void *data,
 		size_t size);
 void			ft_lst_push_back(t_list **begin, void *data,
@@ -170,7 +172,7 @@ int				ft_strnequ(char const *s1, char const *s2, size_t n);
 char			**ft_tabdup(char **t);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
-int		ft_strrchri(const char *s, int c);
+int				ft_strrchri(const char *s, int c);
 char			*ft_strdup(const char *s1);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
