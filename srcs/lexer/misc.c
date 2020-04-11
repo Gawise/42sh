@@ -2,6 +2,9 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "sh.h"
+#include "exec.h"
+#include "var.h"
+#include "line_edition.h"
 
 int			lex_err(t_lexer *lexer, char c)
 {

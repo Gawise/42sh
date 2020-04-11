@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:21:00 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/10 20:25:04 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/11 14:43:30 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void			add_prefix(t_printf *data, uintmax_t val, int ext)
 	&& data->flags & (1 << 15) && !data->prec)
 	? (data->printed)++ : 0;
 	if ((data->flags & (1 << 0) && data->base == 16
-	&& !data->flags & (1 << 1) && val) || data->flags & (1 << 12))
+	&& !(data->flags & (1 << 1)) && val) || data->flags & (1 << 12))
 		data->width -= 2;
 	if ((data->width - data->printed) > 0)
 		data->pad = data->width - data->printed;
@@ -83,7 +83,7 @@ void				conv_uint(t_printf *data)
 	data->printed = 0;
 	while (tmp && ++(data->printed))
 		tmp /= data->base;
-	CH_ZERO(data->flags) ? data->prec = data->width : 0;
+	data->flags & (1 << 1) ? data->prec = data->width : 0;
 	ext = (data->printed >= data->prec) ? 0 : 1;
 	data->printed = (data->prec > data->printed) ? data->prec : data->printed;
 	if (data->printed <= 0 && !(data->flags & (1 << 15)))
