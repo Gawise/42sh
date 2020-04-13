@@ -1,6 +1,4 @@
 #include "libft.h"
-#include "lexer.h"
-#include "parser.h"
 #include "exp.h"
 
 void		**args_to_tab(t_list *lst, char *cmd)

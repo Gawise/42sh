@@ -6,6 +6,7 @@
 # include <termios.h>
 
 # define L_BUFF_SIZE	256
+# define EXP_BSIZE	5
 
 
 typedef struct s_list	t_list;
@@ -186,6 +187,22 @@ typedef struct			s_parser
 	t_list			*table;
 	t_list			*curr_table;
 }					t_parser;
+
+/*
+** ANALYZER
+*/
+
+typedef struct		s_exp
+{
+	char		buf[EXP_BSIZE];
+	int		i;
+	int		quote;
+	int		bs;
+	int		assign;
+	char		*param;
+	char		*word;
+	char		*res;
+}			t_exp;
 
 /*
 ** SELECT

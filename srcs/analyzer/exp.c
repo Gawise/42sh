@@ -1,6 +1,5 @@
 #include "sh.h"
 #include "exp.h"
-#include "struct.h"
 #include "libft.h"
 #include "ft_printf.h"
 #include "var.h"
@@ -18,6 +17,8 @@ int	word_expansions(t_simple_cmd *cmd)
 	t_assignment	*assign;
 	int		ret;
 
+	if (cfg_shell()->debug)
+		ft_printf("\n----------- expansions -----------\n\n");
 	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
 		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
 	lst = cmd->args;
@@ -38,14 +39,15 @@ int	word_expansions(t_simple_cmd *cmd)
 	return (1);
 }
 
-#include <stdio.h>
-
 int	exp_main(char **word, int assign)
 {
 	t_exp		exp;
 	int		ret;
+	t_cfg		*cfg;
 
-	printf("Entree exp main\nstr= [%s]\n\n", *word);
+	cfg = cfg_shell();
+	if (cfg->debug)
+		ft_printf("Exp main start,\nstr= [%s]\n\n", *word);
 	init_exp(&exp);
 	exp.assign = assign;
 	if (assign)
@@ -55,6 +57,7 @@ int	exp_main(char **word, int assign)
 	ft_bzero(exp.buf, EXP_BSIZE);
 	if ((ret = parse_param_exp(word, exp)) < 0)
 		return (ret);
-	printf("Sortie exp main\nstr= [%s]\n\n", *word);
+	if (cfg->debug)
+		ft_printf("Exp main end,\nstr= [%s]\n\n", *word);
 	return (1);
 }

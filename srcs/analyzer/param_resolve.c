@@ -36,15 +36,12 @@ char	*resolve_parameter(char *str, int hash)
 	return (res);
 }
 
-#include <stdio.h>
 int	resolve_colon_param(char **str, t_exp *exp, char *param)
 {
 	(*str)++;
-	printf("\nentree colon param str = [%s]\n", *str);
 	if (!ft_strchr("-=?+", **str)
 	|| !(exp->param = resolve_parameter(param, 0)))
 		return (-1);
-	printf("encore bon colon\n");
 	if (exp->param[0])
 	{
 		if (**str == '+')
@@ -88,21 +85,17 @@ int	resolve_pattern_param(char **str, t_exp *exp, char *param)
 	int	type;
 	int	ret;
 
-	printf("resolve pattern str = [%s]\n", *str);
 	ret = -1;
 	type = **str == '#' ? 0 : 1;
 	(*str)++;
 	if (ft_strchr("#%", *(*str + 1)))
 		(*str)++;
-	printf("resolve pattern str = [%s]", *str);
 	if (!(exp->param = resolve_parameter(param, 0))
 	|| (ret = rec_word_parse(exp, str)) < 0
 	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
 		return (ret);
-	printf("fin de recursive, str = [%s]\n", *str);
 	if (**str == '}')
 		(*str)++;
-	printf("\nfin resolve pattern,\nparam = [%s]\nword=[%s]\n", exp->param, exp->word);
 	substitute_pattern(exp, type);
 	return (1);
 }

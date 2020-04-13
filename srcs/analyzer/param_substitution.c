@@ -15,12 +15,10 @@ int	substitute_parameter(t_exp *exp, char **str)
 	return (ret);
 }
 
-#include <stdio.h>
 int	substitute_word(t_exp *exp, char **str)
 {
 	int	ret;
 
-	printf("debut substitute word\n");
 	(*str)++;
 	if ((ret = rec_word_parse(exp, str)) < 0
 	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
@@ -28,7 +26,6 @@ int	substitute_word(t_exp *exp, char **str)
 	if (**str == '}')
 		(*str)++;
 	exp_substitute(exp, exp->word);
-	printf("fin substitute word\n");
 	return (1);
 }
 

@@ -67,7 +67,6 @@ LEXSRCS += state/word.c
 
 PARSRCS += amp.c
 PARSRCS += and_or.c
-PARSRCS += args_tab.c
 PARSRCS += assign.c
 PARSRCS += cmd.c
 PARSRCS += free.c
@@ -91,22 +90,20 @@ PARSRCS += state/io_number.c
 PARSRCS += state/redir.c
 PARSRCS += state/table_start.c
 
-## EXPANSIONS ##
-
-EXPSRCS += exp.c
-EXPSRCS += exp_tools.c
-EXPSRCS += parameter.c
-EXPSRCS += param_resolve.c
-EXPSRCS += param_substitution.c
-EXPSRCS += recursive_parameter.c
-EXPSRCS += tilde.c
-EXPSRCS += word_parameter.c
-
 ## ANALYZER ##
 
+ANASRCS += args_tab.c
 ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
+ANASRCS += exp.c
+ANASRCS += exp_tools.c
+ANASRCS += parameter.c
+ANASRCS += param_recursive.c
+ANASRCS += param_resolve.c
+ANASRCS += param_substitution.c
+ANASRCS += tilde_exp.c
+ANASRCS += word_parameter.c
 
 ## EVAL ##
 
@@ -163,7 +160,6 @@ SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
-SRC += $(addprefix exp/,$(EXPSRCS))
 SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
@@ -175,7 +171,6 @@ OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
-OPATHS += $(OPATH)exp
 OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator

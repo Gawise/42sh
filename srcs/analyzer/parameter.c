@@ -2,7 +2,6 @@
 #include "libft.h"
 #include "sh.h"
 
-#include <stdio.h>
 int	simple_param_exp(t_exp *exp, char **str)
 {
 	char	*param;
@@ -35,13 +34,11 @@ int	param_dispatch(t_exp *exp, char **str)
 {
 	if (**str == '$' && exp->quote != 1 && *(*str + 1) == '{')
 	{
-		printf("entree rec str = [%s]\n", *str);
 		exp_flush_buf(exp, &exp->res);
 		return (rec_param_exp(exp, str));
 	}
 	else if (**str == '$' && exp->quote != 1)
 	{
-		printf("entree smp str = [%s]\n", *str);
 		exp_flush_buf(exp, &exp->res);
 		return (simple_param_exp(exp, str));
 	}
@@ -75,7 +72,6 @@ int	parse_param_exp(char **word, t_exp exp)
 		if (exp.bs)
 			exp.bs--;
 	}
-	printf("\nsortie while ret = %d\n", ret);
 	if (ret >= 0)
 	{
 		exp_flush_buf(&exp, &exp.res);
