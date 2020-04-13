@@ -80,7 +80,7 @@ int		analyzer_routine(t_parser *parser)
 	if (parser->state != S_PARSER_SYNTAX_ERROR
 	&& !p_set_jobs_str(parser))
 		return (0);
-	p_make_args_tab(parser);
+	a_make_args_tab(parser);
 	a_remove_leading_tabs(parser);
 	return (1);
 }

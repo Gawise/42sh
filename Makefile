@@ -92,7 +92,8 @@ PARSRCS += state/table_start.c
 
 ## ANALYZER ##
 
-ANASRCS += args_tab.c
+ANASRCS += args_to_tab.c
+ANASRCS += make_args_tab.c
 ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c

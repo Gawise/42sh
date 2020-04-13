@@ -1,4 +1,4 @@
-#include "exp.h"
+#include "analyzer.h"
 #include "libft.h"
 
 int	word_dispatch(t_exp *exp, char **str, int *quote)
