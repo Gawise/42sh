@@ -54,6 +54,7 @@
 # define KILLED 8
 # define FAILED 16
 # define COMPLETED 32
+# define BACKGROUND 64
 
 
 /*		debug	*/
@@ -96,6 +97,7 @@ void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
 void		do_pipe(t_process *p);
 void		process_type(t_process *p);
 void		routine_clean_job(void *del, size_t u);
+void	del_struct_process(void *del, size_t u);
 
 
 #endif

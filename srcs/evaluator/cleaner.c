@@ -38,10 +38,16 @@ void	routine_clean_job(void *del, size_t u)
 	ft_bzero(j, u);
 }
 
+void	del_struct_job(void *del, size_t u)
+{
+	routine_clean_job(del, u);
+	free(del);
+}
+
 void	clean_cfg(t_cfg *shell)
 {
 	ft_lstdel(&shell->env, del_struct_tvar);
 	ft_lstdel(&shell->intern, del_struct_tvar);
-	ft_lstdel(&shell->job, routine_clean_job);
+	ft_lstdel(&shell->job, del_struct_job);
 	ft_bzero(shell, sizeof(t_cfg));
 }

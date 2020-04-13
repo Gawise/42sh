@@ -100,7 +100,7 @@ ANASRCS += heredoc.c
 ## EVAL ##
 
 EVALSRCS += launcher.c
-EVALSRCS += pipe.c
+EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
 EVALSRCS += cleaner.c
 EVALSRCS += constructor.c
@@ -114,7 +114,10 @@ EVALSRCS += setvar_add.c
 EVALSRCS += errors_handling.c
 
 
-## COMMUN TOOLS  ##
+## JOB CONTROL ##
+JBSRCS += tools_job.c
+
+## COMMON TOOLS  ##
 
 TOOLSRCS += path_errors.c
 TOOLSRCS += tools_path.c
@@ -132,6 +135,7 @@ BTSRCS += unsetenv.c
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
 INCLUDES += parser.h
@@ -139,15 +143,6 @@ INCLUDES += sh.h
 INCLUDES += struct.h
 INCLUDES += var.h
 
-## INCLUDES ##
-
-INCLUDES += exec.h
-INCLUDES += lexer.h
-INCLUDES += line_edition.h
-INCLUDES += parser.h
-INCLUDES += sh.h
-INCLUDES += struct.h
-INCLUDES += var.h
 
 ## DEBUG ##
 
@@ -162,6 +157,7 @@ SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix job_control/,$(JBSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
 SRC += $(addprefix tools/,$(TOOLSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
@@ -175,6 +171,7 @@ OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)job_control
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)debug

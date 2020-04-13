@@ -4,6 +4,7 @@
 #include "var.h"
 #include "ft_printf.h"
 #include "sh.h"
+#include "job_control.h"
 #include <unistd.h>
 
 #include <termios.h>
@@ -26,30 +27,6 @@ void	set_signal_child(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 }
-
-/*    plus besoin si strjoin valide avec stdarg
- *char		*ft_create_var_env(char **ctab, int len0, int len1)
- *{
- *    char	*dst;
- *
- *    if (!(dst = ft_strnew(len0 + len1 + 1)))
- *        exit(EXIT_FAILURE);
- *    ft_strcat(dst, ctab[0]);
- *    ft_strcat(dst, "=");
- *    ft_strcat(dst, ctab[1]);
- *    return (dst);
- *}
- */
-
-
-/*					    ^        										*/
-/*					    |        										*/
-/********************TOOOOLLLLLLLLLLLLLLLLS*******************************/
-
-
-
-
-
 
 static uint8_t		ft_echo(t_job *j, t_process *p)
 {
@@ -100,8 +77,9 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[Parent process] close error:");
-
+			perror("[Parent process] close error:"); ///perror
+	if (process->setup & ERROR)
+		process->status = FAILED; // pour bg
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
 		if (job->pgid == 0)
@@ -110,7 +88,7 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 	}
 	if (job->fg)// pour tous les process ?
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
-			perror("[PARENT PROCESS] error tcsetpgrp");
+			perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	ft_del_tab((void **)envp);
 	return (0);
 }
@@ -173,6 +151,32 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	return ;
 }
 
+int32_t	has_failed(void *process, void *compare)
+{
+	t_process	*p;
+	
+	p = process;
+	if (p->status == *((uint8_t *)(compare)))
+		return (1);
+	return (0);
+}
+
+// ft_lstdelif(&job->process, &compare, has_failed, del_struct_process);
+
+void	set_job_background(t_cfg *shell, t_job *job)
+{
+	t_job	jc;
+
+	job->status |= BACKGROUND;
+	shell->active_job++;
+	job->id = shell->active_job;
+	job->ret = 0;
+	ft_printf("[%d] %d\n", job->id, job->pgid);
+	ft_cpy_job(job, &jc);
+	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
+	ft_bzero(&jc, sizeof(t_job));
+}
+
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 {
 	char	*ret;
@@ -189,7 +193,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
 	else		//bg gerer son return pour cas particuler ? doit avoir un wait
-		return (0);
+		set_job_background(shell, job);
 	ret = ft_itoa(job->ret);
 	ft_setvar(&shell->intern, "$", ret);
 	ft_strdel(&ret);
@@ -198,6 +202,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
+	job->status |= RUNNING;
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);

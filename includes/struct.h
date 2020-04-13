@@ -20,6 +20,7 @@ typedef struct	s_cfg
 	t_list	*env;
 	t_list	*intern;
 	t_list	*job;
+	uint8_t		active_job;
 	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
 
@@ -259,6 +260,7 @@ typedef struct	s_process
 
 typedef struct	s_job
 {
+	uint8_t		id;					/* number job	*/
 	char		*cmd;		        /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
 	pid_t		pgid;               /* process group ID */

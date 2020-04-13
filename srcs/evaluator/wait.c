@@ -35,7 +35,21 @@ t_process	*find_process_by_pid(t_list *lst, pid_t child)
 	return (NULL);
 }
 
-static void		aplylyse_wstatus(t_process *p, int wstatus)
+t_process	*find_process_by_status(t_list *lst, uint8_t want)
+{
+	t_process *p;
+
+	while (lst)
+	{
+		p = lst->data;
+		if (p->status & want)
+			return (p);
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
+static uint8_t		aplylyse_wstatus(t_process *p, int wstatus)
 {
 	if (WIFEXITED(wstatus))
 	{
@@ -51,10 +65,12 @@ static void		aplylyse_wstatus(t_process *p, int wstatus)
 	{
 		p->status = STOPPED ; // anakyser en fonction du signal
 		p->ret = WSTOPSIG(wstatus);
+		return (1);
 	}
+	return (0);
 }
 
-static void		update_process(t_list *lst, pid_t child, int wstatus)
+static uint8_t	update_process(t_list *lst, pid_t child, int wstatus)
 {
 	t_process *p;
 
@@ -62,37 +78,41 @@ static void		update_process(t_list *lst, pid_t child, int wstatus)
 	return (aplylyse_wstatus(p, wstatus));
 }
 
-void		update_job(t_job *j)
+void		update_job(t_job *j, uint8_t stopped)
 {
 	t_list		*lst;
 
+	if (stopped)
+	{
+		j->ret = 128 + find_process_by_status(j->process, STOPPED)->ret;
+		call_jobcontroler(j);
+		return ;
+	}
 	lst = ft_lstgettail(j->process);
 	j->status = ((t_process *)(lst->data))->status;
 	if (j->status & (COMPLETED | FAILED))
 		j->ret = ((t_process *)(lst->data))->ret;
 	else if (j->status & KILLED)
 		j->ret = 128 + ((t_process*)(lst->data))->ret;
-	else if (j->status & STOPPED)
-	{
-		j->ret = 128 + ((t_process*)(lst->data))->ret;
-		call_jobcontroler(j);
-	}
 }
 
 void		wait_process(t_job *job)
 {
 	pid_t		pid_child;
-	int32_t			wstatus;
+	int32_t		wstatus;
+	uint8_t		stopped;
 
+	stopped = 0;
 	while (ft_lsthave(job->process, has_running))
 	{
 		wstatus = 0;
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
 			perror("[WAIT_PROCESS] error waitpid");
-		update_process(job->process, pid_child, wstatus);
+		if (update_process(job->process, pid_child, wstatus))
+			stopped = TRUE;
 	}
-	update_job(job);
+	update_job(job, stopped);
 
 
 

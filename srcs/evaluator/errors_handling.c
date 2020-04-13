@@ -14,7 +14,6 @@ uint8_t		process_errors_handling(t_process *p)
 	if (!p->cmd)
 		exit(EXIT_SUCCESS);
 	p->setup &= ~ERROR;
-	printf("p->cmd = %s\n", p->cmd);
 	if (p->setup & E_UNFOUND)
 		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
 	else if (p->setup & E_ISDIR)
@@ -40,7 +39,7 @@ uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t
 	if (!namesh)
 		namesh = NAME_SH;
 	p->ret = 1;
-	p->status = FAILED;
+	p->status |= FAILED;
 	if (fd)
 		ft_dprintf(STDERR_FILENO, "%s: %d: Bad file descriptor\n", namesh, fd);
 	else if (error & E_ISDIR)

@@ -89,7 +89,3 @@ void		create_lst_var(t_list **lst, char **tab)
 		i++;
 	}
 }
-
-
-/*rajouter une fonction pour del une var ? voir unsetenv*/
-
