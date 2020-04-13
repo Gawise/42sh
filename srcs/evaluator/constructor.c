@@ -20,6 +20,7 @@ void	cmd_to_process(t_list **lst, t_list *s_cmd)
 		process.std[2] = STDERR_FILENO;
 		process.status = WAITING;
 		process.redir = cmd->redir;
+		process.assign = cmd->assign;
 		ft_lst_push_back(lst, &process, sizeof(process));
 		s_cmd = s_cmd->next;
 	}

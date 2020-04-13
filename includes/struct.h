@@ -251,9 +251,10 @@ typedef struct	s_process
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
 	int8_t 		std[3];				/* stdin out err*/
-	uint32_t	setup;				/* info du process */
+	uint32_t	setup;				/* info of process */
 	t_list		*redir;				/* list of redirs */
-	t_list		*env;				/* VAR env  */
+	t_list		*env;				/* list of env  */
+	t_list		*assign;			/* list of assign */
 }				t_process;
 
 typedef struct	s_job

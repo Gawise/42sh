@@ -4,7 +4,57 @@
 #include "var.h"
 #include <unistd.h>
 
-void	do_pipe(t_process *p)
+static void		assign_for_unfound(t_cfg *shell, t_list *assignment)
+{
+	t_list			*tmp;
+	t_assignment	*assign;
+
+	while (assignment)
+	{
+		assign = assignment->data;
+		if ((tmp = find_var(shell->env, assign->var)))
+			ft_setvar(&tmp, assign->var, assign->val);
+		else
+			ft_setvar(&shell->intern, assign->var, assign->val);
+		assignment = assignment->next;
+	}
+}
+
+static void		assign_for_b_special(t_cfg *shell, t_process *p, t_list *assignment)
+{
+	t_assignment	*assign;
+
+	while (assignment)
+	{
+		assign = assignment->data;
+		ft_setvar(&p->env, assign->var, assign->var);
+		ft_setvar(&shell->env, assign->var, assign->var);
+		assignment = assignment->next;
+	}
+}
+
+void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
+{
+	t_assignment	*assign;
+
+	if (!assignment)
+		return ;
+	if (p->setup & E_UNFOUND)
+		assign_for_unfound(shell, assignment);
+	else if (p->setup & B_SPECIAL)
+		assign_for_b_special(shell, p, assignment);
+	else
+	{
+		while (assignment)
+		{
+			assign = assignment->data;
+			ft_setvar(&p->env, assign->var, assign->var);
+			assignment = assignment->next;
+		}
+	}
+}
+
+void			do_pipe(t_process *p)
 {
 	if (p->std[0] != STDIN_FILENO &&
 			p->std[0] != -1)
@@ -24,7 +74,7 @@ void	do_pipe(t_process *p)
 	}
 }
 
-void	routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
+void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 {
 	t_process	*manage;
 	t_list		*env;
@@ -39,7 +89,7 @@ void	routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 	if (!process->next)
 		return ;
 	if (pipe(fd->fd) == -1)
-		perror("pipe:");
+		perror("pipe:");      ///////////// perror 
 	manage->std[1] = fd->fd[1];
 	manage->setup += PIPE_ON;		/*Useless now    */
 	manage = process->next->data;

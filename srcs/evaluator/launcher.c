@@ -80,13 +80,14 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[7])(t_job *, t_process *);
 
+
 	tab_f[0] = ft_echo;
-	tab_f[1] = ft_exit;
-	tab_f[2] = ft_cd;
-	tab_f[3] = ft_env;
-	tab_f[4] = ft_setenv;
-	tab_f[5] = ft_unsetenv;
-	tab_f[6] = ft_hash;
+	tab_f[1] = ft_cd;
+	tab_f[2] = ft_env;
+	tab_f[3] = ft_setenv;
+	tab_f[4] = ft_unsetenv;
+	tab_f[5] = ft_hash;
+	tab_f[6] = ft_exit;
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else
@@ -155,9 +156,10 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-void	run_process(t_job *j, t_process *p)
+void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
+	process_assign(shell, p, p->assign);
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
 	{
 		process_redir(p, p->redir);
@@ -186,7 +188,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		tcsetpgrp(STDIN_FILENO, shell->pid);
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
-	else		//bg gerer son return pour cas particuler ? doit avoir un wait ?
+	else		//bg gerer son return pour cas particuler ? doit avoir un wait
 		return (0);
 	ret = ft_itoa(job->ret);
 	ft_setvar(&shell->intern, "$", ret);
@@ -199,7 +201,7 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);
-		run_process(job, process->data);
+		run_process(shell, job, process->data);
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)

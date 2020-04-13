@@ -4,8 +4,10 @@
 #include "var.h"
 #include "sh.h"
 
-static int			builtin_search(t_process *p)
+static uint32_t			builtin_search(t_process *p)
 {
+	if (!p->cmd)
+		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
 		return (p->setup |= B_ECHO);
 	if (!ft_strcmp(p->cmd, "setenv"))
@@ -27,15 +29,10 @@ static uint16_t		find_type(t_list *env, t_process *p)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
-	/*
-	 *-> if utility {}
-	 *-> if function {}
-	 */
 	else if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);
-
 	return (SUCCESS);
 }
 

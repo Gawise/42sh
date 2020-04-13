@@ -8,11 +8,13 @@ uint8_t		process_errors_handling(t_process *p)
 	char	*namesh;
 
 	if (!(namesh = find_var_value(cfg_shell()->intern, "PS1")))
-		namesh = "\0";
-	/* faire tableau avec hash*/
+		namesh = NAME_SH;
 	if (!(p->setup & ERROR))
 		return (SUCCESS);
+	if (!p->cmd)
+		exit(EXIT_SUCCESS);
 	p->setup &= ~ERROR;
+	printf("p->cmd = %s\n", p->cmd);
 	if (p->setup & E_UNFOUND)
 		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
 	else if (p->setup & E_ISDIR)
@@ -36,7 +38,7 @@ uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t
 	error &= ~ERROR;
 	namesh = find_var_value((cfg_shell())->intern, "PS1");
 	if (!namesh)
-		namesh = "21sh";
+		namesh = NAME_SH;
 	p->ret = 1;
 	p->status = FAILED;
 	if (fd)
