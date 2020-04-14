@@ -48,5 +48,7 @@ void	clean_cfg(t_cfg *shell)
 	ft_lstdel(&shell->env, del_struct_tvar);
 	ft_lstdel(&shell->intern, del_struct_tvar);
 	ft_lstdel(&shell->job, del_struct_job);
+	if (shell->debug > 2)
+		close(shell->debug);
 	ft_bzero(shell, sizeof(t_cfg));
 }

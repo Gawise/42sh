@@ -19,8 +19,8 @@ void	ex(char *s); //pour la gestion des erreurs amenant a quiter
 void		ft_ex(char *error);
 void		clean_cfg(t_cfg *shell);
 void		set_signal_ign(void);
-uint8_t		init_shell(char **env, char **av);
-t_cfg		*init_cfg(char **env, char **av);
+void		init_shell(char **env, char **av, int ac);
+t_cfg		*init_cfg(char **env, char **av, int ac);
 t_cfg		*cfg_shell(void);
 
 /*	COMMON TOOLS */

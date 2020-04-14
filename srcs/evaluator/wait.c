@@ -113,27 +113,8 @@ void		wait_process(t_job *job)
 			stopped = TRUE;
 	}
 	update_job(job, stopped);
-
-
-
-
-	/* DEBUG  */
-	t_cfg *shell = cfg_shell();
-	if (shell->debug)
-	{
-		t_process *process;
-		t_list *j = job->process;
-		printf("\n\n ----------------------\n--> [INFO PROCESS] \n");
-		while (j)
-		{
-			process = j->data;
-			printf("path = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
-			j = j->next;
-		}
-		printf("--> [INFO JOB] \n");
-		printf("\tJOB status = [%d]\t  JOB return = [%d]\n ----------------------\n\n", job->status, job->ret);
-	}
-	/*		*/
+	if (cfg_shell()->debug)
+		debug_print_all(job, job->process, "wait ending");
 	return ;
 }
 

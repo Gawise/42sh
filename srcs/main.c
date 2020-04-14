@@ -91,8 +91,7 @@ int		main(int ac, char **av, char **env)
 	t_lexer		lexer;
 	t_parser	parser;
 
-	init_shell(env, av);
-	(void)ac;
+	init_shell(env, av, ac);
 	while (1)
 	{
 		if ((ret = line_edition_routine(&line)) <= 0
@@ -108,6 +107,7 @@ int		main(int ac, char **av, char **env)
 			}
 		}
 	}
+	clean_cfg(cfg_shell());
 	exit(0);
 	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }
