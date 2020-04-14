@@ -111,6 +111,7 @@ EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
 EVALSRCS += errors_handling.c
+EVALSRCS += debug.c
 
 ## JOB CONTROL ##
 

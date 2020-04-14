@@ -60,10 +60,10 @@ uint8_t		ft_eval(t_list *cmd_table)
 
 	shell = cfg_shell();
 	if (shell->debug)
-		ft_printf("\n\n----------- eval -----------\n\n\n\n");
+		ft_dprintf(shell->debug, "\n\n--------- EVAL ----------\n\n");
 	set_signal_ign();
 	lvl_cmd_table(shell, cmd_table);
 	if (shell->debug)
-		ft_printf("----------- eval -----------\n\n");
+		ft_dprintf(shell->debug, "---------- EVAL ----------\n\n");
 	return (0);
 }

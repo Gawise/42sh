@@ -100,5 +100,7 @@ void		process_type(t_process *p);
 void		routine_clean_job(void *del, size_t u);
 void	del_struct_process(void *del, size_t u);
 
+/*		DEBUG */
+void	debug_print_all(t_job *j, t_list *process, char *where);
 
 #endif

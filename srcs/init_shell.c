@@ -13,10 +13,8 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 {
 	if (cfg && (cfg->interactive = isatty(tty)))
 	{
-/*		if (!(cfg->term_origin = malloc(sizeof(struct termios))))
-			ft_ex("[Fatal Error] MALLOC\nexit\n"); */
 		if ((tcgetattr(tty, &cfg->term_origin) == FALSE))
-			perror("[TERM ORIGIN] ERROR TCGETATTR");
+			perror("[TERM ORIGIN] ERROR TCGETATTR"); ///perror
 		return (1);
 	}
 	return (0);
@@ -32,7 +30,6 @@ void		set_signal_ign(void)
 //	signal(SIGCHLD, SIG_IGN); //for job control
 }
 
-
 t_cfg		*cfg_shell(void)
 {
 	static t_cfg shell;
@@ -41,7 +38,7 @@ t_cfg		*cfg_shell(void)
 }
 
 
-uint8_t		init_shell(char **env, char **av)
+void		init_shell(char **env, char **av, int ac)
 {
 	uint8_t		shell_terminal;
 	pid_t		shell_pgid;
@@ -50,7 +47,7 @@ uint8_t		init_shell(char **env, char **av)
 
 	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
 		ft_ex("file descriptor stdin close\nbad file descriptor\nexit");
-	shell = init_cfg(env, av);
+	shell = init_cfg(env, av, ac);
 	if (check_terminal(shell, shell_terminal))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
@@ -61,5 +58,4 @@ uint8_t		init_shell(char **env, char **av)
 		if (tcsetpgrp(shell_terminal, shell->pid))
 			perror("[INIT SHELL] error tcsetpgrp");
 	}
-	return (shell->debug);
 }

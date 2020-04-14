@@ -95,6 +95,8 @@ uint8_t			ft_env(t_job *j, t_process *p)
 		routine_clean_job(j_cpy, sizeof(t_job));
 		ft_memdel((void **)&j_cpy);
 	}
+	if (shell_cpy.debug)
+		shell_cpy.debug = 1;
 	clean_cfg(&shell_cpy);
 	return (ret);
 }
