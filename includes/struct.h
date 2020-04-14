@@ -14,13 +14,14 @@ typedef struct s_hash_map	t_hash_map;
 
 typedef struct	s_cfg
 {
-	struct termios	*term_origin;      /* origin terminal modes */
-	uint8_t 	interactive;		/*True Or False*/
-	pid_t		pid;				/* pid's 21	*/
-	t_list		*env;
-	t_list		*intern;
-	t_list		*job;
-	t_hash_map	*map;
+	struct termios	term_origin;      /* origin terminal modes */
+	uint8_t 		interactive;		/*True Or False*/
+	pid_t			pid;				/* pid's 21	*/
+	t_list			*env;
+	t_list			*intern;
+	t_list			*job;
+	t_hash_map		*map;
+	uint8_t			active_job;
 	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
 
@@ -252,13 +253,15 @@ typedef struct	s_process
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
 	int8_t 		std[3];				/* stdin out err*/
-	uint32_t	setup;				/* info du process */
+	uint32_t	setup;				/* info of process */
 	t_list		*redir;				/* list of redirs */
-	t_list		*env;				/* VAR env  */
+	t_list		*env;				/* list of env  */
+	t_list		*assign;			/* list of assign */
 }				t_process;
 
 typedef struct	s_job
 {
+	uint8_t		id;					/* number job	*/
 	char		*cmd;		        /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
 	pid_t		pgid;               /* process group ID */
@@ -266,7 +269,7 @@ typedef struct	s_job
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
-	uint8_t		std[3];				/* stdin out err*/
+	int8_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 

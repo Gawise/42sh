@@ -4,31 +4,16 @@
 #include "var.h"
 #include "ft_printf.h"
 #include "sh.h"
+#include "job_control.h"
 #include <unistd.h>
+
+#include <termios.h>
 
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
-#include <signal.h>
-void	sig(int i)
-{
-	printf("sig detect = [%d]\n", i);
-}
 
 #include "sh.h"
-void	signal_debug_printf(void)
-{
-	signal(SIGHUP, sig);
-	signal(SIGINT, sig);
-	signal(SIGQUIT, sig);
-	signal(SIGPIPE, sig);
-	signal(SIGCHLD, sig);
-	signal(SIGTSTP, sig);
-	signal(SIGTSTP, sig);
-	signal(SIGCONT, sig);
-	signal(SIGTTIN, sig);
-	signal(SIGTTOU, sig);
-}
 
 void	set_signal_child(void)
 {
@@ -42,35 +27,6 @@ void	set_signal_child(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 }
-
-/*    plus besoin si strjoin valide avec stdarg
- *char		*ft_create_var_env(char **ctab, int len0, int len1)
- *{
- *    char	*dst;
- *
- *    if (!(dst = ft_strnew(len0 + len1 + 1)))
- *        exit(EXIT_FAILURE);
- *    ft_strcat(dst, ctab[0]);
- *    ft_strcat(dst, "=");
- *    ft_strcat(dst, ctab[1]);
- *    return (dst);
- *}
- */
-
-
-/*					    ^        										*/
-/*					    |        										*/
-/********************TOOOOLLLLLLLLLLLLLLLLS*******************************/
-
-
-
-
-void		set_termios(struct termios *term)
-{
-	if (tcsetattr(STDIN_FILENO, TCSADRAIN, term) == -1)
-		perror("[RUN JOB] error tcsetattr");
-}
-
 
 static uint8_t		ft_echo(t_job *j, t_process *p)
 {
@@ -92,13 +48,14 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[7])(t_job *, t_process *);
 
+
 	tab_f[0] = ft_echo;
-	tab_f[1] = ft_exit;
-	tab_f[2] = ft_cd;
-	tab_f[3] = ft_env;
-	tab_f[4] = ft_setenv;
-	tab_f[5] = ft_unsetenv;
-	tab_f[6] = ft_hash;
+	tab_f[1] = ft_cd;
+	tab_f[2] = ft_env;
+	tab_f[3] = ft_setenv;
+	tab_f[4] = ft_unsetenv;
+	tab_f[5] = ft_hash;
+	tab_f[6] = ft_exit;
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else
@@ -106,43 +63,23 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-uint8_t		error_handling(t_process *p)
-{
-	char	*namesh;
-
-	if (!(namesh = find_var_value(cfg_shell()->intern, "PS1")))
-		namesh = "\0";
-	/* faire tableau avec hash*/
-	if (!(p->setup & ERROR))
-		return (SUCCESS);
-	p->setup &= ~ERROR;
-	if (p->setup & E_UNFOUND)
-		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
-	else if (p->setup & E_ISDIR)
-		ft_dprintf(2, "%s: %s: is a directory\n", namesh, p->path );
-	else if (p->setup & E_NOENT)
-		ft_dprintf(2, "%s: %s: No such file or directory\n", namesh, p->path);
-	else if (p->setup & E_ACCES)
-		ft_dprintf(2, "%s: %s: Permission denied\n", namesh, p->path);
-	else if (p->setup & E_LOOP)
-		ft_dprintf(2, "%s: %s: Too many links\n", namesh, p->path);
-	else if (p->setup & E_NTL)
-		ft_dprintf(2, "%s: %s: File name too long\n", namesh, p->path);
-	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
-	exit(p->ret);
-}
 
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[Parent process] close error:");
-	if (job->pgid == 0)
-		job->pgid = process->pid;
-	setpgid(process->pid, job->pgid);
-	if (job->fg)
+			perror("[Parent process] close error:"); ///perror
+	if (process->setup & ERROR)
+		process->status = FAILED; // pour bg
+	if (cfg_shell()->interactive) //singelton obliger?
+	{
+		if (job->pgid == 0)
+			job->pgid = process->pid;
+		setpgid(process->pid, job->pgid);
+	}
+	if (job->fg)// pour tous les process ?
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
-			perror("[PARENT PROCESS] error tcsetpgrp");
+			perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	ft_del_tab((void **)envp);
 	return (0);
 }
@@ -153,16 +90,19 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (close(fd_pipe) == -1)
 			perror("[child process] close error:");
 	p->pid = getpid();
-	if (job->pgid == 0)
-		job->pgid = p->pid;
-	setpgid(p->pid, job->pgid);
+	if (cfg_shell()->interactive) //singelton obliger?
+	{
+		if (job->pgid == 0)
+			job->pgid = p->pid;
+		setpgid(p->pid, job->pgid);
+		set_signal_child();
+	}
 	if (job->fg)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
 	process_redir(p, p->redir);
-	set_signal_child();
-	error_handling(p);
+	process_errors_handling(p);
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
@@ -185,9 +125,10 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-void	run_process(t_job *j, t_process *p)
+void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
+	process_assign(shell, p, p->assign);
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
 	{
 		process_redir(p, p->redir);
@@ -201,33 +142,66 @@ void	run_process(t_job *j, t_process *p)
 	return ;
 }
 
-int		run_job(t_cfg *shell, t_job *job, t_list *process)
+int32_t	has_failed(void *process, void *compare)
 {
+	t_process	*p;
+	
+	p = process;
+	if (p->status == *((uint8_t *)(compare)))
+		return (1);
+	return (0);
+}
+
+// ft_lstdelif(&job->process, &compare, has_failed, del_struct_process);
+
+void	set_job_background(t_cfg *shell, t_job *job)
+{
+	t_job	jc;
+
+	job->status |= BACKGROUND;
+	shell->active_job++;
+	job->id = shell->active_job;
+	job->ret = 0;
+	ft_printf("[%d] %d\n", job->id, job->pgid);
+	ft_cpy_job(job, &jc);
+	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
+	ft_bzero(&jc, sizeof(t_job));
+}
+
+uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
+{
+	char	*ret;
+
+	if (!shell->interactive)
+	{
+		wait_process(job);
+	}
+	else if (job->fg)
+	{
+	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */
+		wait_process(job);
+		tcsetpgrp(STDIN_FILENO, shell->pid);
+		set_termios(TCSADRAIN, &shell->term_origin);
+	}
+	else
+		set_job_background(shell, job);
+	ret = ft_itoa(job->ret);
+	ft_setvar(&shell->intern, "$", ret);
+	ft_strdel(&ret);
+	return (job->ret);
+}
+
+uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
+{
+	job->status |= RUNNING;
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);
-		run_process(job, process->data);
+		run_process(shell, job, process->data);
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				perror("[check and do pipe] close error:");
+				perror("[check and do pipe] close error:");  //perror
 	}
-	if (job->fg)
-	{
-		wait_process(job);
-		if (tcsetpgrp(STDIN_FILENO, shell->pid) == -1)
-			perror("[run job] error tcsetpgrp");
-		set_termios(shell->term_origin);
-	}
-
-	/*
-	 *   if (!shell_is_interactive)
-	 wait_for_job (j);
-	 else if (foreground)
-	 put_job_in_foreground (j, 0);
-	 else
-	 put_job_in_background (j, 0);
-https://www.gnu.org/software/libc/manual/html_node/Stopped-and-Terminated-Jobs.html#Stopped-and-Terminated-Jobs
-*/
-	return (0);
+	return (routine_ending_job(shell, job));
 }

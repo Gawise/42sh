@@ -100,30 +100,42 @@ ANASRCS += heredoc.c
 ## EVAL ##
 
 EVALSRCS += launcher.c
-EVALSRCS += pipe.c
+EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_var.c
-EVALSRCS += env.c
-EVALSRCS += setenv.c
-EVALSRCS += unsetenv.c
 EVALSRCS += cleaner.c
-EVALSRCS += building_struct.c
+EVALSRCS += constructor.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
-EVALSRCS += path_err.c
-EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
+EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
+EVALSRCS += tools_termios.c
+EVALSRCS += errors_handling.c
+
+## JOB CONTROL ##
+
+JBSRCS += tools_job.c
+
+## COMMON TOOLS  ##
+
+TOOLSRCS += path_errors.c
+TOOLSRCS += tools_path.c
+TOOLSRCS += setvar_add.c
+TOOLSRCS += tools_var.c
 
 ## BUILTIN ##
 
 BTSRCS += exit.c
 BTSRCS += hash.c
+BTSRCS += env.c
+BTSRCS += setenv.c
+BTSRCS += unsetenv.c
 
 ## INCLUDES ##
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
 INCLUDES += parser.h
@@ -131,15 +143,6 @@ INCLUDES += sh.h
 INCLUDES += struct.h
 INCLUDES += var.h
 
-## INCLUDES ##
-
-INCLUDES += exec.h
-INCLUDES += lexer.h
-INCLUDES += line_edition.h
-INCLUDES += parser.h
-INCLUDES += sh.h
-INCLUDES += struct.h
-INCLUDES += var.h
 
 ## DEBUG ##
 
@@ -154,7 +157,9 @@ SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix job_control/,$(JBSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
+SRC += $(addprefix tools/,$(TOOLSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
 
@@ -168,6 +173,8 @@ OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)tools
+OPATHS += $(OPATH)job_control
 
 CC = clang
 COMPILE = $(CC) -c

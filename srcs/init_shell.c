@@ -13,9 +13,9 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 {
 	if (cfg && (cfg->interactive = isatty(tty)))
 	{
-		if (!(cfg->term_origin = malloc(sizeof(struct termios))))
-			ft_ex("[Fatal Error] MALLOC\nexit\n");
-		if ((tcgetattr(tty, cfg->term_origin) == FALSE))
+/*		if (!(cfg->term_origin = malloc(sizeof(struct termios))))
+			ft_ex("[Fatal Error] MALLOC\nexit\n"); */
+		if ((tcgetattr(tty, &cfg->term_origin) == FALSE))
 			perror("[TERM ORIGIN] ERROR TCGETATTR");
 		return (1);
 	}

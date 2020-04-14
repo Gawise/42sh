@@ -4,7 +4,6 @@
 #include "var.h"
 
 
-
 static void	set_var_intern(t_cfg *shell)
 {
 	char	*pid;
