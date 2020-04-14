@@ -11,7 +11,6 @@ void	del_struct_tvar(void *del, size_t u)
 	free(v);
 }
 
-
 void	del_struct_process(void *del, size_t u)
 {
 	t_process *p;

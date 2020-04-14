@@ -110,7 +110,6 @@ EVALSRCS += redir.c
 EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
-EVALSRCS += setvar_add.c
 EVALSRCS += errors_handling.c
 
 
@@ -121,6 +120,8 @@ JBSRCS += tools_job.c
 
 TOOLSRCS += path_errors.c
 TOOLSRCS += tools_path.c
+TOOLSRCS += setvar_add.c
+TOOLSRCS += tools_var.c
 
 
 ## BUILTIN ##

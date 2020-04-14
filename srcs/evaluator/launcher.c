@@ -192,7 +192,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		tcsetpgrp(STDIN_FILENO, shell->pid);
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
-	else		//bg gerer son return pour cas particuler ? doit avoir un wait
+	else
 		set_job_background(shell, job);
 	ret = ft_itoa(job->ret);
 	ft_setvar(&shell->intern, "$", ret);
