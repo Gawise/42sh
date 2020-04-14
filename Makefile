@@ -112,8 +112,8 @@ EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
 EVALSRCS += errors_handling.c
 
-
 ## JOB CONTROL ##
+
 JBSRCS += tools_job.c
 
 ## COMMON TOOLS  ##
@@ -123,14 +123,13 @@ TOOLSRCS += tools_path.c
 TOOLSRCS += setvar_add.c
 TOOLSRCS += tools_var.c
 
-
 ## BUILTIN ##
 
 BTSRCS += exit.c
+BTSRCS += hash.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
-
 
 ## INCLUDES ##
 
@@ -172,10 +171,10 @@ OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
 OPATHS += $(OPATH)evaluator
-OPATHS += $(OPATH)job_control
 OPATHS += $(OPATH)builtins
-OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)tools
+OPATHS += $(OPATH)job_control
 
 CC = clang
 COMPILE = $(CC) -c
