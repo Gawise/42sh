@@ -123,6 +123,7 @@ TOOLSRCS += path_errors.c
 TOOLSRCS += tools_path.c
 TOOLSRCS += setvar_add.c
 TOOLSRCS += tools_var.c
+TOOLSRCS += all_signal.c
 
 ## BUILTIN ##
 

@@ -14,8 +14,6 @@
 
 typedef struct	s_cfg t_cfg;
 
-void	ex(char *s); //pour la gestion des erreurs amenant a quiter
-
 void		ft_ex(char *error);
 void		clean_cfg(t_cfg *shell);
 void		set_signal_ign(void);
@@ -29,5 +27,12 @@ uint8_t		c_enametoolong(char *path);
 uint8_t		c_isdir(char *path);
 char		*create_abs_path(char *s);
 uint32_t	check_access(char *path, int right);
+
+
+
+
+/*		SIGNAL  */
+void		set_signal_child(void);
+void		set_signal_ign(void);
 
 #endif

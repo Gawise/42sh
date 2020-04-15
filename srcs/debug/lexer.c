@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
+#include "sh.h"
 
 char	*escape_nl(char *src)
 {
@@ -49,7 +50,7 @@ void	print_debug(t_list *elem)
 		str = ft_strdup("ASSIGNMENT_WORD");
 	if (token->type == NEWLINE)
 	{
-		ft_printf("str=%10.10s\ttype= %15s\n", "\\n", "NEWLINE");
+		ft_dprintf(cfg_shell()->debug, "str=%10.10s\ttype= %15s\n", "\\n", "NEWLINE");
 		return ;
 	}
 	if (token->type == IO_NUMBER)
@@ -78,7 +79,8 @@ void	print_debug(t_list *elem)
 		str = ft_strdup("GREATAND");
 	if (token->type == DLESSDASH)
 		str = ft_strdup("DLESSDASH");
-	ft_printf("str=%30s\ttype= %15s\t%p\n", escape_nl(token->str), str, token);
+	ft_dprintf(cfg_shell()->debug, "str=%30s\ttype= %15s\t%p\n", escape_nl(token->str), str, token);
+	ft_strdel(&str);
 }
 
 void	print_flag_queue(t_list *elem)
