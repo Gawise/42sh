@@ -15,18 +15,6 @@
 
 #include "sh.h"
 
-void	set_signal_child(void)
-{
-	signal(SIGHUP, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGPIPE, SIG_DFL);
-	signal(SIGCHLD, SIG_DFL);
-	signal(SIGTSTP, SIG_DFL);
-	signal(SIGCONT, SIG_DFL);
-	signal(SIGTTIN, SIG_DFL);
-	signal(SIGTTOU, SIG_DFL);
-}
 
 static uint8_t		ft_echo(t_job *j, t_process *p)
 {
@@ -142,18 +130,6 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	return ;
 }
 
-int32_t	has_failed(void *process, void *compare)
-{
-	t_process	*p;
-	
-	p = process;
-	if (p->status == *((uint8_t *)(compare)))
-		return (1);
-	return (0);
-}
-
-// ft_lstdelif(&job->process, &compare, has_failed, del_struct_process);
-
 void	set_job_background(t_cfg *shell, t_job *job)
 {
 	t_job	jc;
@@ -166,6 +142,8 @@ void	set_job_background(t_cfg *shell, t_job *job)
 	ft_cpy_job(job, &jc);
 	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
 	ft_bzero(&jc, sizeof(t_job));
+	if (shell->debug)
+		debug_print_all(job, job->process, "BackGround ending");
 }
 
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)

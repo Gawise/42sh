@@ -4,7 +4,7 @@
 #include "var.h"
 #include "ft_printf.h"
 
-static void	set_var_intern(t_cfg *shell)
+static void		set_var_intern(t_cfg *shell)
 {
 	char	*pid;
 
@@ -46,7 +46,7 @@ static uint8_t		set_debug(char **av)
 	return (fd);
 }
 
-t_cfg		*init_cfg(char **env, char **av, int ac)
+t_cfg			*init_cfg(char **env, char **av, int ac)
 {
 	t_cfg	*shell;
 

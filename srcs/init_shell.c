@@ -6,7 +6,6 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-#include <signal.h>
 #include <sys/stat.h>
 
 static int	check_terminal(t_cfg *cfg, uint8_t tty)
@@ -18,16 +17,6 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 		return (1);
 	}
 	return (0);
-}
-
-void		set_signal_ign(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-//	signal(SIGCHLD, SIG_IGN); //for job control
 }
 
 t_cfg		*cfg_shell(void)

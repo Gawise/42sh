@@ -16,11 +16,11 @@ void	debug_print_all(t_job *j, t_list *process, char *where)
 		p = process->data;
 		ft_dprintf(shell->debug, "CMD = [%s]\tPATH = [%s]\n", p->cmd, p->path);
 		ft_dprintf(shell->debug, "SETUP = [%032b]\n", p->setup);
-		ft_dprintf(shell->debug, "STATUS = [%08b]\n", p->status);
+		ft_dprintf(shell->debug, "STATUS = [%d]\n", p->status);
 		process = process->next;
 	}
 	ft_dprintf(shell->debug, "\t[JOB]\n");
 	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
-	ft_dprintf(shell->debug, "STATUS = [%08b]\tRET = [%d]\n", j->status, j->ret);
+	ft_dprintf(shell->debug, "STATUS = [%d]\tRET = [%d]\n", j->status, j->ret);
 	ft_dprintf(shell->debug, "-----------\n", where);
 }

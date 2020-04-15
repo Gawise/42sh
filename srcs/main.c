@@ -39,7 +39,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 int		parser_routine(t_lexer *lexer,t_parser *parser)
 {
 	if (cfg_shell()->debug)
-		ft_printf("\n----------- parsing -----------\n\n");
+		ft_dprintf(cfg_shell()->debug, "\n----------- parsing -----------\n\n");
 	init_parser(parser);
 	if (!ft_parser(lexer, parser)
 	|| (parser->state == S_PARSER_TABLE_START
