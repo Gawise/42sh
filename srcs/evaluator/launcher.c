@@ -94,7 +94,7 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
-		ft_ex("[Fatal Error] EXECVE\nexit\n");
+		ft_ex(EXEXEC);
 	exit(1);
 }
 

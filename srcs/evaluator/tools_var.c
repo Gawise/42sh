@@ -30,7 +30,7 @@ char		**create_tab_var(t_list *lst, int count)
 	{
 		count++;
 		if (!(tab = (char **)malloc(sizeof(char *) * (count + 1))))
-			ft_ex("[Fatal Error] MALLOC\nexit\n");
+			ft_ex(EXMALLOC);
 		tab[count] = NULL;
 	}
 	count--;

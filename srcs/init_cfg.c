@@ -56,6 +56,8 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	create_lst_var(&shell->env, env);
 	ft_setvar(&shell->env, "PROJECT", "21sh");
 	set_var_intern(shell);
+	if (!(shell->map = ft_hash_init(128)))
+		ft_ex(EXMALLOC);
 	if (ac > 1)
 		shell->debug = set_debug(av);
 	return (shell);
