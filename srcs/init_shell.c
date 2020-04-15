@@ -35,7 +35,7 @@ void		init_shell(char **env, char **av, int ac)
 	struct stat	stat;
 
 	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
-		ft_ex("file descriptor stdin close\nbad file descriptor\nexit");
+		ft_ex(EXFD);
 	shell = init_cfg(env, av, ac);
 	if (check_terminal(shell, shell_terminal))
 	{
@@ -43,8 +43,8 @@ void		init_shell(char **env, char **av, int ac)
 			kill(-shell_pgid, SIGTTIN);
 		set_signal_ign();
 		if (setpgid(shell->pid, shell->pid) < 0)
-			perror("[INIT SHELL] error setpgid");
+			perror("[INIT SHELL] error setpgid");  //perror
 		if (tcsetpgrp(shell_terminal, shell->pid))
-			perror("[INIT SHELL] error tcsetpgrp");
+			perror("[INIT SHELL] error tcsetpgrp"); //perror
 	}
 }

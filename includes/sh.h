@@ -10,6 +10,11 @@
 # define COLOR_SH "\e[0;32m"
 # define COLOR_SUBPROMPT "\e[0;31m"
 
+# define EX "[Critical Error]\nexit\n"
+# define EXMALLOC "[Critical Error] Cannot allocate memory\nexit\n"
+# define EXEXEC "[Critical Error] Execve fail\nexit\n"
+# define EXFD "[Critical Error] Bad file descriptor\nexit\n"
+
 # include <stdint.h>
 
 typedef struct	s_cfg t_cfg;
