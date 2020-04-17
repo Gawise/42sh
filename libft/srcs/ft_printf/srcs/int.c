@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:20:47 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/19 21:02:04 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:10:21 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ static intmax_t		get_int_val(t_printf *data)
 {
 	intmax_t	val;
 
-	if (CH_L(data->flags))
+	if (data->flags & (1 << 9))
 		val = (intmax_t)(va_arg(data->ap, long));
-	else if (CH_LL(data->flags))
+	else if (data->flags & (1 << 10))
 		val = (intmax_t)va_arg(data->ap, long long);
-	else if (CH_Z(data->flags))
+	else if (data->flags & (1 << 13))
 		val = (intmax_t)va_arg(data->ap, ssize_t);
-	else if (CH_J(data->flags))
+	else if (data->flags & (1 << 14))
 		val = va_arg(data->ap, intmax_t);
-	else if (CH_H(data->flags))
+	else if (data->flags & (1 << 7))
 		val = (intmax_t)((short int)va_arg(data->ap, int));
-	else if (CH_HH(data->flags))
+	else if (data->flags & (1 << 8))
 		val = (intmax_t)((char)va_arg(data->ap, int));
 	else
 		val = (intmax_t)va_arg(data->ap, int);
-	if (CH_ZERO(data->flags))
+	if (data->flags & (1 << 1))
 		data->prec = data->width;
 	return (val);
 }
@@ -41,9 +41,9 @@ static void			add_prefix(t_printf *data, intmax_t tmp,
 	add_pad(data, 0);
 	val = (tmp < 0) ? -tmp : tmp;
 	xtoa_base(val, 10, s, data);
-	CH_SPACE(data->flags) ? s[0] = ' ' : 0;
+	data->flags & (1 << 3) ? s[0] = ' ' : 0;
 	(tmp < 0) ? s[0] = '-' : 0;
-	(CH_PLUS(data->flags) && tmp >= 0) ? s[0] = '+' : 0;
+	(data->flags & (1 << 4) && tmp >= 0) ? s[0] = '+' : 0;
 }
 
 void				conv_int(t_printf *data)
@@ -55,17 +55,17 @@ void				conv_int(t_printf *data)
 
 	tmp = get_int_val(data);
 	val = (tmp < 0) ? -tmp : tmp;
-	len = (!tmp && !CH_PGIVEN(data->flags)) ? 1 : 0;
+	len = (!tmp && !(data->flags & (1 << 15))) ? 1 : 0;
 	while (val)
 	{
 		val /= 10;
 		len++;
 	}
-	if ((tmp < 0 || CH_PLUS(data->flags) || CH_SPACE(data->flags))
-	&& CH_ZERO(data->flags))
+	if ((tmp < 0 || data->flags & (1 << 4) || data->flags & (1 << 3))
+	&& data->flags & (1 << 1))
 		(data->prec)--;
 	data->printed = (len > data->prec) ? len : data->prec;
-	(tmp < 0 || CH_PLUS(data->flags) || CH_SPACE(data->flags))
+	(tmp < 0 || data->flags & (1 << 4) || data->flags & (1 << 3))
 	? (data->printed)++ : 0;
 	data->pad = (data->printed > data->width) ? 0 : data->width - data->printed;
 	add_prefix(data, tmp, val, s);

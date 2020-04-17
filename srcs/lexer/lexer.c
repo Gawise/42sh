@@ -5,7 +5,7 @@
 
 int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 {
-	char	c;
+	char			c;
 	t_lexer_flag	flag;
 
 	while ((c = l_get_char(lexer)))
@@ -16,10 +16,10 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 		if (cfg_shell()->debug)
 		{
 			if (c == '\n')
-				ft_printf("->\t%s\t%20s\t%s\n\n",
+				ft_dprintf(cfg_shell()->debug, "->\t%s\t%20s\t%s\n\n",
 						"\\n", get_state_str(lexer), get_flag_name(flag));
 			else
-				ft_printf("->\t%c\t%20s\t%s\n",
+				ft_dprintf(cfg_shell()->debug, "->\t%c\t%20s\t%s\n",
 						c, get_state_str(lexer), get_flag_name(flag));
 		}
 	}

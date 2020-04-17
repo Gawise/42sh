@@ -9,7 +9,6 @@ int	l_build_newline(t_lexer *lexer, char c)
 		lexer->state = S_HD_BODY;
 		lexer->curr_here = lexer->here_queue->data;
 		lexer->curr_token = lexer->curr_here->token;
-		//ft_printf("coucou token %p dans here %p\n", lexer->curr_here->token, lexer->curr_here);
 		return (1);
 	}
 	else if (!l_create_token(lexer))

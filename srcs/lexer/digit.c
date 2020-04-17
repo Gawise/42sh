@@ -2,7 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 
-int	l_delim_digit(t_lexer *lexer, char c)	
+int	l_delim_digit(t_lexer *lexer, char c)
 {
 	l_delim_token(lexer, c);
 	l_build_digit(lexer, c);

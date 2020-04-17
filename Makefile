@@ -92,48 +92,62 @@ PARSRCS += state/table_start.c
 
 ## ANALYZER ##
 
-ANASRCS += args_to_tab.c
-ANASRCS += make_args_tab.c
+ANASRCS += args_tab/args_to_tab.c
+ANASRCS += args_tab/make_args_tab.c
 ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
-ANASRCS += exp.c
-ANASRCS += exp_tools.c
-ANASRCS += parameter.c
-ANASRCS += param_recursive.c
-ANASRCS += param_resolve.c
-ANASRCS += param_substitution.c
-ANASRCS += tilde_exp.c
-ANASRCS += tilde_assign.c
-ANASRCS += word_parameter.c
+ANASRCS += exp/exp.c
+ANASRCS += exp/exp_tools.c
+ANASRCS += exp/parameter.c
+ANASRCS += exp/param_recursive.c
+ANASRCS += exp/param_resolve.c
+ANASRCS += exp/param_substitution.c
+ANASRCS += exp/tilde_exp.c
+ANASRCS += exp/tilde_assign.c
+ANASRCS += exp/word_parameter.c
 
 ## EVAL ##
 
 EVALSRCS += launcher.c
-EVALSRCS += pipe.c
+EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_var.c
-EVALSRCS += env.c
-EVALSRCS += setenv.c
-EVALSRCS += unsetenv.c
 EVALSRCS += cleaner.c
-EVALSRCS += building_struct.c
+EVALSRCS += constructor.c
 EVALSRCS += leveling.c
 EVALSRCS += wait.c
-EVALSRCS += path_err.c
-EVALSRCS += path_err_tools.c
 EVALSRCS += redir.c
+EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
+EVALSRCS += tools_termios.c
+EVALSRCS += errors_handling.c
+EVALSRCS += debug.c
+
+## JOB CONTROL ##
+
+JBSRCS += tools_job.c
+
+## COMMON TOOLS  ##
+
+TOOLSRCS += path_errors.c
+TOOLSRCS += tools_path.c
+TOOLSRCS += setvar_add.c
+TOOLSRCS += tools_var.c
+TOOLSRCS += all_signal.c
 
 ## BUILTIN ##
 
 BTSRCS += exit.c
 BTSRCS += hash.c
+BTSRCS += env.c
+BTSRCS += setenv.c
+BTSRCS += unsetenv.c
 
 ## INCLUDES ##
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
 INCLUDES += parser.h
@@ -141,15 +155,6 @@ INCLUDES += sh.h
 INCLUDES += struct.h
 INCLUDES += var.h
 
-## INCLUDES ##
-
-INCLUDES += exec.h
-INCLUDES += lexer.h
-INCLUDES += line_edition.h
-INCLUDES += parser.h
-INCLUDES += sh.h
-INCLUDES += struct.h
-INCLUDES += var.h
 
 ## DEBUG ##
 
@@ -164,7 +169,9 @@ SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
 SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix job_control/,$(JBSRCS))
 SRC += $(addprefix builtins/,$(BTSRCS))
+SRC += $(addprefix tools/,$(TOOLSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
 
 
@@ -175,9 +182,13 @@ OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
+OPATHS += $(OPATH)analyzer/args_tab
+OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)tools
+OPATHS += $(OPATH)job_control
 
 CC = clang
 COMPILE = $(CC) -c

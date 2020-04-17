@@ -9,7 +9,7 @@ void		init_token(t_token *token)
 	token->len = 0;
 }
 
-int		l_create_token(t_lexer *lexer)
+int			l_create_token(t_lexer *lexer)
 {
 	if (!(lexer->curr_token = (t_token *)ft_memalloc(sizeof(t_token))))
 	{
@@ -22,11 +22,10 @@ int		l_create_token(t_lexer *lexer)
 		ft_printf("erreur malloc create_token 2\n");
 		exit(EXIT_FAILURE);
 	}
-	//ft_printf("creation token %p\n", lexer->curr_token);
 	return (1);
 }
 
-int	l_delim_token(t_lexer *lexer, char c)
+int			l_delim_token(t_lexer *lexer, char c)
 {
 	if (l_get_flag(lexer, F_HD_DELIM))
 	{

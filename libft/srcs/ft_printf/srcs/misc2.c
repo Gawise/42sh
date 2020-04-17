@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:20:54 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/21 12:12:29 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:25:37 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ int		init_type(t_printf *data, int fd, char **str, int str_n)
 
 void	conv_ptr(t_printf *data)
 {
-	data->width -= (CH_ZERO(data->flags) ? 2 : 0);
+	data->width -= data->flags & (1 << 1) ? 2 : 0;
 	data->pad = (data->printed > data->width - 3)
 	? 0 : data->width - 3 - data->printed;
-	data->flags |= F_PCONV;
-	data->flags |= F_SHARP;
+	data->flags |= (1 << 12);
+	data->flags |= (1 << 0);
 	conv_uint(data);
 }
 

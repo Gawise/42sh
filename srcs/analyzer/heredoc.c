@@ -32,7 +32,7 @@ static void		a_tab_trim(t_redir *redir)
 	i = 0;
 	file = redir->file;
 	if (!(res = ft_strnew(ft_strlen(file) - a_count_tabs(file))))
-		ft_ex("Cannot allocate memory\n");
+		ft_ex(EXMALLOC);
 	while (*file)
 	{
 		while (*file && *file == '\t')
