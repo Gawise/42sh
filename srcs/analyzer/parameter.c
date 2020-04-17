@@ -1,12 +1,25 @@
-#include "exp.h"
+#include "analyzer.h"
 #include "libft.h"
 #include "sh.h"
 
-#include <stdio.h>
+int	parse_simple_parameter(t_exp *exp, char **str, char **param)
+{
+	while (**str && (ft_isalnum((int)**str) || **str == '_'))
+		exp_add_to_buf(exp, str, param);
+	if (!exp->i)
+	{
+		(*str)--;
+		return (0);
+	}
+	exp_flush_buf(exp, param);
+	return (1);
+}
+
 int	simple_param_exp(t_exp *exp, char **str)
 {
 	char	*param;
 
+	param = NULL;
 	(*str)++;
 	if (**str == '@' || **str == '*' || **str == '#' || **str == '?'
 	|| **str == '-' || **str == '$' || **str == '!' || ft_isdigit(**str))
@@ -14,19 +27,11 @@ int	simple_param_exp(t_exp *exp, char **str)
 		if (!(param = ft_strndup(*str, 1)))
 			ft_ex("Cannot allocate memory\n");
 	}
-	else
-	{
-		while (**str && (ft_isalnum((int)**str) || **str == '_'))
-			exp_add_to_buf(exp, str, &param);
-		if (!exp->i)
-		{
-			(*str)--;
-			return (0);
-		}
-		exp_flush_buf(exp, &param);
-	}
+	else if (!parse_simple_parameter(exp, str, &param))
+		return (0);
 	if (!(exp->param = resolve_parameter(param, 0)))
 		return (-1);
+	free(param);
 	exp_substitute(exp, exp->param);
 	return (0);
 }
@@ -35,13 +40,11 @@ int	param_dispatch(t_exp *exp, char **str)
 {
 	if (**str == '$' && exp->quote != 1 && *(*str + 1) == '{')
 	{
-		printf("entree rec str = [%s]\n", *str);
 		exp_flush_buf(exp, &exp->res);
 		return (rec_param_exp(exp, str));
 	}
 	else if (**str == '$' && exp->quote != 1)
 	{
-		printf("entree smp str = [%s]\n", *str);
 		exp_flush_buf(exp, &exp->res);
 		return (simple_param_exp(exp, str));
 	}
@@ -59,7 +62,7 @@ int	param_dispatch(t_exp *exp, char **str)
 
 int	parse_param_exp(char **word, t_exp exp)
 {
-	char		*str;
+	char	*str;
 	int		ret;
 
 	if (!word || !*word)
@@ -68,14 +71,13 @@ int	parse_param_exp(char **word, t_exp exp)
 	ret = 0;
 	while (*str)
 	{
-		if (!exp.bs && ft_strchr("\'\"\\$", *str)
-		&& (ret = param_dispatch(&exp, &str)) < 0)
+		if ((!exp.bs && ft_strchr("\'\"\\$", *str)
+		&& (ret = param_dispatch(&exp, &str)) < 0) || !*str)
 			break ;
 		exp_add_to_buf(&exp, &str, &exp.res);
 		if (exp.bs)
 			exp.bs--;
 	}
-	printf("\nsortie while ret = %d\n", ret);
 	if (ret >= 0)
 	{
 		exp_flush_buf(&exp, &exp.res);

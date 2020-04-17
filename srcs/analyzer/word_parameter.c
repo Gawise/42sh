@@ -1,4 +1,4 @@
-#include "exp.h"
+#include "analyzer.h"
 #include "libft.h"
 
 int	word_dispatch(t_exp *exp, char **str, int *quote)
@@ -48,14 +48,11 @@ int	skip_word_dispatch(t_exp *exp, char **str, int *quote)
 	return (0);
 }
 
-#include <stdio.h>
-
 int	skip_word(t_exp *exp, char **str)
 {
 	int	quote;
 	int	ret;
 
-	printf("\nentree dans skip str = [%s]\n", *str);
 	quote = 0;
 	ret = 0;
 	while (**str)
@@ -69,7 +66,6 @@ int	skip_word(t_exp *exp, char **str)
 	}
 	if (!ret)
 		return (-1);
-	printf("sortie de skip, str = [%s]\n", *str);
 	return (ret);
 }
 
@@ -78,7 +74,6 @@ int	rec_word_parse(t_exp *exp, char **str)
 	int	quote;
 	int	ret;
 
-	printf("\nentree rec word str = [%s]\n", *str);
 	quote = 0;
 	ret = 0;
 	while (**str)
@@ -90,7 +85,6 @@ int	rec_word_parse(t_exp *exp, char **str)
 		if (exp->bs)
 			exp->bs--;
 	}
-	printf("rec word ret = %d, str = [%s]\n", ret, *str);
 	if (!ret)
 		return (-1);
 	return (ret);

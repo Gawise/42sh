@@ -1,4 +1,4 @@
-#include "exp.h"
+#include "analyzer.h"
 #include "sh.h"
 #include "libft.h"
 
@@ -24,7 +24,6 @@ void	init_exp(t_exp *exp)
 	exp->res = NULL;
 }
 
-
 void	free_exp_content(t_exp *exp)
 {
 	ft_strdel(&exp->param);
@@ -36,13 +35,16 @@ void	exp_flush_buf(t_exp *exp, char **str)
 {
 	char	*tmp;
 
-	tmp = *str;
-	if (!*str)
+	if (!str || !*str)
 	{
 		if (!(*str = ft_strdup(exp->buf)))
 			ft_ex("Cannot allocate memory\n");
+		ft_bzero(exp->buf, exp->i);
+		exp->i = 0;
+		return ;
 	}
-	else if (!(*str = ft_strjoin(2, *str, exp->buf)))
+	tmp = *str;
+	if (!(*str = ft_strjoin(2, *str, exp->buf)))
 		ft_ex("Cannot allocate memory\n");
 	free(tmp);
 	ft_bzero(exp->buf, exp->i);

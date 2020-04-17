@@ -1,9 +1,9 @@
-#include "exp.h"
+#include "analyzer.h"
 #include "sh.h"
 #include "libft.h"
 #include "var.h"
 
-int	substitute_parameter(t_exp *exp, char **str)
+int		substitute_parameter(t_exp *exp, char **str)
 {
 	int	ret;
 
@@ -15,30 +15,31 @@ int	substitute_parameter(t_exp *exp, char **str)
 	return (ret);
 }
 
-#include <stdio.h>
-int	substitute_word(t_exp *exp, char **str)
+int		substitute_word(t_exp *exp, char **str)
 {
-	printf("debut substitute word\n");
+	int	ret;
+
 	(*str)++;
-	if (rec_word_parse(exp, str) < 0
-	|| exp_main(&exp->word, exp->assign) < 0)
-		return (-1);
+	if ((ret = rec_word_parse(exp, str)) < 0
+	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
+		return (ret);
 	if (**str == '}')
 		(*str)++;
 	exp_substitute(exp, exp->word);
-	printf("fin substitute word\n");
 	return (1);
 }
 
-int	assign_word(t_exp *exp, char **str, char *param)
+int		assign_word(t_exp *exp, char **str, char *param)
 {
-	if (substitute_word(exp, str) < 0
-	|| ft_setvar(&cfg_shell()->env, param, exp->word))
-		return (-1);
+	int	ret;
+
+	if ((ret = substitute_word(exp, str)) < 0)
+		return (ret);
+	ft_setvar(&cfg_shell()->env, param, exp->word);
 	return (1);
 }
 
-int	substitute_null(t_exp *exp, char **str)
+int		substitute_null(t_exp *exp, char **str)
 {
 	int	ret;
 

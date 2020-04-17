@@ -10,9 +10,9 @@
 static char		*get_assign_str(t_list *assign_lst)
 {
 	t_assignment	*assign;
-	char		*new;
-	char		*res;
-	char		*tmp;
+	char			*new;
+	char			*res;
+	char			*tmp;
 
 	if (!assign_lst || !assign_lst->data)
 		return (NULL);
@@ -95,7 +95,8 @@ static int		p_and_or_job_str(t_and_or *and_or)
 	cmd_lst = cmd_lst->next;
 	while (cmd_lst)
 	{
-		if (cmd_lst->data && !(str = get_cmd_str((t_simple_cmd *)cmd_lst->data)))
+		if (cmd_lst->data
+		&& !(str = get_cmd_str((t_simple_cmd *)cmd_lst->data)))
 			return (0);
 		if (cmd_lst->data && ft_asprintf(&tmp, "%s | %s", res, str) == -1)
 			return (0);
@@ -108,12 +109,11 @@ static int		p_and_or_job_str(t_and_or *and_or)
 	return (1);
 }
 
-int		p_set_jobs_str(t_parser *parser)
+int				p_set_jobs_str(t_parser *parser)
 {
 	t_list		*lst;
 	t_cmd_table	*cmd_table;
 	t_list		*and_or;
-
 
 	lst = parser->table;
 	while (lst)
