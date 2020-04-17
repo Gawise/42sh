@@ -201,6 +201,7 @@ char			*ft_strndup(const char *s1, size_t n);
 char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 char			*ft_strclnjoin(char const *s1, char const *s2);
 char			*ft_strlclnjoin(char const *s1, char const *s2);
+int		ft_isname(char *str);
 
 /*
 ** SYSTEM

@@ -57,6 +57,5 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 		ft_strdel(&pmt_prefix);
 		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
-	p_make_args_tab(parser);
 	return (1);
 }

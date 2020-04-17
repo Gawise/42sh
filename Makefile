@@ -67,7 +67,6 @@ LEXSRCS += state/word.c
 
 PARSRCS += amp.c
 PARSRCS += and_or.c
-PARSRCS += args_tab.c
 PARSRCS += assign.c
 PARSRCS += cmd.c
 PARSRCS += free.c
@@ -93,9 +92,20 @@ PARSRCS += state/table_start.c
 
 ## ANALYZER ##
 
+ANASRCS += args_tab/args_to_tab.c
+ANASRCS += args_tab/make_args_tab.c
 ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
+ANASRCS += exp/exp.c
+ANASRCS += exp/exp_tools.c
+ANASRCS += exp/parameter.c
+ANASRCS += exp/param_recursive.c
+ANASRCS += exp/param_resolve.c
+ANASRCS += exp/param_substitution.c
+ANASRCS += exp/tilde_exp.c
+ANASRCS += exp/tilde_assign.c
+ANASRCS += exp/word_parameter.c
 
 ## EVAL ##
 
@@ -172,6 +182,8 @@ OPATHS += $(OPATH)parser
 OPATHS += $(OPATH)parser/state
 OPATHS += $(OPATH)analyzer
 OPATHS += $(OPATH)analyzer/jobs_str
+OPATHS += $(OPATH)analyzer/args_tab
+OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug

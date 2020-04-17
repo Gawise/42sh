@@ -48,6 +48,14 @@ int				l_flag_state_add(t_lexer *lexer, char c)
 		else
 			l_buffer_add(lexer, c);
 	}
+	else if ((flag == F_BRACKEXP && c == '}'))
+	{
+		l_buffer_add(lexer, c);
+		lexer->state = S_TK_WORD;
+		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+	}
+	else if ((flag == F_BRACKEXP && c == '$'))
+		l_build_exp(lexer, c);
 	else
 		l_buffer_add(lexer, c);
 	return (1);
@@ -70,6 +78,8 @@ int				l_delim_flag(t_lexer *lexer, char c)
 		l_add_flag(lexer, c);
 	else if (c == '}' && flag == F_BRACKEXP)
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+	else if (c == '\"' && flag == F_BRACKEXP)
+		l_add_flag(lexer, c);
 	l_buffer_add(lexer, c);
 	if (!l_get_last_flag(lexer))
 		lexer->state = S_TK_WORD;

@@ -73,7 +73,7 @@ static char		*join_redir_str(t_redir *redir, char **str)
 	return (res);
 }
 
-char		*get_redir_str(t_list *redir_lst)
+char			*get_redir_str(t_list *redir_lst)
 {
 	t_redir	*redir;
 	char	*str;
@@ -90,9 +90,9 @@ char		*get_redir_str(t_list *redir_lst)
 	return (str);
 }
 
-char		*get_args_str(char **args)
+char			*get_args_str(char **args)
 {
-	int	i;
+	int		i;
 	char	*str;
 	char	*tmp;
 

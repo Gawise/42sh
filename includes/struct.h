@@ -6,6 +6,7 @@
 # include <termios.h>
 
 # define L_BUFF_SIZE	256
+# define EXP_BSIZE	5
 
 
 typedef struct s_list	t_list;
@@ -189,6 +190,22 @@ typedef struct			s_parser
 }					t_parser;
 
 /*
+** ANALYZER
+*/
+
+typedef struct		s_exp
+{
+	char		buf[EXP_BSIZE];
+	int		i;
+	int		quote;
+	int		bs;
+	int		assign;
+	char		*param;
+	char		*word;
+	char		*res;
+}			t_exp;
+
+/*
 ** SELECT
 */
 
@@ -232,6 +249,16 @@ typedef struct	s_cs_line
 /*
 ** EXEC
 */
+
+typedef enum			e_err_flag
+{
+	E_OK = 0,
+	E_NAMETOOLONG,	// 1
+	E_NOENT,	// 2
+	E_LOOP,		// 3
+	E_NOTDIR,	// 4
+	E_ACCES,	// 5
+}				t_err_flag;
 
 typedef struct	s_var
 {

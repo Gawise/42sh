@@ -25,7 +25,7 @@ static void		a_tab_trim(t_redir *redir)
 {
 	char	*file;
 	char	*res;
-	int	i;
+	int		i;
 
 	if (redir->type != DLESSDASH)
 		return ;
@@ -51,9 +51,9 @@ static void		a_tab_trim(t_redir *redir)
 
 static void		a_trim_commands(t_and_or *and_or)
 {
-	t_list		*lst;
+	t_list			*lst;
 	t_simple_cmd	*cmd;
-	t_list		*redir_lst;
+	t_list			*redir_lst;
 
 	lst = and_or->s_cmd;
 	while (lst)
@@ -69,7 +69,7 @@ static void		a_trim_commands(t_and_or *and_or)
 	}
 }
 
-void		a_remove_leading_tabs(t_parser *parser)
+void			a_remove_leading_tabs(t_parser *parser)
 {
 	t_list		*lst;
 	t_list		*lst_and;
