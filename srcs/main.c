@@ -77,10 +77,10 @@ int		eval_routine(t_parser *parser)
 
 int		analyzer_routine(t_parser *parser)
 {
-	if (parser->state != S_PARSER_SYNTAX_ERROR
+	if ((parser->state != S_PARSER_SYNTAX_ERROR
 	&& !p_set_jobs_str(parser))
+	|| a_make_args_tab(parser) < 0)
 		return (0);
-	a_make_args_tab(parser);
 	a_remove_leading_tabs(parser);
 	return (1);
 }

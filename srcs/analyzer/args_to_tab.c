@@ -5,7 +5,7 @@ void		**args_to_tab(t_list *lst, char *cmd)
 {
 	void	**tab;
 	t_list	*index;
-	int	i;
+	int		i;
 
 	index = lst;
 	i = 1;

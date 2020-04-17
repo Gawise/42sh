@@ -104,6 +104,7 @@ ANASRCS += param_recursive.c
 ANASRCS += param_resolve.c
 ANASRCS += param_substitution.c
 ANASRCS += tilde_exp.c
+ANASRCS += tilde_assign.c
 ANASRCS += word_parameter.c
 
 ## EVAL ##

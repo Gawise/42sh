@@ -3,7 +3,7 @@
 #include "libft.h"
 #include "var.h"
 
-int	substitute_parameter(t_exp *exp, char **str)
+int		substitute_parameter(t_exp *exp, char **str)
 {
 	int	ret;
 
@@ -15,7 +15,7 @@ int	substitute_parameter(t_exp *exp, char **str)
 	return (ret);
 }
 
-int	substitute_word(t_exp *exp, char **str)
+int		substitute_word(t_exp *exp, char **str)
 {
 	int	ret;
 
@@ -29,7 +29,7 @@ int	substitute_word(t_exp *exp, char **str)
 	return (1);
 }
 
-int	assign_word(t_exp *exp, char **str, char *param)
+int		assign_word(t_exp *exp, char **str, char *param)
 {
 	int	ret;
 
@@ -39,7 +39,7 @@ int	assign_word(t_exp *exp, char **str, char *param)
 	return (1);
 }
 
-int	substitute_null(t_exp *exp, char **str)
+int		substitute_null(t_exp *exp, char **str)
 {
 	int	ret;
 

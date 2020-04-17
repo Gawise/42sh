@@ -4,21 +4,22 @@
 #include "ft_printf.h"
 #include "var.h"
 
-int	exp_err(char *word)
+int		exp_err(char *word)
 {
 	ft_dprintf(2, "%s: Bad Substitution\n", word);
 	ft_setvar(&cfg_shell()->env, "?", "1");
 	return (-1);
 }
 
-int	word_expansions(t_simple_cmd *cmd)
+int		word_expansions(t_simple_cmd *cmd)
 {
-	t_list		*lst;
+	t_list			*lst;
 	t_assignment	*assign;
-	int		ret;
+	int				ret;
+	int				debug;
 
-	if (cfg_shell()->debug)
-		ft_printf("\n----------- expansions -----------\n\n");
+	if ((debug = cfg_shell()->debug))
+		ft_dprintf(debug, "\n----------- expansions -----------\n\n");
 	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
 		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
 	lst = cmd->args;
@@ -39,15 +40,15 @@ int	word_expansions(t_simple_cmd *cmd)
 	return (1);
 }
 
-int	exp_main(char **word, int assign)
+int		exp_main(char **word, int assign)
 {
 	t_exp		exp;
-	int		ret;
+	int			ret;
 	t_cfg		*cfg;
 
 	cfg = cfg_shell();
 	if (cfg->debug)
-		ft_printf("Exp main start,\nstr= [%s]\n\n", *word);
+		ft_dprintf(cfg->debug, "Exp main start,\nstr= [%s]\n\n", *word);
 	init_exp(&exp);
 	exp.assign = assign;
 	if (assign)
@@ -58,6 +59,6 @@ int	exp_main(char **word, int assign)
 	if ((ret = parse_param_exp(word, exp)) < 0)
 		return (ret);
 	if (cfg->debug)
-		ft_printf("Exp main end,\nstr= [%s]\n\n", *word);
+		ft_dprintf(cfg->debug, "Exp main end,\nstr= [%s]\n\n", *word);
 	return (1);
 }

@@ -94,8 +94,14 @@ int	skip_word(t_exp *exp, char **str);
 ** tilde_exp.c
 */
 
-void	find_tilde_exp_assign(char **word, t_exp exp);
 void	find_tilde_exp(char **word, t_exp exp);
+int		parse_tilde_exp(char **string, t_exp *exp, int assign);
+
+/*
+** tilde_assign.c
+*/
+
+void	find_tilde_exp_assign(char **word, t_exp exp);
 
 /*
 ** 

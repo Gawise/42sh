@@ -4,19 +4,19 @@
 #include "var.h"
 #include "ft_printf.h"
 
-int	print_error_parameter(t_exp *exp, char **str, char *param)
+int		print_error_parameter(t_exp *exp, char **str, char *param)
 {
 	int	ret;
 
 	if ((ret = substitute_word(exp, str)) < 0)
 		return (ret);
-	ft_dprintf(2, "%s: %s", param, exp->word);
+	ft_dprintf(2, "%s: %s\n", param, exp->word);
 	return (-2);
 }
 
 char	*resolve_parameter(char *str, int hash)
 {
-	int	i;
+	int		i;
 	char	*res;
 
 	i = -1;
@@ -25,19 +25,21 @@ char	*resolve_parameter(char *str, int hash)
 	|| *str == '!' || ft_isdigit(*str)))
 	&& (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1))))
 		return (NULL);
-	if (!hash && !(res = find_var_value(cfg_shell()->env, str))
-	&& !(res = ft_strnew(0)))
+	if (!hash && (res = find_var_value(cfg_shell()->env, str))
+	&& !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
-	else if (hash && !(res = find_var_value(cfg_shell()->env, str + 1))
-	&& !(res = ft_strnew(0)))
+	else if (hash && (res = find_var_value(cfg_shell()->env, str + 1))
+	&& !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
-	if (res && !(res = ft_strdup(res)))
+	if (!res && !(res = ft_strnew(0)))
 		ft_ex("Cannot allocate memory\n");
 	return (res);
 }
 
-int	resolve_colon_param(char **str, t_exp *exp, char *param)
+int		resolve_colon_param(char **str, t_exp *exp, char *param)
 {
+	int		ret;
+
 	(*str)++;
 	if (!ft_strchr("-=?+", **str)
 	|| !(exp->param = resolve_parameter(param, 0)))
@@ -45,23 +47,26 @@ int	resolve_colon_param(char **str, t_exp *exp, char *param)
 	if (exp->param[0])
 	{
 		if (**str == '+')
-			return (substitute_word(exp, str));
-		return (substitute_parameter(exp, str));
+			ret = substitute_word(exp, str);
+		else
+			ret = substitute_parameter(exp, str);
 	}
 	else if (**str == '-')
-		return (substitute_word(exp, str));
+		ret = substitute_word(exp, str);
 	else if (**str == '=')
-		return (assign_word(exp, str, param));
+		ret = assign_word(exp, str, param);
 	else if (**str == '?')
-		return (print_error_parameter(exp, str, param));
+		ret = print_error_parameter(exp, str, param);
 	else
-		return (substitute_null(exp, str));
-	return (0);
+		ret = substitute_null(exp, str);
+	ft_strdel(&exp->param);
+	ft_strdel(&exp->word);
+	return (ret);
 }
 
-int	resolve_brace_param(char **str, t_exp *exp, char *param)
+int		resolve_brace_param(char **str, t_exp *exp, char *param)
 {
-	int	hash;
+	int		hash;
 	char	*hashparam;
 
 	(*str)++;
@@ -80,7 +85,7 @@ int	resolve_brace_param(char **str, t_exp *exp, char *param)
 	return (1);
 }
 
-int	resolve_pattern_param(char **str, t_exp *exp, char *param)
+int		resolve_pattern_param(char **str, t_exp *exp, char *param)
 {
 	int	type;
 	int	ret;

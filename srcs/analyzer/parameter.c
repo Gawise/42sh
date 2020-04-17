@@ -2,10 +2,24 @@
 #include "libft.h"
 #include "sh.h"
 
+int	parse_simple_parameter(t_exp *exp, char **str, char **param)
+{
+	while (**str && (ft_isalnum((int)**str) || **str == '_'))
+		exp_add_to_buf(exp, str, param);
+	if (!exp->i)
+	{
+		(*str)--;
+		return (0);
+	}
+	exp_flush_buf(exp, param);
+	return (1);
+}
+
 int	simple_param_exp(t_exp *exp, char **str)
 {
 	char	*param;
 
+	param = NULL;
 	(*str)++;
 	if (**str == '@' || **str == '*' || **str == '#' || **str == '?'
 	|| **str == '-' || **str == '$' || **str == '!' || ft_isdigit(**str))
@@ -13,19 +27,11 @@ int	simple_param_exp(t_exp *exp, char **str)
 		if (!(param = ft_strndup(*str, 1)))
 			ft_ex("Cannot allocate memory\n");
 	}
-	else
-	{
-		while (**str && (ft_isalnum((int)**str) || **str == '_'))
-			exp_add_to_buf(exp, str, &param);
-		if (!exp->i)
-		{
-			(*str)--;
-			return (0);
-		}
-		exp_flush_buf(exp, &param);
-	}
+	else if (!parse_simple_parameter(exp, str, &param))
+		return (0);
 	if (!(exp->param = resolve_parameter(param, 0)))
 		return (-1);
+	free(param);
 	exp_substitute(exp, exp->param);
 	return (0);
 }
@@ -56,7 +62,7 @@ int	param_dispatch(t_exp *exp, char **str)
 
 int	parse_param_exp(char **word, t_exp exp)
 {
-	char		*str;
+	char	*str;
 	int		ret;
 
 	if (!word || !*word)
