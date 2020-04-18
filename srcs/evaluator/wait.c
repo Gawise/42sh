@@ -108,7 +108,7 @@ void		wait_process(t_job *job)
 		wstatus = 0;
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
-			perror("[WAIT_PROCESS] error waitpid");
+			perror("[WAIT_PROCESS] error waitpid"); //perror
 		if (update_process(job->process, pid_child, wstatus))
 			stopped = TRUE;
 	}

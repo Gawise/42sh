@@ -164,7 +164,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	else
 		set_job_background(shell, job);
 	ret = ft_itoa(job->ret);
-	ft_setvar(&shell->intern, "$", ret);
+	setvar_update(find_var(shell->sp, "?"), ret);
 	ft_strdel(&ret);
 	return (job->ret);
 }

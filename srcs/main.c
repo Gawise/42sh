@@ -109,5 +109,4 @@ int		main(int ac, char **av, char **env)
 	}
 	clean_cfg(cfg_shell());
 	exit(0);
-	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }

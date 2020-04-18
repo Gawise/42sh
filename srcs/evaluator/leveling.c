@@ -54,6 +54,8 @@ void		lvl_cmd_table(t_cfg *shell, t_list *lst)
 	}
 }
 
+#include "var.h"
+
 uint8_t		ft_eval(t_list *cmd_table)
 {
 	t_cfg *shell;
