@@ -33,6 +33,14 @@ int		assign_word(t_exp *exp, char **str, char *param)
 {
 	int	ret;
 
+	if (ft_strlen(param) == 1 && (*param == '@' || *param == '*'
+	|| *param == '#' || *param == '?' || *param == '-' || *param == '$'
+	|| *param == '!' || ft_isdigit(*param)))
+	{
+		if (substitute_parameter(exp, str) < 0)
+			return (-1);
+		return (0);
+	}
 	if ((ret = substitute_word(exp, str)) < 0)
 		return (ret);
 	ft_setvar(&cfg_shell()->env, param, exp->word);
