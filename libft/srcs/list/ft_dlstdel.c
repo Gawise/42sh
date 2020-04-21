@@ -6,7 +6,7 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:47:58 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/03/10 16:20:47 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:34:15 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_dlstdel(t_dlist **alst)
 {
-	t_dlist	*tmp;
-	t_dlist	*tmp2;
+	t_dlist		*tmp;
+	t_dlist		*tmp2;
 
 	if (alst && (tmp = *alst))
 	{
@@ -27,7 +27,7 @@ void	ft_dlstdel(t_dlist **alst)
 			ft_memdel((void **)&tmp->data);
 			ft_memdel((void **)&tmp);
 			if (tmp2)
-                tmp2->prev = NULL;
+				tmp2->prev = NULL;
 			tmp = tmp2;
 		}
 		alst = NULL;

@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:21:00 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/19 21:04:53 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/11 14:43:30 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ static uintmax_t	get_uint_val(t_printf *data)
 
 	if (data->conv == 'p')
 		val = (uintmax_t)va_arg(data->ap, void *);
-	else if (CH_L(data->flags))
+	else if (data->flags & (1 << 9))
 		val = (uintmax_t)va_arg(data->ap, unsigned long);
-	else if (CH_LL(data->flags))
+	else if (data->flags & (1 << 10))
 		val = (uintmax_t)va_arg(data->ap, unsigned long long);
-	else if (CH_Z(data->flags))
+	else if (data->flags & (1 << 13))
 		val = (uintmax_t)va_arg(data->ap, size_t);
-	else if (CH_J(data->flags))
+	else if (data->flags & (1 << 14))
 		val = va_arg(data->ap, uintmax_t);
-	else if (CH_HH(data->flags))
+	else if (data->flags & (1 << 8))
 		val = (uintmax_t)((unsigned char)va_arg(data->ap, unsigned int));
-	else if (CH_H(data->flags))
+	else if (data->flags & (1 << 7))
 		val = (uintmax_t)((short unsigned)va_arg(data->ap, unsigned int));
 	else
 		val = (uintmax_t)va_arg(data->ap, unsigned int);
@@ -50,25 +50,25 @@ static uintmax_t	get_uint_val(t_printf *data)
 
 static void			add_prefix(t_printf *data, uintmax_t val, int ext)
 {
-	(CH_SHARP(data->flags) && val && data->base == 8 && !ext)
+	(data->flags & (1 << 0) && val && data->base == 8 && !ext)
 	? (data->width)-- : 0;
-	(CH_SHARP(data->flags) && data->base == 8 && !val
-	&& CH_PGIVEN(data->flags) && !data->prec)
+	(data->flags & (1 << 0) && data->base == 8 && !val
+	&& data->flags & (1 << 15) && !data->prec)
 	? (data->printed)++ : 0;
-	if ((CH_SHARP(data->flags) && data->base == 16
-	&& !CH_ZERO(data->flags) && val) || CH_PCONV(data->flags))
+	if ((data->flags & (1 << 0) && data->base == 16
+	&& !(data->flags & (1 << 1)) && val) || data->flags & (1 << 12))
 		data->width -= 2;
 	if ((data->width - data->printed) > 0)
 		data->pad = data->width - data->printed;
 	else
 		data->pad = 0;
 	add_pad(data, 0);
-	if ((val || CH_PCONV(data->flags)) && CH_SHARP(data->flags)
+	if ((val || data->flags & (1 << 12)) && data->flags & (1 << 0)
 	&& ((data->base == 8 && !ext) || data->base == 16))
 		buffer("0", data, 1);
-	if ((val || CH_PCONV(data->flags))
-	&& CH_SHARP(data->flags) && data->base == 16)
-		buffer(CH_UPX(data->flags) ? "X" : "x", data, 1);
+	if ((val || data->flags & (1 << 12))
+	&& data->flags & (1 << 0) && data->base == 16)
+		buffer(data->flags & (1 << 11) ? "X" : "x", data, 1);
 }
 
 void				conv_uint(t_printf *data)
@@ -83,10 +83,10 @@ void				conv_uint(t_printf *data)
 	data->printed = 0;
 	while (tmp && ++(data->printed))
 		tmp /= data->base;
-	CH_ZERO(data->flags) ? data->prec = data->width : 0;
+	data->flags & (1 << 1) ? data->prec = data->width : 0;
 	ext = (data->printed >= data->prec) ? 0 : 1;
 	data->printed = (data->prec > data->printed) ? data->prec : data->printed;
-	if (data->printed <= 0 && !CH_PGIVEN(data->flags))
+	if (data->printed <= 0 && !(data->flags & (1 << 15)))
 		data->printed = 1;
 	add_prefix(data, val, ext);
 	xtoa_base(val, data->base, s, data);

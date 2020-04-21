@@ -10,7 +10,7 @@ t_assignment	*init_assignment(void)
 	return (assign);
 }
 
-t_redir		*init_redir(void)
+t_redir			*init_redir(void)
 {
 	t_redir		*redir;
 
@@ -27,7 +27,7 @@ t_simple_cmd	*init_simple_cmd(void)
 	return (cmd);
 }
 
-t_and_or	*init_and_or(void)
+t_and_or		*init_and_or(void)
 {
 	t_and_or	*and_or;
 
@@ -39,7 +39,7 @@ t_and_or	*init_and_or(void)
 	return (and_or);
 }
 
-t_cmd_table	*init_cmd_table(void)
+t_cmd_table		*init_cmd_table(void)
 {
 	t_cmd_table	*table;
 

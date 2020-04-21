@@ -21,22 +21,26 @@
 # define E_NOENT 576
 # define E_ACCES 1088
 # define E_LOOP 2112
-# define E_NTL	4160	/*name too long*/
+# define E_NTL	4160		/*       1000001000000 */
 
-# define B_ECHO 8192		/* 0000.10000000000000 */
-# define B_EXIT 24576		/* 0001.10000000000000 */
-# define B_CD 40960			/* 0010.10000000000000 */
-# define B_ENV 57344		/* 0011.10000000000000 */
-# define B_SETENV 73728		/* 0100.10000000000000 */
-# define B_UNSETENV 90112 	/* 0101.10000000000000 */
-# define B_HASH 106496		/* 0110.10000000000000 */
 
-/*
-# define B_EXIT 16384
-# define B_CD 32768
-# define B_ENV 65536
-# define B_SETENV 131072
-# define B_UNSETENV 262144
+
+# define B_SPECIAL 8192		/* 0000.10000000000000 */
+# define B_ECHO 0			/* 0000.00000000000000 */
+# define B_CD 16384			/* 0001.00000000000000 */
+# define B_ENV 32768		/* 0010.00000000000000 */
+# define B_SETENV 49152		/* 0011.00000000000000 */
+# define B_UNSETENV 65536 	/* 0100.00000000000000 */
+# define B_HASH 81920		/* 0101.00000000000000 */
+# define B_EXIT 98304		/* 0110.10000000000000 */
+
+
+
+/*   Special Builtin 
+# define B_EXIT
+# define B_EXPORT
+# define B_SET
+# define B_UNSET
 */
 
 
@@ -50,13 +54,14 @@
 # define KILLED 8
 # define FAILED 16
 # define COMPLETED 32
+# define BACKGROUND 64
 
 
 /*		debug	*/
 
 
 
-/*		BUILTIN	*/
+/*		BUILTIN		*/
 
 uint8_t			ft_setenv(t_job *j, t_process *p);
 uint8_t			ft_unsetenv(t_job *j, t_process *p);
@@ -65,39 +70,37 @@ uint8_t			ft_exit(t_job *j, t_process *p);
 uint8_t			ft_hash(t_job *j, t_process *p);
 
 
-/*				*/
+/*		REDIR		 */
+void		process_redir(t_process *p, t_list *redir);
+void		do_my_dup2(int8_t fd1, int8_t fd2);
+uint8_t		bad_fd(int fd);
+uint32_t	path_gearing(t_redir *r, char **path, int right);
 
-int		lvl_cmd_table(t_cfg *shell, t_list *lst);
-int		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
-int		do_pipe(t_process *p);
+/*		TERMIOS		*/
+void		term_create_eval(struct termios *origin, struct termios *eval);
+void		set_termios(int32_t mode, struct termios *term);
 
-void	process_type(t_process *p);
+/*		ERROR HANDLING	*/
+uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd);
+uint8_t		process_errors_handling(t_process *p);
 
-int		run_job(t_cfg *shell, t_job *job, t_list *process);
+/*		WAIT		*/
+void		wait_process(t_job *job);
 
-int		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
-int		routine_clean_job(t_job *j);
+/*	 	STEP		*/
+uint8_t		ft_eval(t_list *cmd_table);
+void		lvl_cmd_table(t_cfg *shell, t_list *lst);
+void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
+uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
+//void		run_process(t_job *j, t_process *p);
+void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
+void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
+void		do_pipe(t_process *p);
+void		process_type(t_process *p);
+void		routine_clean_job(void *del, size_t u);
+void	del_struct_process(void *del, size_t u);
 
-
-char		*create_abs_path(char *s);
-int			path_errors(char *path, uint8_t check_it);
-uint8_t		c_enametoolong(char *path);
-uint8_t		c_isdir(char *path);
-/*	wait */
-
-int		wait_process(t_job *job);
-
-/*		term*/
-
-void		set_termios(struct termios *term);
-
-/* redir */
-
-int		process_redir(t_process *p, t_list *redir);
-void	do_my_dup2(uint8_t fd1, uint8_t fd2);
-
-
-int		ft_eval(t_list *cmd_table);
-
+/*		DEBUG */
+void	debug_print_all(t_job *j, t_list *process, char *where);
 
 #endif

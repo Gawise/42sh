@@ -39,7 +39,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 int		parser_routine(t_lexer *lexer,t_parser *parser)
 {
 	if (cfg_shell()->debug)
-		ft_printf("\n----------- parsing -----------\n\n");
+		ft_dprintf(cfg_shell()->debug, "\n----------- parsing -----------\n\n");
 	init_parser(parser);
 	if (!ft_parser(lexer, parser)
 	|| (parser->state == S_PARSER_TABLE_START
@@ -91,10 +91,8 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		lexer;
 	t_parser	parser;
-	uint8_t		debug;
 
-	debug = init_shell(env, av);
-	(void)ac;
+	init_shell(env, av, ac);
 	while (1)
 	{
 		if ((ret = line_edition_routine(&line)) <= 0
@@ -105,10 +103,12 @@ int		main(int ac, char **av, char **env)
 		{
 			if (ret == -1)
 			{
-				ft_putendl("\e[0;31m exit\e[0;0m");
+				ft_dprintf(2, "\e[0;31m exit\e[0;0m");
 				break ;
 			}
 		}
 	}
+	clean_cfg(cfg_shell());
 	exit(0);
+	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }

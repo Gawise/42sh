@@ -33,4 +33,3 @@ int	l_delim_control(t_lexer *lexer, char c)
 	l_build_control(lexer, c);
 	return (1);
 }
-

@@ -6,7 +6,8 @@
 #include "line_edition.h"
 #include "sh.h"
 
-void	p_init_state_machine(int (*table_builder[10][17])(t_token *, t_parser *))
+void	p_init_state_machine(
+		int (*table_builder[10][17])(t_token *, t_parser *))
 {
 	p_init_start_state(table_builder);
 	p_init_cmd_wait_state(table_builder);

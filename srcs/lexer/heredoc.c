@@ -12,7 +12,7 @@ t_here_queue	*l_get_last_here(t_lexer *lexer)
 	return (NULL);
 }
 
-int		l_create_flag_queue(t_lexer *lexer)
+int				l_create_flag_queue(t_lexer *lexer)
 {
 	if (!(lexer->curr_flag = (t_lexer_flag *)ft_memalloc(sizeof(t_lexer_flag))))
 	{
@@ -27,7 +27,7 @@ int		l_create_flag_queue(t_lexer *lexer)
 	return (1);
 }
 
-int		l_create_here_queue(t_lexer *lexer)
+int				l_create_here_queue(t_lexer *lexer)
 {
 	if (!(lexer->curr_here = (t_here_queue *)ft_memalloc(sizeof(t_here_queue))))
 	{
@@ -42,17 +42,7 @@ int		l_create_here_queue(t_lexer *lexer)
 	return (1);
 }
 
-void	del_here_queue(void *data, size_t size)
-{
-	t_here_queue	*queue;
-
-	(void)size;
-	queue = (t_here_queue *)data;
-	ft_strdel(&queue->delim);
-	ft_memdel((void**)&queue);
-}
-
-void	l_flush_delim(t_lexer *lexer)
+void			l_flush_delim(t_lexer *lexer)
 {
 	if (!(lexer->curr_here->delim = ft_strndup(lexer->buffer, lexer->buff_i))
 	|| !l_create_token(lexer)
@@ -66,9 +56,10 @@ void	l_flush_delim(t_lexer *lexer)
 	lexer->buff_i = 0;
 }
 
-int	l_hd_body_flush(t_lexer *lexer, char c)
+int				l_hd_body_flush(t_lexer *lexer, char c)
 {
-	if (ft_strnequ(lexer->buffer, lexer->curr_here->delim, ft_strlen(lexer->curr_here->delim)))
+	if (ft_strnequ(lexer->buffer, lexer->curr_here->delim,
+	ft_strlen(lexer->curr_here->delim)))
 	{
 		ft_bzero(lexer->buffer, L_BUFF_SIZE);
 		lexer->buff_i = 0;

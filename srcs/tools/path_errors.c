@@ -1,9 +1,38 @@
 #include "libft.h"
 #include "exec.h"
+#include "sh.h"
 #include <sys/stat.h>
 #include <dirent.h>
 
-int			c_enoent(char *path)
+uint8_t			c_enametoolong(char *path)
+{
+	int		i;
+	//char	*buf;
+
+	i = 2;
+	if (ft_strlen(path) >= 1024)
+		return (0);
+	/*
+	 *while ((buf = ft_strcut(path, "/", i)))
+	 *{
+	 *    if (ft_strlen(buf) >= 1024)
+	 *    {
+	 *        free(buf);
+	 *        return (0);
+	 *    }
+	 *    if (!*buf)
+	 *    {
+	 *        free(buf);
+	 *        break ;
+	 *    }
+	 *    free(buf);
+	 *    i++;
+	 *}
+	 */
+	return (1);
+}
+
+uint8_t			c_enoent(char *path)
 {
 	DIR				*dir;
 	struct dirent	*dit;
@@ -30,7 +59,7 @@ int			c_enoent(char *path)
 	return (ret);
 }
 
-int			c_eacces(char *path)
+uint8_t			c_eacces(char *path)
 {
 	struct stat		buf;
 
@@ -49,7 +78,7 @@ int			c_eacces(char *path)
 	return (1);
 }
 
-int			c_eloop(char *path)
+uint8_t			c_eloop(char *path)
 {
 	struct stat		buf;
 
@@ -59,7 +88,7 @@ int			c_eloop(char *path)
 	return (1);
 }
 
-int			path_errors(char *path, uint8_t check_it)
+uint32_t		path_errors(char *path, uint8_t check_it)
 {
 	char			*idx;
 	int				ret;

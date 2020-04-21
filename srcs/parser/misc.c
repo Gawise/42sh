@@ -9,7 +9,7 @@
 int		syn_err(t_token *token, t_parser *parser)
 {
 	ft_printf("syntax error near unexpected token `%s\' state=%d\n",
-		token->str, parser->state);
+	token->str, parser->state);
 	parser->state = S_PARSER_SYNTAX_ERROR;
 	return (1);
 }
@@ -21,7 +21,7 @@ int		p_skip(t_token *token, t_parser *parser)
 	return (1);
 }
 
-int		p_set_start_state(t_token* token, t_parser *parser)
+int		p_set_start_state(t_token *token, t_parser *parser)
 {
 	(void)token;
 	parser->state = S_PARSER_TABLE_START;

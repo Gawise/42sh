@@ -8,12 +8,13 @@ static void	hash_usage_error(void)
 {
 	ft_dprintf(2, "hash: usage: hash [-r] [name ...]\n");
 }
-/*
-static void	hash_not_found(char *cmd)
+
+static int	hash_not_found(char *cmd)
 {
-	ft_dprintf(2, "hash: %s: not found\n", cmd);
+	ft_dprintf(2, "hash: no such command: %s\n", cmd);
+	return (0);
 }
-*/
+
 int		hash_check_opt(t_process *p, int *ac)
 {
 	int		i;
@@ -42,11 +43,11 @@ int		hash_fill_map(t_hash_map **map, char *path, char *cmd)
 	if (!cmd)
 		return (0);
 	if (!(file = ft_which(path, cmd)))
-		return (0);
+		return (hash_not_found(cmd));
 	if (!*map)
 		*map = ft_hash_init(100);
 	if (!ft_hash_add(*map, cmd, file))
-		ft_ex("Cannot allocate memory\n");
+		ft_ex(EXMALLOC);
 	return (1);
 }
 
@@ -84,9 +85,9 @@ uint8_t		ft_hash(t_job *j, t_process *p)
 	t_hash_map	**map;
 	int		ac;
 
-	(void)j;
 	r_opt = 0;
 	ac = 1;
+	(void)j;
 	map = &cfg_shell()->map;
 	if (!p)
 		return (1);

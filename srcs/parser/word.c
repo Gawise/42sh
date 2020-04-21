@@ -4,8 +4,8 @@
 
 int	p_cmd_name(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
@@ -21,10 +21,10 @@ int	p_cmd_name(t_token *token, t_parser *parser)
 
 int	p_add_arg(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	char		*str;
+	char			*str;
 
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
@@ -45,10 +45,10 @@ int	p_add_assign_arg(t_token *token, t_parser *parser)
 
 int	p_file_name(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_redir		*redir;
+	t_redir			*redir;
 
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;

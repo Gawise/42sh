@@ -11,7 +11,7 @@ void	call_jobcontroler(t_job *j)
 }
 
 
-int			has_running(t_list *lst)
+int32_t	has_running(t_list *lst)
 {
 	t_process *p;
 
@@ -35,7 +35,21 @@ t_process	*find_process_by_pid(t_list *lst, pid_t child)
 	return (NULL);
 }
 
-static void		aplylyse_wstatus(t_process *p, int wstatus)
+t_process	*find_process_by_status(t_list *lst, uint8_t want)
+{
+	t_process *p;
+
+	while (lst)
+	{
+		p = lst->data;
+		if (p->status & want)
+			return (p);
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
+static uint8_t		aplylyse_wstatus(t_process *p, int wstatus)
 {
 	if (WIFEXITED(wstatus))
 	{
@@ -51,10 +65,12 @@ static void		aplylyse_wstatus(t_process *p, int wstatus)
 	{
 		p->status = STOPPED ; // anakyser en fonction du signal
 		p->ret = WSTOPSIG(wstatus);
+		return (1);
 	}
+	return (0);
 }
 
-static void		update_process(t_list *lst, pid_t child, int wstatus)
+static uint8_t	update_process(t_list *lst, pid_t child, int wstatus)
 {
 	t_process *p;
 
@@ -62,58 +78,43 @@ static void		update_process(t_list *lst, pid_t child, int wstatus)
 	return (aplylyse_wstatus(p, wstatus));
 }
 
-void		update_job(t_job *j)
+void		update_job(t_job *j, uint8_t stopped)
 {
 	t_list		*lst;
 
+	if (stopped)
+	{
+		j->ret = 128 + find_process_by_status(j->process, STOPPED)->ret;
+		call_jobcontroler(j);
+		return ;
+	}
 	lst = ft_lstgettail(j->process);
 	j->status = ((t_process *)(lst->data))->status;
 	if (j->status & (COMPLETED | FAILED))
 		j->ret = ((t_process *)(lst->data))->ret;
 	else if (j->status & KILLED)
 		j->ret = 128 + ((t_process*)(lst->data))->ret;
-	else if (j->status & STOPPED)
-	{
-		j->ret = 128 + ((t_process*)(lst->data))->ret;
-		call_jobcontroler(j);
-	}
 }
 
-int		wait_process(t_job *job)
+void		wait_process(t_job *job)
 {
 	pid_t		pid_child;
-	int			wstatus;
+	int32_t		wstatus;
+	uint8_t		stopped;
 
+	stopped = 0;
 	while (ft_lsthave(job->process, has_running))
 	{
 		wstatus = 0;
 		pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED);
 		if (pid_child == -1)
 			perror("[WAIT_PROCESS] error waitpid");
-		update_process(job->process, pid_child, wstatus);
+		if (update_process(job->process, pid_child, wstatus))
+			stopped = TRUE;
 	}
-	update_job(job);
-
-
-
-
-	/* DEBUG  */
-	t_cfg *shell = cfg_shell();
-	if (shell->debug)
-	{
-		t_process *process;
-		t_list *j = job->process;
-		printf("\n\n ----------------------\n--> [INFO PROCESS] \n");
-		while (j)
-		{
-			process = j->data;
-			printf("cmd = [%s]\t retour = [%d]\t status = [%d]\n", process->path, process->ret, process->status);
-			j = j->next;
-		}
-		printf("--> [INFO JOB] \n");
-		printf("\tJOB status = [%d]\t  JOB return = [%d]\n ----------------------\n\n", job->status, job->ret);
-	}
-	/*		*/
-	return (0);
+	update_job(job, stopped);
+	if (cfg_shell()->debug)
+		debug_print_all(job, job->process, "wait ending");
+	return ;
 }
 

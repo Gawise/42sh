@@ -12,7 +12,7 @@ t_lexer_flag	l_get_last_flag(t_lexer *lexer)
 	return (0);
 }
 
-int	l_add_flag(t_lexer *lexer, char c)
+int				l_add_flag(t_lexer *lexer, char c)
 {
 	if (!(l_create_flag_queue(lexer)))
 		return (0);
@@ -27,12 +27,12 @@ int	l_add_flag(t_lexer *lexer, char c)
 	return (1);
 }
 
-int	l_flag_state_add(t_lexer *lexer, char c)
+int				l_flag_state_add(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
 	flag = l_get_last_flag(lexer);
-	if (flag == F_BSLASH)
+	if (flag == F_BSLASH || (flag == F_BRACKEXP && c == '}'))
 	{
 		l_buffer_add(lexer, c);
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
@@ -61,7 +61,7 @@ int	l_flag_state_add(t_lexer *lexer, char c)
 	return (1);
 }
 
-int	l_delim_flag(t_lexer *lexer, char c)
+int				l_delim_flag(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
@@ -86,7 +86,7 @@ int	l_delim_flag(t_lexer *lexer, char c)
 	return (1);
 }
 
-void	del_flag_queue(void *data, size_t size)
+void			del_flag_queue(void *data, size_t size)
 {
 	(void)size;
 	ft_memdel(&data);

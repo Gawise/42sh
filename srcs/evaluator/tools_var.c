@@ -1,18 +1,20 @@
 #include "libft.h"
 #include "exec.h"
 #include "sh.h"
+#include "ft_printf.h"
 
 
-
-
-void	cpy_var_list(void *dst, void *src)
+uint8_t		ft_print_env_lst(t_list *lst)
 {
-	t_var *d;
-	t_var *s;
+	t_var	*env;
 
-	d = dst;
-	s = src;
-	d->ctab = ft_tabdup(s->ctab);
+	while (lst)
+	{
+		env = lst->data;
+		ft_printf("%s=%s\n", env->ctab[0], env->ctab[1]);
+		lst = lst->next;
+	}
+	return (SUCCESS);
 }
 
 char		**create_tab_var(t_list *lst, int count)
@@ -28,42 +30,13 @@ char		**create_tab_var(t_list *lst, int count)
 	{
 		count++;
 		if (!(tab = (char **)malloc(sizeof(char *) * (count + 1))))
-			ft_ex("[Fatal Error] MALLOC\nexit\n");
+			ft_ex(EXMALLOC);
 		tab[count] = NULL;
 	}
 	count--;
-	/*    plus besoin si strjoin valide avec stdarg
-	 *len0 = ft_strlen(((t_var *)(lst->data))->ctab[0]);
-	 *len1 = ft_strlen(((t_var *)(lst->data))->ctab[1]);
-	 *ctab[count] = ft_create_var_env(((t_var *)(lst->data))->ctab, len0, len1);
-	 */
 	var = lst->data;
 	tab[count] = ft_strjoin(3, var->ctab[0], "=", var->ctab[1]);
 	return (tab);
-}
-
-t_list		*find_var(t_list *lst, char *name)
-{
-	t_var *var;
-
-	while (lst)
-	{
-		var = lst->data;
-		if (!ft_strcmp(var->ctab[0], name))
-			return (lst);
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-char		*find_var_value(t_list *var, char *name)
-{
-	t_list	*lst;
-
-	lst = find_var(var, name);
-	if (lst)
-		return (((t_var *)(lst->data))->ctab[1]);
-	return (NULL);
 }
 
 void		create_lst_var(t_list **lst, char **tab)

@@ -18,15 +18,15 @@ static char		*get_assign_str(t_list *assign_lst)
 		return (NULL);
 	assign = (t_assignment *)assign_lst->data;
 	if (ft_asprintf(&res, "%s=%s", assign->var, assign->val) == -1)
-		ft_ex("Cannot allocate memory\n");
+		ft_ex(EXMALLOC);
 	assign_lst = assign_lst->next;
 	while (assign_lst && assign)
 	{
 		assign = (t_assignment *)assign_lst->data;
 		if (ft_asprintf(&new, "%s=%s", assign->var, assign->val) == -1)
-			ft_ex("Cannot allocate memory\n");
+			ft_ex(EXMALLOC);
 		if (ft_asprintf(&tmp, "%s %s", res, new) == -1)
-			ft_ex("Cannot allocate memory\n");
+			ft_ex(EXMALLOC);
 		ft_strdel(&res);
 		ft_strdel(&new);
 		res = tmp;
@@ -45,17 +45,17 @@ static char		*add_str_to_job(char **str, char **new)
 	if (!*str && *new)
 	{
 		if (!(res = ft_strdup(*new)))
-			ft_ex("Cannot allocate memory\n");
+			ft_ex(EXMALLOC);
 	}
 	else if (*str && *new)
 	{
 		if (ft_asprintf(&res, "%s %s", *str, *new) == -1)
-			ft_ex("Cannot allocate memory\n");
+			ft_ex(EXMALLOC);
 	}
 	else if (*str && !*new)
 	{
 		if (!(res = ft_strdup(*str)))
-			ft_ex("Cannot allocate memory\n");
+			ft_ex(EXMALLOC);
 	}
 	if (*new)
 		ft_strdel(new);

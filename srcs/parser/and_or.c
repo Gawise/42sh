@@ -2,7 +2,7 @@
 #include "lexer.h"
 #include "parser.h"
 
-int	p_add_and_or(t_token *token, t_parser * parser)
+int	p_add_and_or(t_token *token, t_parser *parser)
 {
 	t_cmd_table	*table;
 	t_and_or	*and_or;
