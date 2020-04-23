@@ -134,7 +134,6 @@ void	set_job_background(t_cfg *shell, t_job *job)
 {
 	t_job	jc;
 
-	job->status |= BACKGROUND;
 	shell->active_job++;
 	job->id = shell->active_job;
 	job->ret = 0;

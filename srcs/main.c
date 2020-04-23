@@ -1,15 +1,17 @@
-#include <unistd.h>
-#include <stdio.h>
 #include "libft.h"
 #include "ft_printf.h"
 #include "get_next_line.h"
 #include "lexer.h"
 #include "parser.h"
+#include "job_control.h"
 #include "analyzer.h"
 #include "exec.h"
 #include "sh.h"
 #include "var.h"
 #include "line_edition.h"
+#include <unistd.h>
+#include <stdio.h>
+
 
 void	print_debug(t_list *elem);
 
@@ -55,6 +57,7 @@ int		parser_routine(t_lexer *lexer,t_parser *parser)
 
 int		line_edition_routine(char **line)
 {
+	what_s(cfg_shell(), cfg_shell()->job);
 	if (!(*line = ft_prompt(find_var_value(cfg_shell()->intern, "PS1")
 	, COLOR_SH)))
 		return (0);

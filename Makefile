@@ -116,6 +116,7 @@ EVALSRCS += debug.c
 ## JOB CONTROL ##
 
 JBSRCS += tools_job.c
+JBSRCS += routine_check_child.c
 
 ## COMMON TOOLS  ##
 

@@ -1,6 +1,9 @@
 #include "exec.h"
 #include "libft.h"
 
+
+#include "sh.h"
+#include "ft_printf.h"
 void	del_struct_tvar(void *del, size_t u)
 {
 	t_var	*v;

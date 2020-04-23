@@ -34,9 +34,10 @@ static uint8_t		set_debug(char **av)
 	int		fd;
 	char	*path;
 
+	int d = 0;
 	i = 0;
-	while (i++ && av[i])
-		if (!ft_strcmp(av[i], "debug"))
+	while (++i && av[i])
+		if (!(d = ft_strcmp(av[i], "debug")))
 			break ;
 	if (!av[i])
 		return (0);
