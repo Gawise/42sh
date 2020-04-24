@@ -2,7 +2,37 @@
 #include "struct.h"
 #include "var.h"
 #include "sh.h"
+#include "exec.h" // only for db
+#include "job_control.h"
 
+
+uint8_t			add_job_cfg(t_job *job)
+{
+	t_cfg	*shell;
+	t_job	jc;
+
+	shell = cfg_shell();
+	shell->active_job++;
+	job->id = shell->active_job;
+	ft_cpy_job(job, &jc);
+	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
+	ft_bzero(&jc, sizeof(t_job));
+
+	if (shell->debug)
+	{
+		t_list	*ldb;
+		t_job	*jdb;
+
+		ldb = shell->job;
+		while (ldb)
+		{
+			jdb = ldb->data;
+			debug_print_all(jdb, jdb->process, "add_job_cfg");
+			ldb = ldb->next;
+		}
+	}
+	return (shell->active_job);
+}
 
 static void		cpy_lst_process(void *copy, void *process)
 {

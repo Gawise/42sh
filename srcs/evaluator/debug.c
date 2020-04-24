@@ -9,7 +9,7 @@ void	debug_print_all(t_job *j, t_list *process, char *where)
 
 	shell = cfg_shell();
 	ft_dprintf(shell->debug, "\n\n-----------\t [DEBUG] Print all\t %s\n", where);
-	ft_dprintf(shell->debug, "\t[PROCESS]\n");
+	ft_dprintf(shell->debug, "\t---- [PROCESS]\n");
 
 	while (process)
 	{
@@ -19,7 +19,7 @@ void	debug_print_all(t_job *j, t_list *process, char *where)
 		ft_dprintf(shell->debug, "STATUS = [%d]\n", p->status);
 		process = process->next;
 	}
-	ft_dprintf(shell->debug, "\t[JOB]\n");
+	ft_dprintf(shell->debug, "\t---- [JOB]\n");
 	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
 	ft_dprintf(shell->debug, "STATUS = [%d]\tRET = [%d]\n", j->status, j->ret);
 	ft_dprintf(shell->debug, "-----------\n", where);

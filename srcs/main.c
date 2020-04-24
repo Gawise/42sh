@@ -57,7 +57,7 @@ int		parser_routine(t_lexer *lexer,t_parser *parser)
 
 int		line_edition_routine(char **line)
 {
-	what_s(cfg_shell(), cfg_shell()->job);
+	check_child(cfg_shell(), cfg_shell()->job);
 	if (!(*line = ft_prompt(find_var_value(cfg_shell()->intern, "PS1")
 	, COLOR_SH)))
 		return (0);

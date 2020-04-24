@@ -2,8 +2,10 @@
 # define JOB_CONTROL_H
 
 
-void	ft_cpy_job(t_job *job, t_job *copy);
-void	what_s(t_cfg *shell, t_list *lstjob);
+uint8_t		add_job_cfg(t_job *job);
+
+void		ft_cpy_job(t_job *job, t_job *copy);
+void		check_child(t_cfg *shell, t_list *lstjob);
 
 void		aplylyse_wstatus(t_process *p, int wstatus);
 void		update_process(t_list *lst, pid_t child, int wstatus);

@@ -2,13 +2,18 @@
 #include "libft.h"
 #include "sh.h"
 #include "ft_printf.h"
+#include "job_control.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
+
 void	call_jobcontroler(t_job *j)
 {
-	(void)j;
-	printf("[var intern] Stopped(SIGTSTP)  ->commande line used for message\n");
+	j->id = add_job_cfg(j);
+	if (j->ret - 128 == 20)
+		ft_printf("[%d]\t + Stopped(SIGTSTP)  %s\n", j->id, j->cmd);
+	else
+		ft_printf("[%d]\t + Stopped(SIGSTOP)  %s\n", j->id, j->cmd);
 }
 
 int32_t	has_stopped(t_list *lst)

@@ -117,7 +117,7 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
 	process_assign(shell, p, p->assign);
-	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
+	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		process_redir(p, p->redir);
 		builtin_process(j, p);
@@ -130,19 +130,10 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	return ;
 }
 
-void	set_job_background(t_cfg *shell, t_job *job)
+void	set_job_background(t_job *job)
 {
-	t_job	jc;
-
-	shell->active_job++;
-	job->id = shell->active_job;
-	job->ret = 0;
+	job->id = add_job_cfg(job);
 	ft_printf("[%d] %d\n", job->id, job->pgid);
-	ft_cpy_job(job, &jc);
-	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
-	ft_bzero(&jc, sizeof(t_job));
-	if (shell->debug)
-		debug_print_all(job, job->process, "BackGround ending");
 }
 
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
@@ -161,7 +152,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
 	else
-		set_job_background(shell, job);
+		set_job_background(job);
 	ret = ft_itoa(job->ret);
 	setvar_update(find_var(shell->sp, "?"), ret);
 	ft_strdel(&ret);

@@ -101,7 +101,7 @@ static	void	update_listjob(t_cfg *shell)
 
 }
 
-void	what_s(t_cfg *shell, t_list *lstjob)
+void	check_child(t_cfg *shell, t_list *lstjob)
 {
 	pid_t	pid_child;
 	t_job	*job;
