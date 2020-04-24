@@ -2,10 +2,10 @@
 #include "struct.h"
 #include "exec.h"
 #include "job_control.h"
+#include "ft_printf.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "ft_printf.h"
 
 
 void	one_process_change(t_process *p)
@@ -30,9 +30,11 @@ void	job_done(t_job *j, t_process *last_p)
 {
 	j->status = last_p->status;
 	j->ret = last_p->ret;
-	if (last_p->status == (FAILED | COMPLETED))
+
+
+	if (last_p->status & (FAILED | COMPLETED))
 		ft_printf("\n[%d]\tDone(%d)\t%s\n", j->id, j->ret, j->cmd);
-	else if (last_p->status == KILLED)
+	else if (last_p->status & KILLED)
 	{
 		j->ret += 128;
 		if (last_p->ret == 3)
@@ -74,10 +76,28 @@ int32_t			job_has_finish(void *job, void *status)
 
 static	void	update_listjob(t_cfg *shell)
 {
-	uint8_t	ending_status;
+	uint8_t		ending_status;
+	t_list		*ljob;
+	t_job		*j;
 
 	ending_status = (FAILED | COMPLETED | KILLED);
 	ft_lstdelif(&shell->job, &ending_status, job_has_finish, del_struct_job);
+	ljob = shell->job;
+	if (!ljob)
+		shell->active_job = 0;
+	while (ljob)
+	{
+		j = ljob->data;
+		if (ft_lsthave(j->process, has_running))
+			j->status = RUNNING;
+		else if (ft_lsthave(j->process, has_stopped))
+			j->status = STOPPED;
+		else
+			ft_dprintf(2, "job has lost [%d] [%s]\n",j->pgid, j->cmd);
+		if (!ljob->next)
+			shell->active_job = j->id;
+		ljob = ljob->next;
+	}
 
 }
 

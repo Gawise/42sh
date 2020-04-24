@@ -68,6 +68,9 @@ uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 uint8_t			ft_hash(t_job *j, t_process *p);
 
+/*		PROCESS HANDLING	*/
+int32_t	has_running(t_list *lst);
+int32_t	has_stopped(t_list *lst);
 
 /*		REDIR		 */
 void		process_redir(t_process *p, t_list *redir);
