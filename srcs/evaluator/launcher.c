@@ -132,7 +132,7 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 
 void	set_job_background(t_job *job)
 {
-	job->id = add_job_cfg(job);
+	add_job_cfg(job);
 	ft_printf("[%d] %d\n", job->id, job->pgid);
 }
 

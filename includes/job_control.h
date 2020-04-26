@@ -2,7 +2,9 @@
 # define JOB_CONTROL_H
 
 
-uint8_t		add_job_cfg(t_job *job);
+int32_t			job_has_finish(void *job, void *status);
+
+void		add_job_cfg(t_job *job);
 
 void		ft_cpy_job(t_job *job, t_job *copy);
 void		check_child(t_cfg *shell, t_list *lstjob);

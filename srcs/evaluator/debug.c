@@ -14,7 +14,7 @@ void	debug_print_all(t_job *j, t_list *process, char *where)
 	while (process)
 	{
 		p = process->data;
-		ft_dprintf(shell->debug, "CMD = [%s]\tPATH = [%s]\n", p->cmd, p->path);
+		ft_dprintf(shell->debug, "CMD = [%s]\tPATH = [%s]\t PID = [%d]\n", p->cmd, p->path, p->pid);
 		ft_dprintf(shell->debug, "SETUP = [%032b]\n", p->setup);
 		ft_dprintf(shell->debug, "STATUS = [%d]\n", p->status);
 		process = process->next;

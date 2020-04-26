@@ -6,7 +6,7 @@
 #include "job_control.h"
 
 
-uint8_t			add_job_cfg(t_job *job)
+void		add_job_cfg(t_job *job)
 {
 	t_cfg	*shell;
 	t_job	jc;
@@ -31,7 +31,6 @@ uint8_t			add_job_cfg(t_job *job)
 			ldb = ldb->next;
 		}
 	}
-	return (shell->active_job);
 }
 
 static void		cpy_lst_process(void *copy, void *process)

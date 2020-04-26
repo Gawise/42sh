@@ -9,31 +9,11 @@
 
 void	call_jobcontroler(t_job *j)
 {
-	j->id = add_job_cfg(j);
+	add_job_cfg(j);
 	if (j->ret - 128 == 20)
 		ft_printf("[%d]\t + Stopped(SIGTSTP)  %s\n", j->id, j->cmd);
 	else
 		ft_printf("[%d]\t + Stopped(SIGSTOP)  %s\n", j->id, j->cmd);
-}
-
-int32_t	has_stopped(t_list *lst)
-{
-	t_process *p;
-
-	p = lst->data;
-	if (p->status == STOPPED)
-		return (1);
-	return (0);
-}
-
-int32_t	has_running(t_list *lst)
-{
-	t_process *p;
-
-	p = lst->data;
-	if (p->status == RUNNING)
-		return (1);
-	return (0);
 }
 
 t_process	*find_process_by_pid(t_list *lst, pid_t child)
