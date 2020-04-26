@@ -46,11 +46,9 @@ static uint8_t	deep_check(t_job *j, pid_t child, int32_t wstatus)
 	pid_t	last_child;
 
 
-	ft_dprintf(cfg_shell()->debug, "[DEEP CHECK]1  RENTRE\n child = [%d]  wstatus = [%d]\n", child , wstatus);
 	last_child = child;
 	update_process(j->process, child, wstatus);
 	child = waitpid(-j->pgid, &wstatus, WUNTRACED | WNOHANG);
-	ft_dprintf(cfg_shell()->debug, "[DEEP CHECK]2\n child = [%d]  wstatus = [%d]\n", child , wstatus);
 	if (child == -1)
 		job_done(j, find_process_by_pid(j->process, last_child));
 	else if (child > 0)
@@ -71,12 +69,10 @@ static void		update_listjob(t_cfg *shell)
 		;
 	ljob = shell->job;
 
-	ft_dprintf(shell->debug, "[UPDATE LISTJOB] RENTRE\n");
 	if (!ljob)
 		shell->active_job = 0;
 	while (ljob)
 	{
-		ft_dprintf(shell->debug, "[UPDATE LISTJOB] boucle\n");
 		j = ljob->data;
 		if (find_process_by_status(j->process, RUNNING))
 			j->status = RUNNING;
@@ -98,12 +94,10 @@ void			check_child(t_cfg *shell, t_list *lstjob)
 	uint8_t		new;
 
 	new = 0;
-	ft_dprintf(shell->debug, "[CHECK_CHILD] RENTRE\n ");
 	if (!shell->active_job)
 		return ;
 	while (lstjob)
 	{
-		ft_dprintf(shell->debug, "[CHECK CHILD] boucle\n");
 		job = lstjob->data;
 		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG)))
 			new = deep_check(job, pid_child, wstatus);
