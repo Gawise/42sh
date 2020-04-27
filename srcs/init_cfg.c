@@ -23,27 +23,41 @@ static void		set_var_intern(t_cfg *shell)
 	ft_strdel(&pid);
 }
 
-static uint8_t		set_debug(char **av)
+static uint8_t		set_debug(char **av, int i)
 {
-	int 	i;
 	int		fd;
 	char	*path;
 
-	i = 0;
-	while (i++ && av[i])
-		if (!ft_strcmp(av[i], "debug"))
-			break ;
-	if (!av[i])
-		return (0);
-	if (!av[i + 1] || *av[i + 1] != '-')
-		return (1);
-	path = (av[i + 1]) + 1;
-	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
+	if (!(path = av[i])
+	|| (fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
 	{
-		ft_dprintf(2, "Debug option error\n\tusage: ./21sh debug [-path]\nexit\n");
+		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
 		exit(1);
 	}
 	return (fd);
+}
+
+static void		set_shell_mode(char **av, int ac, t_cfg *shell)
+{
+	int		i;
+
+	(void)ac;
+	i = 1;
+	shell->mode = INTERACTIVE_MODE;
+	if (av[i] && av[i][0] == '-')
+	{
+		if (ft_strequ("-d", av[i++]))
+			shell->debug = set_debug(av, i++);
+		else
+		{
+			ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
+			exit(1);
+		}
+	}
+	if (av[i] && !(shell->file = ft_strdup(av[i])))
+		ft_ex(EXMALLOC);
+	if (shell->file)
+		shell->mode = NON_INTERACTIVE_MODE;
 }
 
 t_cfg			*init_cfg(char **env, char **av, int ac)
@@ -58,7 +72,6 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	set_var_intern(shell);
 	if (!(shell->map = ft_hash_init(128)))
 		ft_ex(EXMALLOC);
-	if (ac > 1)
-		shell->debug = set_debug(av);
+	set_shell_mode(av, ac, shell);
 	return (shell);
 }

@@ -13,6 +13,12 @@ typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
 typedef struct s_hash_map	t_hash_map;
 
+typedef enum			e_mode
+{
+	INTERACTIVE_MODE,
+	NON_INTERACTIVE_MODE
+}				t_mode;
+
 typedef struct	s_cfg
 {
 	struct termios	term_origin;      /* origin terminal modes */
@@ -22,10 +28,11 @@ typedef struct	s_cfg
 	t_list			*intern;
 	t_list			*job;
 	t_hash_map		*map;
+	t_mode			mode;
+	char			*file;
 	uint8_t			active_job;
 	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
-
 
 typedef enum			e_token_type
 {
