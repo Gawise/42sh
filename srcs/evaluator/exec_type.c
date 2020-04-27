@@ -43,6 +43,7 @@ static void			any_slash(t_list *env, t_process *p)
 	p->setup |= path_errors(p->path, 1);
 }
 
+#include "ft_printf.h"
 static void			with_slash(t_process *p)
 {
 	char		*tmp;

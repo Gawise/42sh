@@ -114,18 +114,21 @@ EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
 EVALSRCS += cleaner.c
 EVALSRCS += constructor.c
-EVALSRCS += leveling.c
+EVALSRCS += bridge_step.c
 EVALSRCS += wait.c
 EVALSRCS += redir.c
 EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
 EVALSRCS += errors_handling.c
+EVALSRCS += ft_lst.c
 EVALSRCS += debug.c
 
 ## JOB CONTROL ##
 
 JBSRCS += tools_job.c
+JBSRCS += ft_lst.c
+JBSRCS += routine_check_child.c
 
 ## COMMON TOOLS  ##
 

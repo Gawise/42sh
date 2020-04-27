@@ -1,15 +1,17 @@
-#include <unistd.h>
-#include <stdio.h>
 #include "libft.h"
 #include "ft_printf.h"
 #include "get_next_line.h"
 #include "lexer.h"
 #include "parser.h"
+#include "job_control.h"
 #include "analyzer.h"
 #include "exec.h"
 #include "sh.h"
 #include "var.h"
 #include "line_edition.h"
+#include <unistd.h>
+#include <stdio.h>
+
 
 void	print_debug(t_list *elem);
 
@@ -38,6 +40,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 
 int		parser_routine(t_lexer *lexer,t_parser *parser)
 {
+	check_child(cfg_shell(), cfg_shell()->job);
 	if (cfg_shell()->debug)
 		ft_dprintf(cfg_shell()->debug, "\n----------- parsing -----------\n\n");
 	init_parser(parser);
@@ -110,5 +113,4 @@ int		main(int ac, char **av, char **env)
 	}
 	clean_cfg(cfg_shell());
 	exit(0);
-	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }

@@ -41,14 +41,14 @@ uint8_t		ft_setvar(t_list **lst, char *name, char *value)
 	t_var	*var;
 
 	find = NULL;
-	if (var_check_name(name))
-		return (FAILURE);
 	if ((find = find_var(*lst, name)))
 	{
 		var = find->data;
 		setvar_update(find, value);
 		return (SUCCESS);
 	}
+	if (var_check_name(name))
+		return (FAILURE);
 	setvar_add(lst, name, value);
 	return (SUCCESS);
 }
