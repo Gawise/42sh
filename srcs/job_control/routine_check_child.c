@@ -45,7 +45,6 @@ static uint8_t	deep_check(t_job *j, pid_t child, int32_t wstatus)
 {
 	pid_t	last_child;
 
-
 	last_child = child;
 	update_process(j->process, child, wstatus);
 	child = waitpid(-j->pgid, &wstatus, WUNTRACED | WNOHANG);

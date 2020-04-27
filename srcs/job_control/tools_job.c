@@ -2,11 +2,11 @@
 #include "struct.h"
 #include "var.h"
 #include "sh.h"
+#include "ft_printf.h"
 #include "exec.h" // only for db
 #include "job_control.h"
 
-
-void		add_job_cfg(t_job *job)
+void			add_job_cfg(t_job *job)
 {
 	t_cfg	*shell;
 	t_job	jc;
@@ -31,6 +31,12 @@ void		add_job_cfg(t_job *job)
 			ldb = ldb->next;
 		}
 	}
+}
+
+void			set_job_background(t_job *job)
+{
+	add_job_cfg(job);
+	ft_printf("[%d] %d\n", job->id, job->pgid);
 }
 
 static void		cpy_lst_process(void *copy, void *process)

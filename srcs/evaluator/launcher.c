@@ -51,14 +51,13 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			perror("[Parent process] close error:"); ///perror
-	if (process->setup & ERROR)
-		process->status = FAILED; // pour bg
+	//if (process->setup & ERROR)
+	//	process->status = FAILED; // pour bg mais pourquoi ?
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
 		if (job->pgid == 0)
@@ -74,9 +73,10 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 
 int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
+
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[child process] close error:");
+			perror("[child process] close error:"); //perror
 	p->pid = getpid();
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
@@ -128,12 +128,6 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	else
 		fork_process(j, p);
 	return ;
-}
-
-void	set_job_background(t_job *job)
-{
-	add_job_cfg(job);
-	ft_printf("[%d] %d\n", job->id, job->pgid);
 }
 
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
