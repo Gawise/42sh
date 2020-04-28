@@ -15,7 +15,7 @@ char		*get_args_str(char **args);
 ** jobs_str/core.c
 */
 
-int		p_set_jobs_str(t_parser *parser);
+int		a_set_jobs_str(t_parser *parser);
 
 /*
 ** heredoc.c
