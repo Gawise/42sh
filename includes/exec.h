@@ -33,8 +33,9 @@
 # define B_UNSETENV 65536 	/* 0100.00000000000000 */
 # define B_HASH 81920		/* 0101.00000000000000 */
 # define B_EXIT 98304		/* 0110.10000000000000 */
-
-
+# define B_JOBS 114688		/* 0111.00000000000000 */
+# define B_FG 131072		/* 1000.00000000000000 */
+# define B_BG 147456		/* 1001.00000000000000 */
 
 /*   Special Builtin 
 # define B_EXIT
@@ -67,6 +68,7 @@ uint8_t			ft_unsetenv(t_job *j, t_process *p);
 uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 uint8_t			ft_hash(t_job *j, t_process *p);
+uint8_t 		ft_jobs(t_job *j, t_process *p);
 
 /*		PROCESS HANDLING	*/
 int32_t	has_running(t_list *lst);
