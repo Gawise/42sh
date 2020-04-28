@@ -26,7 +26,6 @@ t_cfg		*cfg_shell(void)
 	return (&shell);
 }
 
-
 void		init_shell(char **env, char **av, int ac)
 {
 	uint8_t		shell_terminal;

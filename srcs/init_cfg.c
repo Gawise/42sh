@@ -4,32 +4,46 @@
 #include "var.h"
 #include "ft_printf.h"
 
-static void		set_var_intern(t_cfg *shell)
+
+static void		set_var_sp(t_cfg *shell)
 {
 	char	*pid;
 
 	pid = ft_itoa(shell->pid);
-	ft_setvar(&shell->intern, "?", "0");
-	ft_setvar(&shell->intern, "$", pid);
-	ft_setvar(&shell->intern, "!", "0");
-	ft_setvar(&shell->intern, "*", 0);
-	ft_setvar(&shell->intern, "@", 0);
-	ft_setvar(&shell->intern, "#", 0);
-	ft_setvar(&shell->intern, "-", 0);
-	ft_setvar(&shell->intern, "0", 0);
+	setvar_add(&shell->sp, "$", pid);
+	setvar_add(&shell->sp, "?", "13");
+	setvar_add(&shell->sp, "!", "0");
+	setvar_add(&shell->sp, "*", 0);
+	setvar_add(&shell->sp, "@", 0);
+	setvar_add(&shell->sp, "#", 0);
+	setvar_add(&shell->sp, "-", 0);
+	setvar_add(&shell->sp, "0", 0);
+	ft_strdel(&pid);
+}
+
+static void		set_var_intern(t_cfg *shell)
+{
 	ft_setvar(&shell->intern, "_", 0);
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");
-	ft_strdel(&pid);
 }
 
 static uint8_t		set_debug(char **av, int i)
 {
 	int		fd;
 	char	*path;
-
-	if (!(path = av[i])
-	|| (fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
+	
+	int d = 0;
+	i = 0;
+	while (++i && av[i])
+		if (!(d = ft_strcmp(av[i], "debug")))
+			break ;
+	if (!av[i])
+		return (0);
+	if (!av[i + 1] || *av[i + 1] != '-')
+		return (1);
+	path = (av[i + 1]) + 1;
+	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
 	{
 		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
 		exit(1);
@@ -70,6 +84,7 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	create_lst_var(&shell->env, env);
 	ft_setvar(&shell->env, "PROJECT", "21sh");
 	set_var_intern(shell);
+	set_var_sp(shell);
 	if (!(shell->map = ft_hash_init(128)))
 		ft_ex(EXMALLOC);
 	set_shell_mode(av, ac, shell);

@@ -27,3 +27,5 @@
 # Vscode
 *.json
 
+# Tags file
+tags

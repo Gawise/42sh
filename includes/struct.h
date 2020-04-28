@@ -26,6 +26,7 @@ typedef struct	s_cfg
 	pid_t			pid;				/* pid's 21	*/
 	t_list			*env;
 	t_list			*intern;
+	t_list			*sp;
 	t_list			*job;
 	t_hash_map		*map;
 	t_mode			mode;

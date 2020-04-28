@@ -11,7 +11,7 @@ uint8_t		process_errors_handling(t_process *p)
 		namesh = NAME_SH;
 	if (!(p->setup & ERROR))
 		return (SUCCESS);
-	if (!p->cmd)
+	if (!p->cmd && (p->assign || p->redir))
 		exit(EXIT_SUCCESS);
 	p->setup &= ~ERROR;
 	if (p->setup & E_UNFOUND)

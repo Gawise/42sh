@@ -1,15 +1,17 @@
-#include <unistd.h>
-#include <stdio.h>
 #include "libft.h"
 #include "ft_printf.h"
 #include "get_next_line.h"
 #include "lexer.h"
 #include "parser.h"
+#include "job_control.h"
 #include "analyzer.h"
 #include "exec.h"
 #include "sh.h"
 #include "var.h"
 #include "line_edition.h"
+#include <unistd.h>
+#include <stdio.h>
+
 
 void	print_debug(t_list *elem);
 
@@ -38,6 +40,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 
 int		parser_routine(t_lexer *lexer,t_parser *parser)
 {
+	check_child(cfg_shell(), cfg_shell()->job);
 	if (cfg_shell()->debug)
 		ft_dprintf(cfg_shell()->debug, "\n----------- parsing -----------\n\n");
 	init_parser(parser);
@@ -50,6 +53,8 @@ int		parser_routine(t_lexer *lexer,t_parser *parser)
 		return (0);
 	}
 	ft_lstdel(&lexer->token_lst, del_token);
+	if (cfg_shell()->debug)
+		print_parser(parser);
 	return (1);
 }
 
@@ -66,20 +71,16 @@ int		line_edition_routine(char **line)
 int		eval_routine(t_parser *parser)
 {
 	if (parser->state != S_PARSER_SYNTAX_ERROR)
-	{
-		if (cfg_shell()->debug)
-			print_parser(parser);
 		ft_eval(parser->table);
-	}
 	ft_lstdel(&parser->table, del_cmd_table);
 	return (1);
 }
 
 int		analyzer_routine(t_parser *parser)
 {
-	if ((parser->state != S_PARSER_SYNTAX_ERROR
-	&& !p_set_jobs_str(parser))
-	|| a_make_args_tab(parser) < 0)
+	if (a_make_args_tab(parser) < 0
+	|| (parser->state != S_PARSER_SYNTAX_ERROR
+	&& !a_set_jobs_str(parser)))
 		return (0);
 	a_remove_leading_tabs(parser);
 	return (1);
@@ -110,5 +111,4 @@ int		main(int ac, char **av, char **env)
 	}
 	clean_cfg(cfg_shell());
 	exit(0);
-	/*The shell exits by default upon receipt of a SIGHUP. Before exiting, an interactive shell resends the SIGHUP to all jobs, running or stopped. Stopped jobs are sent SIGCONT to ensure that they receive the SIGHUP. */
 }

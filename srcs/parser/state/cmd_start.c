@@ -9,7 +9,7 @@ void	p_init_cmd_wait_state(
 	table_builder[S_PARSER_CMD_START][NEWLINE] = p_skip;
 	table_builder[S_PARSER_CMD_START][IO_NUMBER] = p_add_io_num;
 	table_builder[S_PARSER_CMD_START][AND_IF] = syn_err;
-	table_builder[S_PARSER_CMD_START][AMP] = syn_err;
+	table_builder[S_PARSER_CMD_START][AMP] = p_add_amp;
 	table_builder[S_PARSER_CMD_START][OR_IF] = syn_err;
 	table_builder[S_PARSER_CMD_START][PIPE] = p_add_cmd;
 	table_builder[S_PARSER_CMD_START][SEMI] = p_set_start_state;
