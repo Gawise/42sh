@@ -53,6 +53,8 @@ int		parser_routine(t_lexer *lexer,t_parser *parser)
 		return (0);
 	}
 	ft_lstdel(&lexer->token_lst, del_token);
+	if (cfg_shell()->debug)
+		print_parser(parser);
 	return (1);
 }
 
@@ -69,20 +71,16 @@ int		line_edition_routine(char **line)
 int		eval_routine(t_parser *parser)
 {
 	if (parser->state != S_PARSER_SYNTAX_ERROR)
-	{
-		if (cfg_shell()->debug)
-			print_parser(parser);
 		ft_eval(parser->table);
-	}
 	ft_lstdel(&parser->table, del_cmd_table);
 	return (1);
 }
 
 int		analyzer_routine(t_parser *parser)
 {
-	if ((parser->state != S_PARSER_SYNTAX_ERROR
-	&& !p_set_jobs_str(parser))
-	|| a_make_args_tab(parser) < 0)
+	if (a_make_args_tab(parser) < 0
+	|| (parser->state != S_PARSER_SYNTAX_ERROR
+	&& !a_set_jobs_str(parser)))
 		return (0);
 	a_remove_leading_tabs(parser);
 	return (1);
