@@ -32,9 +32,26 @@ static uint8_t		ft_cd(t_job *j, t_process *p)
 		return (0);
 }
 
+static uint8_t		ft_fg(t_job *j, t_process *p)
+{
+		printf("FG builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+static uint8_t		ft_bg(t_job *j, t_process *p)
+{
+		printf("BG builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
-	uint8_t		(*tab_f[7])(t_job *, t_process *);
+	uint8_t		(*tab_f[10])(t_job *, t_process *);
 
 
 	tab_f[0] = ft_echo;
@@ -44,6 +61,9 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[4] = ft_unsetenv;
 	tab_f[5] = ft_hash;
 	tab_f[6] = ft_exit;
+	tab_f[7] = ft_jobs;
+	tab_f[8] = ft_fg;
+	tab_f[9] = ft_bg;
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else

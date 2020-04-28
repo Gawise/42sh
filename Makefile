@@ -145,6 +145,7 @@ BTSRCS += hash.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
+BTSRCS += jobs.c
 
 ## INCLUDES ##
 
