@@ -38,7 +38,7 @@ uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 		return (TRUE);
 	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
 		return (0);
-	ft_hash_add(shell->map, p->cmd, p->path);
+	ft_hash_add(shell->map, p->cmd, p->path, sizeof(p->path));
 	return (TRUE);
 }
 
