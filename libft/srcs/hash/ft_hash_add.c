@@ -1,19 +1,23 @@
 #include "libft.h"
 
-int		ft_hash_add(t_hash_map *map, char *key, void *value)
+int		ft_hash_add(t_hash_map *map, char *key, void *value, size_t size)
 {
 	uint32_t	hash;
 	t_list		*lst;
 	t_hash_node	*node;
+	void		*data;
 
 	if (ft_hash_get_node(map, key))
 		return (1);
+	if (!(data = ft_memalloc(size)))
+		return (0);
+	data = ft_memcpy(data, value, size);
 	hash = ft_hash_str(map, key);
 	lst = map->slots[hash];
 	if (!(node = (t_hash_node *)ft_memalloc(sizeof(t_hash_node)))
 	|| !(node->key = ft_strdup(key)))
 		return (0);
-	node->data = value;
+	node->data = data;
 	if (!(lst = ft_lstpush(&map->slots[hash], node, sizeof(t_hash_node *))))
 		return (0);
 	return (1);

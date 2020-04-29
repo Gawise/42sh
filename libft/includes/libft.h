@@ -79,7 +79,7 @@ char			*ft_itoa(int n);
 
 t_hash_map		*ft_hash_init(uint32_t size);
 uint32_t		ft_hash_str(t_hash_map *map, char *key);
-int				ft_hash_add(t_hash_map *map, char *key, void *value);
+int				ft_hash_add(t_hash_map *map, char *key, void *value, size_t size);
 t_hash_node		*ft_hash_get_node(t_hash_map *map, char *key);
 void			*ft_hash_lookup(t_hash_map *map, char *key);
 t_list			*ft_hash_get_list(t_hash_map *map, char *key);
