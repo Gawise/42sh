@@ -53,6 +53,7 @@ int		parse_tilde_exp(char **string, t_exp *exp, int assign)
 	}
 	if ((i == 1 && !get_home_val(exp)) || (i > 1 && !get_tilde_exp(exp)))
 		return (0);
+	ft_bzero(exp->buf, EXP_BSIZE);
 	*string = str + i;
 	return (1);
 }
@@ -62,10 +63,11 @@ void	find_tilde_exp(char **word, t_exp exp)
 	char	*str;
 	int		i;
 
+	i = 0;
 	if (!word || !*word)
 		return ;
 	str = *word;
-	if (*str != '~' || !(i = parse_tilde_exp(&str, &exp, 0)))
+	if (*str != '~' || !(parse_tilde_exp(&str, &exp, 0)))
 		return ;
 	while (str[i])
 	{
