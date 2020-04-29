@@ -5,7 +5,7 @@
 
 
 
-	#include <stdio.h>				//debug
+# include <stdio.h>				//debug
 # include "struct.h"
 # include "signal.h"
 
@@ -69,6 +69,10 @@ uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 uint8_t			ft_hash(t_job *j, t_process *p);
 uint8_t 		ft_jobs(t_job *j, t_process *p);
+uint8_t 		ft_cd(t_job *j, t_process *p);
+char		*ft_strcut(char *str, char *delim, unsigned int field);
+int			check_whole_path(char *path);
+char			cd_getopt(char **str, int *i);
 
 /*		PROCESS HANDLING	*/
 int32_t	has_running(t_list *lst);
