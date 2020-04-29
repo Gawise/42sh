@@ -45,7 +45,7 @@ int		hash_fill_map(t_hash_map **map, char *path, char *cmd)
 	if (!(file = ft_which(path, cmd)))
 		return (hash_not_found(cmd));
 	if (!*map)
-		*map = ft_hash_init(100);
+		*map = ft_hash_init(128);
 	if (!ft_hash_add(*map, cmd, file))
 		ft_ex(EXMALLOC);
 	return (1);
