@@ -31,11 +31,23 @@ static uint32_t			builtin_search(t_process *p)
 	return (0);
 }
 
+uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
+{
+	
+	if ((p->path = ft_hash_lookup(shell->map, p->cmd)))
+		return (TRUE);
+	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+		return (0);
+	ft_hash_add(shell->map, p->cmd, p->path, sizeof(p->path));
+	return (TRUE);
+}
+
 static uint16_t		find_type(t_list *env, t_process *p)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
-	else if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+//	else if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+	else if (find_binary(env, p, cfg_shell()))
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);
@@ -49,7 +61,6 @@ static void			any_slash(t_list *env, t_process *p)
 	p->setup |= path_errors(p->path, 1);
 }
 
-#include "ft_printf.h"
 static void			with_slash(t_process *p)
 {
 	char		*tmp;

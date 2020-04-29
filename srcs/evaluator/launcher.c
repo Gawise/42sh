@@ -53,7 +53,6 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[10])(t_job *, t_process *);
 
-
 	tab_f[0] = ft_echo;
 	tab_f[1] = ft_cd;
 	tab_f[2] = ft_env;
