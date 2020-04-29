@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "exec.h"
+#include "lexer.h"
 #include "struct.h"
 #include "sh.h"
 #include "var.h"
@@ -19,13 +20,13 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int		cd_oldpwd(t_list **env, t_job *j, t_process *p)
+int		cd_oldpwd(t_job *j, t_process *p)
 {
 	char	**str;
 	char	*oldpwd;
 	int		ret;
 
-	oldpwd = find_var_value(*env, "OLDPWD");
+	oldpwd = find_var_value(p->env, "OLDPWD");
 	if (!oldpwd || !*oldpwd)
 	{
 		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
@@ -36,8 +37,9 @@ int		cd_oldpwd(t_list **env, t_job *j, t_process *p)
 	str[0] = ft_strdup("cd");
 	str[1] = ft_strdup(oldpwd);
 	str[2] = NULL;
+	tabfree(p->av);
+	p->av = str;
 	ret = ft_cd(j, p);
-	tabfree(str);
 	return (ret);
 }
 
@@ -49,13 +51,13 @@ uint8_t		ft_cd(t_job *job, t_process *p)
 	int		i;
 
 	i = 1;
-	if (!(opt = cd_getopt(str, &i)))
+	if (!(opt = cd_getopt(p->av, &i)))
 		return (1);
-	opr = str[i];
+	opr = p->av[i];
 	if (!opr)
-		return (cd_home(&p->env));
+		return (cd_home(job, p));
 	else if (ft_strequ(opr, "-"))
-		return (cd_oldpwd(&p->env, j, p));
+		return (cd_oldpwd(job, p));
 	if (!(curpath = cd_setcurpath(&p->env, opr)))
 		exit(EXIT_FAILURE);
 	if (opt == 'L')

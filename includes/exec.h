@@ -73,6 +73,16 @@ uint8_t 		ft_cd(t_job *j, t_process *p);
 char		*ft_strcut(char *str, char *delim, unsigned int field);
 int			check_whole_path(char *path);
 char			cd_getopt(char **str, int *i);
+int			cd_home(t_job *job, t_process *p);
+char			*cd_setcurpath(t_list **env, char *opr);
+int			cd_logically(t_list **env, char *curpath, char *opr);
+int			cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd);
+char		*ft_strrep(char *str, char *rem, char *rep);
+char		*ft_pathjoin(char *str1, char *str2);
+char		*ft_strcut(char *str, char *delim, unsigned int field);
+char			*cd_del_dotcomponents(char *curpath, char *opr);
+int			display_cd_errors(char *error);
+int			check_chdir_errors(char **error, char *path, char *opr);
 
 /*		PROCESS HANDLING	*/
 int32_t	has_running(t_list *lst);

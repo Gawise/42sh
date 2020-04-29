@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "exec.h"
+#include "lexer.h"
 #include "struct.h"
 #include "sh.h"
 #include "var.h"
@@ -19,13 +20,13 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int		cd_home(t_list **env)
+int		cd_home(t_job *job, t_process *p)
 {
 	char	**str;
 	char	*home;
 	int		ret;
 
-	home = find_var_value(*env, "HOME");
+	home = find_var_value(p->env, "HOME");
 	if (!home)
 	{
 		ft_dprintf(2, "%s: cd: HOME not set\n", NAME_SH);
@@ -37,8 +38,9 @@ int		cd_home(t_list **env)
 	str[0] = ft_strdup("cd");
 	str[1] = home;
 	str[2] = NULL;
-	ret = builtin_cd(env, str);
-	tabfree(str);
+	tabfree(p->av);
+	p->av = str;
+	ret = ft_cd(job, p);
 	str = NULL;
 	return (ret);
 }
@@ -52,7 +54,7 @@ char	*cd_setcurpath(t_list **env, char *opr)
 	|| !ft_strncmp(opr, "../", 3) || !ft_strcmp(opr, "..")))
 		return (ft_strdup(opr));
 	ret = find_var_value(*env, "CDPATH");
-	cdpath = ft_strsplit(ret, ':');
+	cdpath = ft_strsplit(ret, ":");
 	while (cdpath && *cdpath)
 	{
 		ret = ft_pathjoin(*cdpath, opr);
@@ -138,8 +140,8 @@ int		cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd)
 	ft_strdel(&curpath);
 	if (!pwd && !(pwd = getcwd(NULL, 0)))
 		exit(EXIT_FAILURE);
-	ft_setvar(env, "PWD", pwd);
-	ft_setvar(env, "OLDPWD", oldpwd);
+	ft_setvar(&cfg_shell()->env, "PWD", pwd);
+	ft_setvar(&cfg_shell()->env, "OLDPWD", oldpwd);
 	ft_strdel(&oldpwd);
 	return (0);
 }
