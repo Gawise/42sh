@@ -24,17 +24,26 @@ static uint8_t		ft_echo(t_job *j, t_process *p)
 		return (0);
 }
 
-static uint8_t		ft_cd(t_job *j, t_process *p)
+static uint8_t		ft_fg(t_job *j, t_process *p)
 {
-		printf("CD builtin manquant\n");
+		printf("FG builtin manquant\n");
 		(void)j;
 		(void)p;
 		return (0);
 }
 
+static uint8_t		ft_bg(t_job *j, t_process *p)
+{
+		printf("BG builtin manquant\n");
+		(void)j;
+		(void)p;
+		return (0);
+}
+
+
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
-	uint8_t		(*tab_f[7])(t_job *, t_process *);
+	uint8_t		(*tab_f[10])(t_job *, t_process *);
 
 
 	tab_f[0] = ft_echo;
@@ -44,6 +53,9 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[4] = ft_unsetenv;
 	tab_f[5] = ft_hash;
 	tab_f[6] = ft_exit;
+	tab_f[7] = ft_jobs;
+	tab_f[8] = ft_fg;
+	tab_f[9] = ft_bg;
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else
@@ -51,14 +63,13 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-
 int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			perror("[Parent process] close error:"); ///perror
-	if (process->setup & ERROR)
-		process->status = FAILED; // pour bg
+	//if (process->setup & ERROR)
+	//	process->status = FAILED; // pour bg mais pourquoi ?
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
 		if (job->pgid == 0)
@@ -74,9 +85,10 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 
 int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
+
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[child process] close error:");
+			perror("[child process] close error:"); //perror
 	p->pid = getpid();
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
@@ -117,7 +129,7 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
 	process_assign(shell, p, p->assign);
-	if (p->setup & BUILTIN && !(p->setup & PIPE_ON))
+	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		process_redir(p, p->redir);
 		builtin_process(j, p);
@@ -128,22 +140,6 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	else
 		fork_process(j, p);
 	return ;
-}
-
-void	set_job_background(t_cfg *shell, t_job *job)
-{
-	t_job	jc;
-
-	job->status |= BACKGROUND;
-	shell->active_job++;
-	job->id = shell->active_job;
-	job->ret = 0;
-	ft_printf("[%d] %d\n", job->id, job->pgid);
-	ft_cpy_job(job, &jc);
-	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
-	ft_bzero(&jc, sizeof(t_job));
-	if (shell->debug)
-		debug_print_all(job, job->process, "BackGround ending");
 }
 
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
@@ -162,9 +158,9 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}
 	else
-		set_job_background(shell, job);
+		set_job_background(job);
 	ret = ft_itoa(job->ret);
-	ft_setvar(&shell->intern, "$", ret);
+	setvar_update(find_var(shell->sp, "?"), ret);
 	ft_strdel(&ret);
 	return (job->ret);
 }

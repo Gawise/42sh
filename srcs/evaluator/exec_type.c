@@ -22,6 +22,12 @@ static uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_EXIT);
 	if (!ft_strcmp(p->cmd, "hash"))
 		return (p->setup |= B_HASH);
+	if (!ft_strcmp(p->cmd, "jobs"))
+		return (p->setup |= B_JOBS);
+	if (!ft_strcmp(p->cmd, "bg"))
+		return (p->setup |= B_BG);
+	if (!ft_strcmp(p->cmd, "fg"))
+		return (p->setup |= B_FG);
 	return (0);
 }
 
@@ -43,6 +49,7 @@ static void			any_slash(t_list *env, t_process *p)
 	p->setup |= path_errors(p->path, 1);
 }
 
+#include "ft_printf.h"
 static void			with_slash(t_process *p)
 {
 	char		*tmp;

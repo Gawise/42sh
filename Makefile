@@ -114,18 +114,21 @@ EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
 EVALSRCS += cleaner.c
 EVALSRCS += constructor.c
-EVALSRCS += leveling.c
+EVALSRCS += bridge_step.c
 EVALSRCS += wait.c
 EVALSRCS += redir.c
 EVALSRCS += tools_var.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
 EVALSRCS += errors_handling.c
+EVALSRCS += ft_lst.c
 EVALSRCS += debug.c
 
 ## JOB CONTROL ##
 
 JBSRCS += tools_job.c
+JBSRCS += ft_lst.c
+JBSRCS += routine_check_child.c
 
 ## COMMON TOOLS  ##
 
@@ -142,6 +145,13 @@ BTSRCS += hash.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
+BTSRCS += jobs.c
+BTSRCS += cd/chdir_errors.c
+BTSRCS += cd/chdir_errors2.c
+BTSRCS += cd/ft_cd.c
+BTSRCS += cd/ft_cd2.c
+BTSRCS += cd/ft_cd_core.c
+BTSRCS += cd/tools_cd.c
 
 ## INCLUDES ##
 
@@ -186,6 +196,7 @@ OPATHS += $(OPATH)analyzer/args_tab
 OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
+OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control

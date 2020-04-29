@@ -6,7 +6,7 @@
 void	set_termios(int32_t mode, struct termios *term)
 {
 	if (tcsetattr(STDIN_FILENO, mode, term) == -1)
-		perror("[RUN JOB] error tcsetattr");
+		perror("[RUN JOB] error tcsetattr"); // perror
 }
 
 void	term_create_eval(struct termios *origin, struct termios *eval)

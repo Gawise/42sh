@@ -81,7 +81,7 @@ static char		*get_cmd_str(t_simple_cmd *cmd)
 	return (str);
 }
 
-static int		p_and_or_job_str(t_and_or *and_or)
+static int		a_and_or_job_str(t_and_or *and_or)
 {
 	t_list	*cmd_lst;
 	char	*str;
@@ -109,7 +109,7 @@ static int		p_and_or_job_str(t_and_or *and_or)
 	return (1);
 }
 
-int				p_set_jobs_str(t_parser *parser)
+int				a_set_jobs_str(t_parser *parser)
 {
 	t_list		*lst;
 	t_cmd_table	*cmd_table;
@@ -123,7 +123,7 @@ int				p_set_jobs_str(t_parser *parser)
 		and_or = cmd_table->and_or;
 		while (and_or)
 		{
-			p_and_or_job_str((t_and_or *)and_or->data);
+			a_and_or_job_str((t_and_or *)and_or->data);
 			and_or = and_or->next;
 		}
 		lst = lst->next;
