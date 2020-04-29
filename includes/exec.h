@@ -70,6 +70,18 @@ uint8_t			ft_exit(t_job *j, t_process *p);
 uint8_t			ft_hash(t_job *j, t_process *p);
 uint8_t 		ft_jobs(t_job *j, t_process *p);
 
+uint8_t		get_job_id(char *ope);
+
+int		print_job_ope(char opt, t_job *j, int8_t ope);
+void		print_jobs(char opt, t_job *);
+void		print_jobs_opt(t_job *);
+
+char		get_curr(t_list *job, uint8_t stop);
+int8_t		find_stopped_job(t_list *job);
+int		str_is_digit(char *str);
+
+
+
 /*		PROCESS HANDLING	*/
 int32_t	has_running(t_list *lst);
 int32_t	has_stopped(t_list *lst);
