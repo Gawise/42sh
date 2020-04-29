@@ -146,6 +146,9 @@ BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
 BTSRCS += jobs.c
+BTSRCS += tools_job_id.c
+BTSRCS += print_jobs.c
+BTSRCS += tools_job.c
 
 ## INCLUDES ##
 
