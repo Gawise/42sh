@@ -48,7 +48,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 		while (assignment)
 		{
 			assign = assignment->data;
-			ft_setvar(&p->env, assign->var, assign->var);
+			ft_setvar(&p->env, assign->var, assign->val);
 			assignment = assignment->next;
 		}
 	}
