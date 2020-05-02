@@ -32,7 +32,7 @@
 # define B_SETENV 49152		/* 0011.00000000000000 */
 # define B_UNSETENV 65536 	/* 0100.00000000000000 */
 # define B_HASH 81920		/* 0101.00000000000000 */
-# define B_EXIT 98304		/* 0110.10000000000000 */
+# define B_EXIT 106496		/* 0110.10000000000000 */
 # define B_JOBS 114688		/* 0111.00000000000000 */
 # define B_FG 131072		/* 1000.00000000000000 */
 # define B_BG 147456		/* 1001.00000000000000 */
@@ -101,7 +101,7 @@ int32_t	has_running(t_list *lst);
 int32_t	has_stopped(t_list *lst);
 
 /*		REDIR		 */
-void		process_redir(t_process *p, t_list *redir);
+uint8_t		process_redir(t_process *p, t_list *redir);
 void		do_my_dup2(int8_t fd1, int8_t fd2);
 uint8_t		bad_fd(int fd);
 uint32_t	path_gearing(t_redir *r, char **path, int right);

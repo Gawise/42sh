@@ -35,6 +35,8 @@ uint8_t		lvl_and_or(t_cfg *shell, t_list *lst)
 		return (0);
 	andor = lst->data;
 	ret_job = lvl_simple_cmd(shell, andor->s_cmd, andor->str, !andor->background);
+	if (shell->debug)
+		ft_dprintf(shell->debug, "job return [%d] \n", ret_job);
 	if (lst->next && condition_respected(andor, ret_job))
 		lvl_and_or(shell, lst->next); //continue
 	else if (lst->next)

@@ -103,7 +103,6 @@ static void		update_job(t_job *j)
 	}
 }
 
-
 void		wait_process(t_job *job)
 {
 	pid_t		pid_child;
