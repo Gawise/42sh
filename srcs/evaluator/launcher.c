@@ -55,6 +55,8 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[7] = ft_jobs;
 	tab_f[8] = ft_fg;
 	tab_f[9] = ft_bg;
+	if (p->status & FAILED)
+		return (p->ret);
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
 	else
@@ -84,7 +86,6 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 
 int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
-
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
 			perror("[child process] close error:"); //perror
@@ -100,7 +101,8 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
-	process_redir(p, p->redir);
+	if (process_redir(p, p->redir) == FAILURE)
+		exit(1);
 	process_errors_handling(p);
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
@@ -116,7 +118,7 @@ int		fork_process(t_job *job, t_process *p)
 	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
 	p->status = RUNNING;
 	if ((p->pid = fork()) == -1)
-		perror("fork:");
+		perror("fork:"); // perror
 	if (!(p->pid))
 		return (child_process(job, p, job->pipe.fd[0], envp));
 	if (p->pid)
@@ -130,7 +132,9 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	process_assign(shell, p, p->assign);
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
-		process_redir(p, p->redir);
+		if ((process_redir(p, p->redir) == FAILURE) &&
+				(p->setup & B_SPECIAL) && !shell->interactive)
+			exit(1);
 		builtin_process(j, p);
 		do_my_dup2(j->std[0], STDIN_FILENO);
 		do_my_dup2(j->std[1], STDOUT_FILENO);
@@ -146,9 +150,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	char	*ret;
 
 	if (!shell->interactive)
-	{
 		wait_process(job);
-	}
 	else if (job->fg)
 	{
 	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */

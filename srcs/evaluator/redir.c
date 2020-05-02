@@ -81,7 +81,7 @@ uint8_t		redir_heredoc(t_process *p, t_redir *r)
 	return (redir_file(p, r));
 }
 
-void		process_redir(t_process *p, t_list *redir)
+uint8_t		process_redir(t_process *p, t_list *redir)
 {
 	uint8_t		error;
 	t_redir		*r;
@@ -96,7 +96,8 @@ void		process_redir(t_process *p, t_list *redir)
 		else
 			error = redir_fd(p, r);
 		if (error)
-			exit(1);
+			return (FAILURE);
 		redir = redir->next;
 	}
+	return (SUCCESS);
 }
