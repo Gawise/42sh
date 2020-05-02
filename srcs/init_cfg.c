@@ -11,7 +11,7 @@ static void		set_var_sp(t_cfg *shell)
 
 	pid = ft_itoa(shell->pid);
 	setvar_add(&shell->sp, "$", pid);
-	setvar_add(&shell->sp, "?", "13");
+	setvar_add(&shell->sp, "?", "0");
 	setvar_add(&shell->sp, "!", "0");
 	setvar_add(&shell->sp, "*", 0);
 	setvar_add(&shell->sp, "@", 0);
