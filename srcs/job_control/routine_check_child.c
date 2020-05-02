@@ -11,16 +11,16 @@ static void		one_process_change(t_process *p)
 	if (p->status == STOPPED)
 	{
 		if (p->ret == 20)
-			ft_printf("\n\t%d Stopped(SIGTSTP)\t%s\n", p->pid, p->cmd);
+			ft_printf("\t%d Stopped(SIGTSTP)\t%s\n", p->pid, p->cmd);
 		else
-			ft_printf("\n\t%d Stopped(SIGSTOP)\t%s\n", p->pid, p->cmd);
+			ft_printf("\t%d Stopped(SIGSTOP)\t%s\n", p->pid, p->cmd);
 	}
 	else if (p->status == KILLED)
 	{
 		if (p->ret == 3)
-			ft_printf("\n\t%d Quit(SIGQUIT)\t%s\n", p->pid, p->cmd);
+			ft_printf("\t%d Quit(SIGQUIT)\t%s\n", p->pid, p->cmd);
 		else
-			ft_printf("\n\t%d Killed(SIGKILL)\t%s\n", p->pid, p->cmd);
+			ft_printf("\t%d Killed(SIGKILL)\t%s\n", p->pid, p->cmd);
 	}
 }
 
@@ -30,14 +30,14 @@ static void		job_done(t_job *j, t_process *last_p)
 	j->ret = last_p->ret;
 
 	if (last_p->status & (FAILED | COMPLETED))
-		ft_printf("\n[%d]\tDone(%d)\t%s\n", j->id, j->ret, j->cmd);
+		ft_printf("[%d]\tDone(%d)\t%s\n", j->id, j->ret, j->cmd);
 	else if (last_p->status & KILLED)
 	{
 		j->ret += 128;
 		if (last_p->ret == 3)
-			ft_printf("\n[%d]\tQuit(SIGQUIT)(%d)\t%s\n", j->id, j->ret, j->cmd);
+			ft_printf("[%d]\tQuit(SIGQUIT)(%d)\t%s\n", j->id, j->ret, j->cmd);
 		else
-			ft_printf("\n[%d]\tKilled(SIGKILL)(%d)\t%s\n", j->id, j->ret, j->cmd);
+			ft_printf("[%d]\tKilled(SIGKILL)(%d)\t%s\n", j->id, j->ret, j->cmd);
 	}
 }
 

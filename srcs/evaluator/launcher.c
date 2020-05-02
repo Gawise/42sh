@@ -130,6 +130,7 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
 	process_assign(shell, p, p->assign);
+	debug_print_process(j, p, "run_process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		if ((process_redir(p, p->redir) == FAILURE) &&
