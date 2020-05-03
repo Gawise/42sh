@@ -97,7 +97,7 @@ uint32_t		path_errors(char *path, uint8_t check_it)
 	ret = 0;
 	if (!c_enametoolong(path))
 		return (E_NTL);
-	if (c_isdir(path) & check_it)
+	if (c_isdir(path) && check_it)
 		return (E_ISDIR);
 	while (1)
 	{

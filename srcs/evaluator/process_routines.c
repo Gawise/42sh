@@ -48,7 +48,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 		while (assignment)
 		{
 			assign = assignment->data;
-			ft_setvar(&p->env, assign->var, assign->var);
+			ft_setvar(&p->env, assign->var, assign->val);
 			assignment = assignment->next;
 		}
 	}
@@ -91,8 +91,8 @@ void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 	if (pipe(fd->fd) == -1)
 		perror("pipe:");      ///////////// perror 
 	manage->std[1] = fd->fd[1];
-	manage->setup += PIPE_ON;		/*Useless now    */
+	manage->setup |= PIPE_ON;		/*Useless now    */
 	manage = process->next->data;
 	manage->std[0] = fd->fd[0];
-	manage->setup += PIPE_ON;  /*Useless now    */
+	manage->setup |= PIPE_ON;  /*Useless now    */
 }

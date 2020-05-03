@@ -16,4 +16,5 @@ void		update_process(t_list *lst, pid_t child, int wstatus);
 t_process	*find_process_by_status(t_list *lst, uint8_t want);
 t_process	*find_process_by_pid(t_list *lst, pid_t child);
 
+
 #endif
