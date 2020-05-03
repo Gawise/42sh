@@ -6,6 +6,7 @@
 # define TRUE 1
 # define FALSE -1
 
+# define PROJECT "21sh"
 # define NAME_SH "21sh-1.0$ "
 # define COLOR_SH "\e[0;32m"
 # define COLOR_SUBPROMPT "\e[0;31m"
