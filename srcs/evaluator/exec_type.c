@@ -4,7 +4,7 @@
 #include "var.h"
 #include "sh.h"
 
-static uint32_t			builtin_search(t_process *p)
+uint32_t			builtin_search(t_process *p)
 {
 	if (!p->cmd)
 		return (0);
@@ -28,6 +28,8 @@ static uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_BG);
 	if (!ft_strcmp(p->cmd, "fg"))
 		return (p->setup |= B_FG);
+	if (!ft_strcmp(p->cmd, "type"))
+		return (p->setup |= B_TYPE);
 	return (0);
 }
 
@@ -67,7 +69,7 @@ static void			any_slash(t_list *env, t_process *p)
 	p->setup |= path_errors(p->path, 1);
 }
 
-static void			with_slash(t_process *p)
+void			with_slash(t_process *p)
 {
 	char		*tmp;
 
