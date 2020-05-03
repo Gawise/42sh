@@ -155,7 +155,7 @@ BTSRCS += cd/ft_cd.c
 BTSRCS += cd/ft_cd2.c
 BTSRCS += cd/ft_cd_core.c
 BTSRCS += cd/tools_cd.c
-
+BTSRCS += type.c
 
 ## INCLUDES ##
 
