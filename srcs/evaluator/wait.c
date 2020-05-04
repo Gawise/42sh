@@ -9,6 +9,7 @@
 
 void	call_jobcontroler(t_job *j)
 {
+	j->status = STOPPED;
 	add_job_cfg(j);
 	if (j->ret - 128 == 20)
 		ft_printf("[%d]\t + Stopped(SIGTSTP)  %s\n", j->id, j->cmd);
@@ -83,14 +84,15 @@ static void		update_job(t_job *j)
 	if ((tmp = find_process_by_status(j->process, STOPPED)))
 	{
 		j->ret = 128 + tmp->ret;
-		j->status = STOPPED;
 		call_jobcontroler(j);
 	}
 	else if ((tmp = find_process_by_status(j->process, KILLED)))
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = KILLED;
-		if (tmp->ret == 3)
+		if (tmp->ret == 2)
+			ft_printf("\n");
+		else if (tmp->ret == 3)
 			ft_printf("\n\t%d Quit(SIGQUIT)\t%s\n", j->pgid, j->cmd);
 		else
 			ft_printf("\n\t%d Killed(SIGKILL)\t%s\n", j->pgid, j->cmd);
@@ -119,4 +121,3 @@ void		wait_process(t_job *job)
 		debug_print_all(job, job->process, "wait ending");
 	return ;
 }
-
