@@ -6,23 +6,36 @@
 # include <termios.h>
 
 # define L_BUFF_SIZE	256
+# define EXP_BSIZE	5
 
 
 typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
+typedef struct s_hash_map	t_hash_map;
 
+typedef enum			e_mode
+{
+	INTERACTIVE_MODE,
+	NON_INTERACTIVE_MODE
+}				t_mode;
 
 typedef struct	s_cfg
 {
-	struct termios *term_origin;      /* origin terminal modes */
-	uint8_t interactive;		/*True Or False*/
-	pid_t	pid;				/* pid's 21	*/
-	t_list	*env;
-	t_list	*intern;
-	t_list	*job;
+	struct termios	term_origin;      /* origin terminal modes */
+	uint8_t 		interactive;		/*True Or False*/
+	pid_t			pid;				/* pid's 21	*/
+	t_list			*env;
+	t_list			*intern;
+	t_list			*sp;
+	t_list			*job;
+	t_dlist			*history;
+	t_hash_map		*map;
+	t_hash_map		*input_map;
+	t_mode			mode;
+	char			*file;
+	uint8_t			active_job;
 	uint8_t		debug;		/* set for print debug */
 }				t_cfg;
-
 
 typedef enum			e_token_type
 {
@@ -38,9 +51,9 @@ typedef enum			e_token_type
 	PIPE,			// |
 	SEMI,			// ;
 	/* Redirection Operators */
-	LESS,			// <
+	LESS,			// < 10
 	DLESS,			// <<
-	GREAT,			// >
+	GREAT,			// > 12
 	DGREAT,			// >>
 	LESSAND,		// <&
 	GREATAND,		// >&
@@ -50,16 +63,16 @@ typedef enum			e_token_type
 typedef enum			e_char_type
 {
 	C_INHIBITOR,	// 0
-	C_CONTROL,	// 1
-	C_REDIR,	// 2
-	C_NEWLINE,	// 3
-	C_DIGIT,	// 4
-	C_EXP,		// 5
-	C_BLANK,	// 6
-	C_EOI,		// 7
-	C_BRACK,	// 8
-	C_EQU,		// 9
-	C_OTHER		// 10
+	C_CONTROL,		// 1
+	C_REDIR,		// 2
+	C_NEWLINE,		// 3
+	C_DIGIT,		// 4
+	C_EXP,			// 5
+	C_BLANK,		// 6
+	C_EOI,			// 7
+	C_BRACK,		// 8
+	C_EQU,			// 9
+	C_OTHER			// 10
 }				t_char_type;
 
 typedef enum			e_lexer_flag
@@ -87,14 +100,14 @@ typedef struct			s_token
 
 typedef enum			e_lexer_state
 {
-	S_TK_START, // Debut de token		0
-	S_HD_BODY, // Body de Heredoc		1
-	S_AMP_PIPE, // Token avec & | ;		2
-	S_TK_REDIR, // Token avec < >		3
-	S_EXP, // Expansion en cours		4
-	S_TK_WORD, // Token word		5
-	S_IO_NUMBER, // io_number token		6
-	S_FLAG // Flag en cours			7
+	S_TK_START,		// Debut de token		0
+	S_HD_BODY,		// Body de Heredoc		1
+	S_AMP_PIPE,		// Token avec & | ;		2
+	S_TK_REDIR,		// Token avec < >		3
+	S_EXP,			// Expansion en cours		4
+	S_TK_WORD,		// Token word			5
+	S_IO_NUMBER,		// io_number token		6
+	S_FLAG			// Flag en cours		7
 }				t_lexer_state;
 
 typedef struct			s_here_queue
@@ -105,7 +118,7 @@ typedef struct			s_here_queue
 
 typedef struct			s_lexer
 {
-	char			*src;
+	char			**src;
 	char			*curr;
 	t_lexer_state		state;
 	t_list			*token_lst;
@@ -147,7 +160,7 @@ typedef struct			s_redir
 {
 	char			*delim;
 	char			*io_num;
-	t_token_type		type; // enum
+	t_token_type	type; // enum
 	char			*file;
 }				t_redir;
 
@@ -179,11 +192,28 @@ typedef struct			s_cmd_table
 
 typedef struct			s_parser
 {
-	int			state;
-	int			prev_state;
+	int				state;
+	int				prev_state;
+	t_token_type	pmt_prefix;
 	t_list			*table;
 	t_list			*curr_table;
-}				t_parser;
+}					t_parser;
+
+/*
+** ANALYZER
+*/
+
+typedef struct		s_exp
+{
+	char		buf[EXP_BSIZE];
+	int		i;
+	int		quote;
+	int		bs;
+	int		assign;
+	char		*param;
+	char		*word;
+	char		*res;
+}			t_exp;
 
 /*
 ** SELECT
@@ -230,10 +260,19 @@ typedef struct	s_cs_line
 ** EXEC
 */
 
+typedef enum			e_err_flag
+{
+	E_OK = 0,
+	E_NAMETOOLONG,	// 1
+	E_NOENT,	// 2
+	E_LOOP,		// 3
+	E_NOTDIR,	// 4
+	E_ACCES,	// 5
+}				t_err_flag;
+
 typedef struct	s_var
 {
 	char		**ctab;
-	uint8_t		rd;
 }				t_var;
 
 typedef struct	s_pipe
@@ -244,27 +283,30 @@ typedef struct	s_pipe
 
 typedef struct	s_process
 {
-	char *cmd;                  /* cmd name */
-	char **av;                  /* for exec */
-	char *path;					/* path's exec */
-	pid_t pid;                  /* process ID */
-	uint8_t ret;				/* WEXITSTATUS  */
-	uint8_t status;             /* reported status value */
-	uint8_t std[3];				/* stdin out err*/
-	uint16_t setup;				/* info du process */
+	char 		*cmd;                /* cmd name */
+	char 		**av;                /* for exec */
+	char 		*path;				/* path's exec */
+	pid_t 		pid;                /* process ID */
+	uint8_t 	ret;				/* WEXITSTATUS  */
+	uint8_t 	status;             /* reported status value */
+	int8_t 		std[3];				/* stdin out err*/
+	uint32_t	setup;				/* info of process */
+	t_list		*redir;				/* list of redirs */
+	t_list		*env;				/* list of env  */
+	t_list		*assign;			/* list of assign */
 }				t_process;
 
 typedef struct	s_job
 {
-	char		*command;           /* command line, used for messages */
+	uint8_t		id;					/* number job	*/
+	char		*cmd;		        /* command line, used for messages */
 	t_list		*process;     		/* list of processes in this job */
-	t_list		*env;				/* VAR env  */
 	pid_t		pgid;               /* process group ID */
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
-	uint8_t		std[3];				/* stdin out err*/
+	int8_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 

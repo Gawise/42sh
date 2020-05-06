@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/13 14:27:55 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 17:29:12 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <signal.h>
 #include <term.h>
 #include <termios.h>
@@ -43,20 +31,22 @@ void	size_handler(int sig)
 
 void	sig_handler(int sig)
 {
-	t_cs_line	*cs;
+	t_cs_line		*cs;
 
 	if (sig >= 0 && (cs = cs_master(NULL, 0)))
 	{
-		cs->sig_int = 1;
+		cs->sig_int = (sig > 0 ? 1 : 0);
 		end_key(cs);
 		ft_strdel(&cs->input);
+		cs->input = ft_strnew(0);
 		if (cs->history)
-		{
-			cs->history->data = NULL;
-			ft_dlstdel(&cs->history);
-			cs->input = NULL;
-			cs->history = NULL;
-		}
+			cs->history->data = cs->input;
+		cs->row += (cs->screen.y != cs->row ? 1 : 0);
+		cs->min_row = cs->row;
+		cs->line_col = 0;
+		move_cs(&cs);
+		set_scroll(cs);
+		print_prompt(cs);
 	}
 }
 
@@ -67,8 +57,7 @@ void	init_signals(void)
 	i = 0;
 	while (i <= 32)
 	{
-		if (i == SIGCONT || i == SIGTSTP || i == SIGSTOP || i == SIGTTOU
-				|| i == SIGTTIN)
+		if (i == SIGCONT || i == SIGTSTP || i == SIGTTIN)
 			signal(i, SIG_IGN);
 		else if (i == SIGWINCH)
 			signal(i, size_handler);

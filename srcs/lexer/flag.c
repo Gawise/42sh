@@ -4,22 +4,15 @@
 
 t_lexer_flag	l_get_last_flag(t_lexer *lexer)
 {
-
 	t_list		*flag;
 
 	flag = ft_lstgettail(lexer->flag_queue);
 	if (flag && flag->data)
-	{
-		//ft_printf("----------flag_queue---------\n");
-		//ft_lstiter(lexer->flag_queue, print_flag_queue);
-		//ft_printf("-----------------------------\n");
 		return (*((t_lexer_flag *)flag->data));
-	}
-	else
-		return (0);
+	return (0);
 }
 
-int	l_add_flag(t_lexer *lexer, char c)
+int				l_add_flag(t_lexer *lexer, char c)
 {
 	if (!(l_create_flag_queue(lexer)))
 		return (0);
@@ -34,12 +27,19 @@ int	l_add_flag(t_lexer *lexer, char c)
 	return (1);
 }
 
-int	l_flag_state_add(t_lexer *lexer, char c)
+int				l_flag_state_add(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
 	flag = l_get_last_flag(lexer);
-	if (flag == F_DQUOTE)
+	if (flag == F_BSLASH || (flag == F_BRACKEXP && c == '}'))
+	{
+		l_buffer_add(lexer, c);
+		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+		if (!l_get_last_flag(lexer))
+			lexer->state = S_TK_WORD;
+	}
+	else if (flag == F_DQUOTE)
 	{
 		if (c == '$')
 			l_build_exp(lexer, c);
@@ -48,18 +48,20 @@ int	l_flag_state_add(t_lexer *lexer, char c)
 		else
 			l_buffer_add(lexer, c);
 	}
-	else if (flag == F_BRACKEXP && c == '}')
+	else if ((flag == F_BRACKEXP && c == '}'))
 	{
 		l_buffer_add(lexer, c);
 		lexer->state = S_TK_WORD;
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
 	}
+	else if ((flag == F_BRACKEXP && c == '$'))
+		l_build_exp(lexer, c);
 	else
 		l_buffer_add(lexer, c);
 	return (1);
 }
 
-int	l_delim_flag(t_lexer *lexer, char c)
+int				l_delim_flag(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
@@ -76,13 +78,15 @@ int	l_delim_flag(t_lexer *lexer, char c)
 		l_add_flag(lexer, c);
 	else if (c == '}' && flag == F_BRACKEXP)
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
+	else if (c == '\"' && flag == F_BRACKEXP)
+		l_add_flag(lexer, c);
 	l_buffer_add(lexer, c);
 	if (!l_get_last_flag(lexer))
 		lexer->state = S_TK_WORD;
 	return (1);
 }
 
-void	del_flag_queue(void *data, size_t size)
+void			del_flag_queue(void *data, size_t size)
 {
 	(void)size;
 	ft_memdel(&data);

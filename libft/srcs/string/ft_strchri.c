@@ -6,11 +6,11 @@
 /*   By: hmerieux <hmerieux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 18:50:52 by hmerieux          #+#    #+#             */
-/*   Updated: 2020/01/12 18:50:52 by hmerieux         ###   ########.fr       */
+/*   Updated: 2020/03/05 19:38:31 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strchr(const char *s, int c)
+int		ft_strchri(const char *s, int c)
 {
 	int		i;
 	char	*str;

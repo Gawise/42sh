@@ -39,6 +39,7 @@ void	update_history(t_dlist *hs)
 				&& (cs->input[len - 1] = '\0') == 0 && ft_strcmp(cs->input,
 				(char *)cs->history->prev->data) == 0))
 			{
+				cs->history->data = (void *)ft_strdup(cs->input);
 				cs->input[len - 1] = '\n';
 				ft_putstr_fd(cs->input, fd);
 			}

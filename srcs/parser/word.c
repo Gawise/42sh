@@ -4,8 +4,8 @@
 
 int	p_cmd_name(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
@@ -21,10 +21,10 @@ int	p_cmd_name(t_token *token, t_parser *parser)
 
 int	p_add_arg(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	char		*str;
+	char			*str;
 
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
@@ -45,18 +45,22 @@ int	p_add_assign_arg(t_token *token, t_parser *parser)
 
 int	p_file_name(t_token *token, t_parser *parser)
 {
-	t_cmd_table	*table;
-	t_and_or	*and_or;
+	t_cmd_table		*table;
+	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_redir		*redir;
+	t_redir			*redir;
 
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
 	redir = (t_redir *)cmd->curr_redir->data;
+	if ((redir->type == GREATAND || redir->type == LESSAND)
+	&& !ft_strequ(token->str, "-") && !is_digitstr(token->str))
+		syn_err(token, parser);
 	if (!(redir->file = ft_strdup(token->str)))
 		return (0);
-	if (parser->prev_state == S_PARSER_ANDIF_PIPE)
+	if (parser->prev_state == S_PARSER_ANDIF_PIPE
+	|| parser->prev_state == S_PARSER_TABLE_START)
 		parser->state = S_PARSER_CMD_START;
 	else
 		parser->state = parser->prev_state;

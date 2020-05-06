@@ -59,7 +59,6 @@ SRCS += ft_strcpy.c
 SRCS += ft_strdel.c
 SRCS += ft_strdup.c
 SRCS += ft_strequ.c
-SRCS += ft_strichr.c
 SRCS += ft_striter.c
 SRCS += ft_striteri.c
 SRCS += ft_strjoin.c
@@ -78,6 +77,7 @@ SRCS += ft_strnequ.c
 SRCS += ft_strnew.c
 SRCS += ft_strnstr.c
 SRCS += ft_strrchr.c
+SRCS += ft_strrchri.c
 SRCS += ft_strselect.c
 SRCS += ft_strsplit.c
 SRCS += ft_strstr.c
@@ -88,6 +88,8 @@ SRCS += ft_toupper.c
 SRCS += ft_wcharlen.c
 SRCS += ft_wstrlen.c
 SRCS += ft_tabdup.c
+SRCS += ft_isname.c
+SRCS += ft_strtrimoc.c
 
 #-------------------------List-----------------------------#
 SRCS += ft_lstadd.c
@@ -139,6 +141,17 @@ SRCS += uint.c
 SRCS += ft_which.c
 SRCS += ft_isdir.c
 
+#--------------------------Hash----------------------------#
+SRCS += ft_hash_str.c
+SRCS += ft_hash_del_list.c
+SRCS += ft_hash_del_map.c
+SRCS += ft_hash_delone.c
+SRCS += ft_hash_get_list.c
+SRCS += ft_hash_get_node.c
+SRCS += ft_hash_init.c
+SRCS += ft_hash_lookup.c
+SRCS += ft_hash_add.c
+
 #------------------------------------------------------------#
 
 vpath %.c srcs/conversion
@@ -149,10 +162,10 @@ vpath %.c srcs/memory
 vpath %.c srcs/output
 vpath %.c srcs/input
 vpath %.c srcs/string
+vpath %.c srcs/hash
 vpath %.c srcs/ft_printf/srcs
 
 vpath %.h includes
-
 
 PATHO = objs/
 PATHS = srcs/
@@ -166,14 +179,11 @@ COMPIL = $(CC) -c
 COMPILDB = $(CC) -g -c
 
 IFLAGS = -I$(PATHI)
-CFLAGS = -Wall -Werror -Wextra $(IFLAGS)
+CFLAGS = -g -Wall -Werror -Wextra $(IFLAGS)
 DBFLAGS = -fsanitize=address $(CFLAGS)
-
 
 OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
 OBJD = $(patsubst %.c, $(PATHO)db%.o, $(SRCS))
-
-
 
 all : $(NAME)
 debug : $(NAMEDB)
@@ -188,8 +198,6 @@ $(OBJS) : $(PATHO)%.o : %.c
 	$(COMPIL) $(CFLAGS) $< -o $@
 	printf "$(BLUE)  Compiling $<\n"
 
-
-
 $(NAMEDB) : $(PATHO) $(OBJD)
 	@ar rus $@ $(OBJD)
 	@ranlib $@
@@ -199,12 +207,8 @@ $(OBJD): $(PATHO)db%.o : %.c
 	$(COMPILDB) $(DBFLAGS) $< -o $@
 	printf "$(BLUE)Compiling $<       [DEBUG]\n$(NC)"
 
-
-
 $(PATHO) :
 	mkdir -p $(PATHO)
-
-
 
 clean :
 	$(CLEANUP) $(PATHO)

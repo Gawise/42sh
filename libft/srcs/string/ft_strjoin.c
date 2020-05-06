@@ -36,13 +36,15 @@ char			*ft_strjoin(int nb, ...)
 	va_list	ap;
 	char	*dst;
 	int		len;
+	char	*tmp;
 
 	va_start(ap, nb);
 	len = find_len(ap, nb);
 	if (!(dst = ft_strnew(len)))
 		exit(EXIT_FAILURE);
 	while (nb--)
-		ft_strcat(dst, va_arg(ap, char *));
+		if ((tmp = va_arg(ap, char *)))
+			ft_strcat(dst, tmp);
 	va_end(ap);
 	return (dst);
 }

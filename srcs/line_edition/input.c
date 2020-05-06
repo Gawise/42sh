@@ -49,18 +49,20 @@ void	line_master(t_cs_line *cs, char *input)
 
 	if (input && cs)
 	{
-		if (ft_strcmp(input, "\n") == 0)
+		if (ft_strcmp(input, "\n") == 0 || input[0] == '\n')
 		{
 			tmp = cs->input;
 			cs->input = ft_strjoin(2, tmp, "\n");
 			ft_strdel(&tmp);
 		}
 		else
+		{
 			join_input(cs, input);
-		cs->line_col += (int)ft_strlen(input);
-		cs->max_scroll = (int)ft_strlen(cs->input) / cs->screen.x
-			- (cs->screen.y - cs->min_row);
-		set_scroll(cs);
+			cs->line_col += (int)ft_strlen(input);
+			cs->max_scroll = (int)ft_strlen(cs->input) / cs->screen.x
+				- (cs->screen.y - cs->min_row);
+			set_scroll(cs);
+		}
 		cs->history->data = cs->input;
 		cs->clipb = (t_point){-1, -1};
 	}

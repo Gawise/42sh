@@ -20,7 +20,7 @@ LESRCS += cursor.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
 LESRCS += print_cmd.c
-LESRCS += keys2.c
+LESRCS += keys_action.c
 LESRCS += move_word.c
 LESRCS += signals.c
 LESRCS += term_init.c
@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -40,9 +41,11 @@ LEXSRCS += digit.c
 LEXSRCS += equ.c
 LEXSRCS += exp.c
 LEXSRCS += flag.c
+LEXSRCS += free.c
 LEXSRCS += heredoc.c
 LEXSRCS += inhib.c
 LEXSRCS += lexer.c
+LEXSRCS += misc.c
 LEXSRCS += newline.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
@@ -54,6 +57,7 @@ LEXSRCS += state/control.c
 LEXSRCS += state/exp.c
 LEXSRCS += state/flag.c
 LEXSRCS += state/hdbody.c
+LEXSRCS += state/init.c
 LEXSRCS += state/ionumber.c
 LEXSRCS += state/redir.c
 LEXSRCS += state/start.c
@@ -63,29 +67,97 @@ LEXSRCS += state/word.c
 
 PARSRCS += amp.c
 PARSRCS += and_or.c
-PARSRCS += args_tab.c
 PARSRCS += assign.c
 PARSRCS += cmd.c
+PARSRCS += free.c
 PARSRCS += init.c
 PARSRCS += lst_to_tab.c
+PARSRCS += misc.c
 PARSRCS += newline.c
 PARSRCS += parser.c
 PARSRCS += redir.c
+PARSRCS += tools.c
 PARSRCS += word.c
+PARSRCS += state/andif_pipe.c
+PARSRCS += state/arg_assign.c
+PARSRCS += state/assign.c
+PARSRCS += state/cmd_args.c
+PARSRCS += state/cmd_start.c
+PARSRCS += state/delim.c
+PARSRCS += state/error.c
+PARSRCS += state/init.c
+PARSRCS += state/io_number.c
+PARSRCS += state/redir.c
+PARSRCS += state/table_start.c
+
+## ANALYZER ##
+
+ANASRCS += args_tab/args_to_tab.c
+ANASRCS += args_tab/make_args_tab.c
+ANASRCS += jobs_str/core.c
+ANASRCS += jobs_str/redir.c
+ANASRCS += heredoc.c
+ANASRCS += exp/exp.c
+ANASRCS += exp/exp_tools.c
+ANASRCS += exp/parameter.c
+ANASRCS += exp/param_recursive.c
+ANASRCS += exp/param_resolve.c
+ANASRCS += exp/param_substitution.c
+ANASRCS += exp/tilde_exp.c
+ANASRCS += exp/tilde_assign.c
+ANASRCS += exp/word_parameter.c
 
 ## EVAL ##
 
 EVALSRCS += launcher.c
-EVALSRCS += pipe.c
+EVALSRCS += process_routines.c
 EVALSRCS += exec_type.c
-EVALSRCS += tools_var.c
-EVALSRCS += setenv.c
 EVALSRCS += cleaner.c
-EVALSRCS += building_struct.c
-EVALSRCS += leveling.c
+EVALSRCS += constructor.c
+EVALSRCS += bridge_step.c
 EVALSRCS += wait.c
-EVALSRCS += path_err.c
-EVALSRCS += path_err_tools.c
+EVALSRCS += redir.c
+EVALSRCS += tools_var.c
+EVALSRCS += tools_redir.c
+EVALSRCS += tools_termios.c
+EVALSRCS += errors_handling.c
+EVALSRCS += ft_lst.c
+EVALSRCS += debug.c
+
+## JOB CONTROL ##
+
+JBSRCS += tools_job.c
+JBSRCS += ft_lst.c
+JBSRCS += routine_check_child.c
+
+## COMMON TOOLS  ##
+
+TOOLSRCS += path_errors.c
+TOOLSRCS += tools_path.c
+TOOLSRCS += setvar_add.c
+TOOLSRCS += tools_var.c
+TOOLSRCS += all_signal.c
+
+## BUILTIN ##
+
+BTSRCS += exit.c
+BTSRCS += hash.c
+BTSRCS += env.c
+BTSRCS += setenv.c
+BTSRCS += unsetenv.c
+BTSRCS += echo.c
+## INCLUDES ##
+
+INCLUDES += analyzer.h
+INCLUDES += exec.h
+INCLUDES += job_control.h
+INCLUDES += lexer.h
+INCLUDES += line_edition.h
+INCLUDES += parser.h
+INCLUDES += sh.h
+INCLUDES += struct.h
+INCLUDES += var.h
+
 
 ## DEBUG ##
 
@@ -98,21 +170,32 @@ SRC += init_cfg.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
+SRC += $(addprefix analyzer/,$(ANASRCS))
 SRC += $(addprefix evaluator/,$(EVALSRCS))
+SRC += $(addprefix job_control/,$(JBSRCS))
+SRC += $(addprefix builtins/,$(BTSRCS))
+SRC += $(addprefix tools/,$(TOOLSRCS))
 SRC += $(addprefix debug/,$(DBSRCS))
+
 
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
+OPATHS += $(OPATH)parser/state
+OPATHS += $(OPATH)analyzer
+OPATHS += $(OPATH)analyzer/jobs_str
+OPATHS += $(OPATH)analyzer/args_tab
+OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
+OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)debug
-
-vpath %.h includes
+OPATHS += $(OPATH)tools
+OPATHS += $(OPATH)job_control
 
 CC = clang
 COMPILE = $(CC) -c
-COMPILEDB = $(CC) -g
+COMPILEDB = $(CC) -g3
 
 MKDIR = mkdir -p
 CLEANUP = rm -rf
@@ -127,10 +210,10 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -g -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
-DBFLAGS = -fsanitize=address
+DBFLAGS = -g -fsanitize=address
 
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
@@ -138,13 +221,15 @@ SRCS = $(addprefix $(SPATH),$(SRC))
 
 OBJS = $(addprefix $(OPATH),$(OBJ))
 
+INCS = $(addprefix $(IPATH),$(INCLUDES))
+
 all : $(NAME)
 
-$(NAME) : $(LIB) $(OPATHS) $(OBJS)
+$(NAME) : $(LIB) $(OPATHS) $(OBJS) Makefile
 	$(CC) -lncurses -o $@ $(OBJS) $<
 	printf "$(GREEN)$@ is ready.\n$(NC)"
 
-$(OBJS) : $(OPATH)%.o : $(SPATH)%.c
+$(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 	$(COMPILE) $(CFLAGS) $< -o $@
 
 $(OPATHS) :
@@ -157,8 +242,9 @@ $(LIBDB) :
 	$(MAKE) -C $(LPATH) debug
 
 debug : $(LIBDB)
-	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $^ $(SRCS)
+	$(COMPILEDB) $(DBFLAGS) -lncurses $(CFLAGS) -o $(NAMEDB) $(SRCS) $^
 	printf "$(GREEN)$(NAMEDB) is ready.\n$(NC)"
+
 
 clean :
 	$(MAKE) -C $(LPATH) clean

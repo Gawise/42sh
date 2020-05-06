@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 19:20:57 by guaubret          #+#    #+#             */
-/*   Updated: 2019/08/19 19:32:48 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/04/10 20:17:54 by guaubret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void		read_flags(t_printf *data)
 {
-	while ((data->f_index = ft_strichr("#0- +", *(data->fmt))) > -1)
+	while ((data->f_index = ft_strchri("#0- +", *(data->fmt))) > -1)
 	{
 		data->flags |= (1 << data->f_index);
 		(data->fmt)++;
 	}
-	if (CH_MINUS(data->flags))
-		data->flags &= ~F_ZERO;
-	if (CH_PLUS(data->flags))
-		data->flags &= ~F_SPACE;
+	if (data->flags & (1 << 2))
+		data->flags &= ~(1 << 1);
+	if (data->flags & (1 << 4))
+		data->flags &= ~(1 << 3);
 }
 
 void		read_width(t_printf *data)
@@ -39,7 +39,7 @@ void		read_width(t_printf *data)
 		if (data->width < 0)
 		{
 			data->width = -data->width;
-			data->flags |= F_MINUS;
+			data->flags |= (1 << 2);
 		}
 		(data->fmt)++;
 	}
@@ -63,7 +63,7 @@ void		read_prec(t_printf *data)
 				(data->fmt)++;
 		}
 		if (data->prec >= 0)
-			data->flags |= F_PGIVEN;
+			data->flags |= (1 << 15);
 		data->prec = (data->prec < 0) ? 0 : data->prec;
 	}
 }
@@ -72,24 +72,24 @@ void		read_length_mod(t_printf *data)
 {
 	if (*(data->fmt) == 'l')
 	{
-		data->flags |= (*(data->fmt + 1) == 'l') ? F_LL : F_L;
+		data->flags |= (*(data->fmt + 1) == 'l') ? (1 << 10) : (1 << 9);
 		(data->fmt)++;
 	}
 	else if (*(data->fmt) == 'h')
 	{
-		data->flags |= (*(data->fmt + 1) == 'h') ? F_HH : F_H;
+		data->flags |= (*(data->fmt + 1) == 'h') ? (1 << 8) : (1 << 7);
 		(data->fmt)++;
 	}
 	else if (*(data->fmt) == 'L')
-		data->flags |= F_LL;
+		data->flags |= (1 << 10);
 	else if (*(data->fmt) == 'z')
-		data->flags |= F_Z;
+		data->flags |= (1 << 13);
 	else if (*(data->fmt) == 'j')
-		data->flags |= F_J;
+		data->flags |= (1 << 14);
 	if (ft_strchr("lhLzj", *(data->fmt)))
 		(data->fmt)++;
 	if (ft_strchr("DOUFBCSX", *data->fmt))
-		data->flags |= (*data->fmt == 'X') ? F_UPX : F_L;
+		data->flags |= (*data->fmt == 'X') ? (1 << 11) : (1 << 9);
 }
 
 void		read_conv_spec(t_printf *data)
@@ -100,13 +100,13 @@ void		read_conv_spec(t_printf *data)
 	if (!data->disp_set)
 		init_dispatcher(data, disp);
 	data->conv = *(data->fmt);
-	if (ft_strchr("idDoOuUxXbB", *(data->fmt)) && CH_PGIVEN(data->flags))
-		data->flags &= ~F_ZERO;
+	if (ft_strchr("idDoOuUxXbB", *(data->fmt)) && data->flags & (1 << 15))
+		data->flags &= ~(1 << 1);
 	if (*(data->fmt) == 'i')
 		disp[0](data);
-	else if ((i = ft_strichr("DOUFBCSX", *(data->fmt))) > -1)
+	else if ((i = ft_strchri("DOUFBCSX", *(data->fmt))) > -1)
 		disp[i](data);
-	else if ((i = ft_strichr("doufbcsxp%m{", *(data->fmt))) > -1)
+	else if ((i = ft_strchri("doufbcsxp%m{", *(data->fmt))) > -1)
 		disp[i](data);
 	else
 		buffer(data->err_ptr, data, (data->fmt - data->err_ptr));

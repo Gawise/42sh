@@ -30,6 +30,7 @@ int	l_delim_equ(t_lexer *lexer, char c);
 int	l_delim_exp(t_lexer *lexer, char c);
 int	l_build_exp(t_lexer *lexer, char c);
 int	l_exp_brack(t_lexer *lexer, char c);
+int	l_exp_add(t_lexer *lexer, char c);
 
 /*
 **	inhib.c
@@ -83,6 +84,7 @@ int		l_buffer_add(t_lexer *lexer, char c);
 **	heredoc.c
 */
 
+t_here_queue	*l_get_last_here(t_lexer *lexer);
 int		l_create_flag_queue(t_lexer *lexer);
 int		l_create_here_queue(t_lexer *lexer);
 void	del_here_queue(void *data, size_t size);
@@ -126,9 +128,25 @@ int	l_set_token_type(t_lexer *lexer, char c);
 **	token.c
 */
 
-void		init_token(t_token *token);
+void	init_token(t_token *token);
 int		l_create_token(t_lexer *lexer);
-int	l_delim_token(t_lexer *lexer, char c);
+int		l_delim_token(t_lexer *lexer, char c);
+
+/*
+**	free.c
+*/
+
+void	del_token(void *data, size_t size);
+void	tabfree(char **tab);
+void	del_str(void *data, size_t size);
+
+/*
+**	misc.c
+*/
+
+int		lex_err(t_lexer *lexer, char c);
+char	l_get_char(t_lexer *lexer);
+t_char_type	l_get_char_type(char c);
 
 /*
 **	state/start.c
@@ -179,10 +197,16 @@ void	init_io_number_state(int (*token_builder[8][11])(t_lexer *, char));
 void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char));
 
 /*
+**	state/flag.c
+*/
+
+void	init_lexer_states(int (*token_builder[8][11])(t_lexer *, char));
+
+/*
 **	lexer.c
 */
 
-int	ft_lexer(char *str, t_lexer *lexer);
+int	ft_lexer(char **str, t_lexer *lexer);
 int	lex_err(t_lexer *lexer, char c);
 
 #endif

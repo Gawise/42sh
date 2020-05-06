@@ -21,6 +21,30 @@
 # define PROMPT_SIZE 15
 # include "libft.h"
 
+# define READ_SIZE 8
+# define ARROW_LEFT "\e[D"
+# define ARROW_RIGHT "\e[C"
+# define LINE_DOWN "\e[1;2B"
+# define LINE_UP "\e[1;2A"
+# define HISTORY_UP "\e[A"
+# define HISTORY_DOWN "\e[B"
+# define MV_WORD_RIGHT "\e[1;5C"//"\e[1;2C"
+# define MV_WORD_LEFT "\e[1;5D"//"\e[1;2D"
+# define HOME_KEY "\e[H"
+# define END_KEY "\e[F"
+# define CLIP_ARROW_RIGHT "\e[1;4C"
+# define CLIP_ARROW_LEFT "\e[1;4D"
+# define CLIP_ARROW_UP "\e[1;4A"
+# define CLIP_ARROW_DOWN "\e[1;4B"
+# define REVBACK_SPACE "\e[3~"
+# define HOME_KEY_BIS (char)1
+# define END_KEY_BIS (char)5
+# define COPY_CLIP "\ec"//(char)11
+# define CUT_CLIP "\ek"//(char)12
+# define PASTE_CLIP "\ev"//(char)16
+# define BACK_SPACE (char)127
+# define CTRL_D (char)4
+
 t_cs_line		*cs_master(char *prompt, int init);
 void			space_bar(t_cs_line *cs);
 int				check_keys(char *caps);
@@ -76,5 +100,7 @@ int				revback_space(t_cs_line *cs);
 t_point			trim_input(t_cs_line *cs);
 int				ctrl_d(t_cs_line *cs);
 int				back_space(t_cs_line *cs);
+void			init_char_keys(t_hash_map **map);
+void			init_input_map(t_hash_map *map);
 
 #endif

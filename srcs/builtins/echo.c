@@ -12,32 +12,7 @@
 
 #include "libft.h"
 #include <unistd.h>
-
-int	echo_builtin(char **params)
-{
-	t_point	i;
-	int		tty;
-	int		fl;
-
-	if (params)
-	{
-		i = (t_point){1, 0};
-		tty = ttyslot();
-		if (((fl = echo_options(params, &i.x, &i.y)) & 1))
-			i.x = 0;
-		while (params[i.x])
-		{
-			if ((fl & 4))
-				params[i.x] = convert_operand(params[i.x]);
-			ft_putstr_fd(params[i.x++], ttyslot());
-			ft_putchar_fd(' ', ttyslot());
-		}
-		if (!(fl & 2))
-			ft_putchar_fd('\n', ttyslot());
-		return (1);
-	}
-	return (0);
-}
+#include "struct.h"
 
 static int	echo_options(char **av, int *i, int *j)
 {
@@ -49,7 +24,7 @@ static int	echo_options(char **av, int *i, int *j)
 	if (av)
 	{
 		fl = "ne";
-		while ((ret = ft_getopt(i, j, av, flags)) != -1)
+		while ((ret = ft_getopt(i, j, av, fl)) != -1)
 		{
 			if (ret == (int)'?')
 				return ((flags |= 1));
@@ -71,7 +46,7 @@ static char	*convert_operand(char *s)
 	{
 		while (s[i])
 		{
-			if (s[i] == '\' && s[i + 1] && ft_strchr("abcfnrtv", s[i + 1]))
+			if (s[i] == '\\' && s[i + 1] && ft_strchr("abcfnrtv", s[i + 1]))
 			{
 				if (s[i + 1] == 'a')
 					s[i] = '\a';
@@ -91,7 +66,7 @@ static char	*convert_operand(char *s)
                     s[i] = '\v';
 				tmp = s;
 				s[i + 1] = '\0';
-				s = ft_strjoin(s, &s[i + 2]);
+				s = ft_strjoin(2, s, &s[i + 2]);
 				ft_strdel(&tmp);
 			}
 			i++;
@@ -99,3 +74,32 @@ static char	*convert_operand(char *s)
 	}
 	return (s);
 }
+
+uint8_t ft_echo(t_job *j, t_process *p) 
+{
+    t_point i;
+    int     tty;
+    int     fl; 
+    char    **params;
+
+    if (j && p && (params = p->av))
+    {
+        i = (t_point){1, 0}; 
+        tty = ttyslot();
+        if (((fl = echo_options(params, &i.x, &i.y)) & 1)) 
+            i.x = 0;
+        while (params[i.x])
+        {
+            params[i.x] = ft_strtrimoc(params[i.x], (params[i.x][0] == '"' ? '"' : '\''));
+			if ((fl & 4)) 
+                params[i.x] = convert_operand(params[i.x]);
+            ft_putstr_fd(params[i.x++], ttyslot());
+            ft_putchar_fd(' ', ttyslot());
+        }
+        if (!(fl & 2)) 
+            ft_putchar_fd('\n', ttyslot());
+        return (1);
+    }   
+    return (0);
+}
+
