@@ -26,8 +26,13 @@ char		opt_jobs(char **av, char *flags, int *ac)
 	i = 0;
 	while (av[*ac] && av[*ac][i] == '-')
 	{
+		if (!av[*ac][1])
+			return (opt);
 		i++;
-		if (av[*ac][i] == '-')
+//		if (!av[*ac][i] || (av[*ac][i] == '-' && (*ac += 1)))	
+		if ((av[*ac][i] == '-' && av[*ac][i + 1]))
+			return ('?');
+		if ((av[*ac][i] == '-' && (*ac += 1)))
 			return (opt);
 		while (av[*ac][i])
 		{
@@ -56,9 +61,13 @@ uint8_t 	ft_jobs(t_job *j, t_process *p)
 	}
 	if (p->av[ac])
 	{
-		ope = get_job_id(p->av[ac]);
-		if (!print_job_ope(opt, j, ope))
-			ft_dprintf(STDERR_FILENO, "21sh: jobs: %s:no such job\n", p->av[ac]);
+		while (p->av[ac])
+		{
+			ope = get_job_id(p->av[ac]);
+			if (!print_job_ope(opt, j, ope))
+				ft_dprintf(STDERR_FILENO, "21sh: jobs: %s :no such job\n", p->av[ac]);
+			ac++;
+		}
 		return 0;
 	}
 	if (opt == 'r' || opt == 'l')	

@@ -32,11 +32,9 @@ int8_t		get_prev_id(void)
 
 	j = cfg_shell()->job;
 	s = find_stopped_job(j);
-	if (!j->next)
-		return (((t_job *)j->data)->id);
 	while (j)
 	{
-		if ((!s && !(j->next)->next) ||
+		if (!j->next || (!s && !(j->next)->next) ||
 		(s == 1 && ((!j->next && (((t_job *)j->data)->status != STOPPED))
 		|| (!(j->next)->next && (((t_job *)(j->next)->data)->status == STOPPED)))) ||
 		(s > 1 && ((t_job *)j->data)->status == STOPPED && 
@@ -73,6 +71,26 @@ int8_t		get_sstr_id(char *ope)
 	return 0;
 }
 
+char		*ft_strdelc(char *str, char c)
+{
+	int	i;
+	int	n;
+	char	*rts;
+
+	i = 0;
+	n = 0;
+	rts = ft_strnew(ft_strlen(str)); // allou n caractere de trop!
+	while (str[i])
+	{
+		if (str[i] != c)
+			rts[i - n] = str[i];
+		else
+			n++;
+		i++;
+	}
+	return (rts);
+}
+
 int8_t		get_str_id(char *ope)
 {
 	t_list	*job;
@@ -86,6 +104,8 @@ int8_t		get_str_id(char *ope)
 	while (job)
 	{
 		i = 0;
+		if (ft_strchr(ope, '"') && !(ope = ft_strdelc(ope, '"')))
+			return (0); // a prendre en compte? ya alloc!
 		while (ope[i] && ope[i] == ((t_job *)job->data)->cmd[i])
 			i++;
 		if (ope[i] == '\0')
@@ -104,7 +124,7 @@ int8_t		get_str_id(char *ope)
 uint8_t		get_job_id(char *ope)
 {
 	int8_t	ret;
-
+	
 	ret = 0;
 	if (!ft_strcmp(ope, "%"))
 		ret = get_curr_id();

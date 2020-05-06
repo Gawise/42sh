@@ -9,8 +9,8 @@
 
 void	call_jobcontroler(t_job *j)
 {
-	j->status = STOPPED;
-	add_job_cfg(j);
+	if (!j->id)
+		add_job_cfg(j);
 	if (j->ret - 128 == 20)
 		ft_printf("[%d]\t + Stopped(SIGTSTP)  %s\n", j->id, j->cmd);
 	else
