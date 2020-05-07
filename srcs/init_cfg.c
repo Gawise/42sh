@@ -48,10 +48,7 @@ static uint8_t		set_debug(char **av, int i)
 		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
 		exit(1);
 	}
-	if (av[i] && !(shell->file = ft_strdup(av[i])))
-		ft_ex(EXMALLOC);
-	if (shell->file)
-		shell->mode = NON_INTERACTIVE_MODE;
+	return (fd);
 }
 
 static void		set_shell_mode(char **av, int ac, t_cfg *shell)
