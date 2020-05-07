@@ -135,8 +135,5 @@ int		check_keys(char *caps)
             ret = -1;
         print_cmdline(cs);
     }
-	int fd = open("./check_key", O_CREAT | O_APPEND | O_WRONLY, 0666);
-	ft_putstr_fd(caps, fd);
-	close(fd);
 	return (ret);
 }

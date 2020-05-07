@@ -253,7 +253,8 @@ typedef struct	s_cs_line
 	char			*prompt_color;
 	char			*clipboard;
 	t_dlist         *history;
-	  t_point			clipb; //start et end de la selection
+	t_point			clipb; //start et end de la selection
+	char			*old_history;
 }				t_cs_line;
 
 /*

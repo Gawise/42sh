@@ -100,7 +100,7 @@ char	*ft_prompt(char *prompt, char *color)
 		read_input();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
-		if (cs->input && !cs->sig_int && ft_strcmp(cs->input, "\n") != 0
+		if (cs->input && cs->input[0] && !cs->sig_int && ft_strcmp(cs->input, "\n") != 0
 			&& (ret = ft_strdup(cs->input)) >= 0)
 			update_history(hs);
 		else

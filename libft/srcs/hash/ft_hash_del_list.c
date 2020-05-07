@@ -7,7 +7,7 @@ void		ft_hash_del_list(t_list **lst, void (*del)(void *))
 	if ((node = (t_hash_node *)(*lst)->data))
 	{
 		ft_strdel(&node->key);
-		if (del && node->data)
+		if (del)
 			del(node->data);
 		free(node);
 	}
