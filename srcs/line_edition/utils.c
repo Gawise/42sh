@@ -70,18 +70,26 @@ void		ft_utoa(char **str)
 
 void		get_cs_line_position(int *col, int *row)
 {
-	char		buf[16];
+	char		buf[33];
 	char		**n;
-	int			fd;
+	int			i;
 	t_cs_line	*cs;
 
-	ft_bzero(&buf, 16);
+	ft_bzero(&buf, 32);
 	cs = cs_master(NULL, 0);
-	fd = cs->tty;
-	if (read(fd, &buf, 0) == -1)
+	if (read(cs->tty, &buf, 0) == -1)
 		return ;
-	write(fd, "\033[6n", ft_strlen("\033[6n"));
-	read(fd, &buf, 16);
+	write(cs->tty, "\033[6n", ft_strlen("\033[6n"));
+	i = 0;
+	while (i <= 32)
+	{
+    	if (read(cs->tty, &buf[i], 1) != 1 || buf[i] == 'R')
+			break;
+    	if (buf[i] == '\n')
+			i -= 1;
+		i++;
+  	}
+	buf[i] = '\0';
 	if (!(n = split_pos(buf)))
 	{
 		*col = 0;

@@ -19,33 +19,28 @@
 #include <time.h>
 #include <stdio.h>
 #include "struct.h"
+#include "sh.h"
 
 void	read_input(void)
 {
 	int			len;
 	int			stop;
-	char		*buf;
-	int			ret;
+	char		buf[9];
 	t_cs_line	*cs;
 
 	stop = 0;
-	len = 0;
 	cs = cs_master(NULL, 0);
 	if (cs->history)
 		cs->history->data = cs->input;
 	while (stop >= 0)
 	{
-		ioctl(cs->tty, FIONREAD, &len);
-		if (cs->sig_int == 0 && len <= 0)
-			continue ;
-		if (cs->sig_int == 1 || !(buf = ft_strnew(len + 1)))
-			break ;
+		len = read(cs->tty, buf, READ_SIZE);
+		if (len < 0)
+            stop = -1;
+		buf[len] = '\0';
 		if (cs->history)
 			cs->history->data = cs->input;
-		if ((ret = read(cs->tty, buf, len)) != len)
-			stop = -1;
 		stop = (stop >= 0 ? check_keys(buf) : stop);
-		ft_strdel(&buf);
 	}
 }
 
@@ -87,6 +82,7 @@ char	*ft_prompt(char *prompt, char *color)
 	char		*ret;
 	t_cs_line	*cs;
 	t_dlist		*hs;
+	t_cfg		*cfg;
 
 	ret = NULL;
 	cs = NULL;
@@ -94,19 +90,23 @@ char	*ft_prompt(char *prompt, char *color)
 	{
 		cs->prompt_color = color;
 		print_prompt(cs);
-		ft_clear(0);
-		hs = get_history();
+		if (!(cfg = cfg_shell()))
+			return (NULL);
+		hs = cfg->history;
 		cs->sig_int = 0;
 		cs->history = ft_dlstnew(cs->input, 1);
 		ft_dlstaddtail(&hs, cs->history);
 		read_input();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
-		if ((ret = ft_strdup(cs->input)) >= 0 && !cs->sig_int)
-		{
+		if (cs->input && cs->input[0] && !cs->sig_int && ft_strcmp(cs->input, "\n") != 0
+			&& (ret = ft_strdup(cs->input)) >= 0)
 			update_history(hs);
-			ft_dlstdel(&cs->history);
-		}
+		else
+			ft_dlstdelone(&cs->history);
+		if (cs->sig_eof)
+			ft_strdel(&cs->input);
+		set_signal_ign();	
 	}
 	return ((cs->sig_eof) ? ft_strnew(0) : ret);
 }

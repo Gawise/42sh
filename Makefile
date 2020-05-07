@@ -20,7 +20,7 @@ LESRCS += cursor.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
 LESRCS += print_cmd.c
-LESRCS += keys2.c
+LESRCS += keys_action.c
 LESRCS += move_word.c
 LESRCS += signals.c
 LESRCS += term_init.c
@@ -145,6 +145,7 @@ BTSRCS += hash.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
+BTSRCS += echo.c
 BTSRCS += jobs.c
 BTSRCS += tools_job_id.c
 BTSRCS += print_jobs.c
@@ -225,7 +226,7 @@ LIBDB = $(LPATH)libft_db.a
 WFLAGS = -g -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
-DBFLAGS = -fsanitize=address
+DBFLAGS = -g -fsanitize=address
 
 OBJ = $(patsubst %.c, %.o, $(SRC))
 

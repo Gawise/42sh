@@ -16,13 +16,6 @@
 #include "sh.h"
 
 
-static uint8_t		ft_echo(t_job *j, t_process *p)
-{
-		printf("ECHO builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
 
 static uint8_t		ft_fg(t_job *j, t_process *p)
 {
