@@ -2,7 +2,6 @@
 #include "exec.h"
 #include "libft.h"
 #include "var.h"
-#include "ft_printf.h"
 #include "sh.h"
 #include "job_control.h"
 #include <unistd.h>
@@ -168,9 +167,62 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	return (job->ret);
 }
 
+
+uint8_t		path_corr_check(t_redir *r, char **path)
+{
+	int i = 0;
+	if ((ft_atoi(r->io_num) > 255) ||
+			( i =path_gearing(r, path, O_WRONLY)))
+	{
+		ft_strdel(path);
+		return (FAILURE);
+	}
+	return (SUCCESS);
+}
+
+void		patch_corr_redir(t_list *redir)
+{
+	t_redir		*r;
+	char		*path;
+	int32_t	fd;
+
+	path = NULL;
+	while (redir)
+	{
+		r = redir->data;
+		if (r->type == GREAT || r->type == DGREAT)
+		{
+			if (path_corr_check(r, &path))
+				return ;
+			fd = open(path, O_CREAT, 0644);
+			printf("open ret = [%d]\t path = [%s]\n", fd, path);
+			close(fd);
+			ft_strdel(&path);
+			if (fd == -1) //secur?
+				return ;
+		}
+		redir = redir->next;
+	}
+}
+
+void		patch_corr(t_list	*process)
+{
+	t_process	*p;
+
+	if (!process->next)
+		return ;
+	while (process)
+	{
+		p = process->data;
+		patch_corr_redir(p->redir);
+		process = process->next;
+	}
+
+}
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	job->status |= RUNNING;
+	patch_corr(process);
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);
