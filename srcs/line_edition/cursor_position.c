@@ -61,9 +61,9 @@ int			get_line(t_cs_line *cs)
 	t_point i;
 	t_point cr;
 
+	cr = (t_point){0, 0};
 	if (cs->input && cs->input[0])
 	{
-		cr = (t_point){0, 0};
 		i = (t_point){cs->line_col, 0};
 		while (cs->input[i.x] && cr.x == 0 && i.y++ >= 0)
 		{

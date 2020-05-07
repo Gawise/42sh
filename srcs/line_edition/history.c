@@ -32,13 +32,17 @@ void	update_history(t_dlist *hs)
 		path = ft_strjoin(2, path, ".42sh_history");
 		ft_strdel(&tmp);
 		len = ft_strlen(cs->input);
+		cs->history->data = (void *)cs->old_history;
+		while (hs && hs->next)
+			hs = hs->next;
 		if (hs && cs && path && cs->input && cs->input[0] && cs->input[0]
 			!= '\n' && (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
 		{
-			if (!(cs->history->prev && cs->history->prev->data
+			if (!(hs->prev && hs->prev->data
 				&& (cs->input[len - 1] = '\0') == 0 && ft_strcmp(cs->input,
-				(char *)cs->history->prev->data) == 0))
+				(char *)hs->prev->data) == 0))
 			{
+				hs->data = (void *)ft_strdup(cs->input);
 				cs->input[len - 1] = '\n';
 				ft_putstr_fd(cs->input, fd);
 			}
@@ -81,6 +85,8 @@ void	history_up(t_cs_line *cs)
 			ft_clear(1);
 			cs->clipb = (t_point){-1, -1};
 			cs->history = cs->history->prev;
+			ft_strdel(&cs->old_history);
+			cs->old_history = ft_strdup((char *)cs->history->data);
 			cs->input = (char *)cs->history->data;
 			cs->line_col = ft_strlen(cs->input);
 			cs->scroll = 0;
@@ -99,6 +105,8 @@ void	history_down(t_cs_line *cs)
 			ft_clear(1);
 			cs->clipb = (t_point){-1, -1};
 			cs->history = cs->history->next;
+			ft_strdel(&cs->old_history);
+			cs->old_history = ft_strdup((char *)cs->history->data);
 			cs->input = (char *)cs->history->data;
 			cs->line_col = ft_strlen(cs->input);
 			cs->scroll = 0;

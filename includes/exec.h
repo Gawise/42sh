@@ -23,8 +23,6 @@
 # define E_LOOP 2112
 # define E_NTL	4160		/*       1000001000000 */
 
-
-
 # define B_SPECIAL 8192		/* 0000.10000000000000 */
 # define B_ECHO 0			/* 0000.00000000000000 */
 # define B_CD 16384			/* 0001.00000000000000 */
@@ -64,6 +62,7 @@
 
 /*		BUILTIN		*/
 
+uint8_t		ft_echo(t_job *j, t_process *p);
 uint8_t		ft_type(t_job *j, t_process *p);
 uint8_t		ft_setenv(t_job *j, t_process *p);
 uint8_t		ft_unsetenv(t_job *j, t_process *p);

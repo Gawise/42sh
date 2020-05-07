@@ -44,10 +44,11 @@ void		move_cs(t_cs_line **cs)
 
 t_cs_line	*cs_master(char *prompt, int init)
 {
-	static t_cs_line	cs;
+	static t_cs_line	cs = {0, 0, 0, 0, 0, 0, 0, 0,{0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, {0, 0}, 0};
 
 	if (init == 1)
 	{
+		cs.history = NULL;
 		get_cs_line_position(&cs.min_col, &cs.min_row);
 		cs.col = 0;
 		cs.row = cs.min_row;
@@ -56,12 +57,12 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.max_scroll = 0;
 		cs.input = ft_strnew(0);
 		cs.prompt = prompt;
-		cs.history = NULL;
 		cs.clipb.x = -1;
 		cs.clipb.y = -1;
 		cs.clipboard = NULL;
 		cs.sig_int = 0;
 		cs.sig_eof = 0;
+		cs.old_history = NULL;
 	}
 	return (&cs);
 }
