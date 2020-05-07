@@ -52,36 +52,36 @@ void		init_char_keys(t_hash_map **map)
 	{
 		c[1] = '\0';
 		c[0] = HOME_KEY_BIS;// (char) 1;
-        ft_hash_add(*map, c, &home_key);
+        ft_hash_add(*map, c, &home_key, sizeof(home_key));
 		c[0] = END_KEY_BIS;//(char) 5;
-        ft_hash_add(*map, c, &end_key);
+        ft_hash_add(*map, c, &end_key, sizeof(end_key));
 		c[0] = BACK_SPACE;//(char) 127;
-		ft_hash_add(*map, c, &back_space);
+		ft_hash_add(*map, c, &back_space, sizeof(back_space));
 		c[0] = CTRL_D;//(char) 4;
-		ft_hash_add(*map, c, &ctrl_d);
+		ft_hash_add(*map, c, &ctrl_d, sizeof(ctrl_d));
 	}
 }
 
 void	 init_input_map(t_hash_map *map)
 {
-		ft_hash_add(map, ARROW_LEFT, &arrow_left);
-		ft_hash_add(map, ARROW_RIGHT, &arrow_right);
-		ft_hash_add(map, HISTORY_DOWN, &history_down);
-		ft_hash_add(map, LINE_UP, &arrow_up);
-		ft_hash_add(map, LINE_DOWN, &arrow_down);
-		ft_hash_add(map, MV_WORD_RIGHT, &mv_word_right);
-		ft_hash_add(map, MV_WORD_LEFT, &mv_word_left);
-		ft_hash_add(map, HISTORY_UP, &history_up);
-		ft_hash_add(map, HOME_KEY, &home_key);
-		ft_hash_add(map, END_KEY, &end_key);
-		ft_hash_add(map, CLIP_ARROW_RIGHT, &clip_arrow_right);
-		ft_hash_add(map, CLIP_ARROW_LEFT, &clip_arrow_left);
-		ft_hash_add(map, CLIP_ARROW_UP, &clip_arrow_up);
-		ft_hash_add(map, CLIP_ARROW_DOWN, &clip_arrow_down);
-		ft_hash_add(map, REVBACK_SPACE, &revback_space);
-		ft_hash_add(map, PASTE_CLIP, &paste_clip);
-		ft_hash_add(map, COPY_CLIP, &copy_clip);
-		ft_hash_add(map, CUT_CLIP, &cut_clip);
+		ft_hash_add(map, ARROW_LEFT, &arrow_left, sizeof(arrow_left));
+		ft_hash_add(map, ARROW_RIGHT, &arrow_right, sizeof(arrow_right));
+		ft_hash_add(map, HISTORY_DOWN, &history_down, sizeof(history_down));
+		ft_hash_add(map, LINE_UP, &arrow_up, sizeof(arrow_up));
+		ft_hash_add(map, LINE_DOWN, &arrow_down, sizeof(arrow_down));
+		ft_hash_add(map, MV_WORD_RIGHT, &mv_word_right, sizeof(mv_word_right));
+		ft_hash_add(map, MV_WORD_LEFT, &mv_word_left, sizeof(mv_word_left));
+		ft_hash_add(map, HISTORY_UP, &history_up, sizeof(history_up));
+		ft_hash_add(map, HOME_KEY, &home_key, sizeof(home_key));
+		ft_hash_add(map, END_KEY, &end_key, sizeof(end_key));
+		ft_hash_add(map, CLIP_ARROW_RIGHT, &clip_arrow_right, sizeof(clip_arrow_right));
+		ft_hash_add(map, CLIP_ARROW_LEFT, &clip_arrow_left, sizeof(clip_arrow_left));
+		ft_hash_add(map, CLIP_ARROW_UP, &clip_arrow_up, sizeof(clip_arrow_up));
+		ft_hash_add(map, CLIP_ARROW_DOWN, &clip_arrow_down, sizeof(clip_arrow_down));
+		ft_hash_add(map, REVBACK_SPACE, &revback_space, sizeof(revback_space));
+		ft_hash_add(map, PASTE_CLIP, &paste_clip, sizeof(paste_clip));
+		ft_hash_add(map, COPY_CLIP, &copy_clip, sizeof(copy_clip));
+		ft_hash_add(map, CUT_CLIP, &cut_clip, sizeof(cut_clip));
 		init_char_keys(&map);
 }
 

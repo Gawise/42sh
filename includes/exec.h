@@ -30,16 +30,6 @@
 # define B_SETENV 49152		/* 0011.00000000000000 */
 # define B_UNSETENV 65536 	/* 0100.00000000000000 */
 # define B_HASH 81920		/* 0101.00000000000000 */
-# define B_EXIT 98304		/* 0110.10000000000000 */
-
-
-# define B_SPECIAL 8192		/* 0000.10000000000000 */
-# define B_ECHO 0			/* 0000.00000000000000 */
-# define B_CD 16384			/* 0001.00000000000000 */
-# define B_ENV 32768		/* 0010.00000000000000 */
-# define B_SETENV 49152		/* 0011.00000000000000 */
-# define B_UNSETENV 65536 	/* 0100.00000000000000 */
-# define B_HASH 81920		/* 0101.00000000000000 */
 # define B_EXIT 106496		/* 0110.10000000000000 */
 # define B_JOBS 114688		/* 0111.00000000000000 */
 # define B_FG 131072		/* 1000.00000000000000 */
@@ -144,9 +134,6 @@ void		del_struct_job(void *del, size_t u);
 
 /*		DEBUG */
 void	debug_print_all(t_job *j, t_list *process, char *where);
-<<<<<<< HEAD
-=======
 void	debug_print_process(t_job *j, t_process *p, char *where);
->>>>>>> dev
 
 #endif
