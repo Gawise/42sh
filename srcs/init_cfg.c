@@ -11,7 +11,7 @@ static void		set_var_sp(t_cfg *shell)
 
 	pid = ft_itoa(shell->pid);
 	setvar_add(&shell->sp, "$", pid);
-	setvar_add(&shell->sp, "?", "13");
+	setvar_add(&shell->sp, "?", "0");
 	setvar_add(&shell->sp, "!", "0");
 	setvar_add(&shell->sp, "*", 0);
 	setvar_add(&shell->sp, "@", 0);
@@ -28,27 +28,28 @@ static void		set_var_intern(t_cfg *shell)
 	ft_setvar(&shell->intern, "PS2", "> ");
 }
 
-static uint8_t		set_debug(char **av, int i)
+static uint8_t      set_debug(char **av)
 {
-	int		fd;
-	char	*path;
-	
-	int d = 0;
-	i = 0;
-	while (++i && av[i])
-		if (!(d = ft_strcmp(av[i], "debug")))
-			break ;
-	if (!av[i])
-		return (0);
-	if (!av[i + 1] || *av[i + 1] != '-')
-		return (1);
-	path = (av[i + 1]) + 1;
-	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
-	{
-		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
-		exit(1);
-	}
-	return (fd);
+    int     i;
+    int     fd;
+    char    *path;
+
+    int d = 0;
+    i = 0;
+    while (++i && av[i])
+        if (!(d = ft_strcmp(av[i], "debug")))
+            break ;
+    if (!av[i])
+        return (0);
+    if (!av[i + 1] || *av[i + 1] != '-')
+        return (1);
+    path = (av[i + 1]) + 1;
+    if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
+    {
+        ft_dprintf(2, "Debug option error\n\tusage: ./21sh debug [-path]\nexit\n");
+        exit(1);
+    }
+    return (fd);
 }
 
 static void		set_shell_mode(char **av, int ac, t_cfg *shell)

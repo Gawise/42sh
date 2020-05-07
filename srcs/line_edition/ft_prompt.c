@@ -77,7 +77,6 @@ void	ft_clear(int del_prompt)
 	}
 }
 
-
 char	*ft_prompt(char *prompt, char *color)
 {
 	char		*ret;

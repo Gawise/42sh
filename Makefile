@@ -146,6 +146,18 @@ BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
 BTSRCS += echo.c
+BTSRCS += jobs.c
+BTSRCS += tools_job_id.c
+BTSRCS += print_jobs.c
+BTSRCS += tools_job.c
+BTSRCS += cd/chdir_errors.c
+BTSRCS += cd/chdir_errors2.c
+BTSRCS += cd/ft_cd.c
+BTSRCS += cd/ft_cd2.c
+BTSRCS += cd/ft_cd_core.c
+BTSRCS += cd/tools_cd.c
+BTSRCS += type.c
+
 ## INCLUDES ##
 
 INCLUDES += analyzer.h
@@ -189,6 +201,7 @@ OPATHS += $(OPATH)analyzer/args_tab
 OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
+OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control

@@ -33,9 +33,9 @@ void		init_shell(char **env, char **av, int ac)
 	t_cfg		*shell;
 	struct stat	stat;
 
-	shell = init_cfg(env, av, ac);
 	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
 		ft_ex(EXFD);
+	shell = init_cfg(env, av, ac);
 	if (check_terminal(shell, shell_terminal))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))

@@ -4,12 +4,12 @@
 #include "var.h"
 #include "sh.h"
 
-static uint32_t			builtin_search(t_process *p)
+uint32_t			builtin_search(t_process *p)
 {
 	if (!p->cmd)
 		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
-		return ((p->setup |= B_ECHO) + 1);
+		return (p->setup |= B_ECHO);
 	if (!ft_strcmp(p->cmd, "setenv"))
 		return (p->setup |= B_SETENV);
 	if (!ft_strcmp(p->cmd, "unsetenv"))
@@ -22,14 +22,40 @@ static uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_EXIT);
 	if (!ft_strcmp(p->cmd, "hash"))
 		return (p->setup |= B_HASH);
+	if (!ft_strcmp(p->cmd, "jobs"))
+		return (p->setup |= B_JOBS);
+	if (!ft_strcmp(p->cmd, "bg"))
+		return (p->setup |= B_BG);
+	if (!ft_strcmp(p->cmd, "fg"))
+		return (p->setup |= B_FG);
+	if (!ft_strcmp(p->cmd, "type"))
+		return (p->setup |= B_TYPE);
 	return (0);
+}
+
+uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
+{
+	if ((p->path = ft_strdup(ft_hash_lookup(shell->map, p->cmd))))
+	{
+		if (!(ERROR & path_errors(p->path, 1)))
+			return (TRUE);
+		ft_strdel(&p->path);
+		ft_hash_delone(shell->map, p->cmd, free);
+		if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+			ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+		return (p->path ? 1 : 0);
+	}
+	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+		return (0);
+	ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+	return (TRUE);
 }
 
 static uint16_t		find_type(t_list *env, t_process *p)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
-	else if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+	else if (find_binary(env, p, cfg_shell()))
 		p->setup |= EXEC;
 	else
 		return (p->setup |= E_UNFOUND);
@@ -43,8 +69,7 @@ static void			any_slash(t_list *env, t_process *p)
 	p->setup |= path_errors(p->path, 1);
 }
 
-#include "ft_printf.h"
-static void			with_slash(t_process *p)
+void			with_slash(t_process *p)
 {
 	char		*tmp;
 

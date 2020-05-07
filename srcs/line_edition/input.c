@@ -56,6 +56,7 @@ void	line_master(t_cs_line *cs, char *input)
 			ft_strdel(&tmp);
 		}
 		else
+<<<<<<< HEAD
 		{
 			join_input(cs, input);
 			cs->line_col += (int)ft_strlen(input);
@@ -63,6 +64,13 @@ void	line_master(t_cs_line *cs, char *input)
 				- (cs->screen.y - cs->min_row);
 			set_scroll(cs);
 		}
+=======
+			join_input(cs, input);
+		cs->line_col += (int)ft_strlen(input);
+		cs->max_scroll = (int)ft_strlen(cs->input) / cs->screen.x
+			- (cs->screen.y - cs->min_row);
+		set_scroll(cs);
+>>>>>>> dev
 		cs->history->data = cs->input;
 		cs->clipb = (t_point){-1, -1};
 	}

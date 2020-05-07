@@ -74,6 +74,7 @@ static char	*convert_operand(char *s)
 	}
 	return (s);
 }
+<<<<<<< HEAD
 
 uint8_t ft_echo(t_job *j, t_process *p) 
 {
@@ -102,4 +103,3 @@ uint8_t ft_echo(t_job *j, t_process *p)
     }   
     return (0);
 }
-
