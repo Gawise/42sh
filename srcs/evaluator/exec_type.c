@@ -42,12 +42,12 @@ uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 		ft_strdel(&p->path);
 		ft_hash_delone(shell->map, p->cmd, free);
 		if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
-			ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+			ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 		return (p->path ? 1 : 0);
 	}
 	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
 		return (0);
-	ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+	ft_hash_add(shell->map, p->cmd, ft_strdel(p->path), free);
 	return (TRUE);
 }
 
