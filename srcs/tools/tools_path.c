@@ -42,11 +42,12 @@ int8_t		check_right(char *path, int right)
 		return (FALSE);
 	return (SUCCESS);
 }
-
 uint32_t	check_access(char *path, int right)
 {
-	char	*tmp;
+	char		*tmp;
+	uint32_t	ret;
 
+	ret = SUCCESS;
 	tmp = NULL;
 	if (access(path, F_OK) == SUCCESS)
 	{
@@ -58,14 +59,9 @@ uint32_t	check_access(char *path, int right)
 	}
 	tmp = remove_file_name(path);
 	if (access(tmp, F_OK))
-	{
-		ft_strdel(&tmp);
-		return (E_NOENT);
-	}
-	if (access(tmp, right))
-	{
-		ft_strdel(&tmp);
-		return (E_ACCES);
-	}
-	return (SUCCESS);
+		ret = E_NOENT;
+	else if (access(tmp, right))
+		ret = E_ACCES;
+	ft_strdel(&tmp);
+	return (ret);
 }

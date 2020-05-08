@@ -290,7 +290,7 @@ typedef struct	s_process
 	pid_t 		pid;                /* process ID */
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
-	int8_t 		std[3];				/* stdin out err*/
+	int16_t 	*std;				/* stdin out err*/
 	uint32_t	setup;				/* info of process */
 	t_list		*redir;				/* list of redirs */
 	t_list		*env;				/* list of env  */
@@ -307,7 +307,7 @@ typedef struct	s_job
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
-	int8_t		std[3];				/* stdin out err*/
+	int16_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 
