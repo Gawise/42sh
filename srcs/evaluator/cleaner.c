@@ -54,7 +54,7 @@ void	clean_cfg(t_cfg *shell)
 	ft_lstdel(&shell->job, del_struct_job);
 	ft_dlstdel(&shell->history);
 	ft_hash_del_map(&shell->map, free);
-	ft_hash_del_map(&shell->input_map, free);
+	ft_hash_del_map(&shell->input_map, NULL);
 	if (shell->debug > 2)
 		close(shell->debug);
 	ft_bzero(shell, sizeof(t_cfg));
