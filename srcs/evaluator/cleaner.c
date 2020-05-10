@@ -4,6 +4,13 @@
 
 #include "sh.h"
 #include "ft_printf.h"
+
+void	free_fd(void *del, size_t u)
+{
+	(void)u;
+	free(del);
+}
+
 void	del_struct_tvar(void *del, size_t u)
 {
 	t_var	*v;
@@ -21,9 +28,11 @@ void	del_struct_process(void *del, size_t u)
 	(void)u;
 	p = del;
 	ft_lstdel(&p->env, del_struct_tvar);
+	ft_lstdel(&p->fd, free_fd);
 	ft_strdel(&(p->cmd));
 	ft_del_tab((void **)p->av);
 	ft_strdel(&p->path);
+	ft_strdel(&p->message);
 	free(del);
 }
 

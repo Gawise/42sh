@@ -10,18 +10,19 @@
 # include "signal.h"
 
 
-# define PIPE_ON 2
-# define EXEC 4
-# define BUILTIN 8		/*rajouter un # define PIPE_ON ?*/
-# define SLASH 16
-# define FUNCTION 32
-# define ERROR 64
-# define E_UNFOUND 192
-# define E_ISDIR 320
-# define E_NOENT 576
-# define E_ACCES 1088
-# define E_LOOP 2112
-# define E_NTL	4160		/*       1000001000000 */
+# define PIPE_ON 1
+# define EXEC 2
+# define BUILTIN 4		/*rajouter un # define PIPE_ON ?*/
+# define SLASH 8
+# define R_ERROR 16
+# define P_ERROR 32
+# define E_BADFD 64
+# define E_UNFOUND 128
+# define E_ISDIR 256
+# define E_NOENT 512
+# define E_ACCES 1024
+# define E_LOOP 2048
+# define E_NTL 4096		/*       1000001000000 */
 
 # define B_SPECIAL 8192		/* 0000.10000000000000 */
 # define B_ECHO 0			/* 0000.00000000000000 */
@@ -55,10 +56,13 @@
 # define FAILED 16
 # define COMPLETED 32
 
+# define ERROR 96			/* P_ERROR | R_ERRO */
 
 /*		debug	*/
 
 
+void	print_fd_lst(t_list *fd);
+void	job_redir(t_list *process);
 
 /*		BUILTIN		*/
 
@@ -97,22 +101,28 @@ int			str_is_digit(char *str);
 /*		PROCESS HANDLING	*/
 int32_t		has_running(t_list *lst);
 int32_t		has_stopped(t_list *lst);
-void		with_slash(t_process *p);
+void		with_slash(t_process *p, uint32_t *err);
 uint32_t	builtin_search(t_process *p);
 
 
 /*		REDIR		 */
-uint8_t		process_redir(t_process *p, t_list *redir);
+uint32_t		process_redir(t_process *p, t_list *redir);
 void		do_my_dup2(int8_t fd1, int8_t fd2);
 uint8_t		bad_fd(int fd);
 uint32_t	path_gearing(t_redir *r, char **path, int right);
+
+void		add_fd_process(t_list **fd, int16_t source, int16_t target);
+void		do_redir(t_list *fd);
+uint8_t		patch_redir(t_list *process);
+
+
 
 /*		TERMIOS		*/
 void		term_create_eval(struct termios *origin, struct termios *eval);
 void		set_termios(int32_t mode, struct termios *term);
 
 /*		ERROR HANDLING	*/
-uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd);
+uint32_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd);
 uint8_t		process_errors_handling(t_process *p);
 
 /*		WAIT		*/

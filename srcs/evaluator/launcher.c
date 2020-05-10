@@ -11,7 +11,7 @@
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
-
+#include "ft_printf.h"
 #include "sh.h"
 
 
@@ -94,8 +94,12 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
-	if (process_redir(p, p->redir) == FAILURE)
+	do_redir(p->fd);
+	if (p->setup & R_ERROR)
+	{
+		ft_dprintf(STDERR_FILENO,"%s", p->message);
 		exit(1);
+	}
 	process_errors_handling(p);
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
@@ -122,11 +126,14 @@ int		fork_process(t_job *job, t_process *p)
 void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
-	process_assign(shell, p, p->assign);
+	process_assign(shell, p, p->assign); // not cmd != false
 	debug_print_process(j, p, "run_process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
-		if ((process_redir(p, p->redir) == FAILURE) &&
+		do_redir(p->fd);
+		if (p->setup & R_ERROR)
+			ft_dprintf(STDERR_FILENO,"%s", p->message);
+		if ((p->setup & R_ERROR) &&
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);
 		builtin_process(j, p);
@@ -161,61 +168,10 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 }
 
 
-uint8_t		path_corr_check(t_redir *r, char **path)
-{
-	int i = 0;
-	if ((ft_atoi(r->io_num) > 255) ||
-			( i =path_gearing(r, path, O_WRONLY)))
-	{
-		ft_strdel(path);
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
-
-void		patch_corr_redir(t_list *redir)
-{
-	t_redir		*r;
-	char		*path;
-	int32_t	fd;
-
-	path = NULL;
-	while (redir)
-	{
-		r = redir->data;
-		if (r->type == GREAT || r->type == DGREAT)
-		{
-			if (path_corr_check(r, &path))
-				return ;
-			fd = open(path, O_CREAT, 0644);
-			printf("open ret = [%d]\t path = [%s]\n", fd, path);
-			close(fd);
-			ft_strdel(&path);
-			if (fd == -1) //secur?
-				return ;
-		}
-		redir = redir->next;
-	}
-}
-
-void		patch_corr(t_list	*process)
-{
-	t_process	*p;
-
-	if (!process->next)
-		return ;
-	while (process)
-	{
-		p = process->data;
-		patch_corr_redir(p->redir);
-		process = process->next;
-	}
-
-}
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	job->status |= RUNNING;
-	patch_corr(process);
+	ft_lstiter(job->process, job_redir);
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);

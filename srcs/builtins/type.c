@@ -4,6 +4,9 @@
 #include "var.h"
 #include "ft_printf.h"
 
+
+
+/*
 static	uint8_t		type_error(char *p)
 {
 	ft_dprintf(STDERR_FILENO, "%s: type: %s : not found\n", PROJECT, p);
@@ -42,9 +45,15 @@ static uint8_t		type_find(t_cfg *shell, t_process *ptype, t_list *env)
 	else
 		return (type_error(ptype->cmd));
 }
-
+*/
 uint8_t		ft_type(t_job *j, t_process *p)
 {
+
+	(void)j;
+	(void)p;
+	ft_printf("need updtade -> with_slash\n");
+	return (1);
+/*
 	uint8_t		i;
 	t_process	ptype;
 	t_cfg		*shell;
@@ -64,4 +73,5 @@ uint8_t		ft_type(t_job *j, t_process *p)
 		i++;
 	}
 	return (ret);
+	*/
 }

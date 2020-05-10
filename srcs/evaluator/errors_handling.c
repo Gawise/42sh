@@ -26,19 +26,17 @@ uint8_t		process_errors_handling(t_process *p)
 	exit(p->ret);
 }
 
-uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
+uint32_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
 {
-	error &= ~ERROR;
-	p->ret = 1;
 	p->status = FAILED;
-	if (fd)
-		ft_dprintf(STDERR_FILENO, "%s: %d: Bad file descriptor\n", PROJECT, fd);
+	if (error & E_BADFD)
+		ft_asprintf(&p->message, "%s: %d: Bad file descriptor\n", PROJECT, fd);
 	else if (error & E_ISDIR)
-		ft_dprintf(STDERR_FILENO, "%s: %s: is a directory\n", PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: is a directory\n", PROJECT, info);
 	else if (error & E_NOENT)
-		ft_dprintf(STDERR_FILENO, "%s: %s: No such file or directory\n", PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: No such file or directory\n", PROJECT, info);
 	else if (error & E_ACCES)
-		ft_dprintf(STDERR_FILENO, "%s: %s: Permission denied\n", PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: Permission denied\n", PROJECT, info);
 	ft_strdel(&info);
-	return (FAILURE);
+	return (error | R_ERROR);
 }
