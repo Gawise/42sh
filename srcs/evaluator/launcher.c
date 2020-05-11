@@ -188,7 +188,6 @@ void		patch_corr_redir(t_list *redir)
 			if (path_corr_check(r, &path))
 				return ;
 			fd = open(path, O_CREAT, 0644);
-			printf("open ret = [%d]\t path = [%s]\n", fd, path);
 			close(fd);
 			ft_strdel(&path);
 			if (fd == -1) //secur?

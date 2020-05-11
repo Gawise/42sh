@@ -6,6 +6,8 @@
 
 void		setvar_update(t_list *lst, char *value)
 {
+	if (!lst || !lst->data)
+		return ;
 	ft_strdel(&(((t_var *)(lst->data))->ctab[1]));
 	((t_var *)(lst->data))->ctab[1] = ft_strdup(value);
 }
