@@ -107,7 +107,7 @@ uint32_t	builtin_search(t_process *p);
 
 /*		REDIR		 */
 uint32_t		process_redir(t_process *p, t_list *redir);
-void		do_my_dup2(int8_t fd1, int8_t fd2);
+void		do_my_dup2(int16_t fd1, int16_t fd2);
 uint8_t		bad_fd(int fd);
 uint32_t	path_gearing(t_redir *r, char **path, int right);
 

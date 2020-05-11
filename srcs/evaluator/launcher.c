@@ -48,7 +48,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[8] = ft_fg;
 	tab_f[9] = ft_bg;
 	tab_f[10] = ft_type;
-	if (p->status & FAILED)
+	if (p->status == FAILED)
 		return (p->ret);
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
@@ -123,6 +123,17 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
+void	close_fd(t_list *lst)
+{
+	int16_t	*fd;
+
+	fd = lst->data;
+	if (fd[0] > 2)
+		close(fd[0]);
+	if (fd[1] > 2)
+		close(fd[1]);
+}
+
 void	run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	process_type(p);
@@ -143,6 +154,7 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	}
 	else
 		fork_process(j, p);
+	ft_lstiter(p->fd, close_fd);
 	return ;
 }
 

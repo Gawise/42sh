@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-void	do_my_dup2(int8_t fd1, int8_t fd2)
+void	do_my_dup2(int16_t fd1, int16_t fd2)
 {
 	if (fd1 == -1)
 		return ;

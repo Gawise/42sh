@@ -7,6 +7,12 @@
 #include <fcntl.h>
 
 
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
 void		do_redir(t_list *fd)
 {
 	int16_t *t;
@@ -72,11 +78,23 @@ uint32_t		redir_file(t_process *p, t_redir *r)
 	return(redir_gear(p, r, target, right));
 }
 
+
+int32_t		create_fd_null(void)
+{
+	int32_t	fd;
+
+	if ((fd = open("/dev/null", 0)) == -1)
+		if ((fd = open("/tmp/tmpfd2142sh", O_CREAT, 0644)) == -1)
+			return (0);
+	return (fd);
+}
+
 uint32_t		redir_fd(t_process *p, t_redir *r)
 {
 	uint8_t		io;
-	uint32_t	target;
+	int32_t		target;
 	int32_t		source;
+	int32_t		tmp;
 
 	io = (r->type == LESSAND) ? 0 : 1;
 	target = (*r->io_num) ? ft_atoi(r->io_num) : io;
@@ -91,6 +109,16 @@ uint32_t		redir_fd(t_process *p, t_redir *r)
 		return (redir_errors_handling(p, E_BADFD, 0, target));
 	if (bad_fd(source))
 		return (redir_errors_handling(p, E_BADFD, 0, source));
+	if (bad_fd(target))
+	{
+		if (!(tmp = create_fd_null()))
+			return (redir_errors_handling(p, E_BADFD, 0, target));
+		if (tmp != target)
+		{
+			do_my_dup2(tmp, target);
+			close(tmp);
+		}
+	}
 	add_fd_process(&p->fd, source, target);
 	return (SUCCESS);
 }
