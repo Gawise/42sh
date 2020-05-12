@@ -61,7 +61,6 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	return (job->ret);
 }
 
-
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	job->status |= RUNNING;

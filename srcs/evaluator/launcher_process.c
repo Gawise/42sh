@@ -121,7 +121,7 @@ uint8_t		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-void	run_process(t_cfg *shell, t_job *j, t_process *p)
+void		run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 
 	p->status = RUNNING | (p->status & ~WAITING);
