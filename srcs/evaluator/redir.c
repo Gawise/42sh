@@ -1,41 +1,11 @@
 #include "exec.h"
 #include "libft.h"
 #include "struct.h"
-#include "ft_printf.h"
 #include "var.h"
 #include "sh.h"
+#include "ft_printf.h"
 #include <fcntl.h>
 
-
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-
-void		do_redir(t_list *fd)
-{
-	int16_t *t;
-
-	while (fd)
-	{
-		t = fd->data;
-		if (t[0] == -1)
-			close(t[1]);
-		else if (t[0] != t[1])
-			do_my_dup2(t[0], t[1]);
-		fd = fd->next;
-	}
-}
-
-void		add_fd_process(t_list **fd, int16_t source, int16_t target)
-{
-	int16_t		tab[2];
-
-	tab[0] = source;
-	tab[1] = target;
-	ft_lst_push_back(fd, tab, sizeof(tab));
-}
 
 
 uint32_t		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
@@ -76,17 +46,6 @@ uint32_t		redir_file(t_process *p, t_redir *r)
 	else if (r->type == DGREAT)
 		right |= O_APPEND;
 	return(redir_gear(p, r, target, right));
-}
-
-
-int32_t		create_fd_null(void)
-{
-	int32_t	fd;
-
-	if ((fd = open("/dev/null", 0)) == -1)
-		if ((fd = open("/tmp/tmpfd2142sh", O_CREAT, 0644)) == -1)
-			return (0);
-	return (fd);
 }
 
 uint32_t		redir_fd(t_process *p, t_redir *r)
@@ -159,15 +118,4 @@ uint32_t		process_redir(t_process *p, t_list *redir)
 		redir = redir->next;
 	}
 	return (SUCCESS);
-}
-
-
-
-
-void	job_redir(t_list *process)
-{
-	t_process 	*p;
-
-	p = process->data;
-	p->setup |= process_redir(p, p->redir);
 }

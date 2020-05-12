@@ -9,7 +9,7 @@ uint32_t			builtin_search(t_process *p)
 	if (!p->cmd)
 		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
-		return (p->setup |= B_ECHO);
+		return ((p->setup |= B_ECHO) + 1);
 	if (!ft_strcmp(p->cmd, "setenv"))
 		return (p->setup |= B_SETENV);
 	if (!ft_strcmp(p->cmd, "unsetenv"))
@@ -69,7 +69,7 @@ static void			any_slash(t_list *env, t_process *p, uint32_t *err)
 	*err |= path_errors(p->path, 1);
 }
 
-void			with_slash(t_process *p, uint32_t *err)
+void				with_slash(t_process *p, uint32_t *err)
 {
 	char		*tmp;
 
@@ -93,8 +93,8 @@ void				process_type(t_process *p)
 	if (ft_strchr(p->cmd, '/'))
 		with_slash(p, &err);
 	else (any_slash(p->env, p, &err));
-	if (err)
-		p->setup |= (p->setup & R_ERROR) ?
-			P_ERROR : (P_ERROR | err);
-
+	if (err && (p->setup & R_ERROR))
+		p->setup |= P_ERROR;
+	else if (err)
+		p->setup |= process_errors_handling(p, err);
 }

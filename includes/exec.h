@@ -9,6 +9,7 @@
 # include "struct.h"
 # include "signal.h"
 
+# define ERROR 48
 
 # define PIPE_ON 1
 # define EXEC 2
@@ -56,13 +57,15 @@
 # define FAILED 16
 # define COMPLETED 32
 
-# define ERROR 96			/* P_ERROR | R_ERRO */
 
 /*		debug	*/
 
 
-void	print_fd_lst(t_list *fd);
-void	job_redir(t_list *process);
+
+
+
+
+
 
 /*		BUILTIN		*/
 
@@ -98,22 +101,8 @@ int			str_is_digit(char *str);
 
 
 
-/*		PROCESS HANDLING	*/
-int32_t		has_running(t_list *lst);
-int32_t		has_stopped(t_list *lst);
-void		with_slash(t_process *p, uint32_t *err);
-uint32_t	builtin_search(t_process *p);
 
 
-/*		REDIR		 */
-uint32_t		process_redir(t_process *p, t_list *redir);
-void		do_my_dup2(int16_t fd1, int16_t fd2);
-uint8_t		bad_fd(int fd);
-uint32_t	path_gearing(t_redir *r, char **path, int right);
-
-void		add_fd_process(t_list **fd, int16_t source, int16_t target);
-void		do_redir(t_list *fd);
-uint8_t		patch_redir(t_list *process);
 
 
 
@@ -121,23 +110,54 @@ uint8_t		patch_redir(t_list *process);
 void		term_create_eval(struct termios *origin, struct termios *eval);
 void		set_termios(int32_t mode, struct termios *term);
 
+
+
+
+/*		JOB 		*/
+uint8_t		ft_eval(t_list *cmd_table);
+void		lvl_cmd_table(t_cfg *shell, t_list *lst);
+void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
+
+uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
+
+/*		PROCESS 	*/
+
+void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
+void		run_process(t_cfg *shell, t_job *j, t_process *p);
+void		process_type(t_process *p);
+void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
+void		do_pipe(t_process *p);
+int32_t		has_running(t_list *lst);
+int32_t		has_stopped(t_list *lst);
+void		with_slash(t_process *p, uint32_t *err);
+uint32_t	builtin_search(t_process *p);
+
+/*		REDIR		 */
+uint32_t	process_redir(t_process *p, t_list *redir);
+void		do_my_dup2(int16_t fd1, int16_t fd2);
+uint8_t		bad_fd(int fd);
+uint32_t	path_gearing(t_redir *r, char **path, int right);
+
+void		add_fd_process(t_list **fd, int16_t source, int16_t target);
+void		do_redir(t_list *fd);
+uint8_t		patch_redir(t_list *process);
+void	close_fd(t_list *lst);
+void	job_redir(t_list *process);
+
+void		add_fd_process(t_list **fd, int16_t source, int16_t target);
+void		do_redir(t_list *fd);
+int32_t		create_fd_null(void);
+
+
 /*		ERROR HANDLING	*/
 uint32_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd);
-uint8_t		process_errors_handling(t_process *p);
+uint32_t		process_errors_handling(t_process *p, uint32_t	err);
 
 /*		WAIT		*/
 void		wait_process(t_job *job);
 
-/*	 	STEP		*/
-uint8_t		ft_eval(t_list *cmd_table);
-void		lvl_cmd_table(t_cfg *shell, t_list *lst);
-void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
-uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
-//void		run_process(t_job *j, t_process *p);
-void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
-void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
-void		do_pipe(t_process *p);
-void		process_type(t_process *p);
+
+/*		DESTRUCTOR	*/
 void		routine_clean_job(void *del, size_t u);
 void		del_struct_process(void *del, size_t u);
 void		del_struct_job(void *del, size_t u);
@@ -145,5 +165,6 @@ void		del_struct_job(void *del, size_t u);
 /*		DEBUG */
 void	debug_print_all(t_job *j, t_list *process, char *where);
 void	debug_print_process(t_job *j, t_process *p, char *where);
+void	print_fd_lst(t_list *fd);
 
 #endif
