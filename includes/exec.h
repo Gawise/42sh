@@ -165,6 +165,6 @@ void		del_struct_job(void *del, size_t u);
 /*		DEBUG */
 void	debug_print_all(t_job *j, t_list *process, char *where);
 void	debug_print_process(t_job *j, t_process *p, char *where);
-void	print_fd_lst(t_list *fd);
+void	debug_print_lstfd(t_list *fd);
 
 #endif

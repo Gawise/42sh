@@ -4,19 +4,6 @@
 #include "var.h"
 
 
-void	print_fd_lst(t_list *fd)
-{
-	int16_t	*t;
-
-	while(fd)
-	{
-		t = fd->data;
-		printf("tab[0] = [%d]\ttab[1] = [%d]\n", t[0], t[1]);
-		fd = fd->next;
-	}
-
-}
-
 void	cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	t_process		process;
