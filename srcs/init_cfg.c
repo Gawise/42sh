@@ -45,6 +45,7 @@ static uint8_t		set_debug(char **av, int i)
 	path = (av[i + 1]) + 1;
 	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
 	{
+		printf("la\n");
 		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
 		exit(1);
 	}

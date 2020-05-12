@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "var.h"
 #include "sh.h"
+#include "ft_printf.h"
 #include "job_control.h"
 #include <unistd.h>
 
@@ -10,7 +11,6 @@
 
 #include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
-
 
 #include "sh.h"
 
@@ -48,7 +48,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[8] = ft_fg;
 	tab_f[9] = ft_bg;
 	tab_f[10] = ft_type;
-	if (p->status & FAILED)
+	if (p->status == FAILED)
 		return (p->ret);
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
 		p->status = FAILED;
@@ -57,7 +57,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
+uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
@@ -74,10 +74,10 @@ int		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid))
 			perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	ft_del_tab((void **)envp);
-	return (0);
+	return (SUCCESS);
 }
 
-int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
+uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
@@ -94,9 +94,12 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
-	if (process_redir(p, p->redir) == FAILURE)
-		exit(1);
-	process_errors_handling(p);
+	do_redir(p->fd);
+	if (p->setup & ERROR)
+	{
+		ft_dprintf(STDERR_FILENO,"%s", p->message);
+		exit(p->ret);
+	}
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
 	if ((execve(p->path, p->av, envp)) == -1)
@@ -104,12 +107,11 @@ int		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 	exit(1);
 }
 
-int		fork_process(t_job *job, t_process *p)
+uint8_t		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
 	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
-	p->status = RUNNING;
 	if ((p->pid = fork()) == -1)
 		perror("fork:"); // perror
 	if (!(p->pid))
@@ -119,14 +121,19 @@ int		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-void	run_process(t_cfg *shell, t_job *j, t_process *p)
+void		run_process(t_cfg *shell, t_job *j, t_process *p)
 {
+
+	p->status = RUNNING | (p->status & ~WAITING);
 	process_type(p);
-	process_assign(shell, p, p->assign);
+	process_assign(shell, p, p->assign); // not cmd != false
 	debug_print_process(j, p, "run_process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
-		if ((process_redir(p, p->redir) == FAILURE) &&
+		do_redir(p->fd);
+		if (p->setup & R_ERROR)
+			ft_dprintf(STDERR_FILENO,"%s", p->message);
+		if ((p->setup & R_ERROR) &&
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);
 		builtin_process(j, p);
@@ -136,93 +143,6 @@ void	run_process(t_cfg *shell, t_job *j, t_process *p)
 	}
 	else
 		fork_process(j, p);
+	ft_lstiter(p->fd, close_fd);
 	return ;
-}
-
-uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
-{
-	char	*ret;
-
-	if (!shell->interactive)
-		wait_process(job);
-	else if (job->fg)
-	{
-	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */
-		wait_process(job);
-		tcsetpgrp(STDIN_FILENO, shell->pid);
-		set_termios(TCSADRAIN, &shell->term_origin);
-	}
-	else
-		set_job_background(job);
-	ret = ft_itoa(job->ret);
-	setvar_update(find_var(shell->sp, "?"), ret);
-	ft_strdel(&ret);
-	return (job->ret);
-}
-
-
-uint8_t		path_corr_check(t_redir *r, char **path)
-{
-	int i = 0;
-	if ((ft_atoi(r->io_num) > 255) ||
-			( i =path_gearing(r, path, O_WRONLY)))
-	{
-		ft_strdel(path);
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
-
-void		patch_corr_redir(t_list *redir)
-{
-	t_redir		*r;
-	char		*path;
-	int32_t	fd;
-
-	path = NULL;
-	while (redir)
-	{
-		r = redir->data;
-		if (r->type == GREAT || r->type == DGREAT)
-		{
-			if (path_corr_check(r, &path))
-				return ;
-			fd = open(path, O_CREAT, 0644);
-			close(fd);
-			ft_strdel(&path);
-			if (fd == -1) //secur?
-				return ;
-		}
-		redir = redir->next;
-	}
-}
-
-void		patch_corr(t_list	*process)
-{
-	t_process	*p;
-
-	if (!process->next)
-		return ;
-	while (process)
-	{
-		p = process->data;
-		patch_corr_redir(p->redir);
-		process = process->next;
-	}
-
-}
-uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
-{
-	job->status |= RUNNING;
-	patch_corr(process);
-	while (process)
-	{
-		routine_process(shell, process, &job->pipe);
-		run_process(shell, job, process->data);
-		process = process->next;
-		if (job->pipe.tmp)
-			if (close(job->pipe.tmp) == -1)
-				perror("[check and do pipe] close error:");  //perror
-	}
-	return (routine_ending_job(shell, job));
 }

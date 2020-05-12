@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+
 static int	check_terminal(t_cfg *cfg, uint8_t tty)
 {
 	if (cfg && (cfg->interactive = isatty(tty)))

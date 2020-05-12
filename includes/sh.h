@@ -17,11 +17,13 @@
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"
 
 # include <stdint.h>
+# include <stddef.h>
 
 typedef struct	s_cfg t_cfg;
 
 void		ft_ex(char *error);
 void		clean_cfg(t_cfg *shell);
+void		del_struct_tvar(void *del, size_t u);
 void		set_signal_ign(void);
 void		init_shell(char **env, char **av, int ac);
 t_cfg		*init_cfg(char **env, char **av, int ac);
