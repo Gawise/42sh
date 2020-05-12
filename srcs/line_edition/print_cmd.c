@@ -23,7 +23,7 @@ void	print_prompt(t_cs_line *cs)
 	int			len;
 	t_cfg		*cfg;
 
-	if (cs && (cfg = cfg_shell()) && cfg->mode == INTERACTIVE_MODE)
+	if (cs && (cfg = cfg_shell()) && cfg->interactive)
 	{
 		ft_putstr_fd(cs->prompt_color, cs->tty);
 		if (cs->screen.x <= (len = (int)ft_strlen(cs->prompt)

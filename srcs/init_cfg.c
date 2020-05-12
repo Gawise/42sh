@@ -31,19 +31,11 @@ static void		set_var_intern(t_cfg *shell)
 static uint8_t		set_debug(char **av, int i)
 {
 	int		fd;
-	char	*path;
 	
-	int d = 0;
-	i = 0;
-	while (++i && av[i])
-		if (!(d = ft_strcmp(av[i], "debug")))
-			break ;
+		ft_printf("arg=\'%s\'\n", av[i]);
 	if (!av[i])
 		return (0);
-	if (!av[i + 1] || *av[i + 1] != '-')
-		return (1);
-	path = (av[i + 1]) + 1;
-	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
+	if ((fd = open(av[i], O_CREAT | O_WRONLY, 0644)) == -1)
 	{
 		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
 		exit(1);
@@ -57,7 +49,7 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 
 	(void)ac;
 	i = 1;
-	shell->mode = INTERACTIVE_MODE;
+	shell->interactive = 1;
 	if (av[i] && av[i][0] == '-')
 	{
 		if (ft_strequ("-d", av[i++]))
@@ -71,7 +63,7 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 	if (av[i] && !(shell->file = ft_strdup(av[i])))
 		ft_ex(EXMALLOC);
 	if (shell->file)
-		shell->mode = NON_INTERACTIVE_MODE;
+		shell->interactive = 0;
 }
 
 t_cfg			*init_cfg(char **env, char **av, int ac)
@@ -91,5 +83,6 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 		ft_ex(EXMALLOC);
 	init_input_map(shell->input_map);
 	set_shell_mode(av, ac, shell);
+	ft_printf("shell->file=\'%s\'\n", shell->file);
 	return (shell);
 }
