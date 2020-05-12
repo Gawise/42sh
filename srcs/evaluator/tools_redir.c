@@ -35,12 +35,14 @@ void		do_redir(t_list *fd)
 		fd = fd->next;
 	}
 }
+#include <stdio.h>
 
 void		do_pipe(t_process *p)
 {
 	if (p->std[0] != STDIN_FILENO &&
 			p->std[0] != -1)
 	{
+		printf("do pipe 1 = p->std[0] = [%d]\n", p->std[0]);
 		if (dup2(p->std[0], STDIN_FILENO) == -1)
 			perror("[do_pipe]1 dup2 error:");
 		if (close(p->std[0]) == -1)
@@ -49,6 +51,7 @@ void		do_pipe(t_process *p)
 	if (p->std[1] != STDOUT_FILENO &&
 			p->std[0] != -1)
 	{
+		printf("do pipe2 = p->std[1] = [%d]\n", p->std[1]);
 		if (dup2(p->std[1], STDOUT_FILENO) == -1)
 			perror("[do_pipe]2 dup2 error:");
 		if (close(p->std[1]) == -1)
