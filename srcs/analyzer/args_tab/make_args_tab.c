@@ -25,7 +25,7 @@ int	mat_s_cmd(t_list *s_cmd_lst)
 	{
 		if (!cmd->args)
 		{
-			if ((cmd->av = ft_memalloc(sizeof(void*) * 2)))
+			if (!(cmd->av = ft_memalloc(sizeof(void*) * 2)))
 				ft_ex(EXMALLOC);
 			cmd->av[0] = cmd->cmd_name;
 			cmd->av[1] = NULL;
