@@ -81,7 +81,10 @@ int		analyzer_routine(t_parser *parser)
 	if (a_make_args_tab(parser) < 0
 	|| (parser->state != S_PARSER_SYNTAX_ERROR
 	&& !a_set_jobs_str(parser)))
+	{
+		ft_lstdel(&parser->table, del_cmd_table);
 		return (0);
+	}
 	a_remove_leading_tabs(parser);
 	return (1);
 }
