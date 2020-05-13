@@ -106,6 +106,7 @@ ANASRCS += exp/param_substitution.c
 ANASRCS += exp/tilde_exp.c
 ANASRCS += exp/tilde_assign.c
 ANASRCS += exp/word_parameter.c
+ANASRCS += quote_removal.c
 
 ## EVAL ##
 
