@@ -15,6 +15,33 @@ int	parse_simple_parameter(t_exp *exp, char **str, char **param)
 	return (1);
 }
 
+#include <stdio.h>
+
+void	special_parameter(char **str, char **param)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = *str;
+	if (ft_isdigit(**str))
+	{
+		while (ft_isdigit(**str))
+		{
+			i++;
+			(*str)++;
+		}
+		if (!(*param = ft_strndup(tmp, i)))
+			ft_ex("Cannot allocate memory\n");
+	}
+	else
+	{
+		 if (!(*param = ft_strndup(*str, 1)))
+			ft_ex("Cannot allocate memory\n");
+		(*str)++;
+	}
+}
+
 int	simple_param_exp(t_exp *exp, char **str)
 {
 	char	*param;
@@ -23,10 +50,7 @@ int	simple_param_exp(t_exp *exp, char **str)
 	(*str)++;
 	if (**str == '@' || **str == '*' || **str == '#' || **str == '?'
 	|| **str == '-' || **str == '$' || **str == '!' || ft_isdigit(**str))
-	{
-		if (!(param = ft_strndup(*str, 1)))
-			ft_ex("Cannot allocate memory\n");
-	}
+		special_parameter(str, &param);
 	else if (!parse_simple_parameter(exp, str, &param))
 		return (0);
 	if (!(exp->param = resolve_parameter(param, 0)))
