@@ -99,7 +99,7 @@ char	*a_quote_removal(char **str)
 	flag = 0;
 	i = 0;
 	cpy = *str;
-	if (!(res = ft_memalloc(sizeof(char) * ft_strlen(*str))))
+	if (!(res = ft_strnew(sizeof(char) * ft_strlen(*str))))
 		ft_ex(EXMALLOC);
 	tmp = res;
 	while (*cpy)
@@ -113,7 +113,6 @@ char	*a_quote_removal(char **str)
 		}
 		cpy++;
 	}
-	ft_printf("res quote removal : %s\n", res);
 	ft_strdel(str);
 	return (res);
 }
