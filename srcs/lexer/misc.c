@@ -86,6 +86,8 @@ int			l_complete_str(t_lexer *lexer, char c)
 		ft_strdel(&pmt_prefix);
 		return (0);
 	}
+	if (!*new)
+		return (l_hd_body_flush(lexer, c));
 	if (!(*lexer->src = ft_strclnjoin(*lexer->src, new)))
 	{
 		ft_printf("erreur malloc complete_flag\n");
