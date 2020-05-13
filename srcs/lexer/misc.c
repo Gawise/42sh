@@ -86,11 +86,10 @@ int			l_complete_str(t_lexer *lexer, char c)
 		ft_strdel(&pmt_prefix);
 		return (0);
 	}
+	if (!*new && l_get_last_flag(lexer) == F_HEREDOC)
+		return (l_hd_body_flush(lexer, c));
 	if (!(*lexer->src = ft_strclnjoin(*lexer->src, new)))
-	{
-		ft_printf("erreur malloc complete_flag\n");
-		exit(1);
-	}
+		ft_ex(EXMALLOC);
 	lexer->curr = *lexer->src + pos;
 	ft_strdel(&pmt_prefix);
 	return (1);

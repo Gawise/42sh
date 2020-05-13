@@ -106,11 +106,13 @@ ANASRCS += exp/param_substitution.c
 ANASRCS += exp/tilde_exp.c
 ANASRCS += exp/tilde_assign.c
 ANASRCS += exp/word_parameter.c
+ANASRCS += quote_removal.c
 
 ## EVAL ##
 
-EVALSRCS += launcher.c
-EVALSRCS += process_routines.c
+EVALSRCS += launcher_job.c
+EVALSRCS += launcher_process.c
+EVALSRCS += process_assign.c
 EVALSRCS += exec_type.c
 EVALSRCS += cleaner.c
 EVALSRCS += constructor.c
@@ -118,6 +120,7 @@ EVALSRCS += bridge_step.c
 EVALSRCS += wait.c
 EVALSRCS += redir.c
 EVALSRCS += tools_var.c
+EVALSRCS += tools_fd.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
 EVALSRCS += errors_handling.c
@@ -179,6 +182,7 @@ DBSRCS += parser.c
 SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
+SRC += destructor.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))

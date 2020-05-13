@@ -287,11 +287,13 @@ typedef struct	s_process
 	char 		*cmd;                /* cmd name */
 	char 		**av;                /* for exec */
 	char 		*path;				/* path's exec */
+	char		*message;
 	pid_t 		pid;                /* process ID */
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
 	int16_t 	std[3];				/* stdin out err*/
 	uint32_t	setup;				/* info of process */
+	t_list		*fd;
 	t_list		*redir;				/* list of redirs */
 	t_list		*env;				/* list of env  */
 	t_list		*assign;			/* list of assign */
