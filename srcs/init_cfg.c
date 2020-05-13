@@ -83,6 +83,5 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 		ft_ex(EXMALLOC);
 	init_input_map(shell->input_map);
 	set_shell_mode(av, ac, shell);
-	ft_printf("shell->file=\'%s\'\n", shell->file);
 	return (shell);
 }
