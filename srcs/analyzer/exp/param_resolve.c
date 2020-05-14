@@ -16,19 +16,21 @@ int		print_error_parameter(t_exp *exp, char **str, char *param)
 
 char	*resolve_parameter(char *str, int hash)
 {
-	int		i;
 	char	*res;
+	int		type;
 
-	i = -1;
-	if (!(ft_strlen(str) == 1 && (*str == '@' || *str == '*'
-	|| *str == '#' || *str == '?' || *str == '-' || *str == '$'
-	|| *str == '!' || ft_isdigit(*str)))
-	&& (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1))))
+	type = 0;
+	if ((ft_strlen(str) == 1 && ft_strchr("@*#?-$!", *str)) || ft_isdigit(*str))
+		type = 1;
+	else if (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1)))
 		return (NULL);
-	if (!hash && (res = find_var_value(cfg_shell()->env, str))
+	if (type && (res = find_var_value(cfg_shell()->sp, str))
 	&& !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
-	else if (hash && (res = find_var_value(cfg_shell()->env, str + 1))
+	else if (!type && !hash && (res = find_var_value(cfg_shell()->env, str))
+	&& !(res = ft_strdup(res)))
+		ft_ex("Cannot allocate memory\n");
+	else if (!type && hash && (res = find_var_value(cfg_shell()->env, str + 1))
 	&& !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
 	if (!res && !(res = ft_strnew(0)))

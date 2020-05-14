@@ -4,17 +4,49 @@
 #include "ft_printf.h"
 #include "var.h"
 
-int		exp_err(char *word)
+static int		exp_err(char *word)
 {
 	ft_dprintf(2, "%s: Bad Substitution\n", word);
-	ft_setvar(&cfg_shell()->env, "?", "1");
+	ft_setvar(&cfg_shell()->sp, "?", "1");
 	return (-1);
+}
+
+static int		arg_exp(t_simple_cmd *cmd)
+{
+	t_list	*lst;
+	int		ret;
+
+	lst = cmd->args;
+	while (lst)
+	{
+		if ((ret = exp_main((char **)&lst->data, 0)) < 0)
+			return (ret == -1 ? exp_err((char *)lst->data) : -1);
+		lst->data = (void *)a_quote_removal((char **)&lst->data);
+		lst = lst->next;
+	}
+	return (1);
+}
+
+static int		assign_exp(t_simple_cmd *cmd)
+{
+	t_list	*lst;
+	int		ret;
+	t_assignment	*assign;
+
+	lst = cmd->assign;
+	while (lst)
+	{
+		assign = lst->data;
+		if ((ret = exp_main((char **)&assign->val, 1)) < 0)
+			return (ret == -1 ? exp_err((char *)assign->val) : -1);
+		assign->val = a_quote_removal((char **)&assign->val);
+		lst = lst->next;
+	}
+	return (1);
 }
 
 int		word_expansions(t_simple_cmd *cmd)
 {
-	t_list			*lst;
-	t_assignment	*assign;
 	int				ret;
 	int				debug;
 
@@ -22,21 +54,8 @@ int		word_expansions(t_simple_cmd *cmd)
 		ft_dprintf(debug, "\n----------- expansions -----------\n\n");
 	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
 		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
-	lst = cmd->args;
-	while (lst)
-	{
-		if ((ret = exp_main((char **)&lst->data, 0)) < 0)
-			return (ret == -1 ? exp_err((char *)lst->data) : -1);
-		lst = lst->next;
-	}
-	lst = cmd->assign;
-	while (lst)
-	{
-		assign = lst->data;
-		if ((ret = exp_main((char **)&assign->val, 1)) < 0)
-			return (ret == -1 ? exp_err((char *)assign->val) : -1);
-		lst = lst->next;
-	}
+	if (arg_exp(cmd) < 0 || assign_exp(cmd) < 0)
+		return (-1);
 	return (1);
 }
 
