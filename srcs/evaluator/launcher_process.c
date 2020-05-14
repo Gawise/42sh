@@ -111,7 +111,6 @@ uint8_t		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
-	ft_printf("pipe.fd[0] = %d  pipe.fd[1] = %d tmp = %d \n", job->pipe.fd[0], job->pipe.fd[1], job->pipe.tmp);
 	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
 	if ((p->pid = fork()) == -1)
 		perror("fork:"); // perror

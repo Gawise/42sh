@@ -58,13 +58,37 @@
 # define COMPLETED 32
 
 
-/*		debug	*/
+# define S_SIGHUP "Hangup" /*1*/
+# define S_SIGINT "\n" /*2*/
+# define S_SIGQUIT "Quit" /*3*/
+# define S_SIGILL "Illegal instruction" /*4*/
+# define S_SIGTRAP "Trace/Breakpoint trap"   /*5*/
+# define S_SIGABRT "Aborted" /*6*/
+# define S_SIGBUS "Bus Error" /*7*/
+# define S_SIGFPE "Floating point exception" /*8*/
+# define S_SIGKILL "KILLED"	/*9*/
+# define S_SIGUSR1 "User defined signal 1" /*10*/
+# define S_SIGSEGV "Segmentation fault" /*11*/
+# define S_SIGUSR2 "User defined signal 2" /*12*/
+# define S_SIGALRM "Alarm clock" /*14*/ /*26*/
+# define S_SIGTERM "Terminated" /*15*/
+# define S_SIGXCPU "CPU time limit exceeded" /*24*/
+# define S_SIGXFSZ "File size limit exceeded" /*25*/
+# define S_SIGPROF "Profiling timer expired" /*27*/
+
+# define S_SIGTTOU "Stopped(SIGTTOU)"  /*22*/
+# define S_SIGTTIN "Stopped(SIGTTIN)"  /*21*/
+# define S_SIGTSTP "Stopped(SIGTSTP)"  /*20*/
+# define S_SIGSTOP "Stopped(SIGSTOP)"  /*19*/
 
 
 
 
 
 
+
+
+uint8_t		print_message_signal(uint8_t sig, t_job *j);
 
 
 /*		BUILTIN		*/
