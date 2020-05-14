@@ -66,6 +66,6 @@ void          	ft_cpy_job(t_job *job, t_job *copy)
 	copy->status = job->status;
 	copy->ret = job->ret;
 	copy->id = job->id;
-	ft_memset(copy->std, -1, sizeof(uint8_t) * 3);
+	ft_memset(copy->std, -1, sizeof(int16_t) * 3);
 	ft_memcpy(&copy->term_eval, &job->term_eval, sizeof(job->term_eval));
 }
