@@ -7,7 +7,7 @@
 static int		exp_err(char *word)
 {
 	ft_dprintf(2, "%s: Bad Substitution\n", word);
-	ft_setvar(&cfg_shell()->env, "?", "1");
+	ft_setvar(&cfg_shell()->sp, "?", "1");
 	return (-1);
 }
 

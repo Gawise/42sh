@@ -15,8 +15,6 @@ int	parse_simple_parameter(t_exp *exp, char **str, char **param)
 	return (1);
 }
 
-#include <stdio.h>
-
 void	special_parameter(char **str, char **param)
 {
 	int		i;
@@ -48,8 +46,7 @@ int	simple_param_exp(t_exp *exp, char **str)
 
 	param = NULL;
 	(*str)++;
-	if (**str == '@' || **str == '*' || **str == '#' || **str == '?'
-	|| **str == '-' || **str == '$' || **str == '!' || ft_isdigit(**str))
+	if (ft_strchr("@*#?-$!", **str) || ft_isdigit(**str))
 		special_parameter(str, &param);
 	else if (!parse_simple_parameter(exp, str, &param))
 		return (0);
