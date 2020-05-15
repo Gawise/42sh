@@ -20,6 +20,28 @@
 #include <stdio.h>
 #include "struct.h"
 #include "sh.h"
+#include "get_next_line.h"
+
+char	*read_nonint(t_cfg	*cfg)
+{
+	char		*line;
+	static int	fd = -2;
+	int			ret;
+
+	if (fd == -2)
+		if (cfg && (fd = open(cfg->file, O_RDONLY)) < 0)
+			ft_ex("Bad file descriptor\n");
+	line = ft_strnew(0);
+	if (cfg)
+	{
+		ft_strdel(&line);
+		if ((ret = get_next_line(fd, &line)) < 0)
+			ft_ex("An error occured while reading file");
+		else if (ret == 0)
+			line = ft_strnew(0);
+	}
+	return (line);
+}
 
 void	read_input(void)
 {
@@ -86,6 +108,10 @@ char	*ft_prompt(char *prompt, char *color)
 
 	ret = NULL;
 	cs = NULL;
+	if (!(cfg = cfg_shell()))
+    	return (NULL);
+	if (cfg->mode == NON_INTERACTIVE_MODE)
+		return (read_nonint(cfg));
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{
 		cs->prompt_color = color;
@@ -108,5 +134,5 @@ char	*ft_prompt(char *prompt, char *color)
 			ft_strdel(&cs->input);
 		set_signal_ign();	
 	}
-	return ((cs->sig_eof) ? ft_strnew(0) : ret);
+	return ((cs && cs->sig_eof) ? ft_strnew(0) : ret);
 }
