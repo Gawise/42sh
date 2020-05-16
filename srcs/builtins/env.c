@@ -6,7 +6,7 @@
 #include "ft_printf.h"
 
 
-static uint8_t		env_erro(char c)
+static uint8_t	env_erro(char c)
 {
 	char	*usage;
 
@@ -44,7 +44,6 @@ uint8_t			add_new_var(t_process *p, t_cfg *shell_cpy, int32_t *ac)
 			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n", p->av[*ac]);
 		*ac += 1;
 	}
-
 	return (0);
 }
 

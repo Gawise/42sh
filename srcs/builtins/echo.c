@@ -78,14 +78,12 @@ static char	*convert_operand(char *s)
 uint8_t ft_echo(t_job *j, t_process *p) 
 {
     t_point i;
-    int     tty;
     int     fl; 
     char    **params;
 
     if (j && p && (params = p->av))
     {
         i = (t_point){1, 0}; 
-        tty = ttyslot();
         if (((fl = echo_options(params, &i.x, &i.y)) & 1)) 
             i.x = 0;
         while (params[i.x])
@@ -93,11 +91,11 @@ uint8_t ft_echo(t_job *j, t_process *p)
           //  params[i.x] = ft_strtrimoc(params[i.x], (params[i.x][0] == '"' ? '"' : '\'')); trim les quotes dans les params
 			if ((fl & 4)) 
                 params[i.x] = convert_operand(params[i.x]);
-            ft_putstr_fd(params[i.x++], ttyslot());
-            ft_putchar_fd(' ', ttyslot());
+            ft_putstr(params[i.x++]);
+            ft_putchar(' ');
         }
         if (!(fl & 2)) 
-            ft_putchar_fd('\n', ttyslot());
+            ft_putchar('\n');
         return (1);
     }   
     return (0);
