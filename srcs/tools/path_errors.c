@@ -91,13 +91,13 @@ uint8_t			c_eloop(char *path)
 uint32_t		path_errors(char *path, uint8_t check_it)
 {
 	char			*idx;
-	int				ret;
+	uint32_t		ret;
 
 	idx = path;
 	ret = 0;
 	if (!c_enametoolong(path))
 		return (E_NTL);
-	if (c_isdir(path) && check_it)
+	if (check_it && c_isdir(path))
 		return (E_ISDIR);
 	while (1)
 	{

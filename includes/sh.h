@@ -10,11 +10,22 @@
 # define NAME_SH "21sh-1.0$ "
 # define COLOR_SH "\e[0;32m"
 # define COLOR_SUBPROMPT "\e[0;31m"
+# define USAGE "Usage: 21sh [-d [path]]  [file]\nexit\n"
+
+
+# define STR_UNFOUND "Command not found"
+# define STR_ISDIR "Is a directory"
+# define STR_NOENT "No such file or directory"
+# define STR_ACCES "Permission denied"
+# define STR_LOOP "Too many links"
+# define STR_NTL "File name too long"		/*       1000001000000 */
 
 # define EX "[Critical Error]\nexit\n"
 # define EXMALLOC "[Critical Error] Cannot allocate memory\nexit\n"
 # define EXEXEC "[Critical Error] Execve fail\nexit\n"
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"
+
+
 
 # include <stdint.h>
 

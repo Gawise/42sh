@@ -28,18 +28,33 @@ static void		set_var_intern(t_cfg *shell)
 	ft_setvar(&shell->intern, "PS2", "> ");
 }
 
+static void		debug_path_fail(char *path)
+{
+	char		*taberr[6];
+	uint32_t	err;
+	
+	taberr[0] = STR_UNFOUND;
+	taberr[1] = STR_ISDIR;
+	taberr[2] = STR_NOENT;
+	taberr[3] = STR_ACCES;
+	taberr[4] = STR_LOOP;
+	taberr[5] = STR_NTL;
+	if (!(err = path_errors(path, TRUE)))
+		ft_ex(USAGE);
+	ft_dprintf(STDERR_FILENO, "%s; Debug option fail: %s: %s\n", PROJECT, path, tab[err >> 7]);
+	ft_ex(USAGE);
+}
+
 static uint8_t		set_debug(char **av, int i)
 {
 	int		fd;
 	
-		ft_printf("arg=\'%s\'\n", av[i]);
+	fd = STDERR_FILENO;
+
 	if (!av[i])
-		return (0);
-	if ((fd = open(av[i], O_CREAT | O_WRONLY, 0644)) == -1)
-	{
-		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
-		exit(1);
-	}
+		return (fd);
+	if ((fd = open(av[i], O_CREAT | O_WRONLY, 0644)) == -1) /* check_path */
+		debug_path_fail(av[i]);
 	return (fd);
 }
 
@@ -50,15 +65,12 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 	(void)ac;
 	i = 1;
 	shell->interactive = 1;
-	if (av[i] && av[i][0] == '-')
+	if (av[i] && av[i][0] == '-') /*get opt*/
 	{
 		if (ft_strequ("-d", av[i++]))
 			shell->debug = set_debug(av, i++);
 		else
-		{
-			ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
-			exit(1);
-		}
+			ft_ex(USAGE);
 	}
 	if (av[i] && !(shell->file = ft_strdup(av[i])))
 		ft_ex(EXMALLOC);
@@ -74,7 +86,6 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	ft_bzero(shell, sizeof(t_cfg));
 	shell->pid = getpid();
 	create_lst_var(&shell->env, env);
-	ft_setvar(&shell->env, "PROJECT", "21sh");
 	set_var_intern(shell);
 	set_var_sp(shell);
 	shell->history = get_history();
