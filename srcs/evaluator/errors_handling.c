@@ -17,7 +17,7 @@ uint32_t		process_errors_handling(t_process *p, uint32_t err)
 	else if (err & E_ACCES)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_ACCES);
 	else if (err & E_LOOP)
-		ft_asprintf(&p->message, "%s: %s: %s\n", PROEJECT, p->path, STR_LOOP);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_LOOP);
 	else if (err & E_NTL)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NTL);
 	p->ret = err & (E_UNFOUND | E_NOENT) ? 127 : 126;
