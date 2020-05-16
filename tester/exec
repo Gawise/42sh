@@ -1,8 +1,0 @@
-#! /bin/bash
-
-while IFS="\n" read -r line;
-do
-	./cmd_exec -n /dev/pts/$1 "$line"
-	./cmd_exec -n /dev/pts/$2 "$line"
-	sleep 1s
-done < $3/input
