@@ -6,7 +6,7 @@
 #include "ft_printf.h"
 
 
-static uint8_t		env_erro(char c)
+static uint8_t	env_erro(char c)
 {
 	char	*usage;
 
@@ -44,7 +44,6 @@ uint8_t			add_new_var(t_process *p, t_cfg *shell_cpy, int32_t *ac)
 			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n", p->av[*ac]);
 		*ac += 1;
 	}
-
 	return (0);
 }
 
@@ -58,10 +57,10 @@ t_job			*create_new_instance(t_cfg *shell_cpy, t_job *j, t_process *p, int32_t a
 	ft_bzero(&p_cpy, sizeof(t_process));
 	p_cpy.cmd = ft_strdup(*(p->av+ac));
 	p_cpy.av = ft_tabdup(p->av+ac);
-	ft_memset(p_cpy.std, -1, (sizeof(int8_t) * 3));
+	ft_memset(p_cpy.std, -1, (sizeof(int16_t) * 3));
 	j_cpy->cmd = ft_strdup(j->cmd);
 	j_cpy->pgid = j->pgid;
-	ft_memset(j_cpy->std, -1, (sizeof(int8_t) * 3));
+	ft_memset(j_cpy->std, -1, (sizeof(int16_t) * 3));
 	j_cpy->fg = j->fg;
 	ft_lst_push_back(&j_cpy->process, &p_cpy, sizeof(t_process));
 	shell = cfg_shell();

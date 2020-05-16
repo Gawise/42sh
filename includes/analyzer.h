@@ -104,8 +104,10 @@ int		parse_tilde_exp(char **string, t_exp *exp, int assign);
 void	find_tilde_exp_assign(char **word, t_exp exp);
 
 /*
-** 
+** quote_removal.c
 */
+
+char	*a_quote_removal(char **str);
 
 /*
 ** 

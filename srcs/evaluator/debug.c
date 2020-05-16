@@ -25,7 +25,6 @@ void	debug_print_all(t_job *j, t_list *process, char *where)
 	ft_dprintf(shell->debug, "-----------\n", where);
 }
 
-
 void	debug_print_process(t_job *j, t_process *p, char *where)
 {
 	t_cfg		*shell;
@@ -41,4 +40,17 @@ void	debug_print_process(t_job *j, t_process *p, char *where)
 	ft_dprintf(shell->debug, "SETUP = [%032b]\n", p->setup);
 	ft_dprintf(shell->debug, "STATUS = [%d]\n", p->status);
 	ft_dprintf(shell->debug, "\t---- \n");
+}
+
+void	debug_print_lstfd(t_list *fd)
+{
+	int16_t	*t;
+
+	while(fd)
+	{
+		t = fd->data;
+		printf("tab[0] = [%d]\ttab[1] = [%d]\n", t[0], t[1]);
+		fd = fd->next;
+	}
+
 }

@@ -49,10 +49,8 @@ static uint8_t		set_debug(char **av, int i)
 {
 	int		fd;
 	
-	fd = STDERR_FILENO;
-
 	if (!av[i])
-		return (fd);
+		return (STDERR_FILENO);
 	if ((fd = open(av[i], O_CREAT | O_WRONLY, 0644)) == -1) /* check_path */
 		debug_path_fail(av[i]);
 	return (fd);

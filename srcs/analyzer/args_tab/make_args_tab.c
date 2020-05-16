@@ -1,6 +1,7 @@
 #include "analyzer.h"
 #include "struct.h"
 #include "libft.h"
+#include "sh.h"
 
 int	args_tab_iter(t_list *lst, int (*f)(t_list *elem))
 {
@@ -24,7 +25,8 @@ int	mat_s_cmd(t_list *s_cmd_lst)
 	{
 		if (!cmd->args)
 		{
-			cmd->av = ft_memalloc(sizeof(void*) * 2);
+			if (!(cmd->av = ft_memalloc(sizeof(void*) * 2)))
+				ft_ex(EXMALLOC);
 			cmd->av[0] = cmd->cmd_name;
 			cmd->av[1] = NULL;
 			return (1);

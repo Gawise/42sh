@@ -3,42 +3,39 @@
 #include "var.h"
 #include "ft_printf.h"
 
-uint8_t		process_errors_handling(t_process *p)
+uint32_t		process_errors_handling(t_process *p, uint32_t err)
 {
-	if (!(p->setup & ERROR))
-		return (SUCCESS);
 	if (!p->cmd && (p->assign || p->redir))
-		exit(EXIT_SUCCESS);
-	p->setup &= ~ERROR;
-	if (p->setup & E_UNFOUND)
-		ft_dprintf(2, "%s: %s: %s\n", STR_UNFOUND, PROJECT, p->cmd);
-	else if (p->setup & E_ISDIR)
-		ft_dprintf(2, "%s: %s: %s\n", STR_ISDIR, PROJECT, p->path );
-	else if (p->setup & E_NOENT)
-		ft_dprintf(2, "%s: %s: %s\n", STR_NOENT, PROJECT, p->path);
-	else if (p->setup & E_ACCES)
-		ft_dprintf(2, "%s: %s: %s\n", STR_ACCES PROJECT, p->path);
-	else if (p->setup & E_LOOP)
-		ft_dprintf(2, "%s: %s: %s\n", STR_LOOP PROJECT, p->path);
-	else if (p->setup & E_NTL)
-		ft_dprintf(2, "%s: %s: %s\n", STR_NTL, PROJECT, p->path);
-	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
-	exit(p->ret);
+		return (SUCCESS);
+	p->status |= FAILED;
+	if (err & E_UNFOUND)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->cmd, STR_UNFOUND);
+	else if (err & E_ISDIR)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_ISDIR);
+	else if (err & E_NOENT)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NOENT);
+	else if (err & E_ACCES)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_ACCES);
+	else if (err & E_LOOP)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROEJECT, p->path, STR_LOOP);
+	else if (err & E_NTL)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NTL);
+	p->ret = err & (E_UNFOUND | E_NOENT) ? 127 : 126;
+	return (P_ERROR | err);
 }
 
-uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
+uint32_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
 {
-	error &= ~ERROR;
-	p->ret = 1;
-	p->status = FAILED;
-	if (fd)
-		ft_dprintf(STDERR_FILENO, "%s: %d: Bad file descriptor\n", PROJECT, fd);
+	p->status |= FAILED;
+	if (error & E_BADFD)
+		ft_asprintf(&p->message, "%s: %d: Bad file descriptor\n", PROJECT, fd);
 	else if (error & E_ISDIR)
-		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", STR_ISDIR, PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_ISDIR);
 	else if (error & E_NOENT)
-		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", STR_NOENT, PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_NOENT);
 	else if (error & E_ACCES)
-		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", STR_ACCES, PROJECT, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_ACCES);
 	ft_strdel(&info);
-	return (FAILURE);
+	p->ret = 1;
+	return (error | R_ERROR);
 }
