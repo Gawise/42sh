@@ -5,10 +5,11 @@
 #include "ft_printf.h"
 #include "line_edition.h"
 
-static void		set_var_sp(t_cfg *shell)
+static void		set_var(t_cfg *shell)
 {
 	char	*pid;
 
+	/*var sp*/
 	pid = ft_itoa(shell->pid);
 	setvar_add(&shell->sp, "$", pid);
 	setvar_add(&shell->sp, "?", "0");
@@ -19,12 +20,10 @@ static void		set_var_sp(t_cfg *shell)
 	setvar_add(&shell->sp, "-", 0);
 	setvar_add(&shell->sp, "0", 0);
 	ft_strdel(&pid);
-}
-
-static void		set_var_intern(t_cfg *shell)
-{
+	/*var intern*/
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");
+
 }
 
 static void		argv_path_fail(char *path, char *mode, uint32_t err)
@@ -47,7 +46,7 @@ static void		argv_path_fail(char *path, char *mode, uint32_t err)
 	ft_ex(USAGE);
 }
 
-static uint8_t		set_debug(char **av, int *ac)
+static uint8_t	set_debug(char **av, int *ac)
 {
 	int			fd;
 	uint32_t	err;
@@ -55,13 +54,23 @@ static uint8_t		set_debug(char **av, int *ac)
 	if (!av[*ac] || *av[*ac] == '-')
 		return (STDERR_FILENO);
 
-	if ((fd = open(av[*ac], O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
+	if ((fd = open(av[*ac], O_CREAT | O_WRONLY, 0644)) == -1)
 	{
 		err = path_errors(av[*ac], TRUE, S_IWUSR);
 		argv_path_fail(av[*ac], "Debug mode fail", err);
 	}
 	*ac += 1;
 	return (fd);
+}
+
+static void		set_nonint(t_cfg *shell, char *path)
+{
+	int32_t		err;
+
+	shell->file = (*path == '/') ? ft_strdup(path) : create_abs_path(path);
+	if ((err = path_errors(shell->file, TRUE, S_IRUSR)))
+		argv_path_fail(shell->file, "Non-interactive mode fail", err);
+	shell->interactive = 0;
 }
 
 static void		set_shell_mode(char **av, int ac, t_cfg *shell)
@@ -84,12 +93,8 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 		else if (ret == 'd')
 			shell->debug = set_debug(av, &ac);
 	}
-	if (av[ac] && !(shell->file = ft_strdup(av[ac])))
-		ft_ex(EXMALLOC);
-	if (shell->file && !((i = path_errors(shell->file, TRUE, S_IRUSR))))
-		shell->interactive = 0;
-	else if (i)
-		argv_path_fail(shell->file, "Non-interactive mode fail", i);
+	if (av[ac])
+		set_nonint(shell, av[ac]);
 }
 
 t_cfg			*init_cfg(char **env, char **av, int ac)
@@ -100,8 +105,7 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	ft_bzero(shell, sizeof(t_cfg));
 	shell->pid = getpid();
 	create_lst_var(&shell->env, env);
-	set_var_intern(shell);
-	set_var_sp(shell);
+	set_var(shell);
 	shell->history = get_history();
 	if (!(shell->map = ft_hash_init(128))
 		|| !(shell->input_map = ft_hash_init(21)))
