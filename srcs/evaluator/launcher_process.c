@@ -69,10 +69,10 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 		if (job->pgid == 0)
 			job->pgid = process->pid;
 		setpgid(process->pid, job->pgid);
+		if (job->fg)// pour tous les process ?
+			if (tcsetpgrp(STDIN_FILENO, job->pgid))
+				perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	}
-	if (job->fg)// pour tous les process ?
-		if (tcsetpgrp(STDIN_FILENO, job->pgid))
-			perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	ft_del_tab((void **)envp);
 	return (SUCCESS);
 }
@@ -88,11 +88,11 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (job->pgid == 0)
 			job->pgid = p->pid;
 		setpgid(p->pid, job->pgid);
+		if (job->fg)
+			if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
+				perror("[CHILD PROCESS] error tcsetpgrp");
 		set_signal_child();
 	}
-	if (job->fg)
-		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
-			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
 	do_redir(p->fd);
 	if (p->setup & ERROR)
