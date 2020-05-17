@@ -37,10 +37,14 @@ void	sig_handler(int sig)
 	{
 		cs->sig_int = (sig > 0 ? 1 : 0);
 		end_key(cs);
+		cs->sig_int = 0;
 		ft_strdel(&cs->input);
-		cs->input = ft_strnew(0);
-		if (cs->history)
-			cs->history->data = cs->input;
+		cs->history->data = ft_strdup((char *)cs->old_history);
+		while (cs->history && cs->history->next)
+			cs->history = cs->history->next;
+		ft_strdel((char **)&cs->history->data);
+		cs->history->data = (void *)ft_strnew(0);
+		cs->input = (char *)cs->history->data;
 		cs->row += (cs->screen.y != cs->row ? 1 : 0);
 		cs->min_row = cs->row;
 		cs->line_col = 0;

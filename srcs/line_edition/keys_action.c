@@ -85,23 +85,6 @@ void	 init_input_map(t_hash_map *map)
 		init_char_keys(&map);
 }
 
-int	ft_strcheck(char const *s, char oc)
-{
-	int	i;
-
-	if (s && oc)
-	{
-		i = 0;
-		while (s[i])
-		{
-			if (oc == s[i] && i > 0 && oc == s[i - 1])
-				return (1);
-			i++;
-		}
-	}
-	return (0);
-}
-
 int		check_keys(char *caps)
 {
 	int				ret;

@@ -102,5 +102,6 @@ int				ctrl_d(t_cs_line *cs);
 int				back_space(t_cs_line *cs);
 void			init_char_keys(t_hash_map **map);
 void			init_input_map(t_hash_map *map);
+int				ft_strcheck(char *s, char *oc);
 
 #endif

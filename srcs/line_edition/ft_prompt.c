@@ -36,7 +36,7 @@ char	*read_nonint(t_cfg	*cfg)
 	{
 		ft_strdel(&line);
 		if ((ret = get_next_line(fd, &line)) < 0)
-			ft_ex("An error occured while reading file");
+			ft_ex("An error occured while reading file\n");
 		else if (ret == 0)
 			line = ft_strnew(0);
 	}
@@ -125,14 +125,13 @@ char	*ft_prompt(char *prompt, char *color)
 		read_input();
 		term_init(0, NULL);
 		ft_putstr_fd("\n", cs->tty);
-		if (cs->input && cs->input[0] && !cs->sig_int && ft_strcmp(cs->input, "\n") != 0
-			&& (ret = ft_strdup(cs->input)) >= 0)
+		if (cs->input && cs->input[0] && !ft_strcheck(cs->input, " \t")
+		&& ft_strcmp(cs->input, "\n") != 0 && (ret = ft_strdup(cs->input)) >= 0)
 			update_history(hs);
 		else
 			ft_dlstdelone(&cs->history);
-		if (cs->sig_eof)
-			ft_strdel(&cs->input);
-		set_signal_ign();	
+		set_signal_ign();
+		ft_strdel(&cs->clipboard);
 	}
 	return ((cs && cs->sig_eof) ? ft_strnew(0) : ret);
 }
