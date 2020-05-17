@@ -11,12 +11,13 @@
 
 static int	check_terminal(t_cfg *cfg, uint8_t tty)
 {
-	if (cfg && (cfg->interactive = isatty(tty)))
+	if (isatty(tty))
 	{
 		if ((tcgetattr(tty, &cfg->term_origin) == FALSE))
 			perror("[TERM ORIGIN] ERROR TCGETATTR"); ///perror
 		return (1);
 	}
+	ft_ex(EXFD);
 	return (0);
 }
 
@@ -34,10 +35,11 @@ void		init_shell(char **env, char **av, int ac)
 	t_cfg		*shell;
 	struct stat	stat;
 
+
 	if (fstat((shell_terminal = ttyslot()), &stat) == -1)
 		ft_ex(EXFD);
 	shell = init_cfg(env, av, ac);
-	if (check_terminal(shell, shell_terminal))
+	if (shell->interactive && check_terminal(shell, shell_terminal))
 	{
 		while (tcgetpgrp(shell_terminal) != (shell_pgid = getpgrp()))
 			kill(-shell_pgid, SIGTTIN);

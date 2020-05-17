@@ -110,7 +110,7 @@ char	*ft_prompt(char *prompt, char *color)
 	cs = NULL;
 	if (!(cfg = cfg_shell()))
     	return (NULL);
-	if (cfg->mode == NON_INTERACTIVE_MODE)
+	if (!cfg->interactive)
 		return (read_nonint(cfg));
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{

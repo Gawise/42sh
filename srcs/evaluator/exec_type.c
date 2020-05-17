@@ -37,7 +37,7 @@ uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 {
 	if ((p->path = ft_strdup(ft_hash_lookup(shell->map, p->cmd))))
 	{
-		if (!(ERROR & path_errors(p->path, 1)))
+		if (!(ERROR & path_errors(p->path, 1, S_IXUSR)))
 			return (TRUE);
 		ft_strdel(&p->path);
 		ft_hash_delone(shell->map, p->cmd, free);
@@ -66,7 +66,7 @@ static void			any_slash(t_list *env, t_process *p, uint32_t *err)
 {
 	if (find_type(env, p, err) || p->setup & BUILTIN)
 		return ;
-	*err |= path_errors(p->path, 1);
+	*err |= path_errors(p->path, 1, S_IXUSR);
 }
 
 void				with_slash(t_process *p, uint32_t *err)
@@ -76,11 +76,11 @@ void				with_slash(t_process *p, uint32_t *err)
 	p->setup |= SLASH;
 	p->path = ft_strdup(p->cmd);
 	if (*p->path == '/')
-		*err |= path_errors(p->path, 1);
+		*err |= path_errors(p->path, 1, S_IXUSR);
 	else
 	{
 		tmp = create_abs_path(p->path);
-		*err |= path_errors(tmp, 1);
+		*err |= path_errors(tmp, 1, S_IXUSR);
 		ft_strdel(&tmp);
 	}
 }

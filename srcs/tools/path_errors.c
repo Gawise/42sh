@@ -59,20 +59,21 @@ uint8_t			c_enoent(char *path)
 	return (ret);
 }
 
-uint8_t			c_eacces(char *path)
+uint8_t			c_eacces(char *path, uint32_t right)
 {
 	struct stat		buf;
 
 	if (!*path)
 	{
 		if (!lstat("/", &buf))
-			if (!(buf.st_mode & S_IXUSR))
+			if (!(buf.st_mode & right))
+			//if (!(buf.st_mode & S_IXUSR))
 				return (0);
 	}
 	else
 	{
 		if (!lstat(path, &buf))
-			if (!(buf.st_mode & S_IXUSR))
+			if (!(buf.st_mode & right))
 				return (0);
 	}
 	return (1);
@@ -88,16 +89,16 @@ uint8_t			c_eloop(char *path)
 	return (1);
 }
 
-uint32_t		path_errors(char *path, uint8_t check_it)
+uint32_t		path_errors(char *path, uint8_t check_dir, uint32_t right)
 {
 	char			*idx;
-	int				ret;
+	uint32_t		ret;
 
 	idx = path;
 	ret = 0;
 	if (!c_enametoolong(path))
 		return (E_NTL);
-	if (c_isdir(path) && check_it)
+	if (check_dir && c_isdir(path))
 		return (E_ISDIR);
 	while (1)
 	{
@@ -107,7 +108,7 @@ uint32_t		path_errors(char *path, uint8_t check_it)
 			ret = E_NOENT;
 		if (!ret && !c_eloop(path))
 			ret = E_LOOP;
-		if (!ret && !c_eacces(path))
+		if (!ret && !c_eacces(path, right))
 			ret = E_ACCES;
 		if (idx)
 			*(idx) = '/';
