@@ -41,7 +41,7 @@ t_cfg		*init_cfg(char **env, char **av, int ac);
 t_cfg		*cfg_shell(void);
 
 /*	COMMON TOOLS */
-uint32_t	path_errors(char *path, uint8_t check_it);
+uint32_t	path_errors(char *path, uint8_t check_dir, uint32_t right);
 uint8_t		c_enametoolong(char *path);
 uint8_t		c_isdir(char *path);
 char		*create_abs_path(char *s);

@@ -27,7 +27,7 @@ typedef struct	s_cfg
 	t_hash_map		*input_map;
 	char			*file;
 	uint8_t			active_job;
-	uint8_t		debug;		/* set for print debug */
+	int32_t			debug;		/* set for print debug */
 }				t_cfg;
 
 typedef enum			e_token_type

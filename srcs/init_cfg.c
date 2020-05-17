@@ -23,57 +23,73 @@ static void		set_var_sp(t_cfg *shell)
 
 static void		set_var_intern(t_cfg *shell)
 {
-	ft_setvar(&shell->intern, "_", 0);
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");
 }
 
-static void		debug_path_fail(char *path)
+static void		argv_path_fail(char *path, char *mode, uint32_t err)
 {
 	char		*taberr[6];
-	uint32_t	err;
+	int8_t		tmp;
 	
-	taberr[0] = STR_UNFOUND;
-	taberr[1] = STR_ISDIR;
-	taberr[2] = STR_NOENT;
-	taberr[3] = STR_ACCES;
-	taberr[4] = STR_LOOP;
-	taberr[5] = STR_NTL;
-	if (!(err = path_errors(path, TRUE)))
+	tmp = 0;
+	taberr[0] = STR_ISDIR;
+	taberr[1] = STR_NOENT;
+	taberr[2] = STR_ACCES;
+	taberr[3] = STR_LOOP;
+	taberr[4] = STR_NTL;
+	if (!err)
 		ft_ex(USAGE);
-	ft_dprintf(STDERR_FILENO, "%s; Debug option fail: %s: %s\n", PROJECT, path, tab[err >> 7]);
+	err = err >> 7;
+	while (!((err = err >> 1) & 1))
+		tmp++;
+	ft_dprintf(STDERR_FILENO, "%s; %s: %s: %s\n", PROJECT, mode, path, taberr[tmp]);
 	ft_ex(USAGE);
 }
 
-static uint8_t		set_debug(char **av, int i)
+static uint8_t		set_debug(char **av, int *ac)
 {
-	int		fd;
+	int			fd;
+	uint32_t	err;
 	
-	if (!av[i])
+	if (!av[*ac] || *av[*ac] == '-')
 		return (STDERR_FILENO);
-	if ((fd = open(av[i], O_CREAT | O_WRONLY, 0644)) == -1) /* check_path */
-		debug_path_fail(av[i]);
+
+	if ((fd = open(av[*ac], O_CREAT | O_WRONLY | O_APPEND, 0644)) == -1)
+	{
+		err = path_errors(av[*ac], TRUE, S_IWUSR);
+		argv_path_fail(av[*ac], "Debug mode fail", err);
+	}
+	*ac += 1;
 	return (fd);
 }
 
 static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 {
-	int		i;
+	int32_t		 i;
+	int8_t		ret;
 
-	(void)ac;
-	i = 1;
-	shell->interactive = 1;
-	if (av[i] && av[i][0] == '-') /*get opt*/
+	i = 0;
+	shell->interactive = TRUE;
+	if (ac == 1)
+		return ;
+	ac = 1;
+	while ((ret = ft_getopt(&ac, &i, av, "d")) != -1)
 	{
-		if (ft_strequ("-d", av[i++]))
-			shell->debug = set_debug(av, i++);
-		else
+		if (ret == '?')
+		{
+			ft_dprintf(STDERR_FILENO, "%s: -%c : Bad option\n", PROJECT, av[ac][i]);
 			ft_ex(USAGE);
+		}
+		else if (ret == 'd')
+			shell->debug = set_debug(av, &ac);
 	}
-	if (av[i] && !(shell->file = ft_strdup(av[i])))
+	if (av[ac] && !(shell->file = ft_strdup(av[ac])))
 		ft_ex(EXMALLOC);
-	if (shell->file)
+	if (shell->file && !((i = path_errors(shell->file, TRUE, S_IRUSR))))
 		shell->interactive = 0;
+	else if (i)
+		argv_path_fail(shell->file, "Non-interactive mode fail", i);
 }
 
 t_cfg			*init_cfg(char **env, char **av, int ac)
