@@ -19,7 +19,7 @@ uint8_t		lvl_simple_cmd(t_cfg *shell, t_list *s_cmd, char *cmd, uint8_t fg)
 	t_job		job;
 
 	cmd_to_job(shell, &job, s_cmd, cmd);
-	if ((job.fg = fg))
+	if ((job.fg = fg) && shell->interactive)
 		set_termios(TCSADRAIN, &job.term_eval);
 	ret_job = run_job(shell, &job, job.process);
 	routine_clean_job(&job, sizeof(t_job));
