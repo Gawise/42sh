@@ -7,7 +7,7 @@ void	exp_substitute(t_exp *exp, char *str)
 	char	*res;
 
 	if ((!exp->res && !(res = ft_strdup(str)))
-	|| (exp->res && !(res = ft_strjoin(2, exp->res, str))))
+	|| (exp->res && !(res = ft_strjoin(exp->res, str))))
 		ft_ex("Cannot allocate memory\n");
 	free(exp->res);
 	exp->res = res;
@@ -44,7 +44,7 @@ void	exp_flush_buf(t_exp *exp, char **str)
 		return ;
 	}
 	tmp = *str;
-	if (!(*str = ft_strjoin(2, *str, exp->buf)))
+	if (!(*str = ft_strjoin(*str, exp->buf)))
 		ft_ex("Cannot allocate memory\n");
 	free(tmp);
 	ft_bzero(exp->buf, exp->i);

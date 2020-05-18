@@ -15,12 +15,13 @@
 
 # define STR_UNFOUND "Command not found"
 # define STR_ISDIR "Is a directory"
+# define STR_ISNDIR "Is not a directory"
 # define STR_NOENT "No such file or directory"
 # define STR_ACCES "Permission denied"
 # define STR_LOOP "Too many links"
 # define STR_NTL "File name too long"		/*       1000001000000 */
 
-# define EX "[Critical Error]\nexit\n"
+# define EX "[Critical Systeme Error]\nexit\n"
 # define EXMALLOC "[Critical Error] Cannot allocate memory\nexit\n"
 # define EXEXEC "[Critical Error] Execve fail\nexit\n"
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"

@@ -66,7 +66,7 @@ static char	*convert_operand(char *s)
                     s[i] = '\v';
 				tmp = s;
 				s[i + 1] = '\0';
-				s = ft_strjoin(2, s, &s[i + 2]);
+				s = ft_strjoin(s, &s[i + 2]);
 				ft_strdel(&tmp);
 			}
 			i++;

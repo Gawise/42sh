@@ -28,7 +28,7 @@ static void		set_var(t_cfg *shell)
 
 static void		argv_path_fail(char *path, char *mode, uint32_t err)
 {
-	char		*taberr[6];
+	char		*taberr[5];
 	int8_t		tmp;
 	
 	tmp = 0;
