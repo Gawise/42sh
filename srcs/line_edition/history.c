@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ft_printf.h"
+#include "sh.h"
 #include "get_next_line.h"
 #include "line_edition.h"
 #include "struct.h"
@@ -36,16 +38,17 @@ void	update_history(t_dlist *hs)
 	int			fd;
 	int			len;
 	char		*path;
-	char		*tmp;
+//	char		*tmp;
 	t_cs_line	*cs;
 
 	cs = cs_master(NULL, 0);
 	if (hs && cs && cs->history)
 	{
-		path = ft_strjoin(2, getenv("HOME"), "/");
+		ft_asprintf(&path, "%s/.%s_history", getenv("HOME"), PROJECT);
+	/*	path = ft_strjoin(2, getenv("HOME"), "/");
 		tmp = path;
 		path = ft_strjoin(2, path, ".42sh_history");
-		ft_strdel(&tmp);
+		ft_strdel(&tmp); */
 		len = ft_strlen(cs->input);
 		cs->history->data = (void *)cs->old_history;
 		while (hs && hs->next)
@@ -74,15 +77,16 @@ t_dlist	*get_history(void)
 {
 	t_dlist	*hs;
 	char	*line;
-	char	*tmp;
+//	char	*tmp;
 	int		fd;
 
 	if ((hs = ft_dlstnew(NULL, 0)))
 	{
-		line = ft_strjoin(2, getenv("HOME"), "/");
+		ft_asprintf(&line, "%s/.%s_history", getenv("HOME"), PROJECT);
+	/*	line = ft_strjoin(2, getenv("HOME"), "/");
 		tmp = line;
 		line = ft_strjoin(2, line, ".42sh_history");
-		ft_strdel(&tmp);
+		ft_strdel(&tmp); */
 		if ((fd = open(line, O_RDONLY)) > 0)
 		{
 			ft_strdel(&line);

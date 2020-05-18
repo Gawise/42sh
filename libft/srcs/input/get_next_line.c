@@ -90,7 +90,7 @@ int					get_next_line(const int fd, char **line)
 	while ((res = read(fd, *buff, BUFF_SIZE) > 0))
 	{
 		n = tmp;
-		if (!(tmp = ft_strjoin(2, tmp, *buff)))
+		if (!(tmp = ft_strjoin(tmp, *buff)))
 			return (-1);
 		free(n);
 		ft_bzero(*buff, BUFF_SIZE);

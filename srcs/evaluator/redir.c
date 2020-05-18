@@ -18,7 +18,7 @@ uint32_t		redir_gear(t_process *p, t_redir *r, uint32_t target, uint32_t right)
 	if ((error = path_gearing(r, &path, right)))
 		return (redir_errors_handling(p, error, path, 0));
 	if ((source = open(path, right, 0644)) == -1)
-		perror("la open");  //perror
+		ft_ex(EX);  //debug ?
 	if (bad_fd(target))
 	{
 		do_my_dup2(source, target);
@@ -90,9 +90,9 @@ uint32_t		redir_heredoc(t_process *p, t_redir *r)
 	path = NULL;
 	ft_asprintf(&path, "/tmp/%s-heredoc-%p", PROJECT, r);//proteger
 	if (((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1))
-		perror("redir_heredoc open failled"); //perror
+		ft_ex(EX);  //debug ?
 	if (write(fd, r->file, ft_strlen(r->file)) == -1)
-		perror("write redir_heredoc"); //perror
+		ft_ex(EX);  //debug ?
 	close(fd);
 	ft_strdel(&r->file);
 	r->file = path;

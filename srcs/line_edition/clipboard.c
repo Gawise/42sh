@@ -56,7 +56,7 @@ void	cut_clip(t_cs_line *cs)
 		cs->input[cs->clipb.x] = oc;
 		tmp = cut;
 		cs->line_col = cs->clipb.x;
-		cut = ft_strjoin(2, cut, &cs->input[cs->clipb.y]);
+		cut = ft_strjoin(cut, &cs->input[cs->clipb.y]);
 		ft_strdel(&tmp);
 		ft_strdel(&cs->input);
 		cs->input = cut;
