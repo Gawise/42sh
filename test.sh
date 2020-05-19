@@ -3,7 +3,7 @@
 SHELL_DIR=$(dirname $(readlink -f "$0"))
 TESTER_DIR=$SHELL_DIR/tester
 TMP_DIR=$TESTER_DIR/tmp
-TEST_DIRS=$(ls $TESTER_DIR/units)
+TEST_DIRS=$(ls -r $TESTER_DIR/units)
 
 output_print () {
 	if [ -z "$OUTPUT_FILE" ]
@@ -99,5 +99,6 @@ list_vars () {
 		exit 1
 	fi
 }
+
 list_vars $@
 run_tests $TEST_DIRS
