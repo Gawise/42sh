@@ -29,8 +29,8 @@ static int		arg_exp(t_simple_cmd *cmd)
 
 static int		assign_exp(t_simple_cmd *cmd)
 {
-	t_list	*lst;
-	int		ret;
+	t_list			*lst;
+	int				ret;
 	t_assignment	*assign;
 
 	lst = cmd->assign;
@@ -45,7 +45,7 @@ static int		assign_exp(t_simple_cmd *cmd)
 	return (1);
 }
 
-int		word_expansions(t_simple_cmd *cmd)
+int				word_expansions(t_simple_cmd *cmd)
 {
 	int				ret;
 	int				debug;
@@ -59,7 +59,7 @@ int		word_expansions(t_simple_cmd *cmd)
 	return (1);
 }
 
-int		exp_main(char **word, int assign)
+int				exp_main(char **word, int assign)
 {
 	t_exp		exp;
 	int			ret;
