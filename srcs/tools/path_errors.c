@@ -67,7 +67,6 @@ uint8_t			c_eacces(char *path, uint32_t right)
 	{
 		if (!lstat("/", &buf))
 			if (!(buf.st_mode & right))
-			//if (!(buf.st_mode & S_IXUSR))
 				return (0);
 	}
 	else

@@ -33,7 +33,7 @@ char			cd_getopt(char **str, int *i)
 		else if (str[a][1] != '-' || (str[a][1] == '-' && str[a][2]))
 		{
 			ft_dprintf(2, "%s: cd: -%c: invalid option\n",
-			NAME_SH, str[a][1]);
+			PROJECT, str[a][1]);
 			ft_dprintf(2, "Usage: cd [-L|-P] [dir]\n");
 			return (0);
 		}

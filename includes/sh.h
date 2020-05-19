@@ -45,6 +45,9 @@ t_cfg		*cfg_shell(void);
 uint32_t	path_errors(char *path, uint8_t check_dir, uint32_t right);
 uint8_t		c_enametoolong(char *path);
 uint8_t		c_isdir(char *path);
+uint8_t		c_eacces(char *path, uint32_t right);
+uint8_t		c_eloop(char *path);
+uint8_t		c_enoent(char *path);
 char		*create_abs_path(char *s);
 uint32_t	check_access(char *path, int right);
 

@@ -29,11 +29,11 @@ int		cd_oldpwd(t_job *j, t_process *p)
 	oldpwd = find_var_value(p->env, "OLDPWD");
 	if (!oldpwd || !*oldpwd)
 	{
-		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
+		ft_dprintf(2, "%s: cd: OLDPWD not set\n", PROJECT);
 		return (1);
 	}
 	if (!(str = (char**)malloc(sizeof(char*) * 3)))
-		exit(EXIT_FAILURE);
+		ft_ex(EXMALLOC);
 	str[0] = ft_strdup("cd");
 	str[1] = ft_strdup(oldpwd);
 	str[2] = NULL;
@@ -59,7 +59,7 @@ uint8_t		ft_cd(t_job *job, t_process *p)
 	else if (ft_strequ(opr, "-"))
 		return (cd_oldpwd(job, p));
 	if (!(curpath = cd_setcurpath(&p->env, opr)))
-		exit(EXIT_FAILURE);
+		ft_ex(EXMALLOC);
 	if (opt == 'L')
 		return (cd_logically(&p->env, curpath, opr));
 	return (cd_change_directory(&p->env, curpath, opr, NULL));
