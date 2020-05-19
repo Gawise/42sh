@@ -152,6 +152,7 @@ SRCS += ft_hash_get_node.c
 SRCS += ft_hash_init.c
 SRCS += ft_hash_lookup.c
 SRCS += ft_hash_add.c
+SRCS += ft_hash_reset.c
 
 #------------------------------------------------------------#
 

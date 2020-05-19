@@ -44,7 +44,7 @@ uint8_t		ft_setvar(t_list **lst, char *name, char *value)
 
 	find = NULL;
 	if (!ft_strcmp(name, "PATH"))
-		ft_hash_del_map(&cfg_shell()->map, free);
+		ft_hash_reset(&cfg_shell()->map, free, 128);
 	if ((find = find_var(*lst, name)))
 	{
 		var = find->data;

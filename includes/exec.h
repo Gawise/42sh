@@ -14,7 +14,7 @@
 # define PIPE_ON 1
 # define EXEC 2
 # define BUILTIN 4		/*rajouter un # define PIPE_ON ?*/
-# define SLASH 8
+# define NOCMD 8
 # define R_ERROR 16
 # define P_ERROR 32
 # define E_BADFD 64

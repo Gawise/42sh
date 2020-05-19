@@ -86,6 +86,7 @@ t_list			*ft_hash_get_list(t_hash_map *map, char *key);
 void			ft_hash_delone(t_hash_map *map, char *key, void (*del)(void *));
 void			ft_hash_del_list(t_list **lst, void (*del)(void *));
 void			ft_hash_del_map(t_hash_map **map, void (*del)(void *data));
+void			ft_hash_reset(t_hash_map **map, void (*del)(void * data), uint32_t size);
 
 /*
 ** INPUT

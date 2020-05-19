@@ -101,6 +101,8 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 	}
 	if (p->setup & BUILTIN)
 		exit(builtin_process(job, p));  //que faire de envp??????
+	if (p->setup & NOCMD)
+		exit(0);
 	if ((execve(p->path, p->av, envp)) == -1)
 		ft_ex(EXEXEC);
 	exit(1);
