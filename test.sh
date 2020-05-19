@@ -55,7 +55,7 @@ make_test () {
 }
 
 run_tests () {
-	for i in $@
+	for i in "$@"
 	do
 		local test="$TESTER_DIR/units/$1"
 		make_test $test
