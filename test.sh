@@ -40,7 +40,14 @@ print_fail () {
 	else
 		output_print "EXIT_CODE \e[1;31mFAIL\e[0m\nbash=$4\n42sh=$5"
 	fi
-	output_print "$(cat $LOG_DIR/redir.diff)"
+	if [ "$REDIR_RET" != "0" ]
+	then
+		output_print "REDIR \e[1;31mFAIL\e[0m"
+		output_print "$(cat $LOG_DIR/redir.diff)"
+	else
+		output_print "REDIR \e[1;32mSUCCESS\e[0m"
+		output_print "$(cat $LOG_DIR/redir.diff)"
+	fi
 	output_print "--------------------------------------------"
 }
 
@@ -51,7 +58,10 @@ move_shell_redir () {
 		IFS='\n\r' command eval "file_arr=($(cat $1/redir))"
 		for i in ${file_arr[@]}
 		do
-			mv $TMP_DIR/$i $LOG_DIR/$i.shell
+			if [ -f $TMP_DIR/$i ]
+			then
+				mv $TMP_DIR/$i $LOG_DIR/$i.shell
+			fi
 		done
 	fi
 	echo "${file_arr[@]}"
@@ -64,10 +74,12 @@ move_bash_redir () {
 		IFS='\n\r' command eval "file_arr=($(cat $1/redir))"
 		for i in ${file_arr[@]}
 		do
-			mv $TMP_DIR/$i $LOG_DIR/$i
+			if [ -f $TMP_DIR/$i ]
+			then
+				mv $TMP_DIR/$i $LOG_DIR/$i
+			fi
 		done
 	fi
-	echo "${file_arr[@]}"
 }
 
 redir_diff () {
@@ -107,18 +119,27 @@ redir_diff () {
 	echo "$output"
 }
 
-
+env_setup () {
+	if [ -f "$1" ]
+	then
+		/bin/bash $1
+	fi
+}
 
 make_test () {
 	REDIR_FILE=""
 	cd $TMP_DIR
-
+	env_setup $1/setup
 	$SHELL_DIR/$SHELL_FILE $1/input >$LOG_DIR/stdout.sh 2>$LOG_DIR/stderr.sh
 	local sh_exit=$?
 	local redir_files=($(move_shell_redir $1))
+	rm -f $TMP_DIR/*
+	cd $TMP_DIR
+	env_setup $1/setup
 	/bin/bash --posix $1/input >$LOG_DIR/stdout.bash 2>$LOG_DIR/stderr.bash
 	local bash_exit=$?
 	move_bash_redir $1
+	rm -f $TMP_DIR/*
 	redir_diff ${redir_files[@]} >$LOG_DIR/redir.diff
 	local stdout_diff=$(diff $LOG_DIR/stdout.sh $LOG_DIR/stdout.bash)
 	local stderr_diff=$(diff $LOG_DIR/stderr.sh $LOG_DIR/stderr.bash)
@@ -154,6 +175,9 @@ print_usage () {
 }
 
 list_vars () {
+	local h_opt=0
+	local usage=0
+	local exit_code=0
 	while getopts ":o:h" opt;
 	do
 		case ${opt} in
@@ -161,15 +185,18 @@ list_vars () {
 				OUTPUT_FILE=$OPTARG
 				;;
 			h )
-				print_usage
+				h_opt=1
+				usage=1
 				;;
 			\? )
 				echo "Invalid option: -$OPTARG" 1>&2
-				print_usage
+				usage=1
+				exit_code=1
 				;;
 			: )
 				echo "Invalid option: -$OPTARG requires an argument" 1>&2
-				print_usage
+				usage=1
+				exit_code=1
 				;;
 		esac
 	done
@@ -180,10 +207,25 @@ list_vars () {
 		SHELL_FILE=$1
 	else
 		echo "Missing shell file" 1>&2
+		usage=1
+		exit_code=1
+	fi
+	if [ "$usage" = "1" ]
+	then
 		print_usage
+	fi
+	if [ "$h_opt" = "1" ]
+	then
+		cat tester/doc
+	fi
+	if [ "$exit_code" = "1" ]
+	then
 		exit 1
 	fi
 }
 
 list_vars $@
-run_tests $TEST_DIRS
+if [ -n "$SHELL_FILE" ]
+then
+	run_tests $TEST_DIRS
+fi
