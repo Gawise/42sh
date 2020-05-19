@@ -3,10 +3,11 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include "sh.h" //ft_ex
 void	set_termios(int32_t mode, struct termios *term)
 {
 	if (tcsetattr(STDIN_FILENO, mode, term) == -1)
-		perror("[RUN JOB] error tcsetattr"); // perror
+		ft_ex("[RUN JOB] error tcsetattr"); // debug
 }
 
 void	term_create_eval(struct termios *origin, struct termios *eval)

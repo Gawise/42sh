@@ -37,10 +37,10 @@ static uint8_t		type_find(t_cfg *shell, t_process *ptype, t_list *env)
 	else if (builtin_search(ptype))
 		return (type_success(ptype, 1));
 	else if ((ptype->path = ft_strdup(ft_hash_lookup(shell->map, ptype->cmd)))
-			&& !(ERROR & path_errors(ptype->path, 1)))
+			&& !(ERROR & path_errors(ptype->path, 1, S_IXUSR)))
 		return (type_success(ptype, 2));
 	else if ((ptype->path = ft_which(find_var_value(env, "PATH"), ptype->cmd))
-			&& !(ERROR & path_errors(ptype->path, 1)))
+			&& !(ERROR & path_errors(ptype->path, 1, S_IXUSR)))
 		return (type_success(ptype, 0));
 	else
 		return (type_error(ptype->cmd));

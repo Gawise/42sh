@@ -68,10 +68,10 @@ int		term_init(int init, char *prompt)
 	t_cfg					*cfg;
 
 	tty = ttyslot();
-	if ((cfg = cfg_shell()) && cfg->mode == NON_INTERACTIVE_MODE)
+	if ((cfg = cfg_shell()) && !cfg->interactive)
 		if ((tty = open(cfg->file, O_RDONLY)) < 0)
 			return (-1);
-	if (cfg->mode == NON_INTERACTIVE_MODE)
+	if (!cfg->interactive)
 		return (1);
 	if (init >= 1 && term_check(&new_term, &old_term, tty) == 1)
 	{

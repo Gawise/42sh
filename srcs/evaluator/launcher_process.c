@@ -9,7 +9,6 @@
 
 #include <termios.h>
 
-#include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
 #include "sh.h"
@@ -61,7 +60,7 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[Parent process] close error:"); ///perror
+			ft_ex("[Parent process] close error:"); ///debug
 	//if (process->setup & ERROR)
 	//	process->status = FAILED; // pour bg mais pourquoi ?
 	if (cfg_shell()->interactive) //singelton obliger?
@@ -69,10 +68,10 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 		if (job->pgid == 0)
 			job->pgid = process->pid;
 		setpgid(process->pid, job->pgid);
+		if (job->fg)// pour tous les process ?
+			if (tcsetpgrp(STDIN_FILENO, job->pgid))
+				ft_ex("[PARENT PROCESS] error tcsetpgrp"); //debug
 	}
-	if (job->fg)// pour tous les process ?
-		if (tcsetpgrp(STDIN_FILENO, job->pgid))
-			perror("[PARENT PROCESS] error tcsetpgrp"); //perror
 	ft_del_tab((void **)envp);
 	return (SUCCESS);
 }
@@ -81,18 +80,18 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			perror("[child process] close error:"); //perror
+			ft_ex("[child process] close error:"); //debug
 	p->pid = getpid();
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
 		if (job->pgid == 0)
 			job->pgid = p->pid;
 		setpgid(p->pid, job->pgid);
+		if (job->fg)
+			if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
+				ft_ex("[CHILD PROCESS] error tcsetpgrp"); //debug
 		set_signal_child();
 	}
-	if (job->fg)
-		if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
-			perror("[CHILD PROCESS] error tcsetpgrp");
 	do_pipe(p);
 	do_redir(p->fd);
 	if (p->setup & ERROR)
@@ -113,7 +112,7 @@ uint8_t		fork_process(t_job *job, t_process *p)
 
 	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
 	if ((p->pid = fork()) == -1)
-		perror("fork:"); // perror
+		ft_ex(EX);
 	if (!(p->pid))
 		return (child_process(job, p, job->pipe.fd[0], envp));
 	if (p->pid)

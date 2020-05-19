@@ -23,7 +23,7 @@ int			display_cd_errors(char *error)
 {
 	if (!(error))
 		exit(EXIT_FAILURE);
-	ft_dprintf(2, "%s: cd: %s", NAME_SH, error);
+	ft_dprintf(2, "%s: cd: %s", PROJECT, error);
 	free(error);
 	return (1);
 }
@@ -56,24 +56,24 @@ int			check_enametoolong(char *path)
 
 int			check_chdir_errors(char **error, char *path, char *opr)
 {
-	int ret;
+	char	*taberr[5];
+	int 	ret;
 
+	taberr[0] = STR_NTL;
+	taberr[1] = STR_NOENT;
+	taberr[2] = STR_LOOP;
+	taberr[3] = STR_ISNDIR;
+	taberr[4] = STR_ACCES;
 	ret = 0;
 	if (!check_enametoolong(path))
 	{
-		*error = (ft_strjoin(2, opr, ": File name too long\n"));
+		ft_asprintf(error, "%s: %s\n", opr, taberr[ret]);
 		return (1);
 	}
-	ret = check_whole_path(path);
-	if (ret == 1)
-		*error = (ft_strjoin(2, opr, ": No such file or directory\n"));
-	if (ret == 2)
-		*error = (ft_strjoin(2, opr, ": Symbolic link error\n"));
-	if (ret == 3)
-		*error = (ft_strjoin(2, opr, ": Not a directory\n"));
-	if (ret == 4)
-		*error = (ft_strjoin(2, opr, ": Permission denied\n"));
-	if (!ret)
-		return (0);
-	return (1);
+	else if ((ret = check_whole_path(path)))
+	{
+		ft_asprintf(error, "%s: %s\n", opr, taberr[ret]);
+		return (1);
+	}
+	return (SUCCESS);
 }

@@ -24,7 +24,7 @@ void	join_input(t_cs_line *cs, char *input)
 	{
 		if ((int)ft_strlen(cs->input) == cs->line_col && (tmp = cs->input))
 		{
-			cs->input = ft_strjoin(2, cs->input, input);
+			cs->input = ft_strjoin(cs->input, input);
 			ft_strdel(&tmp);
 		}
 		else if (cs->input && cs->input[0])
@@ -32,10 +32,10 @@ void	join_input(t_cs_line *cs, char *input)
 			oc = cs->input[cs->line_col];
 			cs->input[cs->line_col] = '\0';
 			tmp = cs->input;
-			cs->input = ft_strjoin(2, tmp, input);
+			cs->input = ft_strjoin(tmp, input);
 			tmp[cs->line_col] = oc;
 			insert = cs->input;
-			cs->input = ft_strjoin(2, insert, &tmp[cs->line_col]);
+			cs->input = ft_strjoin(insert, &tmp[cs->line_col]);
 			ft_strdel(&insert);
 			ft_strdel(&tmp);
 		}
@@ -52,7 +52,7 @@ void	line_master(t_cs_line *cs, char *input)
 		if (ft_strcmp(input, "\n") == 0 || input[0] == '\n')
 		{
 			tmp = cs->input;
-			cs->input = ft_strjoin(2, tmp, "\n");
+			cs->input = ft_strjoin(tmp, "\n");
 			ft_strdel(&tmp);
 		}
 		else

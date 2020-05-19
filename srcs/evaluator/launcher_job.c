@@ -8,7 +8,6 @@
 
 #include <termios.h>
 
-#include <stdio.h> //perror !!!!]]
 #include <stdlib.h>
 
 #include "ft_printf.h"
@@ -32,12 +31,12 @@ void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 	if (!process->next)
 		return ;
 	if (pipe(fd->fd) == -1)
-		perror("pipe:");      ///////////// perror 
+		ft_ex("pipe routine process"); // debug
 	manage->std[1] = fd->fd[1];
-	manage->setup |= PIPE_ON;		/*Useless now    */
+	manage->setup |= PIPE_ON;
 	manage = process->next->data;
 	manage->std[0] = fd->fd[0];
-	manage->setup |= PIPE_ON;  /*Useless now    */
+	manage->setup |= PIPE_ON;
 }
 
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
@@ -72,7 +71,7 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				perror("[check and do pipe] close error:");  //perror
+				ft_ex("[check and do pipe] close error:"); //debug
 	}
 	return (routine_ending_job(shell, job));
 }

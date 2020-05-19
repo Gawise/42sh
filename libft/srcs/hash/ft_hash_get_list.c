@@ -6,7 +6,8 @@ t_list		*ft_hash_get_list(t_hash_map *map, char *key)
 	t_list		*lst;
 	t_hash_node	*node;
 
-	hash = ft_hash_str(map, key);
+	if (!(hash = ft_hash_str(map, key)))
+		return (NULL);
 	lst = map->slots[hash];
 	while (lst)
 	{

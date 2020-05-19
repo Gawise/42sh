@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "ft_printf.h"
 #include "exec.h"
 #include "sh.h"
 #include <sys/stat.h>
@@ -10,7 +11,7 @@ char		*create_abs_path(char *s)
 
 	if (!(buf = getcwd(0, 0)))
 		perror("getcwd");       ////////perror
-	tmp = ft_strjoin(3, buf, "/", s);
+	ft_asprintf(&tmp, "%s/%s", buf, s);
 	ft_strdel(&buf);
 	return (tmp);
 }
