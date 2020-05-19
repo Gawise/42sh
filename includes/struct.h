@@ -30,6 +30,10 @@ typedef struct	s_cfg
 	int32_t			debug;		/* set for print debug */
 }				t_cfg;
 
+/*
+** LEXER
+*/
+
 typedef enum			e_token_type
 {
 	TOKEN,
@@ -79,10 +83,6 @@ typedef enum			e_lexer_flag
 	F_BRACKEXP,	// 32
 	F_HD_DELIM	// 64
 }				t_lexer_flag;
-
-/*
-** LEXER
-*/
 
 typedef struct			s_token
 {
