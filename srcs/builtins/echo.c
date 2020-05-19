@@ -75,7 +75,7 @@ static char	*convert_operand(char *s)
 	return (s);
 }
 
-uint8_t ft_echo(t_job *j, t_process *p) 
+uint8_t		ft_echo(t_job *j, t_process *p) 
 {
     t_point i;
     int     fl; 

@@ -34,7 +34,7 @@ int		cd_home(t_job *job, t_process *p)
 	}
 	home = ft_strdup(home);
 	if (!(str = (char**)malloc(sizeof(char*) * 3)))
-		exit(EXIT_FAILURE);
+		ft_ex(EXMALLOC);
 	str[0] = ft_strdup("cd");
 	str[1] = home;
 	str[2] = NULL;
@@ -51,7 +51,7 @@ char	*cd_setcurpath(t_list **env, char *opr)
 	char	**cdpath;
 
 	if ((!ft_strncmp(opr, "./", 2) || !ft_strcmp(opr, ".")
-	|| !ft_strncmp(opr, "../", 3) || !ft_strcmp(opr, "..")))
+				|| !ft_strncmp(opr, "../", 3) || !ft_strcmp(opr, "..")))
 		return (ft_strdup(opr));
 	ret = find_var_value(*env, "CDPATH");
 	cdpath = ft_strsplit(ret, ":");
@@ -77,11 +77,11 @@ int		cd_set_relativepath(t_list **env, char *curpath, char *opr, char *pwd)
 
 	oldpath = ft_strdup(curpath);
 	if (ft_strlen(curpath) >= PATH_MAX && ft_strlen(opr) < PATH_MAX
-	&& !ft_strncmp(curpath, pwd, ft_strlen(pwd)))
+			&& !ft_strncmp(curpath, pwd, ft_strlen(pwd)))
 	{
 		tmp = curpath[ft_strlen(pwd)] == '/' ?
-		ft_strdup(curpath + ft_strlen(pwd) + 1) :
-		ft_strdup(curpath + ft_strlen(pwd));
+			ft_strdup(curpath + ft_strlen(pwd) + 1) :
+			ft_strdup(curpath + ft_strlen(pwd));
 		ft_strdel(&curpath);
 		curpath = tmp;
 	}
@@ -100,7 +100,7 @@ int		cd_logically(t_list **env, char *curpath, char *opr)
 	error = NULL;
 	if (!(pwd = ft_strdup(find_var_value(*env, "PWD"))))
 		if (!(pwd = getcwd(NULL, 0)))
-			exit(EXIT_FAILURE);
+			ft_ex(EX);
 	if (*curpath != '/')
 	{
 		tmp = curpath;
@@ -110,7 +110,7 @@ int		cd_logically(t_list **env, char *curpath, char *opr)
 	if (!(curpath = cd_del_dotcomponents(curpath, opr)))
 		return (1);
 	if (check_chdir_errors(&error, curpath, opr)
-	&& ft_strcmp(ft_strrchr(error, ':'), ": Not a directory\n"))
+			&& ft_strcmp(ft_strrchr(error, ':'), ": Not a directory\n"))
 	{
 		ft_strdel(&curpath);
 		ft_strdel(&pwd);
@@ -126,20 +126,23 @@ int		cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd)
 	char	*error;
 	char	*str;
 
+	error = NULL;
 	if ((str = find_var_value(*env, "PWD")))
 		oldpwd = ft_strdup(str);
 	else if (!(oldpwd = getcwd(NULL, 0)))
-		exit(EXIT_FAILURE);
+		ft_ex(EX);
 	if (chdir(curpath) == -1)
 	{
 		check_chdir_errors(&error, curpath, opr);
 		ft_strdel(&oldpwd);
 		ft_strdel(&curpath);
+		if (!error)
+			ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
 		return (display_cd_errors(error));
 	}
 	ft_strdel(&curpath);
 	if (!pwd && !(pwd = getcwd(NULL, 0)))
-		exit(EXIT_FAILURE);
+		ft_ex(EX);
 	ft_setvar(&cfg_shell()->env, "PWD", pwd);
 	ft_setvar(&cfg_shell()->env, "OLDPWD", oldpwd);
 	ft_strdel(&oldpwd);
