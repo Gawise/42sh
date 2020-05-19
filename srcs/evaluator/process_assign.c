@@ -39,7 +39,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 
 	if (!assignment)
 		return ;
-	if (p->setup & E_UNFOUND)
+	if (p->setup & NOCMD && !(p->setup & PIPE_ON))
 		assign_for_unfound(shell, assignment);
 	else if (p->setup & B_SPECIAL)
 		assign_for_b_special(shell, p, assignment);

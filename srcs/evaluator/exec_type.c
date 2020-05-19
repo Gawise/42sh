@@ -73,7 +73,7 @@ void				with_slash(t_process *p, uint32_t *err)
 {
 	char		*tmp;
 
-	p->setup |= SLASH;
+	p->setup |= EXEC;
 	p->path = ft_strdup(p->cmd);
 	if (*p->path == '/')
 		*err |= path_errors(p->path, 1, S_IXUSR);
