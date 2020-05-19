@@ -84,6 +84,7 @@ int		resolve_brace_param(char **str, t_exp *exp, char *param)
 	}
 	else
 		exp_substitute(exp, exp->param);
+	ft_strdel(&exp->param);
 	return (1);
 }
 
@@ -104,5 +105,7 @@ int		resolve_pattern_param(char **str, t_exp *exp, char *param)
 	if (**str == '}')
 		(*str)++;
 	substitute_pattern(exp, type);
+	ft_strdel(&exp->param);
+	ft_strdel(&exp->word);
 	return (1);
 }
