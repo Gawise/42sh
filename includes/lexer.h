@@ -4,6 +4,13 @@
 # include "struct.h"
 
 /*
+**	comment.c
+*/
+
+int	l_end_comment(t_lexer *lexer, char c);
+int	l_comment_line(t_lexer *lexer, char c);
+
+/*
 **	control.c
 */
 
@@ -152,55 +159,61 @@ t_char_type	l_get_char_type(char c);
 **	state/start.c
 */
 
-void	init_start_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_start_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/hdbody.c
 */
 
-void	init_heredoc_body_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_heredoc_body_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/control.c
 */
 
-void	init_amp_pipe_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_amp_pipe_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/redir.c
 */
 
-void	init_redir_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_redir_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/exp.c
 */
 
-void	init_exp_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_exp_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/word.c
 */
 
-void	init_word_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_word_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/ionumber.c
 */
 
-void	init_io_number_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_io_number_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	state/flag.c
 */
 
-void	init_flag_state(int (*token_builder[8][11])(t_lexer *, char));
+void	init_flag_state(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
-**	state/flag.c
+**	state/comment.c
 */
 
-void	init_lexer_states(int (*token_builder[8][11])(t_lexer *, char));
+void	init_comment_state(int (*token_builder[9][12])(t_lexer *, char));
+
+/*
+**	state/initt.c
+*/
+
+void	init_lexer_states(int (*token_builder[9][12])(t_lexer *, char));
 
 /*
 **	lexer.c

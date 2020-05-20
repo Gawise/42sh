@@ -32,6 +32,8 @@ t_char_type	l_get_char_type(char c)
 		return (C_NEWLINE);
 	else if (c == '$')
 		return (C_EXP);
+	else if (c == '#')
+		return (C_HASH);
 	else if (ft_strchr("\"\'\\", c))
 		return (C_INHIBITOR);
 	else if (ft_strchr("&|;", c))

@@ -3,7 +3,7 @@
 #include "lexer.h"
 #include "sh.h"
 
-int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
+int	do_lexing(t_lexer *lexer, int (*token_builder[9][12])(t_lexer *, char))
 {
 	char			c;
 	t_lexer_flag	flag;
@@ -30,7 +30,7 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[8][11])(t_lexer *, char))
 
 int	ft_lexer(char **str, t_lexer *lexer)
 {
-	int	(*token_builder[8][11])(t_lexer *, char);
+	int	(*token_builder[9][12])(t_lexer *, char);
 
 	lexer->src = str;
 	lexer->curr = *str;
