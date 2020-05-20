@@ -4,14 +4,13 @@
 #include "var.h"
 #include "ft_printf.h"
 
-
-static	uint8_t		type_error(char *p)
+static	uint8_t	type_error(char *p)
 {
 	ft_dprintf(STDERR_FILENO, "%s: type: %s : not found\n", PROJECT, p);
 	return (FAILURE);
 }
 
-static uint8_t		type_success(t_process *p, uint8_t model)
+static uint8_t	type_success(t_process *p, uint8_t model)
 {
 	if (!model)
 		ft_printf("%s is %s\n", p->cmd, p->path);
@@ -22,7 +21,7 @@ static uint8_t		type_success(t_process *p, uint8_t model)
 	return (SUCCESS);
 }
 
-static uint8_t		type_find(t_cfg *shell, t_process *ptype, t_list *env)
+static uint8_t	type_find(t_cfg *shell, t_process *ptype, t_list *env)
 {
 	uint32_t	err;
 
@@ -47,10 +46,8 @@ static uint8_t		type_find(t_cfg *shell, t_process *ptype, t_list *env)
 		return (type_error(ptype->cmd));
 }
 
-uint8_t		ft_type(t_job *j, t_process *p)
+uint8_t			ft_type(t_job *j, t_process *p)
 {
-
-	(void)j;
 	uint8_t		i;
 	t_process	ptype;
 	t_cfg		*shell;

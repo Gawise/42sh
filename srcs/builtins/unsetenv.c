@@ -1,24 +1,23 @@
 #include "libft.h"
 #include "exec.h"
-#include "struct.h"
 #include "sh.h"
 #include "var.h"
 
-int			unsetenv_find(void *elem, void *var)
+int32_t		unsetenv_find(void *elem, void *var)
 {
-	 if (ft_strcmp(((t_var *)elem)->ctab[0], (char *)var) == 0)
-        return (1);
-    return (0);
+	if (ft_strcmp(((t_var *)elem)->ctab[0], (char *)var) == 0)
+		return (1);
+	return (0);
 }
 
 void		unsetenv_del(void *delete, size_t size)
 {
 	(void)size;
-    ft_del_tab(((void **)((t_var *)delete)->ctab));
-    free(delete);
+	ft_del_tab(((void **)((t_var *)delete)->ctab));
+	free(delete);
 }
 
-uint8_t			ft_unsetenv(t_job *j, t_process *p)
+uint8_t		ft_unsetenv(t_job *j, t_process *p)
 {
 	int		i;
 

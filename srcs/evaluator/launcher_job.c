@@ -1,20 +1,8 @@
-#include "parser.h"
-#include "exec.h"
 #include "libft.h"
+#include "exec.h"
 #include "var.h"
-#include "sh.h"
 #include "job_control.h"
-#include <unistd.h>
-
-#include <termios.h>
-
-#include <stdlib.h>
-
-#include "ft_printf.h"
 #include "sh.h"
-
-
-
 
 void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 {
@@ -26,12 +14,12 @@ void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 	if (env)
 		manage->env = ft_lstdup(env, env->size, cpy_var_list);
 	fd->tmp = fd->fd[0];
-	fd->fd[0] = 0;				/* set a 0, voir si pas mieux a -1*/
+	fd->fd[0] = 0;
 	fd->fd[1] = 0;
 	if (!process->next)
 		return ;
 	if (pipe(fd->fd) == -1)
-		ft_ex("pipe routine process"); // debug
+		ft_ex(EX);
 	manage->std[1] = fd->fd[1];
 	manage->setup |= PIPE_ON;
 	manage = process->next->data;

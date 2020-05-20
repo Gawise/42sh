@@ -62,7 +62,7 @@ static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 	return (SUCCESS);
 }
 
-static void			any_slash(t_list *env, t_process *p, uint32_t *err)
+void				any_slash(t_list *env, t_process *p, uint32_t *err)
 {
 	if (find_type(env, p, err) || p->setup & BUILTIN)
 		return ;
@@ -83,18 +83,4 @@ void				with_slash(t_process *p, uint32_t *err)
 		*err |= path_errors(tmp, 1, S_IXUSR);
 		ft_strdel(&tmp);
 	}
-}
-
-void				process_type(t_process *p)
-{
-	uint32_t	err;
-
-	err = 0;
-	if (ft_strchr(p->cmd, '/'))
-		with_slash(p, &err);
-	else (any_slash(p->env, p, &err));
-	if (err && (p->setup & R_ERROR))
-		p->setup |= P_ERROR;
-	else if (err)
-		p->setup |= process_errors_handling(p, err);
 }

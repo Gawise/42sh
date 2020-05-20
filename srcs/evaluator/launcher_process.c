@@ -1,19 +1,8 @@
-#include "parser.h"
-#include "exec.h"
 #include "libft.h"
+#include "exec.h"
 #include "var.h"
 #include "sh.h"
 #include "ft_printf.h"
-#include "job_control.h"
-#include <unistd.h>
-
-#include <termios.h>
-
-#include <stdlib.h>
-
-#include "sh.h"
-
-
 
 static uint8_t		ft_fg(t_job *j, t_process *p)
 {
@@ -30,7 +19,6 @@ static uint8_t		ft_bg(t_job *j, t_process *p)
 		(void)p;
 		return (0);
 }
-
 
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
@@ -56,19 +44,16 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	return (p->ret);
 }
 
-uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
+uint8_t		parent_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
-		if (close(fd_pipe) == -1)
-			ft_ex("[Parent process] close error:"); ///debug
-	//if (process->setup & ERROR)
-	//	process->status = FAILED; // pour bg mais pourquoi ?
-	if (cfg_shell()->interactive) //singelton obliger?
+		close(fd_pipe);
+	if (cfg_shell()->interactive)
 	{
 		if (job->pgid == 0)
-			job->pgid = process->pid;
-		setpgid(process->pid, job->pgid);
-		if (job->fg)// pour tous les process ?
+			job->pgid = p->pid;
+		setpgid(p->pid, job->pgid);
+		if (job->fg)
 			if (tcsetpgrp(STDIN_FILENO, job->pgid))
 				ft_ex("[PARENT PROCESS] error tcsetpgrp"); //debug
 	}
@@ -79,32 +64,29 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
-		if (close(fd_pipe) == -1)
-			ft_ex("[child process] close error:"); //debug
+		close(fd_pipe);
 	p->pid = getpid();
-	if (cfg_shell()->interactive) //singelton obliger?
+	if (cfg_shell()->interactive)
 	{
 		if (job->pgid == 0)
 			job->pgid = p->pid;
 		setpgid(p->pid, job->pgid);
 		if (job->fg)
-			if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
-				ft_ex("[CHILD PROCESS] error tcsetpgrp"); //debug
+			tcsetpgrp(STDIN_FILENO, job->pgid);
 		set_signal_child();
 	}
 	do_pipe(p);
 	do_redir(p->fd);
 	if (p->setup & ERROR)
 	{
-		ft_dprintf(STDERR_FILENO,"%s", p->message);
+		ft_dprintf(STDERR_FILENO, "%s", p->message);
 		exit(p->ret);
 	}
 	if (p->setup & BUILTIN)
-		exit(builtin_process(job, p));  //que faire de envp??????
+		exit(builtin_process(job, p));
 	if (p->setup & NOCMD)
 		exit(0);
-	if ((execve(p->path, p->av, envp)) == -1)
-		ft_ex(EXEXEC);
+	execve(p->path, p->av, envp);
 	exit(1);
 }
 
@@ -112,7 +94,7 @@ uint8_t		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
-	envp = create_tab_var(p->env, 0); //problematique, a voir ac l'assignement
+	envp = create_tab_var(p->env, 0);
 	if ((p->pid = fork()) == -1)
 		ft_ex(EX);
 	if (!(p->pid))
@@ -124,16 +106,15 @@ uint8_t		fork_process(t_job *job, t_process *p)
 
 void		run_process(t_cfg *shell, t_job *j, t_process *p)
 {
-
 	p->status = RUNNING | (p->status & ~WAITING);
 	process_type(p);
-	process_assign(shell, p, p->assign); // not cmd != false
+	process_assign(shell, p, p->assign);
 	debug_print_process(j, p, "run_process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		do_redir(p->fd);
 		if (p->setup & R_ERROR)
-			ft_dprintf(STDERR_FILENO,"%s", p->message);
+			ft_dprintf(STDERR_FILENO, "%s", p->message);
 		if ((p->setup & R_ERROR) &&
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);

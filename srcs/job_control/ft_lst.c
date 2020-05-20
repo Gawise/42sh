@@ -4,7 +4,7 @@
 
 int32_t			job_has_finish(void *job, void *status)
 {
-	t_job		*j;
+	t_job	*j;
 	uint8_t	ending_status;
 
 	j = job;
