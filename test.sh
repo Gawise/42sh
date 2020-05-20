@@ -21,7 +21,7 @@ output_print () {
 
 print_fail () {
 	output_print "--------------------------------------------"
-	output_print "\e[1;31mFAIL\e[0m $1"
+	output_print "\e[1;41m$1\e[0m"
 	if [ -z "$2" ]
 	then
 		output_print "STDOUT \e[1;32mSUCCESS\e[0m"
@@ -47,6 +47,12 @@ print_fail () {
 	else
 		output_print "REDIR \e[1;32mSUCCESS\e[0m"
 		output_print "$(cat $LOG_DIR/redir.diff)"
+	fi
+	if [ "$6" != "0" ]
+	then
+		output_print "LEAKS \e[1;31mFAIL\e[0m\nDetails in $LOG_DIR/.$(basename $1)"
+	else
+		output_print "LEAKS \e[1;32mSUCCESS\e[0m"
 	fi
 	output_print "--------------------------------------------"
 }
@@ -143,12 +149,14 @@ make_test () {
 	redir_diff ${redir_files[@]} >$LOG_DIR/redir.diff
 	local stdout_diff=$(diff $LOG_DIR/stdout.sh $LOG_DIR/stdout.bash)
 	local stderr_diff=$(diff $LOG_DIR/stderr.sh $LOG_DIR/stderr.bash)
-	if [ -n "$stdout_diff" -o -n "$stderr_diff" -o "$bash_exit" != "$sh_exit" -o "$REDIR_RET" != "0" ]
+	valgrind --leak-check=yes --leak-check=full --track-origins=yes --error-exitcode=1 --log-file="$LOG_DIR/.$(basename $1)" $SHELL_DIR/$SHELL_FILE $1/input 1>&- 2>&-
+	local leaks_check=$?
+	if [ -n "$stdout_diff" -o -n "$stderr_diff" -o "$bash_exit" != "$sh_exit" -o "$REDIR_RET" != "0" -o "$leaks_check" != "0" ]
 	then
-		print_fail $(basename $1) "$stdout_diff" "$stderr_diff" "$bash_exit" "$sh_exit"
+		print_fail $(basename $1) "$stdout_diff" "$stderr_diff" "$bash_exit" "$sh_exit" "$leaks_check"
 		TEST_RET=1
 	else
-		output_print "\e[1;32mSUCCESS\e[0m $(basename $1)"
+		output_print "\e[1;42m$(basename $1)\e[0m"
 		TEST_RET=0
 	fi
 	rm -f $LOG_DIR/*
@@ -165,7 +173,7 @@ run_tests () {
 		else
 			SUCCESS_TESTS=$((SUCCESS_TESTS + 1))
 		fi
-		#rm -f $TMP_DIR/*
+		rm -f $TMP_DIR/*
 	done
 	echo "$FAIL_TESTS out of $(($FAIL_TESTS + $SUCCESS_TESTS)) failed"
 }
