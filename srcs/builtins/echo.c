@@ -88,15 +88,14 @@ uint8_t		ft_echo(t_job *j, t_process *p)
             i.x = 0;
         while (params[i.x])
         {
-          //  params[i.x] = ft_strtrimoc(params[i.x], (params[i.x][0] == '"' ? '"' : '\'')); trim les quotes dans les params
 			if ((fl & 4)) 
                 params[i.x] = convert_operand(params[i.x]);
             ft_putstr(params[i.x++]);
-            ft_putchar(' ');
+            ft_putstr(params[i.x] ? " " : NULL);
         }
         if (!(fl & 2)) 
             ft_putchar('\n');
-        return (1);
+        return (0);
     }   
-    return (0);
+    return (1);
 }
