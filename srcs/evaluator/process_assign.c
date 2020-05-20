@@ -1,8 +1,6 @@
-#include "exec.h"
 #include "libft.h"
-#include "sh.h"
+#include "exec.h"
 #include "var.h"
-#include <unistd.h>
 
 static void		assign_for_unfound(t_cfg *shell, t_list *assignment)
 {
@@ -20,7 +18,8 @@ static void		assign_for_unfound(t_cfg *shell, t_list *assignment)
 	}
 }
 
-static void		assign_for_b_special(t_cfg *shell, t_process *p, t_list *assignment)
+static void		assign_for_b_special(t_cfg *shell, t_process *p,
+		t_list *assignment)
 {
 	t_assignment	*assign;
 

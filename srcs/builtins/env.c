@@ -57,7 +57,7 @@ t_job			*create_new_instance(t_cfg *shell_cpy, t_job *j, t_process *p, int32_t a
 	ft_bzero(&p_cpy, sizeof(t_process));
 	p_cpy.cmd = ft_strdup(*(p->av+ac));
 	p_cpy.av = ft_tabdup(p->av+ac);
-	ft_memset(p_cpy.std, -1, (sizeof(int16_t) * 3));
+	ft_memset(p_cpy.std, -1, (sizeof(int16_t) * 2));
 	j_cpy->cmd = ft_strdup(j->cmd);
 	j_cpy->pgid = j->pgid;
 	ft_memset(j_cpy->std, -1, (sizeof(int16_t) * 3));
