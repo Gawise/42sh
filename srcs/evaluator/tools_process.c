@@ -36,7 +36,8 @@ void		process_type(t_process *p)
 	err = 0;
 	if (ft_strchr(p->cmd, '/'))
 		with_slash(p, &err);
-	else (any_slash(p->env, p, &err));
+	else
+		(any_slash(p->env, p, &err));
 	if (err && (p->setup & R_ERROR))
 		p->setup |= P_ERROR;
 	else if (err)
