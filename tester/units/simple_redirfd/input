@@ -1,0 +1,1 @@
+ls . unknowpath >&- 2>&1

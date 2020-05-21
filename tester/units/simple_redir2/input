@@ -1,0 +1,1 @@
+ls -1  ~ >test1 ; ls -1 ~ >>test1
