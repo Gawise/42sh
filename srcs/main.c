@@ -113,6 +113,7 @@ int		main(int ac, char **av, char **env)
 			}
 		}
 	}
+	ret = ft_atoi(find_var_value(cfg_shell()->sp, "?"));
 	clean_cfg(cfg_shell());
-	exit(0);
+	exit(ret);
 }

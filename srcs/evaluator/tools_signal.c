@@ -4,7 +4,7 @@
 
 char		**create_message_signal(char **tab)
 {
-	ft_bzero(tab, sizeof(char *) * 28);
+	ft_bzero(tab, sizeof(char *) * 32);
 	tab[1] = S_SIGHUP;
 	tab[2] = S_SIGINT;
 	tab[3] = S_SIGQUIT;
@@ -27,12 +27,13 @@ char		**create_message_signal(char **tab)
 	tab[25] = S_SIGXFSZ;
 	tab[26] = S_SIGALRM;
 	tab[27] = S_SIGPROF;
+	tab[31] = S_SIGSYS;
 	return (tab);
 }
 
 uint8_t		print_message_signal(uint8_t sig, t_job *j)
 {
-	char	*tab[28];
+	char	*tab[32];
 
 	create_message_signal(tab);
 	if ((sig < 19 || sig > 22) && tab[sig] && j->fg)

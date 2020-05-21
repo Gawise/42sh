@@ -75,6 +75,7 @@
 # define S_SIGXCPU "CPU time limit exceeded" /*24*/
 # define S_SIGXFSZ "File size limit exceeded" /*25*/
 # define S_SIGPROF "Profiling timer expired" /*27*/
+# define S_SIGSYS "Bad system call" /*31*/
 
 # define S_SIGTTOU "Stopped(SIGTTOU)"  /*22*/
 # define S_SIGTTIN "Stopped(SIGTTIN)"  /*21*/
