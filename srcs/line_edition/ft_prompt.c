@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "ft_printf.h"
 #include <termios.h>
 #include <term.h>
 #include <sys/ioctl.h>
@@ -27,7 +28,9 @@ char	*read_nonint(t_cfg	*cfg)
 	char		*line;
 	static int	fd = -2;
 	int			ret;
+	char		*tmp;
 
+	tmp = NULL;
 	if (fd == -2)
 	{
 		if (cfg && (fd = open(cfg->file, O_RDONLY)) < 0)
@@ -45,6 +48,13 @@ char	*read_nonint(t_cfg	*cfg)
 			ft_ex("An error occured while reading file\n");
 		else if (ret == 0)
 			line = ft_strnew(0);
+		if (ret > 0)
+		{
+			if (ft_asprintf(&tmp, "%s\n", line) == -1)
+				ft_ex(EXMALLOC);
+			ft_strdel(&line);
+			line = tmp;
+		}
 	}
 	return (line);
 }

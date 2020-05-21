@@ -2,7 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 
-void	init_redir_state(int (*token_builder[8][11])(t_lexer *, char))
+void	init_redir_state(int (*token_builder[9][12])(t_lexer *, char))
 {
 	token_builder[S_TK_REDIR][C_INHIBITOR] = l_delim_inhib;
 	token_builder[S_TK_REDIR][C_CONTROL] = l_build_redir;
@@ -14,5 +14,6 @@ void	init_redir_state(int (*token_builder[8][11])(t_lexer *, char))
 	token_builder[S_TK_REDIR][C_EOI] = l_do_nothing;
 	token_builder[S_TK_REDIR][C_BRACK] = l_delim_word;
 	token_builder[S_TK_REDIR][C_EQU] = l_delim_word;
+	token_builder[S_TK_REDIR][C_HASH] = l_delim_word;
 	token_builder[S_TK_REDIR][C_OTHER] = l_delim_word;
 }

@@ -69,7 +69,8 @@ typedef enum			e_char_type
 	C_EOI,			// 7
 	C_BRACK,		// 8
 	C_EQU,			// 9
-	C_OTHER			// 10
+	C_HASH,			// 10
+	C_OTHER			// 11
 }				t_char_type;
 
 typedef enum			e_lexer_flag
@@ -100,7 +101,8 @@ typedef enum			e_lexer_state
 	S_EXP,			// Expansion en cours		4
 	S_TK_WORD,		// Token word			5
 	S_IO_NUMBER,		// io_number token		6
-	S_FLAG			// Flag en cours		7
+	S_FLAG,			// Flag en cours		7
+	S_COMMENT
 }				t_lexer_state;
 
 typedef struct			s_here_queue
