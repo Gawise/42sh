@@ -39,6 +39,9 @@ int	ft_lexer(char **str, t_lexer *lexer)
 		return (0);
 	while (l_get_last_flag(lexer) || l_get_last_here(lexer))
 		if (!do_lexing(lexer, token_builder))
+		{
+			ft_printf("coucou\n");
 			return (0);
+		}
 	return (1);
 }

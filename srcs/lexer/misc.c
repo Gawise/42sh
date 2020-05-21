@@ -80,22 +80,38 @@ int			l_complete_str(t_lexer *lexer, char c)
 	(void)c;
 	new = NULL;
 	pos = lexer->curr - *lexer->src;
-	if (!(pmt_prefix = l_get_prompt_prefix(lexer))
-	|| ft_dprintf(0, "%s", pmt_prefix) == -1
-	|| !(new = ft_prompt(find_var_value(cfg_shell()->intern, "PS2"),
+	if (cfg_shell()->interactive)
+	{
+		if (!(pmt_prefix = l_get_prompt_prefix(lexer))
+		|| ft_dprintf(0, "%s", pmt_prefix) == -1)
+			ft_ex(EXMALLOC);
+	}
+	if (!(new = ft_prompt(find_var_value(cfg_shell()->intern, "PS2"),
 	COLOR_SUBPROMPT)))
 	{
-		ft_strdel(&pmt_prefix);
+		if (cfg_shell()->interactive)
+			ft_strdel(&pmt_prefix);
 		return (0);
 	}
 	if (!*new && l_get_last_here(lexer))
-		return (l_hd_body_flush(lexer, c));
+	{
+		if (cfg_shell()->interactive)
+			ft_strdel(&pmt_prefix);
+		ft_strdel(&new);
+		return (l_hd_body_flush(lexer, 0));
+	}
 	else if (!*new && (l_get_last_flag(lexer) == F_SQUOTE
 	|| l_get_last_flag(lexer) == F_DQUOTE))
+	{
+		if (cfg_shell()->interactive)
+			ft_strdel(&pmt_prefix);
+		ft_strdel(&new);
 		return (0);
+	}
 	if (!(*lexer->src = ft_strclnjoin(*lexer->src, new)))
 		ft_ex(EXMALLOC);
 	lexer->curr = *lexer->src + pos;
-	ft_strdel(&pmt_prefix);
+	if (cfg_shell()->interactive)
+		ft_strdel(&pmt_prefix);
 	return (1);
 }
