@@ -88,8 +88,11 @@ int			l_complete_str(t_lexer *lexer, char c)
 		ft_strdel(&pmt_prefix);
 		return (0);
 	}
-	if (!*new && l_get_last_flag(lexer) == F_HEREDOC)
+	if (!*new && l_get_last_here(lexer))
 		return (l_hd_body_flush(lexer, c));
+	else if (!*new && (l_get_last_flag(lexer) == F_SQUOTE
+	|| l_get_last_flag(lexer) == F_DQUOTE))
+		return (0);
 	if (!(*lexer->src = ft_strclnjoin(*lexer->src, new)))
 		ft_ex(EXMALLOC);
 	lexer->curr = *lexer->src + pos;
