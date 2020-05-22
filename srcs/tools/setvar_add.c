@@ -6,6 +6,8 @@
 
 void		setvar_update(t_list *lst, char *value)
 {
+	if (!lst || !lst->data)
+		return ;
 	ft_strdel(&(((t_var *)(lst->data))->ctab[1]));
 	((t_var *)(lst->data))->ctab[1] = ft_strdup(value);
 }
@@ -41,6 +43,8 @@ uint8_t		ft_setvar(t_list **lst, char *name, char *value)
 	t_var	*var;
 
 	find = NULL;
+	if (!ft_strcmp(name, "PATH"))
+		ft_hash_reset(&cfg_shell()->map, free, 128);
 	if ((find = find_var(*lst, name)))
 	{
 		var = find->data;

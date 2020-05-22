@@ -81,7 +81,10 @@ int		analyzer_routine(t_parser *parser)
 	if (a_make_args_tab(parser) < 0
 	|| (parser->state != S_PARSER_SYNTAX_ERROR
 	&& !a_set_jobs_str(parser)))
+	{
+		ft_lstdel(&parser->table, del_cmd_table);
 		return (0);
+	}
 	a_remove_leading_tabs(parser);
 	return (1);
 }
@@ -104,7 +107,8 @@ int		main(int ac, char **av, char **env)
 		{
 			if (ret == -1)
 			{
-				ft_dprintf(2, "\e[0;31m exit\e[0;0m\n");
+				if (cfg_shell()->interactive)
+					ft_dprintf(2, "\e[K\e[0;31mexit\e[0;0m\n"); // a t on vraiment besoin de ce printf? pq sur sortie d erreur ?
 				break ;
 			}
 		}

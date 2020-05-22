@@ -54,8 +54,8 @@ char		*ft_pathjoin(char *str1, char *str2)
 		return (0);
 	s1len = ft_strlen(str1);
 	if (!s1len || (str1[s1len - 1] == '/'))
-		return (ft_strjoin(2, str1, str2));
-	ret = ft_strjoin(2, str1, "/");
+		return (ft_strjoin(str1, str2));
+	ret = ft_strjoin(str1, "/");
 	ret = ft_strlclnjoin(ret, str2);
 	return (ret);
 }

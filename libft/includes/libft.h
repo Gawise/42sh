@@ -79,13 +79,14 @@ char			*ft_itoa(int n);
 
 t_hash_map		*ft_hash_init(uint32_t size);
 uint32_t		ft_hash_str(t_hash_map *map, char *key);
-int				ft_hash_add(t_hash_map *map, char *key, void *value, size_t size);
+int				ft_hash_add(t_hash_map *map, char *key, void *value, void (*del)(void *));
 t_hash_node		*ft_hash_get_node(t_hash_map *map, char *key);
 void			*ft_hash_lookup(t_hash_map *map, char *key);
 t_list			*ft_hash_get_list(t_hash_map *map, char *key);
 void			ft_hash_delone(t_hash_map *map, char *key, void (*del)(void *));
 void			ft_hash_del_list(t_list **lst, void (*del)(void *));
 void			ft_hash_del_map(t_hash_map **map, void (*del)(void *data));
+void			ft_hash_reset(t_hash_map **map, void (*del)(void * data), uint32_t size);
 
 /*
 ** INPUT
@@ -122,7 +123,7 @@ void			ft_lstaddtail(t_list **alst, t_list *new);
 t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
-
+uint32_t		ft_lstcount(t_list *elem);
 /*
 ** MEMORY
 */
@@ -183,7 +184,7 @@ char			*ft_strncat(char *s1, const char *s2, size_t n);
 char			*ft_strnew(size_t size);
 char			*ft_strmap(char const *s, char (*f)(char));
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char			*ft_strjoin(int nb, ...);
+char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_strtrim(char const *s);
 char			*ft_strsub(char const *s, unsigned int start, size_t len);
 char			*ft_strselect(char *str, char c);

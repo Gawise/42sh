@@ -13,12 +13,6 @@ typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
 typedef struct s_hash_map	t_hash_map;
 
-typedef enum			e_mode
-{
-	INTERACTIVE_MODE,
-	NON_INTERACTIVE_MODE
-}				t_mode;
-
 typedef struct	s_cfg
 {
 	struct termios	term_origin;      /* origin terminal modes */
@@ -31,11 +25,14 @@ typedef struct	s_cfg
 	t_dlist			*history;
 	t_hash_map		*map;
 	t_hash_map		*input_map;
-	t_mode			mode;
 	char			*file;
 	uint8_t			active_job;
-	uint8_t		debug;		/* set for print debug */
+	int32_t			debug;		/* set for print debug */
 }				t_cfg;
+
+/*
+** LEXER
+*/
 
 typedef enum			e_token_type
 {
@@ -86,10 +83,6 @@ typedef enum			e_lexer_flag
 	F_BRACKEXP,	// 32
 	F_HD_DELIM	// 64
 }				t_lexer_flag;
-
-/*
-** LEXER
-*/
 
 typedef struct			s_token
 {
@@ -287,11 +280,13 @@ typedef struct	s_process
 	char 		*cmd;                /* cmd name */
 	char 		**av;                /* for exec */
 	char 		*path;				/* path's exec */
+	char		*message;
 	pid_t 		pid;                /* process ID */
 	uint8_t 	ret;				/* WEXITSTATUS  */
 	uint8_t 	status;             /* reported status value */
-	int8_t 		std[3];				/* stdin out err*/
+	int16_t 	std[3];				/* stdin out err*/
 	uint32_t	setup;				/* info of process */
+	t_list		*fd;
 	t_list		*redir;				/* list of redirs */
 	t_list		*env;				/* list of env  */
 	t_list		*assign;			/* list of assign */
@@ -307,7 +302,7 @@ typedef struct	s_job
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
 	uint8_t		ret;				/* retour last process */
-	int8_t		std[3];				/* stdin out err*/
+	int16_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */
 } 				t_job;
 

@@ -9,7 +9,7 @@ uint32_t			builtin_search(t_process *p)
 	if (!p->cmd)
 		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
-		return (p->setup |= B_ECHO);
+		return ((p->setup |= B_ECHO) + 1);
 	if (!ft_strcmp(p->cmd, "setenv"))
 		return (p->setup |= B_SETENV);
 	if (!ft_strcmp(p->cmd, "unsetenv"))
@@ -37,57 +37,64 @@ uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 {
 	if ((p->path = ft_strdup(ft_hash_lookup(shell->map, p->cmd))))
 	{
-		if (!(ERROR & path_errors(p->path, 1)))
+		if (!(ERROR & path_errors(p->path, 1, S_IXUSR)))
 			return (TRUE);
 		ft_strdel(&p->path);
 		ft_hash_delone(shell->map, p->cmd, free);
 		if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
-			ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+			ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 		return (p->path ? 1 : 0);
 	}
 	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
 		return (0);
-	ft_hash_add(shell->map, p->cmd, p->path, ft_strlen(p->path) + 1);
+	ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 	return (TRUE);
 }
 
-static uint16_t		find_type(t_list *env, t_process *p)
+static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
 	else if (find_binary(env, p, cfg_shell()))
 		p->setup |= EXEC;
 	else
-		return (p->setup |= E_UNFOUND);
+		return (*err |= E_UNFOUND);
 	return (SUCCESS);
 }
 
-static void			any_slash(t_list *env, t_process *p)
+static void			any_slash(t_list *env, t_process *p, uint32_t *err)
 {
-	if (find_type(env, p) || p->setup & BUILTIN)
+	if (find_type(env, p, err) || p->setup & BUILTIN)
 		return ;
-	p->setup |= path_errors(p->path, 1);
+	*err |= path_errors(p->path, 1, S_IXUSR);
 }
 
-void			with_slash(t_process *p)
+void				with_slash(t_process *p, uint32_t *err)
 {
 	char		*tmp;
 
-	p->setup |= SLASH;
+	p->setup |= EXEC;
 	p->path = ft_strdup(p->cmd);
 	if (*p->path == '/')
-		p->setup |= path_errors(p->path, 1);
+		*err |= path_errors(p->path, 1, S_IXUSR);
 	else
 	{
 		tmp = create_abs_path(p->path);
-		p->setup |= path_errors(tmp, 1);
+		*err |= path_errors(tmp, 1, S_IXUSR);
 		ft_strdel(&tmp);
 	}
 }
 
 void				process_type(t_process *p)
 {
+	uint32_t	err;
+
+	err = 0;
 	if (ft_strchr(p->cmd, '/'))
-		with_slash(p);
-	else (any_slash(p->env, p));
+		with_slash(p, &err);
+	else (any_slash(p->env, p, &err));
+	if (err && (p->setup & R_ERROR))
+		p->setup |= P_ERROR;
+	else if (err)
+		p->setup |= process_errors_handling(p, err);
 }

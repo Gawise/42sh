@@ -26,7 +26,7 @@ int		back_space(t_cs_line *cs)
 			oc = &tmp2[cs->line_col - 1];
 			*oc = '\0';
 			if (tmp2[cs->line_col] != '\0')
-				cs->input = ft_strjoin(2, tmp2, &tmp2[cs->line_col]);
+				cs->input = ft_strjoin(tmp2, &tmp2[cs->line_col]);
 			else
 				cs->input = ft_strdup(tmp2);
 			ft_strdel(&tmp2);
@@ -55,7 +55,7 @@ int		revback_space(t_cs_line *cs)
 				oc = &tmp2[cs->line_col];
 				*oc = '\0';
 				if (tmp2[cs->line_col + 1] != '\0')
-					cs->input = ft_strjoin(2, tmp2, &tmp2[cs->line_col + 1]);
+					cs->input = ft_strjoin(tmp2, &tmp2[cs->line_col + 1]);
 				else
 					cs->input = ft_strdup(tmp2);
 				ft_strdel(&tmp2);

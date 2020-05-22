@@ -1,0 +1,2 @@
+echo "bla" > test.txt
+echo bli > test2.txt

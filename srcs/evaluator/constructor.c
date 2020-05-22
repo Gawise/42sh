@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "var.h"
 
+
 void	cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	t_process		process;
@@ -11,11 +12,10 @@ void	cmd_to_process(t_list **lst, t_list *s_cmd)
 	ft_bzero(&process, sizeof(t_process));
 	while (s_cmd)
 	{
-		
 		cmd = s_cmd->data;
 		process.cmd = ft_strdup(cmd->cmd_name);
 		process.av = ft_tabdup(cmd->av);
-		process.std[0] = STDIN_FILENO;
+		process.std[0] = STDIN_FILENO; //sortir de la boucle
 		process.std[1] = STDOUT_FILENO;
 		process.std[2] = STDERR_FILENO;
 		process.status = WAITING;
@@ -32,8 +32,11 @@ void	cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 	ft_bzero(job, sizeof(t_job));
 	cmd_to_process(&job->process, s_cmd);
 	job->cmd = ft_strdup(cmd);
-	job->std[0] = dup(STDIN_FILENO);
-	job->std[1] = dup(STDOUT_FILENO);
-	job->std[2] = dup(STDERR_FILENO);
+	job->std[0] = 256;
+	do_my_dup2(STDIN_FILENO, job->std[0]);
+	job->std[1] = 257;
+	do_my_dup2(STDOUT_FILENO, job->std[1]);
+	job->std[2] = 258;
+	do_my_dup2(STDERR_FILENO, job->std[2]);
 	term_create_eval(&shell->term_origin, &job->term_eval);
 }

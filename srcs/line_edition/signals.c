@@ -32,21 +32,15 @@ void	size_handler(int sig)
 void	sig_handler(int sig)
 {
 	t_cs_line		*cs;
+	struct termios	new_term;
 
 	if (sig >= 0 && (cs = cs_master(NULL, 0)))
 	{
+		tcgetattr(cs->tty, &new_term);
+		new_term.c_cc[VMIN] = 0;
+		tcsetattr(cs->tty, TCSANOW, &new_term);
 		cs->sig_int = (sig > 0 ? 1 : 0);
-		end_key(cs);
-		ft_strdel(&cs->input);
-		cs->input = ft_strnew(0);
-		if (cs->history)
-			cs->history->data = cs->input;
-		cs->row += (cs->screen.y != cs->row ? 1 : 0);
-		cs->min_row = cs->row;
-		cs->line_col = 0;
-		move_cs(&cs);
-		set_scroll(cs);
-		print_prompt(cs);
+		ft_strdel(&cs->old_history);
 	}
 }
 
@@ -63,5 +57,5 @@ void	init_signals(void)
 			signal(i, size_handler);
 		i++;
 	}
-	signal(SIGINT, sig_handler);
+//	signal(SIGINT, sig_handler);
 }

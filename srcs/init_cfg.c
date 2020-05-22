@@ -5,10 +5,11 @@
 #include "ft_printf.h"
 #include "line_edition.h"
 
-static void		set_var_sp(t_cfg *shell)
+static void		set_var(t_cfg *shell)
 {
 	char	*pid;
 
+	/*var sp*/
 	pid = ft_itoa(shell->pid);
 	setvar_add(&shell->sp, "$", pid);
 	setvar_add(&shell->sp, "?", "0");
@@ -19,59 +20,81 @@ static void		set_var_sp(t_cfg *shell)
 	setvar_add(&shell->sp, "-", 0);
 	setvar_add(&shell->sp, "0", 0);
 	ft_strdel(&pid);
-}
-
-static void		set_var_intern(t_cfg *shell)
-{
-	ft_setvar(&shell->intern, "_", 0);
+	/*var intern*/
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");
+
 }
 
-static uint8_t		set_debug(char **av, int i)
+static void		argv_path_fail(char *path, char *mode, uint32_t err)
 {
-	int		fd;
-	char	*path;
+	char		*taberr[5];
+	int8_t		tmp;
 	
-	int d = 0;
-	i = 0;
-	while (++i && av[i])
-		if (!(d = ft_strcmp(av[i], "debug")))
-			break ;
-	if (!av[i])
-		return (0);
-	if (!av[i + 1] || *av[i + 1] != '-')
-		return (1);
-	path = (av[i + 1]) + 1;
-	if ((fd = open(path, O_CREAT | O_WRONLY, 0644)) == -1)
+	tmp = 0;
+	taberr[0] = STR_ISDIR;
+	taberr[1] = STR_NOENT;
+	taberr[2] = STR_ACCES;
+	taberr[3] = STR_LOOP;
+	taberr[4] = STR_NTL;
+	if (!err)
+		ft_ex(USAGE);
+	err = err >> 7;
+	while (!((err = err >> 1) & 1))
+		tmp++;
+	ft_dprintf(STDERR_FILENO, "%s; %s: %s: %s\n", PROJECT, mode, path, taberr[tmp]);
+	ft_ex(USAGE);
+}
+
+static uint8_t	set_debug(char **av, int *ac)
+{
+	int			fd;
+	uint32_t	err;
+	
+	if (!av[*ac] || *av[*ac] == '-')
+		return (STDERR_FILENO);
+
+	if ((fd = open(av[*ac], O_CREAT | O_WRONLY, 0644)) == -1)
 	{
-		ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
-		exit(1);
+		err = path_errors(av[*ac], TRUE, S_IWUSR);
+		argv_path_fail(av[*ac], "Debug mode fail", err);
 	}
+	*ac += 1;
 	return (fd);
+}
+
+static void		set_nonint(t_cfg *shell, char *path)
+{
+	int32_t		err;
+
+	shell->file = (*path == '/') ? ft_strdup(path) : create_abs_path(path);
+	if ((err = path_errors(shell->file, TRUE, S_IRUSR)))
+		argv_path_fail(shell->file, "Non-interactive mode fail", err);
+	shell->interactive = 0;
 }
 
 static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 {
-	int		i;
+	int32_t		 i;
+	int8_t		ret;
 
-	(void)ac;
-	i = 1;
-	shell->mode = INTERACTIVE_MODE;
-	if (av[i] && av[i][0] == '-')
+	i = 0;
+	shell->interactive = TRUE;
+	if (ac == 1)
+		return ;
+	ac = 1;
+	while ((ret = ft_getopt(&ac, &i, av, "d")) != -1)
 	{
-		if (ft_strequ("-d", av[i++]))
-			shell->debug = set_debug(av, i++);
-		else
+		if (ret == '?')
 		{
-			ft_dprintf(2, "Usage: %s [-d path] file\nexit\n", NAME_SH);
-			exit(1);
+			ft_dprintf(STDERR_FILENO, "%s: -%c : Bad option\n", PROJECT, av[ac][i]);
+			ft_ex(USAGE);
 		}
+		else if (ret == 'd')
+			shell->debug = set_debug(av, &ac);
 	}
-	if (av[i] && !(shell->file = ft_strdup(av[i])))
-		ft_ex(EXMALLOC);
-	if (shell->file)
-		shell->mode = NON_INTERACTIVE_MODE;
+	if (av[ac])
+		set_nonint(shell, av[ac]);
 }
 
 t_cfg			*init_cfg(char **env, char **av, int ac)
@@ -82,12 +105,10 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	ft_bzero(shell, sizeof(t_cfg));
 	shell->pid = getpid();
 	create_lst_var(&shell->env, env);
-	ft_setvar(&shell->env, "PROJECT", "21sh");
-	set_var_intern(shell);
-	set_var_sp(shell);
+	set_var(shell);
 	shell->history = get_history();
 	if (!(shell->map = ft_hash_init(128))
-		|| !(shell->input_map = ft_hash_init(21)))
+		|| !(shell->input_map = ft_hash_init(22)))
 		ft_ex(EXMALLOC);
 	init_input_map(shell->input_map);
 	set_shell_mode(av, ac, shell);

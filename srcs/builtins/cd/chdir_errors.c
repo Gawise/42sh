@@ -22,58 +22,69 @@
 int			display_cd_errors(char *error)
 {
 	if (!(error))
-		exit(EXIT_FAILURE);
-	ft_dprintf(2, "%s: cd: %s", NAME_SH, error);
+		ft_ex(EXMALLOC);
+	ft_dprintf(2, "%s: cd: %s", PROJECT, error);
 	free(error);
 	return (1);
 }
 
-int			check_enametoolong(char *path)
+int			check_enotdir(char *path)
 {
-	int		i;
-	char	*buf;
+	struct stat		buf;
 
-	i = 2;
-	if (ft_strlen(path) >= 1024)
-		return (0);
-	while ((buf = ft_strcut(path, "/", i)))
-	{
-		if (ft_strlen(buf) >= 1024)
-		{
-			free(buf);
+	if (!lstat(path, &buf))
+		if (!(S_IFDIR == (S_IFMT & buf.st_mode)))
 			return (0);
-		}
-		if (!*buf)
-		{
-			free(buf);
-			break ;
-		}
-		free(buf);
-		i++;
-	}
 	return (1);
+}
+
+int			check_whole_path(char *path)
+{
+	char			*idx;
+	int				ret;
+
+	idx = path;
+	ret = 0;
+	while (1)
+	{
+		if ((idx = ft_strchr(idx, '/')))
+			*idx = '\0';
+		if (!ret && !c_enoent(path))
+			ret = 1;
+		if (!ret && !c_eloop(path))
+			ret = 2;
+		if (!ret && !check_enotdir(path))
+			ret = 3;
+		if (!ret && !c_eacces(path, S_IXUSR))
+			ret = 4;
+		if (idx)
+			*(idx) = '/';
+		if (!idx || ret)
+			return (ret);
+		idx++;
+	}
 }
 
 int			check_chdir_errors(char **error, char *path, char *opr)
 {
-	int ret;
+	char	*taberr[5];
+	int 	ret;
 
+	taberr[0] = STR_NTL;
+	taberr[1] = STR_NOENT;
+	taberr[2] = STR_LOOP;
+	taberr[3] = STR_ISNDIR;
+	taberr[4] = STR_ACCES;
 	ret = 0;
-	if (!check_enametoolong(path))
+	if (!c_enametoolong(path))
 	{
-		*error = (ft_strjoin(2, opr, ": File name too long\n"));
-		return (1);
+		ft_asprintf(error, "%s: %s\n", opr, taberr[ret]);
+		return (FAILURE);
 	}
-	ret = check_whole_path(path);
-	if (ret == 1)
-		*error = (ft_strjoin(2, opr, ": No such file or directory\n"));
-	if (ret == 2)
-		*error = (ft_strjoin(2, opr, ": Symbolic link error\n"));
-	if (ret == 3)
-		*error = (ft_strjoin(2, opr, ": Not a directory\n"));
-	if (ret == 4)
-		*error = (ft_strjoin(2, opr, ": Permission denied\n"));
-	if (!ret)
-		return (0);
-	return (1);
+	else if ((ret = check_whole_path(path)))
+	{
+		ft_asprintf(error, "%s: %s\n", opr, taberr[ret]);
+		return (FAILURE);
+	}
+	return (SUCCESS);
 }

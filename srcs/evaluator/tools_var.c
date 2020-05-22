@@ -35,7 +35,7 @@ char		**create_tab_var(t_list *lst, int count)
 	}
 	count--;
 	var = lst->data;
-	tab[count] = ft_strjoin(3, var->ctab[0], "=", var->ctab[1]);
+	ft_asprintf(&tab[count], "%s=%s", var->ctab[0], var->ctab[1]);
 	return (tab);
 }
 

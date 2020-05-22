@@ -113,6 +113,7 @@ SRCS += ft_dlstdel.c
 SRCS += ft_dlstdelone.c
 SRCS += ft_lsthave.c
 SRCS += ft_lstdup.c
+SRCS += ft_lstcount.c
 
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c
@@ -151,6 +152,7 @@ SRCS += ft_hash_get_node.c
 SRCS += ft_hash_init.c
 SRCS += ft_hash_lookup.c
 SRCS += ft_hash_add.c
+SRCS += ft_hash_reset.c
 
 #------------------------------------------------------------#
 

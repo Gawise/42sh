@@ -3,51 +3,39 @@
 #include "var.h"
 #include "ft_printf.h"
 
-uint8_t		process_errors_handling(t_process *p)
+uint32_t		process_errors_handling(t_process *p, uint32_t err)
 {
-	char	*namesh;
-
-	if (!(p->setup & ERROR))
-		return (SUCCESS);
 	if (!p->cmd && (p->assign || p->redir))
-		exit(EXIT_SUCCESS);
-	if (!(namesh = find_var_value(cfg_shell()->intern, "PS1")))
-		namesh = NAME_SH;
-	p->setup &= ~ERROR;
-	if (p->setup & E_UNFOUND)
-		ft_dprintf(2, "%s: %s: command not found\n", namesh, p->cmd);
-	else if (p->setup & E_ISDIR)
-		ft_dprintf(2, "%s: %s: is a directory\n", namesh, p->path );
-	else if (p->setup & E_NOENT)
-		ft_dprintf(2, "%s: %s: No such file or directory\n", namesh, p->path);
-	else if (p->setup & E_ACCES)
-		ft_dprintf(2, "%s: %s: Permission denied\n", namesh, p->path);
-	else if (p->setup & E_LOOP)
-		ft_dprintf(2, "%s: %s: Too many links\n", namesh, p->path);
-	else if (p->setup & E_NTL)
-		ft_dprintf(2, "%s: %s: File name too long\n", namesh, p->path);
-	p->ret = p->setup & (E_UNFOUND | E_NOENT) ? 127 : 126;
-	exit(p->ret);
+		return (NOCMD);
+	p->status |= FAILED;
+	if (err & E_UNFOUND)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->cmd, STR_UNFOUND);
+	else if (err & E_ISDIR)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_ISDIR);
+	else if (err & E_NOENT)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NOENT);
+	else if (err & E_ACCES)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_ACCES);
+	else if (err & E_LOOP)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_LOOP);
+	else if (err & E_NTL)
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NTL);
+	p->ret = err & (E_UNFOUND | E_NOENT) ? 127 : 126;
+	return (P_ERROR | err);
 }
 
-uint8_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
+uint32_t		redir_errors_handling(t_process *p, uint32_t error, char *info, int32_t fd)
 {
-	char 	*namesh;
-
-	error &= ~ERROR;
-	namesh = find_var_value((cfg_shell())->intern, "PS1");
-	if (!namesh)
-		namesh = NAME_SH;
-	p->ret = 1;
-	p->status = FAILED;
-	if (fd)
-		ft_dprintf(STDERR_FILENO, "%s: %d: Bad file descriptor\n", namesh, fd);
+	p->status |= FAILED;
+	if (error & E_BADFD)
+		ft_asprintf(&p->message, "%s: %d: Bad file descriptor\n", PROJECT, fd);
 	else if (error & E_ISDIR)
-		ft_dprintf(STDERR_FILENO, "%s: %s: is a directory\n", namesh, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_ISDIR);
 	else if (error & E_NOENT)
-		ft_dprintf(STDERR_FILENO, "%s: %s: No such file or directory\n", namesh, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_NOENT);
 	else if (error & E_ACCES)
-		ft_dprintf(STDERR_FILENO, "%s: %s: Permission denied\n", namesh, info);
+		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_ACCES);
 	ft_strdel(&info);
-	return (FAILURE);
+	p->ret = 1;
+	return (error | R_ERROR);
 }

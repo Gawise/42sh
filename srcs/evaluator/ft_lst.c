@@ -22,4 +22,21 @@ int32_t	has_running(t_list *lst)
 	return (0);
 }
 
+void	close_fd(t_list *lst)
+{
+	int16_t	*fd;
 
+	fd = lst->data;
+	if (fd[0] > 2)
+		close(fd[0]);
+	if (fd[1] > 2)
+		close(fd[1]);
+}
+
+void	job_redir(t_list *process)
+{
+	t_process 	*p;
+
+	p = process->data;
+	p->setup |= process_redir(p, p->redir);
+}
