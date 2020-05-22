@@ -3,8 +3,6 @@
 
 
 
-
-
 # include <stdio.h>				//debug
 # include "struct.h"
 # include "signal.h"
@@ -66,7 +64,7 @@
 # define S_SIGABRT "Aborted" /*6*/
 # define S_SIGBUS "Bus Error" /*7*/
 # define S_SIGFPE "Floating point exception" /*8*/
-# define S_SIGKILL "KILLED"	/*9*/
+# define S_SIGKILL "Killed"	/*9*/
 # define S_SIGUSR1 "User defined signal 1" /*10*/
 # define S_SIGSEGV "Segmentation fault" /*11*/
 # define S_SIGUSR2 "User defined signal 2" /*12*/
@@ -196,5 +194,6 @@ void		del_struct_job(void *del, size_t u);
 void	debug_print_all(t_job *j, t_list *process, char *where);
 void	debug_print_process(t_job *j, t_process *p, char *where);
 void	debug_print_lstfd(t_list *fd);
+void	debug_print_allfdjob(t_list *process);
 
 #endif

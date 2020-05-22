@@ -52,6 +52,7 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	job->status |= RUNNING;
 	ft_lstiter(job->process, job_redir);
+	debug_print_allfdjob(process);
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);

@@ -17,7 +17,7 @@ void	print_debug(t_list *elem);
 
 void	ft_ex(char *error)
 {
-	ft_dprintf(STDERR_FILENO,"%s", error);
+	ft_dprintf(STDERR_FILENO,"%s: %s", PROJECT, error);
 	exit(EXIT_FAILURE);
 }
 
