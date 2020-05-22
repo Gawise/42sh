@@ -17,7 +17,7 @@ void	print_debug(t_list *elem);
 
 void	ft_ex(char *error)
 {
-	ft_dprintf(STDERR_FILENO,"%s", error);
+	ft_dprintf(STDERR_FILENO,"%s: %s", PROJECT, error);
 	exit(EXIT_FAILURE);
 }
 
@@ -111,8 +111,14 @@ int		main(int ac, char **av, char **env)
 					ft_dprintf(2, "\e[K\e[0;31mexit\e[0;0m\n"); // a t on vraiment besoin de ce printf? pq sur sortie d erreur ?
 				break ;
 			}
+			else if (!ret && !cfg_shell()->interactive)
+			{
+				clean_cfg(cfg_shell());
+				exit(2);
+			}
 		}
 	}
+	ret = ft_atoi(find_var_value(cfg_shell()->sp, "?"));
 	clean_cfg(cfg_shell());
-	exit(0);
+	exit(ret);
 }

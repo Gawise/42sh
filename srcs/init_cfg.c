@@ -46,19 +46,22 @@ static void		argv_path_fail(char *path, char *mode, uint32_t err)
 	ft_ex(USAGE);
 }
 
-static uint8_t	set_debug(char **av, int *ac)
+static uint16_t	set_debug(char **av, int *ac)
 {
 	int			fd;
 	uint32_t	err;
 	
 	if (!av[*ac] || *av[*ac] == '-')
 		return (STDERR_FILENO);
-
 	if ((fd = open(av[*ac], O_CREAT | O_WRONLY, 0644)) == -1)
 	{
 		err = path_errors(av[*ac], TRUE, S_IWUSR);
 		argv_path_fail(av[*ac], "Debug mode fail", err);
 	}
+	if (dup2(fd, 259) == -1)
+		ft_ex(EX);
+	close(fd);
+	fd = 259;
 	*ac += 1;
 	return (fd);
 }

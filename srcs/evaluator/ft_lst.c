@@ -1,8 +1,7 @@
-#include "struct.h"
 #include "exec.h"
 #include "libft.h"
 
-int32_t	has_stopped(t_list *lst)
+int32_t		has_stopped(t_list *lst)
 {
 	t_process *p;
 
@@ -12,7 +11,7 @@ int32_t	has_stopped(t_list *lst)
 	return (0);
 }
 
-int32_t	has_running(t_list *lst)
+int32_t		has_running(t_list *lst)
 {
 	t_process *p;
 
@@ -22,7 +21,7 @@ int32_t	has_running(t_list *lst)
 	return (0);
 }
 
-void	close_fd(t_list *lst)
+void		close_fd(t_list *lst)
 {
 	int16_t	*fd;
 
@@ -33,9 +32,9 @@ void	close_fd(t_list *lst)
 		close(fd[1]);
 }
 
-void	job_redir(t_list *process)
+void		job_redir(t_list *process)
 {
-	t_process 	*p;
+	t_process *p;
 
 	p = process->data;
 	p->setup |= process_redir(p, p->redir);

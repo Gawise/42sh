@@ -1,21 +1,20 @@
 #include "libft.h"
-#include "struct.h"
 #include "sh.h"
 #include "ft_printf.h"
 #include "var.h"
-
+#include "struct.h"
 
 uint8_t		ft_exit(t_job *j, t_process *p)
 {
 	static int	protect_job = 0;
-	uint8_t 		ret;
+	uint8_t		ret;
 	t_cfg		*shell;
 
 	(void)j;
 	shell = cfg_shell();
 	if (shell->job && !protect_job)
 	{
-		ft_dprintf(STDERR_FILENO,"have job running or stopped !\n");
+		ft_dprintf(STDERR_FILENO, "have job running or stopped !\n");
 		protect_job++;
 		return (FAILURE);
 	}

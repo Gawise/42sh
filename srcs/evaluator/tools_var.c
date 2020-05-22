@@ -3,7 +3,6 @@
 #include "sh.h"
 #include "ft_printf.h"
 
-
 uint8_t		ft_print_env_lst(t_list *lst)
 {
 	t_var	*env;

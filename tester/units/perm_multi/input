@@ -1,0 +1,3 @@
+chmod -r ../file_rep/file_no_read ../file_rep/file_no_rw
+cat <../file_rep/file_no_read >../file_rep/file_no_write | ls ../file_rep/file_no_rw 2>&1 | cat -e 
+chmod +r ../file_rep/file_no_read ../file_rep/file_no_rw

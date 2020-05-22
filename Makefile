@@ -36,6 +36,7 @@ LESRCS += other_keys.c
 ## LEXER ##
 
 LEXSRCS += buffer.c
+LEXSRCS += comment.c
 LEXSRCS += control.c
 LEXSRCS += digit.c
 LEXSRCS += equ.c
@@ -53,6 +54,7 @@ LEXSRCS += token.c
 LEXSRCS += tools.c
 LEXSRCS += type.c
 LEXSRCS += word.c
+LEXSRCS += state/comment.c
 LEXSRCS += state/control.c
 LEXSRCS += state/exp.c
 LEXSRCS += state/flag.c
@@ -123,6 +125,8 @@ EVALSRCS += tools_var.c
 EVALSRCS += tools_fd.c
 EVALSRCS += tools_redir.c
 EVALSRCS += tools_termios.c
+EVALSRCS += tools_process.c
+EVALSRCS += tools_signal.c
 EVALSRCS += errors_handling.c
 EVALSRCS += ft_lst.c
 EVALSRCS += debug.c
