@@ -25,6 +25,7 @@
 # define EXMALLOC "[Critical Error] Cannot allocate memory\nexit\n"
 # define EXEXEC "[Critical Error] Execve fail\nexit\n"
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"
+# define EXFD2 "Bad file descriptor\n"
 
 
 

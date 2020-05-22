@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "ft_printf.h"
 #include "exec.h"
 #include "sh.h"
 
@@ -14,10 +15,15 @@ uint8_t		add_fd_process(t_list **fd, int16_t source, int16_t target)
 
 void		do_my_dup2(int16_t fd1, int16_t fd2)
 {
+	char	*err;
+
 	if (fd1 == -1)
 		return ;
 	if (dup2(fd1, fd2) == -1)
-		ft_ex(EX);
+	{
+		ft_asprintf(&err,"%d: %s", fd1, EXFD2);
+		ft_ex(err);
+	}
 }
 
 void		do_redir(t_list *fd)
@@ -27,6 +33,7 @@ void		do_redir(t_list *fd)
 	while (fd)
 	{
 		t = fd->data;
+
 		if (t[0] == -1)
 			close(t[1]);
 		else if (t[0] != t[1])

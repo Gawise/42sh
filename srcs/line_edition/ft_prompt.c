@@ -35,10 +35,10 @@ char	*read_nonint(t_cfg	*cfg)
 	{
 		if (cfg && (fd = open(cfg->file, O_RDONLY)) < 0)
 			ft_ex("Bad file descriptor\n");
-		if (dup2(fd, 259) == -1)
+		if (dup2(fd, 260) == -1)
 			ft_ex(EX);
 		close(fd);
-		fd = 259;
+		fd = 260;
 	}
 	line = ft_strnew(0);
 	if (cfg)
