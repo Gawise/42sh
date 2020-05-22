@@ -48,7 +48,7 @@ print_fail () {
 		output_print "REDIR \e[1;32mSUCCESS\e[0m"
 		output_print "$(cat $LOG_DIR/redir.diff)"
 	fi
-	if [ "$6" != "0" ]
+	if [ "$6" == "156" ]
 	then
 		output_print "LEAKS \e[1;31mFAIL\e[0m\nDetails in $LOG_DIR/.$(basename $1)"
 	else
@@ -132,6 +132,15 @@ env_setup () {
 	fi
 }
 
+get_std_diff () {
+	if [ -f "$1/$2" ]
+	then
+		diff $LOG_DIR/$2.sh $1/$2
+	else
+		diff $LOG_DIR/$2.sh $LOG_DIR/$2.bash
+	fi
+}
+
 make_test () {
 	REDIR_FILE=""
 	cd $TMP_DIR
@@ -147,11 +156,11 @@ make_test () {
 	move_bash_redir $1
 	rm -f $TMP_DIR/*
 	redir_diff ${redir_files[@]} >$LOG_DIR/redir.diff
-	local stdout_diff=$(diff $LOG_DIR/stdout.sh $LOG_DIR/stdout.bash)
-	local stderr_diff=$(diff $LOG_DIR/stderr.sh $LOG_DIR/stderr.bash)
-	valgrind --leak-check=yes --leak-check=full --track-origins=yes --error-exitcode=1 --log-file="$LOG_DIR/.$(basename $1)" $SHELL_DIR/$SHELL_FILE $1/input 1>&- 2>&-
+	local stdout_diff=$(get_std_diff $1 "stdout")
+	local stderr_diff=$(get_std_diff $1 "stderr")
+	valgrind --leak-check=yes --leak-check=full --track-origins=yes --error-exitcode=256 --log-file="$LOG_DIR/.$(basename $1)" $SHELL_DIR/$SHELL_FILE $1/input 1>&- 2>&-
 	local leaks_check=$?
-	if [ -n "$stdout_diff" -o -n "$stderr_diff" -o "$bash_exit" != "$sh_exit" -o "$REDIR_RET" != "0" -o "$leaks_check" != "0" ]
+	if [ -n "$stdout_diff" -o -n "$stderr_diff" -o "$bash_exit" != "$sh_exit" -o "$REDIR_RET" != "0" -o "$leaks_check" == "256" ]
 	then
 		print_fail $(basename $1) "$stdout_diff" "$stderr_diff" "$bash_exit" "$sh_exit" "$leaks_check"
 		TEST_RET=1
