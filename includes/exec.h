@@ -152,16 +152,11 @@ void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
 void		do_pipe(t_process *p);
 int32_t		has_running(t_list *lst);
 int32_t		has_stopped(t_list *lst);
-<<<<<<< HEAD
-void		with_slash(t_process *p, uint32_t *err);
-uint32_t	builtin_search(t_process *p);
-=======
 void		any_slash(t_list *env, t_process *p, uint32_t *err);
 void		with_slash(t_process *p, uint32_t *err);
 uint32_t	builtin_search(t_process *p);
 t_process	*find_process_by_status(t_list *lst, uint8_t want);
 t_process	*find_process_by_pid(t_list *lst, pid_t child);
->>>>>>> dev
 
 /*		REDIR		 */
 uint32_t	process_redir(t_process *p, t_list *redir);
