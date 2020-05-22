@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "var.h"
 
+
 void	cmd_to_process(t_list **lst, t_list *s_cmd)
 {
 	t_process		process;

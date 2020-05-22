@@ -22,8 +22,25 @@
 #include "struct.h"
 #include "sh.h"
 #include "get_next_line.h"
+#include <sys/ioctl.h>
+#include <stropts.h>
+#include <signal.h>
 
-char	*read_nonint(t_cfg	*cfg)
+static int	init_fd_nonint(t_cfg *cfg)
+{
+	int	fd;
+
+	fd = -1;
+	if (cfg && (fd = open(cfg->file, O_RDONLY)) < 0)
+		ft_ex("Bad file descriptor\n");
+	if (dup2(fd, 259) == -1)
+		ft_ex(EX);
+	close(fd);
+    fd = 259;
+	return (fd);
+}
+
+char		*read_nonint(t_cfg	*cfg)
 {
 	char		*line;
 	static int	fd = -2;
@@ -31,18 +48,10 @@ char	*read_nonint(t_cfg	*cfg)
 	char		*tmp;
 
 	tmp = NULL;
-	if (fd == -2)
-	{
-		if (cfg && (fd = open(cfg->file, O_RDONLY)) < 0)
-			ft_ex("Bad file descriptor\n");
-		if (dup2(fd, 260) == -1)
-			ft_ex(EX);
-		close(fd);
-		fd = 260;
-	}
 	line = ft_strnew(0);
 	if (cfg)
 	{
+        fd = (fd == -2 ? init_fd_nonint(cfg) : fd);
 		ft_strdel(&line);
 		if ((ret = get_next_line(fd, &line)) < 0)
 			ft_ex("An error occured while reading file\n");
@@ -59,7 +68,7 @@ char	*read_nonint(t_cfg	*cfg)
 	return (line);
 }
 
-void	read_input(void)
+void		read_input(void)
 {
 	int			len;
 	int			stop;
@@ -73,8 +82,10 @@ void	read_input(void)
 	while (stop >= 0)
 	{
 		len = read(cs->tty, buf, READ_SIZE);
+		if (cs->sig_int)
+			break ;
 		if (len < 0)
-            stop = -1;
+			stop = -1;
 		buf[len] = '\0';
 		if (cs->history)
 			cs->history->data = cs->input;
@@ -82,7 +93,19 @@ void	read_input(void)
 	}
 }
 
-void	ft_clear(int del_prompt)
+static void	clear_line(t_point *col, struct winsize ws, t_cs_line *cs, int dl_p)
+{
+	if (col->y++ == cs->min_row)
+	{
+		if (dl_p == 1)
+			tputs(tgetstr("ce", NULL), 1, &my_putchar);
+		tputs(tgoto(tgetstr("cm", NULL), 0, cs->min_row + 1), 1, &my_putchar);
+	}
+	else if (col->y - 1 != cs->min_row && col->y - 1 < ws.ws_row)
+		tputs(tgetstr("dl", NULL), ws.ws_col, &my_putchar);
+}
+
+void		ft_clear(int del_prompt)
 {
 	t_point			col;
 	t_cs_line		*cs;
@@ -99,23 +122,38 @@ void	ft_clear(int del_prompt)
 		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
 				1, &my_putchar);
 		while (col.y < ws.ws_row)
-		{
-			if (col.y++ == cs->min_row)
-			{
-				if (del_prompt == 1)
-					tputs(tgetstr("ce", NULL), 1, &my_putchar);
-				tputs(tgoto(tgetstr("cm", NULL), 0, cs->min_row + 1),
-						1, &my_putchar);
-			}
-			else if (col.y - 1 != cs->min_row && col.y - 1 < ws.ws_row)
-				tputs(tgetstr("dl", NULL), ws.ws_col, &my_putchar);
-		}
+			clear_line(&col, ws, cs, del_prompt);
 		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
 				1, &my_putchar);
 	}
 }
 
-char	*ft_prompt(char *prompt, char *color)
+static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
+{
+	char	*ret;
+
+	signal(SIGINT, sig_handler);
+	ret = NULL;
+	read_input();
+	end_key(cs);
+	if (!cs->sig_int)
+		tputs(tgoto(tgetstr("cm", NULL), 0, cs->row), 1, &my_putchar);
+	term_init(0, NULL);
+	if (cs->input && !cs->sig_int && cs->input[0]
+		&& !ft_strcheck(cs->input, " \t") && ft_strcmp(cs->input, "\n") != 0
+		&& (ret = ft_strdup(cs->input)) >= 0)
+		update_history(hs);
+	else
+	{
+		 while (cs->history && cs->history->next)
+            cs->history = cs->history->next;
+        ft_dlstdelone(&cs->history);
+	}
+	ft_strdel(&cs->clipboard);
+	return (ret);
+}
+
+char		*ft_prompt(char *prompt, char *color)
 {
 	char		*ret;
 	t_cs_line	*cs;
@@ -125,9 +163,10 @@ char	*ft_prompt(char *prompt, char *color)
 	ret = NULL;
 	cs = NULL;
 	if (!(cfg = cfg_shell()))
-    	return (NULL);
+		return (NULL);
 	if (!cfg->interactive)
 		return (read_nonint(cfg));
+	signal(SIGINT, SIG_IGN);
 	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
 	{
 		cs->prompt_color = color;
@@ -135,20 +174,10 @@ char	*ft_prompt(char *prompt, char *color)
 		if (!(cfg = cfg_shell()))
 			return (NULL);
 		hs = cfg->history;
-		cs->sig_int = 0;
 		cs->history = ft_dlstnew(cs->input, 1);
 		ft_dlstaddtail(&hs, cs->history);
-		read_input();
-		end_key(cs);
-		tputs(tgoto(tgetstr("cm", NULL), 0, cs->row), 1, &my_putchar);
-		term_init(0, NULL);
-		if (cs->input && cs->input[0] && !ft_strcheck(cs->input, " \t")
-		&& ft_strcmp(cs->input, "\n") != 0 && (ret = ft_strdup(cs->input)) >= 0)
-			update_history(hs);
-		else
-			ft_dlstdelone(&cs->history);
-		set_signal_ign();
-		ft_strdel(&cs->clipboard);
+		ret = get_cmd_line(cs, hs);
 	}
+	set_signal_ign();
 	return ((cs && cs->sig_eof) ? ft_strnew(0) : ret);
 }

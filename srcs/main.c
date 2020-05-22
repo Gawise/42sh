@@ -108,7 +108,7 @@ int		main(int ac, char **av, char **env)
 			if (ret == -1)
 			{
 				if (cfg_shell()->interactive)
-					ft_dprintf(2, "\e[0;31m exit\e[0;0m\n");
+					ft_dprintf(2, "\e[K\e[0;31mexit\e[0;0m\n"); // a t on vraiment besoin de ce printf? pq sur sortie d erreur ?
 				break ;
 			}
 			else if (!ret && !cfg_shell()->interactive)

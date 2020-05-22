@@ -10,18 +10,16 @@
 #include "struct.h"
 #include "sh.h"
 
-void	set_term(int tty, int init, char *prompt, struct termios *new_term)
+void	set_term(int tty, char *prompt, struct termios *new_term)
 {
 	t_cs_line			*cs;
 
-	signal(SIGINT, sig_handler);
 	(*new_term).c_lflag &= ~(ICANON | ECHO);
 	(*new_term).c_cc[VMIN] = 1;
 	(*new_term).c_cc[VTIME] = 0;
 	tcsetattr(tty, TCSANOW, new_term);
 	cs_master(prompt, 1);
 	cs = cs_master(NULL, 0);
-	init =1;
 	get_cs_line_position(&cs->min_col, &cs->min_row);
 	cs_set();
 	cs->tty = tty;
@@ -38,7 +36,7 @@ void	unset_term(struct termios *old_term)
 	}
 }
 
-int		term_check(struct termios *new_term, struct termios *old_term, int tty)
+int		term_check(struct termios *new_term, int tty)
 {
 	int 	ret;
 	char	*term;
@@ -52,8 +50,7 @@ int		term_check(struct termios *new_term, struct termios *old_term, int tty)
 			term = "vt100";
 		if (ret && tgetent(NULL, term) == -1 && !(ret = 0))
 			ft_putstr_fd("ft_select: Terminfo database not found\n", 2);
-		if (ret && (tcgetattr(tty, old_term) == -1
-					|| tcgetattr(tty, new_term) == -1) && !(ret = 0))
+		if (ret && (tcgetattr(tty, new_term) == -1) && !(ret = 0))
 			ft_putstr_fd("ft_select: Could not get terminal attributes\n", 2);
 		init_signals();
 	}
@@ -63,7 +60,6 @@ int		term_check(struct termios *new_term, struct termios *old_term, int tty)
 int		term_init(int init, char *prompt)
 {
 	struct termios			new_term;
-	static struct termios	old_term;
 	int						tty;
 	t_cfg					*cfg;
 
@@ -73,14 +69,14 @@ int		term_init(int init, char *prompt)
 			return (-1);
 	if (!cfg->interactive)
 		return (1);
-	if (init >= 1 && term_check(&new_term, &old_term, tty) == 1)
+	if (init >= 1 && term_check(&new_term, tty) == 1)
 	{
-		set_term(tty, init, prompt, &new_term);
+		set_term(tty, prompt, &new_term);
 		return (1);
 	}
 	if (init == 0)
 	{
-		unset_term(&old_term);
+		unset_term(&cfg->term_origin);
 		return (1);
 	}
 	return (0);

@@ -34,16 +34,16 @@ void	end_key(t_cs_line *cs)
 {
 	int	cr;
 
-	if (cs && (cs->line_col = (int)ft_strlen(cs->input)) > 0)
+	if (cs && (cs->line_col = (int)ft_strlen(cs->input)) >= 0)
 	{
 		cr = get_line(cs);
 		cs->scroll = cr - (cs->screen.y - cs->min_row - 1);
 		if (cs->scroll < 0)
 			cs->scroll = 0;
 		print_cmdline(cs);
-		if (cs->sig_int)
-			ft_putstr_fd("^C", cs->tty);
 		move_cs(&cs);
+		if (cs->sig_int)
+            ft_putstr_fd("^C\n", cs->tty);
 	}
 }
 

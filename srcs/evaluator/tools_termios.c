@@ -2,6 +2,7 @@
 #include "exec.h"
 #include "sh.h"
 
+#include "sh.h" //ft_ex
 void	set_termios(int32_t mode, struct termios *term)
 {
 	if (tcsetattr(STDIN_FILENO, mode, term) == -1)

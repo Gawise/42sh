@@ -44,7 +44,7 @@ void		move_cs(t_cs_line **cs)
 
 t_cs_line	*cs_master(char *prompt, int init)
 {
-	static t_cs_line	cs = {0, 0, 0, 0, 0, 0, 0, 0,{0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, {0, 0}, 0};
+	static t_cs_line	cs = {0, 0, 0, 0, 0, 0, 0, 0, {0, 0}, 0, 0, 0, 0, 0, 0, 0, 0, {0, 0}, 0};
 
 	if (init == 1)
 	{

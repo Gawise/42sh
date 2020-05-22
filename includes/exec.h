@@ -88,6 +88,8 @@
 
 
 
+uint8_t		print_message_signal(uint8_t sig, t_job *j);
+
 
 /*		BUILTIN		*/
 
@@ -138,6 +140,7 @@ void		set_termios(int32_t mode, struct termios *term);
 /*		JOB 		*/
 uint8_t		ft_eval(t_list *cmd_table);
 void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
+
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
 
 /*		PROCESS 	*/
@@ -149,11 +152,16 @@ void		process_assign(t_cfg *shell, t_process *p, t_list *assignment);
 void		do_pipe(t_process *p);
 int32_t		has_running(t_list *lst);
 int32_t		has_stopped(t_list *lst);
+<<<<<<< HEAD
+void		with_slash(t_process *p, uint32_t *err);
+uint32_t	builtin_search(t_process *p);
+=======
 void		any_slash(t_list *env, t_process *p, uint32_t *err);
 void		with_slash(t_process *p, uint32_t *err);
 uint32_t	builtin_search(t_process *p);
 t_process	*find_process_by_status(t_list *lst, uint8_t want);
 t_process	*find_process_by_pid(t_list *lst, pid_t child);
+>>>>>>> dev
 
 /*		REDIR		 */
 uint32_t	process_redir(t_process *p, t_list *redir);

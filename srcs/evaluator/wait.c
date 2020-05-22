@@ -7,6 +7,7 @@
 
 void			aplylyse_wstatus(t_process *p, int wstatus)
 {
+
 	if (WIFEXITED(wstatus))
 	{
 		p->ret = WEXITSTATUS(wstatus);

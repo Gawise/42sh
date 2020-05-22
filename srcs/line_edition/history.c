@@ -14,6 +14,7 @@
 #include "ft_printf.h"
 #include "sh.h"
 #include "get_next_line.h"
+#include "var.h"
 #include "line_edition.h"
 #include "struct.h"
 #include <stdlib.h>
@@ -33,22 +34,28 @@ int ft_strcheck(char *s, char *oc)
     return (0);
 }
 
+static char	*get_home(void)
+{
+	t_cfg	*cfg;
+	char	*home;
+
+	if ((cfg = cfg_shell()))
+		if ((home = find_var_value(cfg->env, "HOME")))
+			return (home);
+	return (".");
+}
+
 void	update_history(t_dlist *hs)
 {
 	int			fd;
 	int			len;
 	char		*path;
-//	char		*tmp;
 	t_cs_line	*cs;
 
 	cs = cs_master(NULL, 0);
 	if (hs && cs && cs->history)
 	{
-		ft_asprintf(&path, "%s/.%s_history", getenv("HOME"), PROJECT);
-	/*	path = ft_strjoin(2, getenv("HOME"), "/");
-		tmp = path;
-		path = ft_strjoin(2, path, ".42sh_history");
-		ft_strdel(&tmp); */
+		ft_asprintf(&path, "%s/.%s_history", get_home(), PROJECT);
 		len = ft_strlen(cs->input);
 		cs->history->data = (void *)cs->old_history;
 		while (hs && hs->next)
@@ -77,16 +84,11 @@ t_dlist	*get_history(void)
 {
 	t_dlist	*hs;
 	char	*line;
-//	char	*tmp;
 	int		fd;
 
 	if ((hs = ft_dlstnew(NULL, 0)))
 	{
-		ft_asprintf(&line, "%s/.%s_history", getenv("HOME"), PROJECT);
-	/*	line = ft_strjoin(2, getenv("HOME"), "/");
-		tmp = line;
-		line = ft_strjoin(2, line, ".42sh_history");
-		ft_strdel(&tmp); */
+		ft_asprintf(&line, "%s/.%s_history", get_home(), PROJECT);
 		if ((fd = open(line, O_RDONLY)) > 0)
 		{
 			ft_strdel(&line);

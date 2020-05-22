@@ -59,13 +59,11 @@ void			cs_set(void);
 void			ft_clear(int del_prompt);
 void			move_cs(t_cs_line **cs);
 int				term_init(int init, char *prompt);
-void			set_term(int tty, int init, char *prompt,
-							struct termios *new_term);
+void			set_term(int tty, char *prompt, struct termios *new_term);
 void			size_handler(int sig);
 void			sig_handler(int sig);
 void			putchar_n(char c, int n);
-int				term_check(struct termios *new_term, struct termios *old_term,
-							int tty);
+int				term_check(struct termios *new_term, int tty);
 void			init_signals(void);
 void			print_cmdline(t_cs_line *cs);
 void			line_master(t_cs_line *cs, char *input);

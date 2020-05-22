@@ -33,7 +33,6 @@ void		do_redir(t_list *fd)
 	while (fd)
 	{
 		t = fd->data;
-
 		if (t[0] == -1)
 			close(t[1]);
 		else if (t[0] != t[1])
