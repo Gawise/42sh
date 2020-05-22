@@ -1,0 +1,11 @@
+OLDPWD=/tmp cd -
+pwd
+cd /
+HOME=/ cd $HOME
+pwd
+OLDPWD=/home/deh cd $OLDPWD 
+pwd
+cd ~
+pwd
+env -i cd ~
+cd unknowpath

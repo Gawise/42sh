@@ -1,0 +1,17 @@
+mkdir units/cd_multi
+echo "cd - \\n pwd \\n cd $HOME \\n pwd \\n cd $OLDPWD \\n pwd" >units/cd_multi/input
+mkdir units/cd_multi2
+echo "OLDPWD=/tmp cd - \\n pwd \\n  cd / \\n HOME=/ cd $HOME \\n pwd \\n OLDPWD=$HOME cd $OLDPWD \\n pwd" >units/cd_multi2/input
+mkdir units/cd_root
+echo "cd /root" > units/cd_root/input
+mkdir file_rep
+cd file_rep
+touch file_no_read file_no_write file_no_rw file_no_x 
+mkdir rep_no_read rep_no_write rep_no_rw rep_no_x
+chmod -r file_no_r rep_no_read 
+chmod -r file_no_read rep_no_read 
+chmod -w file_no_write file_no_rw rep_no_write
+chmod -r file_no_rw
+chmod -x rep_no_x
+chmod -r -w rep_no_rw
+echo "cat <../file_rep/file_no_read >../file_rep/file_no_write | ls ../file_rep/file_no_rw 2>&1 | cat -e " > ../units/perm_multi/imput
