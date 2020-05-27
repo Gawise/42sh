@@ -1,0 +1,1 @@
+ls >tmp_ls.txt / ; cat < tmp_ls.txt
