@@ -30,6 +30,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 		ft_strdel(line);
 		ft_lstdel(&lexer->token_lst, del_token);
 		ft_lstdel(&lexer->here_queue, del_here_queue);
+		ft_lstdel(&lexer->flag_queue, del_flag_queue);
 		return (0);
 	}
 	if (cfg_shell()->debug)
