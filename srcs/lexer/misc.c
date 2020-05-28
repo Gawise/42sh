@@ -68,7 +68,7 @@ char		*l_get_prompt_prefix(t_lexer *lexer)
 	}
 	else if ((here = l_get_last_here(lexer)))
 		return (ft_strdup("heredoc"));
-	return (NULL);
+	return (ft_strnew(0));
 }
 
 int			l_complete_str(t_lexer *lexer, char c)
