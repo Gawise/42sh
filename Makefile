@@ -186,6 +186,7 @@ SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
 SRC += destructor.c
+SRC += routine_exit.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))

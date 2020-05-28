@@ -46,6 +46,6 @@ uint8_t			ft_exit(t_job *j, t_process *p)
 		ft_dprintf(STDERR_FILENO, "exit\n");
 	if (exit_opt(shell->sp, p->av, &ret) == -1)
 		return (1);
-	clean_cfg(shell);
-	exit(ret);
+	exit_routine(shell, ret);
+	return (0);
 }

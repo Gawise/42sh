@@ -96,8 +96,9 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_lexer		lexer;
 	t_parser	parser;
+	t_cfg		*shell;
 
-	init_shell(env, av, ac);
+	shell = init_shell(env, av, ac);
 	while (1)
 	{
 		if ((ret = line_edition_routine(&line)) <= 0
@@ -107,19 +108,13 @@ int		main(int ac, char **av, char **env)
 		|| (ret = eval_routine(&parser)) <= 0)
 		{
 			if (ret == -1)
-			{
-				if (cfg_shell()->interactive)
-					ft_dprintf(2, "\e[K\e[0;31mexit\e[0;0m\n"); // a t on vraiment besoin de ce printf? pq sur sortie d erreur ?
 				break ;
-			}
-			else if (!ret && !cfg_shell()->interactive)
+			else if (!ret && !shell->interactive)
 			{
-				clean_cfg(cfg_shell());
+				clean_cfg(shell);
 				exit(2);
 			}
 		}
 	}
-	ret = ft_atoi(find_var_value(cfg_shell()->sp, "?"));
-	clean_cfg(cfg_shell());
-	exit(ret);
+	exit_routine(shell, ft_atoi(find_var_value(shell->sp, "?")));
 }

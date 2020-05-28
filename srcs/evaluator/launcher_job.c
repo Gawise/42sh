@@ -36,7 +36,9 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	else if (job->fg)
 	{
 	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */
+		shell->cur_job = job->pgid;
 		wait_process(job);
+		shell->cur_job = 0;
 		tcsetpgrp(STDIN_FILENO, shell->pid);
 		set_termios(TCSADRAIN, &shell->term_origin);
 	}

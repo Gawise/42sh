@@ -1,6 +1,5 @@
 #include "libft.h"
 #include "exec.h"
-#include "sh.h"
 
 #include "sh.h" //ft_ex
 void	set_termios(int32_t mode, struct termios *term)

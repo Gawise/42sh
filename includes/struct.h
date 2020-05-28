@@ -25,6 +25,7 @@ typedef struct	s_cfg
 	t_dlist			*history;
 	t_hash_map		*map;
 	t_hash_map		*input_map;
+	uint32_t		cur_job;
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;		/* set for print debug */
