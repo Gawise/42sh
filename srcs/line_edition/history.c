@@ -62,6 +62,7 @@ static void	history_updater(t_cs_line *cs, t_dlist *hs, int fd)
 		ft_dlstdelone(&hs);
 }
 
+
 void		update_history(t_dlist *hs)
 {
 	int			fd;

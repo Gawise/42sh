@@ -15,7 +15,7 @@ static uint8_t	type_success(t_process *p, uint8_t model)
 	if (!model)
 		ft_printf("%s is %s\n", p->cmd, p->path);
 	else if (model == 1)
-		ft_printf("%s is builtin\n", p->cmd);
+		ft_printf("%s is a shell builtin\n", p->cmd);
 	else if (model == 2)
 		ft_printf("%s is hashed (%s)\n", p->cmd, p->path);
 	return (SUCCESS);

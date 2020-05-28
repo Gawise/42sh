@@ -9,12 +9,8 @@
 
 static void	a_handle_backslash(char **str, char **tmp, int *flag)
 {
-	if (*flag == '\\' || *flag == '\'')
-	{
+	if (*flag == '\'')
 		**tmp = '\\';
-		if (*flag == '\\')
-			*flag = 0;
-	}
 	else if (*flag == '\"')
 	{
 		if (ft_strchr("\"\\", str[0][1]))
@@ -22,11 +18,26 @@ static void	a_handle_backslash(char **str, char **tmp, int *flag)
 			str[0]++;
 			**tmp = **str;
 		}
+		else if (str[0][1] == '\n')
+		{
+			str[0]++;
+			return ;
+		}
 		else
 			**tmp = **str;
 	}
+	else if (*flag == '\\')
+	{
+		**tmp = **str;
+		return ;
+	}
 	else
 	{
+		if (str[0][1] == '\n')
+		{
+			str[0]++;
+			return ;
+		}
 		*flag = '\\';
 		return ;
 	}
@@ -83,7 +94,10 @@ void	a_flag_handle(char **str, char **tmp, int *flag)
 	{
 		if (*flag == '\\')
 			*flag = 0;
-		**tmp = **str;
+		if (ft_strchr("\\\"", *flag) && **str != '\n')
+			**tmp = **str;
+		if (*flag == '\'')
+			**tmp = **str;
 		tmp[0]++;
 	}
 }

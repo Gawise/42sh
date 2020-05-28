@@ -4,7 +4,7 @@
 #include "var.h"
 #include <unistd.h>
 
-static void		assign_for_unfound(t_cfg *shell, t_list *assignment)
+static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 {
 	t_list			*tmp;
 	t_assignment	*assign;
@@ -40,7 +40,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 	if (!assignment)
 		return ;
 	if (p->setup & NOCMD && !(p->setup & PIPE_ON))
-		assign_for_unfound(shell, assignment);
+		assign_for_currenv(shell, assignment);
 	else if (p->setup & B_SPECIAL)
 		assign_for_b_special(shell, p, assignment);
 	else
