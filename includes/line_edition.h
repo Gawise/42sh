@@ -97,9 +97,10 @@ void			cut_clip(t_cs_line *cs);
 int				revback_space(t_cs_line *cs);
 t_point			trim_input(t_cs_line *cs);
 int				ctrl_d(t_cs_line *cs);
-int				back_space(t_cs_line *cs);
+void			back_space(t_cs_line *cs);
 void			init_char_keys(t_hash_map **map);
 void			init_input_map(t_hash_map *map);
 int				ft_strcheck(char *s, char *oc);
+void			sigterm_handler(int sig);
 
 #endif

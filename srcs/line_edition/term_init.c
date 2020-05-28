@@ -9,6 +9,7 @@
 #include "libft.h"
 #include "struct.h"
 #include "sh.h"
+#include "var.h"
 
 void	set_term(int tty, char *prompt, struct termios *new_term)
 {
@@ -40,18 +41,21 @@ int		term_check(struct termios *new_term, int tty)
 {
 	int 	ret;
 	char	*term;
+	t_cfg	*cfg;
 
 	ret = 0;
-	if ((ret = 1))
+	if ((cfg = cfg_shell()))
 	{
+		ret = 1;
 		if (!isatty(tty) && !(ret = 0))
-			ft_putstr_fd("ft_select: Not a valid terminal type device\n", 2);
-		if (ret && !(term = getenv("TERM")))
+			ft_putstr_fd("21sh: Not a valid terminal type device\n", 2);
+		if (ret && (!(term = find_var_value(cfg->env, "TERM"))
+			|| tgetent(NULL, term) <= 0 || ft_strcmp(term, "dumb") == 0))
 			term = "vt100";
 		if (ret && tgetent(NULL, term) == -1 && !(ret = 0))
-			ft_putstr_fd("ft_select: Terminfo database not found\n", 2);
+			ft_putstr_fd("21sh: Terminfo database not found\n", 2);
 		if (ret && (tcgetattr(tty, new_term) == -1) && !(ret = 0))
-			ft_putstr_fd("ft_select: Could not get terminal attributes\n", 2);
+			ft_putstr_fd("21sh: Could not get terminal attributes\n", 2);
 		init_signals();
 	}
 	return (ret);

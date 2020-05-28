@@ -43,7 +43,9 @@ void	end_key(t_cs_line *cs)
 		print_cmdline(cs);
 		move_cs(&cs);
 		if (cs->sig_int)
-            ft_putstr_fd("^C\n", cs->tty);
+			ft_putstr_fd("^C\n", cs->tty);
+		if (cs->sig_eof)
+			ft_putstr_fd("\n", cs->tty);
 	}
 }
 

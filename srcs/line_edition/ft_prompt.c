@@ -26,7 +26,7 @@
 #include <stropts.h>
 #include <signal.h>
 
-static int	init_fd_nonint(t_cfg *cfg)
+static int		init_fd_nonint(t_cfg *cfg)
 {
 	int	fd;
 
@@ -36,11 +36,11 @@ static int	init_fd_nonint(t_cfg *cfg)
 	if (dup2(fd, 259) == -1)
 		ft_ex(EX);
 	close(fd);
-    fd = 259;
+	fd = 259;
 	return (fd);
 }
 
-char		*read_nonint(t_cfg	*cfg)
+char			*read_nonint(t_cfg *cfg)
 {
 	char		*line;
 	static int	fd = -2;
@@ -51,7 +51,7 @@ char		*read_nonint(t_cfg	*cfg)
 	line = ft_strnew(0);
 	if (cfg)
 	{
-        fd = (fd == -2 ? init_fd_nonint(cfg) : fd);
+		fd = (fd == -2 ? init_fd_nonint(cfg) : fd);
 		ft_strdel(&line);
 		if ((ret = get_next_line(fd, &line)) < 0)
 			ft_ex("An error occured while reading file\n");
@@ -68,7 +68,7 @@ char		*read_nonint(t_cfg	*cfg)
 	return (line);
 }
 
-void		read_input(void)
+void			read_input(void)
 {
 	int			len;
 	int			stop;
@@ -93,7 +93,8 @@ void		read_input(void)
 	}
 }
 
-static void	clear_line(t_point *col, struct winsize ws, t_cs_line *cs, int dl_p)
+static void		clear_line(t_point *col, struct winsize ws, t_cs_line *cs,
+int dl_p)
 {
 	if (col->y++ == cs->min_row)
 	{
@@ -105,7 +106,7 @@ static void	clear_line(t_point *col, struct winsize ws, t_cs_line *cs, int dl_p)
 		tputs(tgetstr("dl", NULL), ws.ws_col, &my_putchar);
 }
 
-void		ft_clear(int del_prompt)
+void			ft_clear(int del_prompt)
 {
 	t_point			col;
 	t_cs_line		*cs;
@@ -145,15 +146,15 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 		update_history(hs);
 	else
 	{
-		 while (cs->history && cs->history->next)
-            cs->history = cs->history->next;
-        ft_dlstdelone(&cs->history);
+		while (cs->history && cs->history->next)
+			cs->history = cs->history->next;
+		ft_dlstdelone(&cs->history);
 	}
 	ft_strdel(&cs->clipboard);
 	return (ret);
 }
 
-char		*ft_prompt(char *prompt, char *color)
+char			*ft_prompt(char *prompt, char *color)
 {
 	char		*ret;
 	t_cs_line	*cs;
@@ -167,17 +168,16 @@ char		*ft_prompt(char *prompt, char *color)
 	if (!cfg->interactive)
 		return (read_nonint(cfg));
 	signal(SIGINT, SIG_IGN);
-	if (term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0)))
-	{
-		cs->prompt_color = color;
-		print_prompt(cs);
-		if (!(cfg = cfg_shell()))
-			return (NULL);
-		hs = cfg->history;
-		cs->history = ft_dlstnew(cs->input, 1);
-		ft_dlstaddtail(&hs, cs->history);
-		ret = get_cmd_line(cs, hs);
-	}
+	signal(SIGWINCH, SIG_IGN);
+	signal(SIGTERM, sigterm_handler);
+	if (!(term_init(1, prompt) == 1 && (cs = cs_master(NULL, 0))))
+		return (NULL);
+	cs->prompt_color = color;
+	print_prompt(cs);
+	hs = cfg->history;
+	cs->history = ft_dlstnew(cs->input, 1);
+	ft_dlstaddtail(&hs, cs->history);
+	ret = get_cmd_line(cs, hs);
 	set_signal_ign();
 	return ((cs && cs->sig_eof) ? ft_strnew(0) : ret);
 }

@@ -19,19 +19,19 @@
 #include "struct.h"
 #include <stdlib.h>
 
-int ft_strcheck(char *s, char *oc)
+int			ft_strcheck(char *s, char *oc)
 {
-    int i;
+	int	i;
 
-    if (s && oc)
-    {
-        i = 0;
-        while (s[i])
-            if (!ft_strchr(oc, s[i++]) && s[i - 1] != '\n')
-                return (0);
-        return (1);
-    }
-    return (0);
+	if (s && oc)
+	{
+		i = 0;
+		while (s[i])
+			if (!ft_strchr(oc, s[i++]) && s[i - 1] != '\n')
+				return (0);
+		return (1);
+	}
+	return (0);
 }
 
 static char	*get_home(void)
@@ -45,10 +45,27 @@ static char	*get_home(void)
 	return (".");
 }
 
-void	update_history(t_dlist *hs)
+static void	history_updater(t_cs_line *cs, t_dlist *hs, int fd)
+{
+	int	len;
+
+	len = ft_strlen(cs->input);
+	if (!(hs->prev && hs->prev->data && (cs->input[len - 1] = '\0')
+		== 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
+	{
+		ft_strdel((char **)&hs->data);
+		hs->data = (void *)ft_strdup(cs->input);
+		cs->input[len - 1] = '\n';
+		ft_putstr_fd(cs->input, fd);
+	}
+	else
+		ft_dlstdelone(&hs);
+}
+
+
+void		update_history(t_dlist *hs)
 {
 	int			fd;
-	int			len;
 	char		*path;
 	t_cs_line	*cs;
 
@@ -56,23 +73,13 @@ void	update_history(t_dlist *hs)
 	if (hs && cs && cs->history)
 	{
 		ft_asprintf(&path, "%s/.%s_history", get_home(), PROJECT);
-		len = ft_strlen(cs->input);
 		cs->history->data = (void *)cs->old_history;
 		while (hs && hs->next)
 			hs = hs->next;
 		if (hs && cs && path && cs->input && cs->input[0] && cs->input[0]
 			!= '\n' && (fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)))
 		{
-			if (!(hs->prev && hs->prev->data && (cs->input[len - 1] = '\0')
-				== 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
-			{
-				ft_strdel((char **)&hs->data);
-				hs->data = (void *)ft_strdup(cs->input);
-				cs->input[len - 1] = '\n';
-				ft_putstr_fd(cs->input, fd);
-			}
-			else
-				ft_dlstdelone(&hs);
+			history_updater(cs, hs, fd);
 			ft_strdel(&cs->input);
 			close(fd);
 		}
@@ -80,7 +87,7 @@ void	update_history(t_dlist *hs)
 	}
 }
 
-t_dlist	*get_history(void)
+t_dlist		*get_history(void)
 {
 	t_dlist	*hs;
 	char	*line;
@@ -102,7 +109,7 @@ t_dlist	*get_history(void)
 	return (hs);
 }
 
-void	history_up(t_cs_line *cs)
+void		history_up(t_cs_line *cs)
 {
 	if (cs)
 	{
@@ -122,7 +129,7 @@ void	history_up(t_cs_line *cs)
 	}
 }
 
-void	history_down(t_cs_line *cs)
+void		history_down(t_cs_line *cs)
 {
 	if (cs)
 	{
@@ -141,7 +148,7 @@ void	history_down(t_cs_line *cs)
 	}
 }
 
-t_dlist	*init_history(void)
+t_dlist		*init_history(void)
 {
 	t_dlist *hist;
 
