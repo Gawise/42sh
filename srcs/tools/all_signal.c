@@ -23,6 +23,7 @@ void	set_signal_ign(void)
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGSTOP, SIG_IGN);
 	signal(SIGCONT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
 
 //	signal(SIGCHLD, SIG_IGN); //for job control
 }

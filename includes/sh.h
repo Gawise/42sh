@@ -36,11 +36,13 @@
 
 typedef struct	s_cfg t_cfg;
 
+
+void		exit_routine(t_cfg *shell, uint8_t ret);
 void		ft_ex(char *error);
 void		clean_cfg(t_cfg *shell);
 void		del_struct_tvar(void *del, size_t u);
 void		set_signal_ign(void);
-void		init_shell(char **env, char **av, int ac);
+t_cfg		*init_shell(char **env, char **av, int ac);
 t_cfg		*init_cfg(char **env, char **av, int ac);
 t_cfg		*cfg_shell(void);
 

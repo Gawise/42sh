@@ -23,7 +23,9 @@ void	clean_cfg(t_cfg *shell)
 	ft_hash_del_map(&shell->map, free);
 	ft_hash_del_map(&shell->input_map, NULL);
 	ft_strdel(&shell->file);
-	if (shell->debug > 2)
+	if (shell->debug)
 		close(shell->debug);
+//	if (shell->file)
+//		close(159/160);
 	ft_bzero(shell, sizeof(t_cfg));
 }
