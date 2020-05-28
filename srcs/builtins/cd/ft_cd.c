@@ -40,6 +40,7 @@ int		cd_oldpwd(t_job *j, t_process *p)
 	tabfree(p->av);
 	p->av = str;
 	ret = ft_cd(j, p);
+	ft_printf("%s\n", oldpwd);
 	return (ret);
 }
 

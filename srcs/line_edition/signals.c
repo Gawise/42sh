@@ -44,6 +44,11 @@ void	sig_handler(int sig)
 	}
 }
 
+void	sigterm_handler(int sig)
+{
+	sig = 0;
+}
+
 void	init_signals(void)
 {
 	int	i;
@@ -57,5 +62,4 @@ void	init_signals(void)
 			signal(i, size_handler);
 		i++;
 	}
-//	signal(SIGINT, sig_handler);
 }

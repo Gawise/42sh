@@ -1,0 +1,2 @@
+ls -la | grep .. >/dev/null 2>/dev/null
+hash

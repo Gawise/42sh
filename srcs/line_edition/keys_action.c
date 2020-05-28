@@ -44,45 +44,45 @@ void	set_scroll(t_cs_line *cs)
 	}
 }
 
-void		init_char_keys(t_hash_map **map)
+void	init_char_keys(t_hash_map **map)
 {
-	char        c[2];
+	char	c[2];
 
 	if (map && *map)
 	{
 		c[1] = '\0';
-		c[0] = HOME_KEY_BIS;// (char) 1;
-        ft_hash_add(*map, c, &home_key, NULL);
-		c[0] = END_KEY_BIS;//(char) 5;
-        ft_hash_add(*map, c, &end_key, NULL);
-		c[0] = BACK_SPACE;//(char) 127;
+		c[0] = HOME_KEY_BIS;
+		ft_hash_add(*map, c, &home_key, NULL);
+		c[0] = END_KEY_BIS;
+		ft_hash_add(*map, c, &end_key, NULL);
+		c[0] = BACK_SPACE;
 		ft_hash_add(*map, c, &back_space, NULL);
-		c[0] = CTRL_D;//(char) 4;
+		c[0] = CTRL_D;
 		ft_hash_add(*map, c, &ctrl_d, NULL);
 	}
 }
 
-void	 init_input_map(t_hash_map *map)
+void	init_input_map(t_hash_map *map)
 {
-		ft_hash_add(map, ARROW_LEFT, &arrow_left, NULL);
-		ft_hash_add(map, ARROW_RIGHT, &arrow_right, NULL);
-		ft_hash_add(map, HISTORY_DOWN, &history_down, NULL);
-		ft_hash_add(map, LINE_UP, &arrow_up, NULL);
-		ft_hash_add(map, LINE_DOWN, &arrow_down, NULL);
-		ft_hash_add(map, MV_WORD_RIGHT, &mv_word_right, NULL);
-		ft_hash_add(map, MV_WORD_LEFT, &mv_word_left, NULL);
-		ft_hash_add(map, HISTORY_UP, &history_up, NULL);
-		ft_hash_add(map, HOME_KEY, &home_key, NULL);
-		ft_hash_add(map, END_KEY, &end_key, NULL);
-		ft_hash_add(map, CLIP_ARROW_RIGHT, &clip_arrow_right, NULL);
-		ft_hash_add(map, CLIP_ARROW_LEFT, &clip_arrow_left, NULL);
-		ft_hash_add(map, CLIP_ARROW_UP, &clip_arrow_up, NULL);
-		ft_hash_add(map, CLIP_ARROW_DOWN, &clip_arrow_down, NULL);
-		ft_hash_add(map, REVBACK_SPACE, &revback_space, NULL);
-		ft_hash_add(map, PASTE_CLIP, &paste_clip, NULL);
-		ft_hash_add(map, COPY_CLIP, &copy_clip, NULL);
-		ft_hash_add(map, CUT_CLIP, &cut_clip, NULL);
-		init_char_keys(&map);
+	ft_hash_add(map, ARROW_LEFT, &arrow_left, NULL);
+	ft_hash_add(map, ARROW_RIGHT, &arrow_right, NULL);
+	ft_hash_add(map, HISTORY_DOWN, &history_down, NULL);
+	ft_hash_add(map, LINE_UP, &arrow_up, NULL);
+	ft_hash_add(map, LINE_DOWN, &arrow_down, NULL);
+	ft_hash_add(map, MV_WORD_RIGHT, &mv_word_right, NULL);
+	ft_hash_add(map, MV_WORD_LEFT, &mv_word_left, NULL);
+	ft_hash_add(map, HISTORY_UP, &history_up, NULL);
+	ft_hash_add(map, HOME_KEY, &home_key, NULL);
+	ft_hash_add(map, END_KEY, &end_key, NULL);
+	ft_hash_add(map, CLIP_ARROW_RIGHT, &clip_arrow_right, NULL);
+	ft_hash_add(map, CLIP_ARROW_LEFT, &clip_arrow_left, NULL);
+	ft_hash_add(map, CLIP_ARROW_UP, &clip_arrow_up, NULL);
+	ft_hash_add(map, CLIP_ARROW_DOWN, &clip_arrow_down, NULL);
+	ft_hash_add(map, REVBACK_SPACE, &revback_space, NULL);
+	ft_hash_add(map, PASTE_CLIP, &paste_clip, NULL);
+	ft_hash_add(map, COPY_CLIP, &copy_clip, NULL);
+	ft_hash_add(map, CUT_CLIP, &cut_clip, NULL);
+	init_char_keys(&map);
 }
 
 int		check_keys(char *caps)
@@ -96,27 +96,22 @@ int		check_keys(char *caps)
 		return (-1);
 	ret = 0;
 	cs = cs_master(NULL, 0);
+	fct = ft_hash_lookup(cfg->input_map, caps);
 	if (caps[0] == (char)4)
 		ret = ctrl_d(cs);
-	else if ((fct = ft_hash_lookup(cfg->input_map, caps)))
-	{
+	else if (fct && (ret = (caps[0] == (char)4 ? -1 : 0)))
 		fct(cs);
-		ret = (caps[0] == (char)4 ? -1 : 0);
-	}
-	else if (ft_strcmp(caps, "\n") == 0 || caps[0] == '\n')
-	{
-		ret = -1;
+	else if ((ft_strcmp(caps, "\n") == 0 || caps[0] == '\n') && (ret = -1) < 0)
 		line_master(cs, caps);
-	}
 	else if (ft_strcmp(caps, "\033[6n") == 0)
 		ret = -1;
 	else if (caps[0] != 127 && ret == 0 && (caps[0] != '\033' && caps[0] >= 32)
-            && (ret = 1))
-    {
-        line_master(cs, caps);
-        if (ft_strchr(caps, '\n'))
-            ret = -1;
-        print_cmdline(cs);
-    }
+			&& (ret = 1))
+	{
+		line_master(cs, caps);
+		if (ft_strchr(caps, '\n'))
+			ret = -1;
+		print_cmdline(cs);
+	}
 	return (ret);
 }

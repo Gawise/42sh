@@ -9,18 +9,19 @@ FAIL_TESTS=0
 SUCCESS_TESTS=0
 TEST_RET=
 
+### OUTPUT ###
 
 output_print () {
 	if [ -z "$OUTPUT_FILE" ]
 	then
 		echo -e "$1"
 	else
-		echo -e "$1" >> $OUTPUT_FILE
+		echo -e "$1" >> $SHELL_DIR/$OUTPUT_FILE
 	fi
 }
 
 print_fail () {
-	output_print "--------------------------------------------"
+	printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}")
 	output_print "\e[1;41m$1\e[0m"
 	if [ -z "$2" ]
 	then
@@ -54,7 +55,7 @@ print_fail () {
 	else
 		output_print "LEAKS \e[1;32mSUCCESS\e[0m"
 	fi
-	output_print "--------------------------------------------"
+	printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}")
 }
 
 move_shell_redir () {
@@ -171,24 +172,54 @@ make_test () {
 	rm -f $LOG_DIR/*
 }
 
+run_test_group () {
+	local group=$1
+	local group_basename=$(basename $group)
+	local dirs=($(ls $group))
+	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print "${group_basename^^}"
+	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	for i in "${dirs[@]}"
+	do
+		make_test $group/$i
+		if [ "$TEST_RET" = "1" ]
+		then
+			GROUP_FAIL=$((GROUP_FAIL + 1))
+			FAIL_TESTS=$((FAIL_TESTS + 1))
+		else
+			GROUP_SUCCESS=$((GROUP_SUCCESS + 1))
+			SUCCESS_TESTS=$((SUCCESS_TESTS + 1))
+		fi
+	done
+	output_print "$GROUP_FAIL/$(($GROUP_FAIL + $GROUP_SUCCESS)) tests failed"
+	GROUP_FAIL=0
+	GROUP_SUCCESS=0
+}
+
 run_tests () {
 	for i in "$@"
 	do
-		local test="$TESTER_DIR/units/$i"
-		make_test $test
-		if [ "$TEST_RET" = "1" ]
-		then
-			FAIL_TESTS=$((FAIL_TESTS + 1))
-		else
-			SUCCESS_TESTS=$((SUCCESS_TESTS + 1))
-		fi
+		local test_group="$TESTER_DIR/units/$i"
+		run_test_group $test_group
 		rm -f $TMP_DIR/*
 	done
+	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print "TOTAL"
+	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
 	echo "$FAIL_TESTS out of $(($FAIL_TESTS + $SUCCESS_TESTS)) failed"
 }
 
 print_usage () {
 	echo 'Usage: test.sh [-h] [-o output_file] shell_file' 1>&2
+}
+
+get_term_size () {
+	if [ -n "$OUTPUT_FILE" ]
+	then
+		TERM_SIZE="45"
+	else
+		TERM_SIZE="$(($(tput cols)))"
+	fi
 }
 
 list_vars () {
@@ -242,7 +273,8 @@ list_vars () {
 }
 
 list_vars $@
-if [ -n "$SHELL_FILE" ]
+get_term_size
+if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]
 then
 	run_tests $TEST_DIRS
 fi

@@ -14,7 +14,7 @@
 #include "struct.h"
 #include "line_edition.h"
 
-int		back_space(t_cs_line *cs)
+void	back_space(t_cs_line *cs)
 {
 	char	*oc;
 	char	*tmp2;
@@ -30,6 +30,7 @@ int		back_space(t_cs_line *cs)
 			else
 				cs->input = ft_strdup(tmp2);
 			ft_strdel(&tmp2);
+			cs->history->data = (void *)cs->input;
 		}
 		cs->line_col -= (cs->line_col > 0 ? 1 : 0);
 		if (cs->col == 1 && cs->scroll && cs->row == cs->min_row
@@ -38,7 +39,6 @@ int		back_space(t_cs_line *cs)
 		cs->scroll = (cs->scroll < 0 ? 0 : cs->scroll);
 		print_cmdline(cs);
 	}
-	return (1);
 }
 
 int		revback_space(t_cs_line *cs)

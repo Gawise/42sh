@@ -83,12 +83,12 @@ void		get_cs_line_position(int *col, int *row)
 	i = 0;
 	while (i <= 32)
 	{
-    	if (read(cs->tty, &buf[i], 1) != 1 || buf[i] == 'R')
-			break;
-    	if (buf[i] == '\n')
+		if (read(cs->tty, &buf[i], 1) != 1 || buf[i] == 'R')
+			break ;
+		if (buf[i] == '\n')
 			i -= 1;
 		i++;
-  	}
+	}
 	buf[i] = '\0';
 	if (!(n = split_pos(buf)))
 	{
