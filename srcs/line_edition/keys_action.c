@@ -99,7 +99,7 @@ int		check_keys(char *caps)
 	fct = ft_hash_lookup(cfg->input_map, caps);
 	if (caps[0] == (char)4)
 		ret = ctrl_d(cs);
-	else if (fct && (ret = (caps[0] == (char)4 ? -1 : 0)))
+	else if (fct && (ret = (caps[0] == (char)4 ? -1 : 0)) <= 0)
 		fct(cs);
 	else if ((ft_strcmp(caps, "\n") == 0 || caps[0] == '\n') && (ret = -1) < 0)
 		line_master(cs, caps);
