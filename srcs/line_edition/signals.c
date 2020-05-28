@@ -1,3 +1,4 @@
+#include "exec.h"
 #include <signal.h>
 #include <term.h>
 #include <termios.h>
@@ -46,7 +47,14 @@ void	sig_handler(int sig)
 
 void	sigterm_handler(int sig)
 {
-	sig = 0;
+	t_process p;
+
+	(void)sig;
+	ft_bzero(&p, sizeof(t_process));
+	if (!(p.av = ft_memalloc(sizeof(char *) * 2)))
+		ft_ex(EXMALLOC);
+	ft_exit(0, &p);
+	ft_memdel((void **)&p.av);
 }
 
 void	init_signals(void)
