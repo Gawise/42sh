@@ -100,6 +100,7 @@ ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
 ANASRCS += exp/exp.c
+ANASRCS += exp/exp_getenv.c
 ANASRCS += exp/exp_tools.c
 ANASRCS += exp/parameter.c
 ANASRCS += exp/param_recursive.c

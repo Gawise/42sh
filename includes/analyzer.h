@@ -43,6 +43,12 @@ int	word_expansions(t_simple_cmd *cmd);
 int	exp_main(char **word, int assign);
 
 /*
+** exp_getenv.c
+*/
+
+char	*exp_getenv(char *str, int type, int hash);
+
+/*
 ** exp_tools.c
 */
 
