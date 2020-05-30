@@ -1,1 +1,1 @@
-${empty} | cat -e
+echo ${empty} | cat -e
