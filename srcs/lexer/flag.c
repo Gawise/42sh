@@ -34,12 +34,12 @@ int				l_flag_state_add(t_lexer *lexer, char c)
 	flag = l_get_last_flag(lexer);
 	if (flag == F_BSLASH || (flag == F_BRACKEXP && c == '}'))
 	{
-
 		l_buffer_add(lexer, c);
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
 		if (!l_get_last_flag(lexer))
 			lexer->state = S_TK_WORD;
-		return (l_complete_str(lexer, l_get_char(lexer)));
+		if (c == '\n')
+			return (l_complete_str(lexer, l_get_char(lexer)));
 	}
 	else if (flag == F_DQUOTE)
 	{

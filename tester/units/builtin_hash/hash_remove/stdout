@@ -1,0 +1,3 @@
+ls=/bin/ls
+grep=/bin/grep
+cat=/bin/cat
