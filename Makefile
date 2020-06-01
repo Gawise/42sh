@@ -190,6 +190,7 @@ BTSRCS += test/str_neq.c
 BTSRCS += test/symlink.c
 BTSRCS += test/write.c
 BTSRCS += test/zero.c
+BTSRCS += test/size.c
 
 ## INCLUDES ##
 

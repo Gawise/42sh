@@ -8,5 +8,5 @@ uint8_t		test_write_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	buf.st_mode & S_IWUSR ? return (0) : return (1);
+	return ((buf.st_mode & S_IWUSR) ? 0 :1);
 }

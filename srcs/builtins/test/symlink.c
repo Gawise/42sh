@@ -8,5 +8,5 @@ uint8_t		test_symlink_file(char *path)
 
 	if (stat(path, &buf))
 		return (FAILURE);
-	buf.st_mode & S_IFLNK ? return (0) : return (1);
+	return ((buf.st_mode & S_IFLNK) ? 0 : 1);
 }

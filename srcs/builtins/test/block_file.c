@@ -1,4 +1,3 @@
-#include "libft.h"
 #include "sh.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9,5 +8,5 @@ uint8_t		test_bloc_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	buf.st_mode & S_IFBLK ? (return (0)) : (return (1));
+	return ((buf.st_mode & S_IFBLK) ? 0 : 1);
 }

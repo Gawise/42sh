@@ -8,5 +8,5 @@ uint8_t		test_socket_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	buf.st_mode & S_IFSOCK ? return (0) : return (1);
+	return ((buf.st_mode & S_IFSOCK) ? 0 : 1);
 }

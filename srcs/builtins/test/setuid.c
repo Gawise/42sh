@@ -8,6 +8,6 @@ uint8_t		test_setuid_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	buf.st_mode & S_ISUID ? return (0) : return (1);
+	return ((buf.st_mode & S_ISUID) ? 0 : 1);
 }
 

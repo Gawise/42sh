@@ -8,5 +8,5 @@ uint8_t		test_size_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	buf.st_size > 0 ? return (0) : return (1);
+	return ((buf.st_size > 0) ? 0 : 1);
 }
