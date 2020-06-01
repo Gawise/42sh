@@ -4,6 +4,13 @@
 # include "struct.h"
 # include <pwd.h>
 
+
+/*
+** main.c
+*/
+
+int		analyzer_routine(t_cmd_table *cmd);
+
 /*
 ** jobs_str/redir.c
 */
@@ -15,19 +22,19 @@ char		*get_args_str(char **args);
 ** jobs_str/core.c
 */
 
-int		a_set_jobs_str(t_parser *parser);
+int		a_set_jobs_str(t_cmd_table *cmd);
 
 /*
 ** heredoc.c
 */
 
-void		a_remove_leading_tabs(t_parser *parser);
+void		a_remove_leading_tabs(t_cmd_table *cmd);
 
 /*
 ** make_args_tab.c 
 */
 
-int		a_make_args_tab(t_parser *parser);
+int		a_make_args_tab(t_cmd_table *cmd);
 
 /*
 ** args_to_tab.c

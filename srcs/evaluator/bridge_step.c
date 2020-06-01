@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "exec.h"
 #include "parser.h"
+#include "analyzer.h"
 #include "sh.h"
 
 static uint8_t	condition_respected(t_and_or *andor, int8_t lr)
@@ -43,16 +44,19 @@ static uint8_t	lvl_and_or(t_cfg *shell, t_list *lst)
 	return (0);
 }
 
-static void		lvl_cmd_table(t_cfg *shell, t_list *lst)
+static uint8_t		lvl_cmd_table(t_cfg *shell, t_list *lst)
 {
 	t_cmd_table		*cmd;
 
 	while (lst)
 	{
 		cmd = lst->data;
+		if (!analyzer_routine(cmd))
+			return (FAILURE);
 		lvl_and_or(shell, cmd->and_or);
 		lst = lst->next;
 	}
+	return (SUCCESS);
 }
 
 uint8_t			ft_eval(t_list *cmd_table)
@@ -63,7 +67,8 @@ uint8_t			ft_eval(t_list *cmd_table)
 	if (shell->debug)
 		ft_dprintf(shell->debug, "\n\n--------- EVAL ----------\n\n");
 	set_signal_ign();
-	lvl_cmd_table(shell, cmd_table);
+	if (lvl_cmd_table(shell, cmd_table))
+		return (FAILURE);
 	if (shell->debug)
 		ft_dprintf(shell->debug, "---------- EVAL ----------\n\n");
 	return (SUCCESS);
