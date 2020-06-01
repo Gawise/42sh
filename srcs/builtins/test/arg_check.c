@@ -4,6 +4,16 @@
 #include "ft_printf.h"
 #include "var.h"
 
+char		**ret_empty_tab(void)
+{
+	char **res;
+
+	if (!(res = ft_memalloc(sizeof(char *))))
+		ft_ex(EXMALLOC);
+	res[0] = NULL;
+	return (res);
+}
+
 char		**retrieve_ops(char **p_av, int *i, int *bang)
 {
 	char	**res;
@@ -11,11 +21,13 @@ char		**retrieve_ops(char **p_av, int *i, int *bang)
 
 	brack = 0;
 	*i = 1;
-	if (ft_strequ("[", p_av[0]))
+	if (!p_av[1])
+		return (ret_empty_tab());
+	if (p_av[0] && ft_strequ("[", p_av[0]))
 		brack = 1;
 	while (p_av[*i])
 		*i += 1;
-	if (ft_strequ(p_av[1], "!"))
+	if (p_av[1] && ft_strequ(p_av[1], "!"))
 		*bang = 1;
 	if (!(res = ft_memalloc(sizeof(char *) * (*i - brack - *bang))))
 		return (NULL);
@@ -24,8 +36,10 @@ char		**retrieve_ops(char **p_av, int *i, int *bang)
 	{
 		if (!(res[*i - 1] = ft_strdup(p_av[*i])))
 			ft_ex(EXMALLOC);
+		*i += 1;
 	}
-	*i -= 2;
+	res[*i - 1] = NULL;
+	*i -= 1;
 	return (res);
 }
 

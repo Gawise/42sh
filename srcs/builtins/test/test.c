@@ -13,36 +13,49 @@
  *			1 arg si $1 != NULL => exit(1)
  */ 
 
-static uint8_t		bin_op(char **av)
+static uint8_t		bin_op(char *cmd, char **av, int bang)
 {
-	int	i;
+	uint8_t		(*fct)(char *, char *);
+	uint8_t		res;
 
-	i = 0;
-	while (av[i])
-		i++;
-	ft_printf("test has %d args\n");
+	if (!(fct = ft_hash_lookup(cfg_shell()->test_bin, av[1])))
+	{
+		ft_dprintf(2, "%s: %s: %s: binary operator expected\n",
+				PROJECT, cmd, av[1]);
+		return (2);
+	}
+	res = fct(av[0], av[2]);
+	if ((bang && !res) || (!bang && res))
+		return (1);
 	return (0);
 }
 
-static uint8_t		un_op(char **av)
+static uint8_t		un_op(char *cmd, char **av, int bang)
 {
-	int	i;
+	uint8_t		(*fct)(char *);
+	uint8_t		res;
 
-	i = 0;
-	while (av[i])
-		i++;
-	ft_printf("test has %d args\n");
+	if (!(fct = ft_hash_lookup(cfg_shell()->test_un, av[0])))
+	{
+		ft_dprintf(2, "%s: %s: %s: unary operator expected\n",
+				PROJECT, cmd, av[0]);
+		return (2);
+	}
+	res = fct(av[1]);
+	if ((bang && !res) || (!bang && res))
+		return (1);
 	return (0);
 }
 
-static uint8_t		single_str(char **av)
+static uint8_t		single_str(char **av, int bang)
 {
-	int	i;
+	uint8_t		res;
 
-	i = 0;
-	while (av[i])
-		i++;
-	ft_printf("test has %d args\n");
+	res = 1;
+	if (av[0] && av[0][0])
+		res = 0;
+	if ((bang && !res) || (!bang && res))
+		return (1);
 	return (0);
 }
 
@@ -65,11 +78,11 @@ uint8_t		ft_test(t_job *j, t_process *p)
 		return (2);
 	}
 	else if (count == 3)
-		ret = bin_op(av);
+		ret = bin_op(p->cmd, av, bang);
 	else if (count == 2)
-		ret = un_op(av);
+		ret = un_op(p->cmd, av, bang);
 	else
-		ret = single_str(av);
+		ret = single_str(av, bang);
 	tabfree(av);
-	return (0);
+	return (ret);
 }
