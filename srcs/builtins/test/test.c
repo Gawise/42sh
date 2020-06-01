@@ -1,5 +1,7 @@
 #include "libft.h"
+#include "lexer.h"
 #include "struct.h"
+#include "exec.h"
 #include "sh.h"
 #include "ft_printf.h"
 #include "var.h"
@@ -19,6 +21,7 @@ static uint8_t		bin_op(char **av)
 	while (av[i])
 		i++;
 	ft_printf("test has %d args\n");
+	return (0);
 }
 
 static uint8_t		un_op(char **av)
@@ -29,6 +32,7 @@ static uint8_t		un_op(char **av)
 	while (av[i])
 		i++;
 	ft_printf("test has %d args\n");
+	return (0);
 }
 
 static uint8_t		single_str(char **av)
@@ -39,6 +43,7 @@ static uint8_t		single_str(char **av)
 	while (av[i])
 		i++;
 	ft_printf("test has %d args\n");
+	return (0);
 }
 
 uint8_t		ft_test(t_job *j, t_process *p)
@@ -48,22 +53,23 @@ uint8_t		ft_test(t_job *j, t_process *p)
 	int		count;
 	int		bang;
 
+	(void)j;
 	bang = 0;
 	if (ft_strequ(p->cmd, "[") && !check_closing_bracket(p->av))
 		return (2);
-	if (!(av = retrieve_ops(p->av, *count, *bang)))
+	if (!(av = retrieve_ops(p->av, &count, &bang)))
 		return (2);
-	if (*count >= 4)
+	if (count >= 4)
 	{
 		ft_dprintf(2, "%s: %s: Too many arguments\n", PROJECT, p->cmd);
 		return (2);
 	}
-	else if (*count == 3)
+	else if (count == 3)
 		ret = bin_op(av);
-	else if (*count == 2)
+	else if (count == 2)
 		ret = un_op(av);
 	else
 		ret = single_str(av);
-	ft_tabfree(av);
+	tabfree(av);
 	return (0);
 }

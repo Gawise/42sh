@@ -31,15 +31,6 @@ static uint8_t		ft_bg(t_job *j, t_process *p)
 		return (0);
 }
 
-static	uint8_t		ft_test(t_job *j, t_process *p)
-{
-	(void)j; (void)p;
-
-	ft_printf("appel test ok\n");
-	return (0);
-}
-
-
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[12])(t_job *, t_process *);

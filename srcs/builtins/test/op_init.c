@@ -1,14 +1,9 @@
 #include "libft.h"
 #include "struct.h"
+#include "exec.h"
 #include "sh.h"
 #include "ft_printf.h"
 #include "var.h"
-
-void	test_op_init(void)
-{
-	test_init_un_op();
-	test_init_bin_op();
-}
 
 void	test_init_un_op(void)
 {
@@ -49,4 +44,10 @@ void	test_init_bin_op(void)
 	ft_hash_add(map, "-le", test_lessor_int, NULL);
 	ft_hash_add(map, "=", test_equal_string, NULL);
 	ft_hash_add(map, "!=", test_diff_string, NULL);
+}
+
+void	init_test_op(void)
+{
+	test_init_un_op();
+	test_init_bin_op();
 }

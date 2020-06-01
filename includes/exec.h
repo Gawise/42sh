@@ -128,6 +128,32 @@ int			str_is_digit(char *str);
 char		**retrieve_ops(char **p_av, int *i, int *bang);
 int		check_closing_bracket(char **av);
 uint8_t		ft_test(t_job *j, t_process *p);
+void		init_test_op(void);
+int		check_closing_bracket(char **av);
+char		**retrieve_ops(char **p_av, int *i, int *bang);
+uint8_t		test_write_file(char *path);
+uint8_t		test_len_string(char *s1);
+uint8_t		test_read_file(char *path);
+uint8_t		test_regular_file(char *path);
+uint8_t		test_setgid_file(char *path);
+uint8_t		test_setuid_file(char *path);
+uint8_t		test_size_file(char *path);
+uint8_t		test_socket_file(char *path);
+uint8_t		test_equal_string(char *s1, char *s2);
+uint8_t		test_diff_string(char *s1, char *s2);
+uint8_t		test_symlink_file(char *path);
+uint8_t		test_char_file(char *path);
+uint8_t		test_dir_file(char *path);
+uint8_t		test_exec_file(char *path);
+uint8_t		test_fifo_file(char *path);
+uint8_t		test_entry_file(char *path);
+uint8_t		test_equal_int(char *s1, char *s2);
+uint8_t		test_greator_int(char *s1, char *s2);
+uint8_t		test_greater_int(char *s1, char *s2);
+uint8_t		test_lessor_int(char *s1, char *s2);
+uint8_t		test_lesser_int(char *s1, char *s2);
+uint8_t		test_diff_int(char *s1, char *s2);
+uint8_t		test_bloc_file(char *path);
 
 
 
