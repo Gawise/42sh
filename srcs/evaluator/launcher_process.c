@@ -31,10 +31,18 @@ static uint8_t		ft_bg(t_job *j, t_process *p)
 		return (0);
 }
 
+static	uint8_t		ft_test(t_job *j, t_process *p)
+{
+	(void)j; (void)p;
+
+	ft_printf("appel test ok\n");
+	return (0);
+}
+
 
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
-	uint8_t		(*tab_f[11])(t_job *, t_process *);
+	uint8_t		(*tab_f[12])(t_job *, t_process *);
 
 	tab_f[0] = ft_echo;
 	tab_f[1] = ft_cd;
@@ -47,6 +55,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[8] = ft_fg;
 	tab_f[9] = ft_bg;
 	tab_f[10] = ft_type;
+	tab_f[11] = ft_test;
 	if (p->status == FAILED)
 		return (p->ret);
 	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
