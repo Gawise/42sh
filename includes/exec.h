@@ -124,6 +124,9 @@ int8_t		find_stopped_job(t_list *job);
 int			str_is_digit(char *str);
 
 
+char		**retrieve_ops(char **p_av, int *i, int *bang);
+int		check_closing_bracket(char **av);
+uint8_t		ft_test(t_job *j, t_process *p);
 
 
 

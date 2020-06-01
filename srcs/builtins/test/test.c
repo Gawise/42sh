@@ -11,41 +11,34 @@
  *			1 arg si $1 != NULL => exit(1)
  */ 
 
-char		**retrieve_ops(char **p_av, int *i, int *bang)
-{
-	char	**res;
-	int	brack;
-
-	brack = 0;
-	*i = 1;
-	if (ft_strequ("[", p_av[0]))
-		brack = 1;
-	while (p_av[*i])
-		*i++;
-	if (ft_strequ(p_av[1], "!"))
-		*bang = 1;
-	if (!(res = ft_memalloc(sizeof(char *) * (*i - brack - *bang))))
-		return (NULL);
-	*i = 1;
-	while (p_av[*i + brack + *bang])
-	{
-		if (!(res[*i - 1] = ft_strdup(p_av[*i])))
-			ft_ex(EXMALLOC);
-	}
-	*i -= 2;
-	return (res);
-}
-
-int		check_closing_bracket(char **av)
+static uint8_t		bin_op(char **av)
 {
 	int	i;
 
 	i = 0;
-	while (av[i] && av[i + 1])
+	while (av[i])
 		i++;
-	if (ft_strequ(av[i]), "]")
-		return (0);
-	return (1);
+	ft_printf("test has %d args\n");
+}
+
+static uint8_t		un_op(char **av)
+{
+	int	i;
+
+	i = 0;
+	while (av[i])
+		i++;
+	ft_printf("test has %d args\n");
+}
+
+static uint8_t		single_str(char **av)
+{
+	int	i;
+
+	i = 0;
+	while (av[i])
+		i++;
+	ft_printf("test has %d args\n");
 }
 
 uint8_t		ft_test(t_job *j, t_process *p)
@@ -66,9 +59,11 @@ uint8_t		ft_test(t_job *j, t_process *p)
 		return (2);
 	}
 	else if (*count == 3)
-		// bin op
+		ret = bin_op(av);
 	else if (*count == 2)
-		// un op
+		ret = un_op(av);
 	else
-		// single string
+		ret = single_str(av);
+	ft_tabfree(av);
+	return (0);
 }

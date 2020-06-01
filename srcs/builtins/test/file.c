@@ -10,7 +10,7 @@
  *	verifie que pathname est un file (pas un regaular file)
  */
 
-uint8_t		test_bloc_file(char *path)
+uint8_t		test_entry_file(char *path)
 {
 	struct stat buf;
 
