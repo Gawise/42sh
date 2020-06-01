@@ -87,7 +87,7 @@ char		*cd_del_dotcomponents(char *curpath, char *opr);
 int			display_cd_errors(char *error);
 int			check_chdir_errors(char **error, char *path, char *opr);
 int			cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd);
-uint8_t		get_job_id(char *ope);
+int16_t		get_job_id(char *ope);
 int		print_job_ope(char opt, t_job *j, int8_t ope);
 void		print_jobs(char opt, t_job *);
 void		print_jobs_opt(t_job *);

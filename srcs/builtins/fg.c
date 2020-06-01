@@ -32,7 +32,7 @@ uint8_t		print_fg_error(char **s)
 		ft_dprintf(STDERR_FILENO, "21sh: fg: %s: no such job\n", s[2]);
 	else
 		ft_dprintf(STDERR_FILENO, "21sh: fg: %s: no such job\n", s[1]);
-	return (0);	
+	return (1);	
 }
 
 int16_t		get_fg_jid(t_process *p)
@@ -68,7 +68,7 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	shell = cfg_shell();
 	job = cfg_shell()->job;
 	if ((jid = get_fg_jid(p)) == -1)
-		return (0);
+		return (2);
 	if (!jid || !job)
 		return (print_fg_error(p->av));
 	while (job)
@@ -88,7 +88,7 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	kill(-j->pgid, SIGCONT);
 	wait_process(j);
 	update_listjob(shell);
-	return (0);
+	return (j->ret);
 }		
 // si fg (job), alors job devient le curr, a faire ????
-
+// si fg job(fini) , message no such job alp "job has terminated"
