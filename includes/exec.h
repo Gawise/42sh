@@ -35,6 +35,7 @@
 # define B_FG 131072		/* 1000.00000000000000 */
 # define B_BG 147456		/* 1001.00000000000000 */
 # define B_TYPE 163840		/* 1010.00000000000000 */
+# define B_TEST 180224		/* 1011.00000000000000 */
 
 /*   Special Builtin 
 # define B_EXIT
