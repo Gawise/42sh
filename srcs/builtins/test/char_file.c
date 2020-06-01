@@ -8,3 +8,12 @@
  *	test -c pathname
  *	verifie que pathname est un character file
  */
+
+uint8_t		test_char_file(char *path)
+{
+	struct stat buf;
+
+	if (lstat(path, &buf))
+		return (failure);
+	buf.st_mode & S_IFCHR ? return (0) : return (1);
+}
