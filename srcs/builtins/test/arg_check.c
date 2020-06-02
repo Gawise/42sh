@@ -4,6 +4,21 @@
 #include "ft_printf.h"
 #include "var.h"
 
+int		check_int_args(char *s1, char *s2)
+{
+	if (!ft_strdigit(s1))
+	{
+		ft_dprintf(2, "%s: test: %s: integer expression expected\n", PROJECT, s1);
+		return (0);
+	}
+	if (!ft_strdigit(s2))
+	{
+		ft_dprintf(2, "%s: test: %s: integer expression expected\n", PROJECT, s2);
+		return (0);
+	}
+	return (1);
+}
+
 char		**ret_empty_tab(void)
 {
 	char **res;

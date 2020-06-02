@@ -9,7 +9,7 @@ void	test_init_un_op(void)
 {
 	t_hash_map	*map;
 
-	if (!(map = ft_hash_init(15)))
+	if (!(map = ft_hash_init(20)))
 		ft_ex(EXMALLOC);
 	cfg_shell()->test_un = map;
 	ft_hash_add(map, "-b", test_bloc_file, NULL);
@@ -25,6 +25,7 @@ void	test_init_un_op(void)
 	ft_hash_add(map, "-s", test_size_file, NULL);
 	ft_hash_add(map, "-S", test_socket_file, NULL);
 	ft_hash_add(map, "-L", test_symlink_file, NULL);
+	ft_hash_add(map, "-h", test_symlink_file, NULL);
 	ft_hash_add(map, "-w", test_write_file, NULL);
 	ft_hash_add(map, "-z", test_len_string, NULL);
 }
@@ -33,7 +34,7 @@ void	test_init_bin_op(void)
 {
 	t_hash_map	*map;
 
-	if (!(map = ft_hash_init(8)))
+	if (!(map = ft_hash_init(10)))
 		ft_ex(EXMALLOC);
 	cfg_shell()->test_bin = map;
 	ft_hash_add(map, "-eq", test_equal_int, NULL);

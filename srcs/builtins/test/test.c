@@ -6,13 +6,6 @@
 #include "ft_printf.h"
 #include "var.h"
 
-/*
- *	- on ajoute "test" et "[" a la hash_table des builtins
- *	- une hash_table pour les opreateurs ? initialisee dans init_shell ?
- *	- return	pas de $1 => exit(0)
- *			1 arg si $1 != NULL => exit(1)
- */ 
-
 static uint8_t		bin_op(char *cmd, char **av, int bang)
 {
 	uint8_t		(*fct)(char *, char *);

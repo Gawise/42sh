@@ -174,6 +174,7 @@ char			**ft_tabdup(char **t);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
 int				ft_strrchri(const char *s, int c);
+int				ft_strdigit(char *s1);
 char			*ft_strdup(const char *s1);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
