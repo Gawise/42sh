@@ -1,0 +1,1 @@
+touch write nowrite; chmod u-w nowrite;test -w nowrite && echo ok || echo wrong

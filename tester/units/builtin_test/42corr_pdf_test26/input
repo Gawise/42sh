@@ -1,0 +1,1 @@
+a='hello' b=''; test  && echo ok || echo wrong; test  && echo ok || echo wrong ; test  && echo ok || echo wrong; test -z  && echo ok || echo wrong; test -z  && echo ok || echo wrong; test -z  && echo ok || echo wrong 

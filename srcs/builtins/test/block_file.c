@@ -8,5 +8,5 @@ uint8_t		test_bloc_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	return ((buf.st_mode & S_IFBLK) ? 0 : 1);
+	return (((buf.st_mode & S_IFMT) == S_IFBLK) ? 0 : 1);
 }

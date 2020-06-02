@@ -1,0 +1,1 @@
+test -e DOESTNOTEXIST && echo ok || echo wrong

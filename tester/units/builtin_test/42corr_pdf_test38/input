@@ -1,0 +1,1 @@
+test 3 -le +2 && echo ok || echo wrong

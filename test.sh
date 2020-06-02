@@ -290,14 +290,15 @@ read -p "Which test do you wish to perform?
 	7)	builtin_setenv
 	8)	builtin_type
 	9)	builtin_unsetenv
-	10)	error_handling
-	11)	heredocs
-	12)	logical_ops
-	13)	pipes
-	14)	quoting
-	15)	redirections
-	16)	signals
-	17)	exit
+	10)	builtin_test
+	11)	error_handling
+	12)	heredocs
+	13)	logical_ops
+	14)	pipes
+	15)	quoting
+	16)	redirections
+	17)	signals
+	18)	exit
     > " ret
 case $ret in
 	0 ) ;;
@@ -310,14 +311,15 @@ case $ret in
 	7 ) TEST_DIRS="units/builtin_setenv";;
 	8 ) TEST_DIRS="units/builtin_type";;
 	9 ) TEST_DIRS="units/builtin_unsetenv";;
-	10 ) TEST_DIRS="error_handling";;
-	11 ) TEST_DIRS="heredocs";;
-	12 ) TEST_DIRS="logical_ops";;
-	13 ) TEST_DIRS="pipes";;
-	14 ) TEST_DIRS="quoting";;
-	15 ) TEST_DIRS="redirections";;
-	16 ) TEST_DIRS="signals";;
-	17 ) exit;;
+	10 ) TEST_DIRS="builtin_test";;
+	11 ) TEST_DIRS="error_handling";;
+	12 ) TEST_DIRS="heredocs";;
+	13 ) TEST_DIRS="logical_ops";;
+	14 ) TEST_DIRS="pipes";;
+	15 ) TEST_DIRS="quoting";;
+	16 ) TEST_DIRS="redirections";;
+	17 ) TEST_DIRS="signals";;
+	18 ) exit;;
 esac
 
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]

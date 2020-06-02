@@ -8,5 +8,5 @@ uint8_t		test_dir_file(char *path)
 
 	if (lstat(path, &buf))
 		return (FAILURE);
-	return ((buf.st_mode & S_IFDIR) ? 0 : 1);
+	return (((buf.st_mode & S_IFMT) == S_IFDIR) ? 0 : 1);
 }
