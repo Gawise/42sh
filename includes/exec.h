@@ -57,7 +57,7 @@
 
 
 # define S_SIGHUP "Hangup" /*1*/
-# define S_SIGINT "\n" /*2*/
+# define S_SIGINT "" /*2*/
 # define S_SIGQUIT "Quit" /*3*/
 # define S_SIGILL "Illegal instruction" /*4*/
 # define S_SIGTRAP "Trace/Breakpoint trap"   /*5*/
