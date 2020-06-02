@@ -31,15 +31,15 @@ char		**retrieve_ops(char **p_av, int *i, int *bang)
 		*bang = 1;
 	if (!(res = ft_memalloc(sizeof(char *) * (*i - brack - *bang))))
 		return (NULL);
-	*i = 1;
-	while (p_av[*i + brack + *bang])
+	*i = 1 + *bang;
+	while (p_av[*i + brack])
 	{
-		if (!(res[*i - 1] = ft_strdup(p_av[*i])))
+		if (!(res[*i - 1 - *bang] = ft_strdup(p_av[*i])))
 			ft_ex(EXMALLOC);
 		*i += 1;
 	}
-	res[*i - 1] = NULL;
-	*i -= 1;
+	res[*i - 1 - *bang] = NULL;
+	*i -= (1 + *bang);
 	return (res);
 }
 
