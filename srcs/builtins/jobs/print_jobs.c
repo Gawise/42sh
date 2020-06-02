@@ -45,7 +45,7 @@ void	print_jobs_opt(t_job *j)
 void	print_jobs(char opt, t_job *j)
 {
 	t_list	*job;
-//	char	*st;
+	char	*st;
 	char 	c;
 	uint8_t	stop;
 
@@ -56,40 +56,40 @@ void	print_jobs(char opt, t_job *j)
 		j = job->data;
 		c = get_curr(job, stop);
 //		get_jstatus(j, &st);
-//		st = j_stat(j):
+		st = j_stat(j);
 		if (opt == 'r')
-			ft_printf("[%d]%c %-24s %s", j->id, c, j_stat(j), j->cmd);
-//			ft_printf("[%d]%c %-24s %s", j->id, c, st, j->cmd);
+//			ft_printf("[%d]%c %-24s %s", j->id, c, j_stat(j), j->cmd);
+			ft_printf("[%d]%c %-24s %s", j->id, c, st, j->cmd);
 		else
-			ft_printf("[%d]%c %d %-24s %s", j->id, c, j->pgid, j_stat(j), j->cmd);
-//			ft_printf("[%d]%c %d %-24s %s", j->id, c, j->pgid, st, j->cmd);
+//			ft_printf("[%d]%c %d %-24s %s", j->id, c, j->pgid, j_stat(j), j->cmd);
+			ft_printf("[%d]%c %d %-24s %s", j->id, c, j->pgid, st, j->cmd);
 		if (j->status == RUNNING)
 			ft_printf(" &");
 		ft_printf("\n");
-//		ft_strdel(&st);
+		ft_strdel(&st);
 		job = job->next;
 	}
 }
 
 void	print_job_opte(char opt, t_job *j, char curr)
 {
-//	char	*st;
+	char	*st;
 	
 //	get_jstatus(j, &state);
-//	st = j_stat(j);
+	st = j_stat(j);
 	if (opt == 'l')
-	{
-		ft_printf("[%d]%c ", j->id, curr);
-		ft_printf("%d %-24s %s", j->pgid, j_stat(j), j->cmd);
-	}
-	//	ft_printf("[%d]%c %d %-24s %s", j->id, curr, j->pgid, st, j->cmd);
+//	{
+	//	ft_printf("[%d]%c ", j->id, curr);
+	//	ft_printf("%d %-24s %s", j->pgid, j_stat(j), j->cmd);
+//	}
+		ft_printf("[%d]%c %d %-24s %s", j->id, curr, j->pgid, st, j->cmd);
 	else
-		ft_printf("[%d]%c %-24s %s", j->id, curr, j_stat(j), j->cmd);
-//		ft_printf("[%d]%c %-24s %s", j->id, curr, st, j->cmd);
+//		ft_printf("[%d]%c %-24s %s", j->id, curr, j_stat(j), j->cmd);
+		ft_printf("[%d]%c %-24s %s", j->id, curr, st, j->cmd);
 	if (j->status == RUNNING)
 		ft_printf(" &");
 	ft_printf("\n");
-//	ft_strdel(&st):
+	ft_strdel(&st);
 }
 
 int	print_job_ope(char opt, t_job *j, int8_t ope)

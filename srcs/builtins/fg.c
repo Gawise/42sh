@@ -64,7 +64,9 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	t_list		*job;
 	t_cfg		*shell;
 	int16_t		jid;
+	int		ret;
 
+	ret = 0;
 	shell = cfg_shell();
 	job = cfg_shell()->job;
 	if ((jid = get_fg_jid(p)) == -1)
@@ -87,8 +89,9 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	set_termios(TCSADRAIN, &shell->term_origin);
 	kill(-j->pgid, SIGCONT);
 	wait_process(j);
+	ret = j->ret;
 	update_listjob(shell);
-	return (j->ret);
+	return (ret);
 }		
 // si fg (job), alors job devient le curr, a faire ????
 // si fg job(fini) , message no such job alp "job has terminated"
