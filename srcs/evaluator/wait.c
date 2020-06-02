@@ -44,7 +44,8 @@ static void		update_job(t_job *j)
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = STOPPED;
-		add_job_cfg(j);
+		if (!j->id)
+			add_job_cfg(j);
 		print_message_signal(j->ret - 128, j);
 	}
 	else

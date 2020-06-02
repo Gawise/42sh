@@ -1,0 +1,23 @@
+cleaner.c:	ft_strdel(&j->cmd);
+cleaner.c:	ft_lstdel(&j->process, del_struct_process);
+cleaner.c:	close(j->std[0]);
+cleaner.c:	close(j->std[1]);
+cleaner.c:	close(j->std[2]);
+debug.c:	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
+debug.c:	ft_dprintf(shell->debug, "STATUS = [%d]\tRET = [%d]\n", j->status, j->ret);
+debug.c:	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
+launcher_process.c:	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
+launcher_process.c:		do_my_dup2(j->std[0], STDIN_FILENO);
+launcher_process.c:		do_my_dup2(j->std[1], STDOUT_FILENO);
+launcher_process.c:		do_my_dup2(j->std[2], STDERR_FILENO);
+tools_signal.c:	if ((sig < 19 || sig > 22) && tab[sig] && j->fg)
+tools_signal.c:		ft_dprintf(STDERR_FILENO, "\n[%d]\t+ %s  %s\n", j->id, tab[sig], j->cmd); //stdrr ?
+wait.c:	if ((tmp = find_process_by_status(j->process, STOPPED)))
+wait.c:		j->ret = 128 + tmp->ret;
+wait.c:		j->status = STOPPED;
+wait.c:		print_message_signal(j->ret - 128, j);
+wait.c:		lst = ft_lstgettail(j->process);
+wait.c:		j->status = ((t_process *)(lst->data))->status;
+wait.c:		if (j->status == KILLED)
+wait.c:			j->ret = print_message_signal(tmp->ret, j);
+wait.c:			j->ret = tmp->ret;
