@@ -30,7 +30,7 @@ uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_FG);
 	if (!ft_strcmp(p->cmd, "type"))
 		return (p->setup |= B_TYPE);
-	if (!ft_strcmp(p->cmd, "test"))
+	if (!ft_strcmp(p->cmd, "test") || !ft_strcmp(p->cmd, "["))
 		return (p->setup |= B_TEST);
 	return (0);
 }
