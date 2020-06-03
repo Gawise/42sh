@@ -75,6 +75,7 @@ void				with_slash(t_process *p, uint32_t *err)
 
 	p->setup |= EXEC;
 	p->path = ft_strdup(p->cmd);
+	protect_malloc(p->path);
 	if (*p->path == '/')
 		*err |= path_errors(p->path, 1, S_IXUSR);
 	else

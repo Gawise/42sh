@@ -72,7 +72,6 @@ int		eval_routine(t_parser *parser)
 		return (0);
 	}
 	ft_lstdel(&parser->table, del_cmd_table);
-	protect_malloc(0);
 	return (1);
 }
 
