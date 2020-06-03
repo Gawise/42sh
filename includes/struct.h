@@ -304,6 +304,7 @@ typedef struct	s_job
 	uint8_t		fg;					/* foreground */
 	t_pipe		pipe;				/* pipeline */
 	uint8_t 	status;          	/* reported status value */
+	uint8_t		curr;				/* info job controler */
 	uint8_t		ret;				/* retour last process */
 	int16_t		std[3];				/* stdin out err*/
 	struct		termios term_eval;     /* saved terminal modes */

@@ -29,6 +29,7 @@ void	cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 {
 	ft_bzero(job, sizeof(t_job));
 	cmd_to_process(&job->process, s_cmd);
+	job->curr = 32;
 	job->cmd = ft_strdup(cmd);
 	job->std[0] = 256;
 	do_my_dup2(STDIN_FILENO, job->std[0]);
