@@ -21,8 +21,8 @@
 # define STR_LOOP "Too many links"
 # define STR_NTL "File name too long"		/*       1000001000000 */
 
-# define EX "[Critical Systeme Error]\nexit\n"
-# define EXMALLOC "[Critical Error] Cannot allocate memory\nexit\n"
+# define EX "[Critical systeme srror]\nexit\n"
+# define EXMALLOC "[Critical systeme error] Cannot allocate memory\nexit\n"
 # define EXEXEC "[Critical Error] Execve fail\nexit\n"
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"
 # define EXFD2 "Bad file descriptor\n"
@@ -39,6 +39,7 @@ typedef struct	s_cfg t_cfg;
 
 void		exit_routine(t_cfg *shell, uint8_t ret);
 void		ft_ex(char *error);
+void		protect_malloc(void *malloc);
 void		clean_cfg(t_cfg *shell);
 void		del_struct_tvar(void *del, size_t u);
 void		set_signal_ign(void);
