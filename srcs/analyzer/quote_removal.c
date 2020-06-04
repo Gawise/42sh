@@ -15,7 +15,7 @@ static void		a_handle_backslash(char **str, char **tmp, int *flag)
 	{
 		if (ft_strchr("\"\\\n", str[0][1]))
 			str[0]++;
-		if (str[0][1] == '\n')
+		if (str[0][0] == '\n')
 			return ;
 		**tmp = **str;
 	}
