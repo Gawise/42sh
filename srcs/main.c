@@ -15,6 +15,37 @@
 
 void	print_debug(t_list *elem);
 
+
+void	test(void)
+{
+	/*
+	static pid_t	pid = 0;
+	t_list			*job;
+	t_job			*j;
+
+	if (!pid)
+		pid = getppid();
+	if (kill(pid, 0))
+	{
+		job = cfg_shell()->job;
+		while (job)
+		{
+			j = job->data;
+			if (j->fg)
+			{
+		//		kill(-j->pgid, SIGTERM);
+				kill(-j->pgid, SIGKILL);
+				kill(-j->pgid, SIGCONT);
+			}
+			job = job->next;
+		}
+		ft_printf("\n ici \n");
+		exit(1);
+	}
+	*/
+	ft_printf("\n test exit hdl \n");
+}
+
 int		lexer_routine(char **line, t_lexer *lexer)
 {
 	set_signal_ign();

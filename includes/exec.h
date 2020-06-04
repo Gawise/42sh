@@ -142,6 +142,7 @@ uint8_t		ft_eval(t_list *cmd_table);
 void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
+t_list		*find_job_by_status(t_list *lst, uint8_t want);
 
 /*		PROCESS 	*/
 

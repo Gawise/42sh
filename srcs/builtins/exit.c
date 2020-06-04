@@ -1,8 +1,18 @@
 #include "libft.h"
+#include "exec.h"
 #include "sh.h"
 #include "ft_printf.h"
 #include "var.h"
 #include "struct.h"
+
+
+uint8_t			protect_job(int8_t update)
+{
+	static uint8_t	pj = 0;
+
+	pj += update;
+	return (pj);
+}
 
 static int16_t	exit_opt(t_list *sp, char **av, uint8_t *ret)
 {
@@ -29,17 +39,16 @@ static int16_t	exit_opt(t_list *sp, char **av, uint8_t *ret)
 
 uint8_t			ft_exit(t_job *j, t_process *p)
 {
-	static int	protect_job = 0;
 	uint8_t		ret;
 	t_cfg		*shell;
 
 	(void)j;
 	ret = 0;
 	shell = cfg_shell();
-	if (shell->job && !protect_job)
+	if (find_job_by_status(shell->job, STOPPED) && !protect_job(0))
 	{
-		ft_dprintf(STDERR_FILENO, "have job running or stopped !\n");
-		protect_job++;
+		ft_dprintf(STDERR_FILENO, "You have job stopped !\n");
+		protect_job(1);
 		return (FAILURE);
 	}
 	if (shell->interactive)
