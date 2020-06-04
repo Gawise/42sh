@@ -39,6 +39,6 @@ uint8_t		print_message_signal(uint8_t sig, t_job *j)
 	if ((sig < 19 || sig > 22) && tab[sig] && j->fg)
 		ft_dprintf(STDERR_FILENO, "%s\n", tab[sig]);
 	else if (tab[sig])
-		ft_dprintf(STDERR_FILENO, "\n[%d]\t+ %s  %s\n", j->id, tab[sig], j->cmd); //stdrr ?
+		ft_dprintf(STDERR_FILENO, "\n[%d]\t+ %s  %s\n", j->id, tab[sig], j->cmd);
 	return (sig + 128);
 }

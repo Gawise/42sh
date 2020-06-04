@@ -19,6 +19,7 @@ uint32_t	process_errors_handling(t_process *p, uint32_t err)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_LOOP);
 	else if (err & E_NTL)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->path, STR_NTL);
+	protect_malloc(p->message);
 	p->ret = err & (E_UNFOUND | E_NOENT) ? 127 : 126;
 	return (P_ERROR | err);
 }
@@ -35,6 +36,7 @@ uint32_t	redir_errors_handling(t_process *p, uint32_t err, char *info,
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_NOENT);
 	else if (err & E_ACCES)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, info, STR_ACCES);
+	protect_malloc(p->message);
 	ft_strdel(&info);
 	p->ret = 1;
 	return (err | R_ERROR);

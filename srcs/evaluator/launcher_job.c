@@ -62,7 +62,7 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				ft_ex("[check and do pipe] close error:"); //debug
+				ft_ex(EXUEPTD); //debug
 	}
 	return (routine_ending_job(shell, job));
 }

@@ -21,11 +21,12 @@
 # define STR_LOOP "Too many links"
 # define STR_NTL "File name too long"		/*       1000001000000 */
 
-# define EX "[Critical systeme srror]\nexit\n"
+# define EX "[Critical systeme error]\nexit\n"
 # define EXMALLOC "[Critical systeme error] Cannot allocate memory\nexit\n"
 # define EXEXEC "[Critical Error] Execve fail\nexit\n"
 # define EXFD "[Critical Error] Bad file descriptor\nexit\n"
 # define EXFD2 "Bad file descriptor\n"
+# define EXUEPTD "An unexpected error occurred... We prefer to leave now\nexit\n"
 
 
 
