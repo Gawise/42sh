@@ -6,11 +6,11 @@
 #include "struct.h"
 
 
-uint8_t			protect_job(int8_t update)
+uint8_t			protect_job(uint8_t update)
 {
 	static uint8_t	pj = 0;
 
-	pj += update;
+	pj = update;
 	return (pj);
 }
 
