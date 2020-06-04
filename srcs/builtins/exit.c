@@ -5,16 +5,15 @@
 #include "var.h"
 #include "struct.h"
 
-
-uint8_t			protect_job(uint8_t update)
+int8_t			protect_job(int8_t update)
 {
-	static uint8_t	pj = 1;
-	uint8_t			ret;
+	static int8_t	pj = 1;
 
-	ret = pj;
-	pj = update;
-	ft_printf("ret = %d \n ", ret);
-	return (ret);
+	if (update > 0 && pj < 1)
+		pj += update;
+	else if (update < 0)
+		pj += update;
+	return (pj);
 }
 
 static int16_t	exit_opt(t_list *sp, char **av, uint8_t *ret)
@@ -50,6 +49,7 @@ uint8_t			ft_exit(t_job *j, t_process *p)
 	shell = cfg_shell();
 	if (find_job_by_status(shell->job, STOPPED) && protect_job(0))
 	{
+		protect_job(-2);
 		ft_dprintf(STDERR_FILENO, "You have job stopped !\n");
 		return (FAILURE);
 	}
