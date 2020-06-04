@@ -48,6 +48,7 @@ LEXSRCS += inhib.c
 LEXSRCS += lexer.c
 LEXSRCS += misc.c
 LEXSRCS += newline.c
+LEXSRCS += prompt.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
 LEXSRCS += token.c

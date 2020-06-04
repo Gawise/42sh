@@ -3,6 +3,12 @@
 #include "lexer.h"
 #include "sh.h"
 
+void	del_flag_queue(void *data, size_t size)
+{
+	(void)size;
+	ft_memdel(&data);
+}
+
 void	del_token(void *data, size_t size)
 {
 	t_token	*token;
