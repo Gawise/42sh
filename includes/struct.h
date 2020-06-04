@@ -251,6 +251,7 @@ typedef struct	s_cs_line
 	t_dlist         *history;
 	t_point			clipb; //start et end de la selection
 	char			*old_history;
+	int				read_error;
 }				t_cs_line;
 
 /*
