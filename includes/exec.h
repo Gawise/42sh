@@ -99,6 +99,7 @@ uint8_t		ft_setenv(t_job *j, t_process *p);
 uint8_t		ft_unsetenv(t_job *j, t_process *p);
 uint8_t		ft_env(t_job *j, t_process *p);
 uint8_t		ft_exit(t_job *j, t_process *p);
+int8_t		protect_job(int8_t update);
 uint8_t		ft_hash(t_job *j, t_process *p);
 uint8_t 	ft_jobs(t_job *j, t_process *p);
 uint8_t 	ft_cd(t_job *j, t_process *p);
@@ -142,6 +143,7 @@ uint8_t		ft_eval(t_list *cmd_table);
 void		cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 
 uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process);
+t_list		*find_job_by_status(t_list *lst, uint8_t want);
 
 /*		PROCESS 	*/
 

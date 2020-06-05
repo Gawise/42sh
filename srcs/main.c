@@ -15,6 +15,7 @@
 
 void	print_debug(t_list *elem);
 
+
 int		lexer_routine(char **line, t_lexer *lexer)
 {
 	set_signal_ign();
@@ -72,6 +73,7 @@ int		eval_routine(t_parser *parser)
 		return (0);
 	}
 	ft_lstdel(&parser->table, del_cmd_table);
+	protect_job(1);
 	return (1);
 }
 

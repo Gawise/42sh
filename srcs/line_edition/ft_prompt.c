@@ -68,6 +68,7 @@ char			*read_nonint(t_cfg *cfg)
 	return (line);
 }
 
+
 void			read_input(void)
 {
 	int			len;

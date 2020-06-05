@@ -26,7 +26,7 @@ void		hdl_sighup(int sig)
 	}
 	if (shell->cur_job)
 		kill(-shell->cur_job, sig);
-	ft_printf("\n%s:\t%d hangup\n", NAME_SH, shell->pid);
+	ft_printf("\n%s:\t%d hangup\n", PROJECT, shell->pid);
 	exit_routine(shell, 129);
 }
 
