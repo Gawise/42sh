@@ -22,6 +22,7 @@ void		do_my_dup2(int16_t fd1, int16_t fd2)
 	if (dup2(fd1, fd2) == -1)
 	{
 		ft_asprintf(&err,"%d: %s", fd1, EXFD2);
+		protect_malloc(err);
 		ft_ex(err);
 	}
 }

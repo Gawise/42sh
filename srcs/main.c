@@ -15,11 +15,6 @@
 
 void	print_debug(t_list *elem);
 
-void	ft_ex(char *error)
-{
-	ft_dprintf(STDERR_FILENO,"%s: %s", PROJECT, error);
-	exit(EXIT_FAILURE);
-}
 
 int		lexer_routine(char **line, t_lexer *lexer)
 {
@@ -71,22 +66,23 @@ int		line_edition_routine(char **line)
 
 int		eval_routine(t_parser *parser)
 {
-	if (parser->state != S_PARSER_SYNTAX_ERROR)
-		ft_eval(parser->table);
-	ft_lstdel(&parser->table, del_cmd_table);
-	return (1);
-}
-
-int		analyzer_routine(t_parser *parser)
-{
-	if (a_make_args_tab(parser) < 0
-	|| (parser->state != S_PARSER_SYNTAX_ERROR
-	&& !a_set_jobs_str(parser)))
+	if (parser->state != S_PARSER_SYNTAX_ERROR
+	&& ft_eval(parser->table))
 	{
 		ft_lstdel(&parser->table, del_cmd_table);
 		return (0);
 	}
-	a_remove_leading_tabs(parser);
+	ft_lstdel(&parser->table, del_cmd_table);
+	protect_job(1);
+	return (1);
+}
+
+int		analyzer_routine(t_cmd_table *cmd)
+{
+	if (a_make_args_tab(cmd) < 0)
+		return (0);
+	a_set_jobs_str(cmd);
+	a_remove_leading_tabs(cmd);
 	return (1);
 }
 
@@ -104,7 +100,6 @@ int		main(int ac, char **av, char **env)
 		if ((ret = line_edition_routine(&line)) <= 0
 		|| (ret = lexer_routine(&line, &lexer)) <= 0
 		|| (ret = parser_routine(&lexer, &parser)) <= 0
-		|| (ret = analyzer_routine(&parser)) <= 0
 		|| (ret = eval_routine(&parser)) <= 0)
 		{
 			if (ret == -1)

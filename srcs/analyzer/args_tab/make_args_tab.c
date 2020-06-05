@@ -46,15 +46,7 @@ int	mat_and_or(t_list *and_or_lst)
 	return (args_tab_iter(and_or->s_cmd, &mat_s_cmd));
 }
 
-int	mat_table(t_list *table_lst)
+int	a_make_args_tab(t_cmd_table *table)
 {
-	t_cmd_table	*table;
-
-	table = (t_cmd_table *)table_lst->data;
 	return (args_tab_iter(table->and_or, &mat_and_or));
-}
-
-int	a_make_args_tab(t_parser *parser)
-{
-	return (args_tab_iter(parser->table, &mat_table));
 }

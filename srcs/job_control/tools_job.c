@@ -6,6 +6,20 @@
 #include "exec.h" // only for db
 #include "job_control.h"
 
+t_list			*find_job_by_status(t_list *lst, uint8_t want)
+{
+	t_job	*j;
+
+	while (lst)
+	{
+		j = lst->data;
+		if (j->status == want)
+			return (lst);
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
 void			add_job_cfg(t_job *job)
 {
 	t_cfg	*shell;
@@ -17,7 +31,6 @@ void			add_job_cfg(t_job *job)
 	ft_cpy_job(job, &jc);
 	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
 	ft_bzero(&jc, sizeof(t_job));
-
 	if (shell->debug)
 	{
 		t_list	*ldb;

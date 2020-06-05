@@ -48,6 +48,7 @@ LEXSRCS += inhib.c
 LEXSRCS += lexer.c
 LEXSRCS += misc.c
 LEXSRCS += newline.c
+LEXSRCS += prompt.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
 LEXSRCS += token.c
@@ -140,10 +141,11 @@ JBSRCS += routine_check_child.c
 
 ## COMMON TOOLS  ##
 
-TOOLSRCS += path_errors.c
 TOOLSRCS += tools_path.c
-TOOLSRCS += setvar_add.c
 TOOLSRCS += tools_var.c
+TOOLSRCS += tools_sh.c
+TOOLSRCS += path_errors.c
+TOOLSRCS += setvar_add.c
 TOOLSRCS += all_signal.c
 
 ## BUILTIN ##

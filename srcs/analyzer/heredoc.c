@@ -69,22 +69,14 @@ static void		a_trim_commands(t_and_or *and_or)
 	}
 }
 
-void			a_remove_leading_tabs(t_parser *parser)
+void			a_remove_leading_tabs(t_cmd_table *table)
 {
-	t_list		*lst;
 	t_list		*lst_and;
-	t_cmd_table	*table;
 
-	lst = parser->table;
-	while (lst)
+	lst_and = table->and_or;
+	while (lst_and)
 	{
-		table = lst->data;
-		lst_and = table->and_or;
-		while (lst_and)
-		{
-			a_trim_commands(lst_and->data);
-			lst_and = lst_and->next;
-		}
-		lst = lst->next;
+		a_trim_commands(lst_and->data);
+		lst_and = lst_and->next;
 	}
 }
