@@ -18,7 +18,6 @@ static uint8_t		bin_op(char *cmd, char **av, int bang)
 		return (2);
 	}
 	res = fct(av[0], av[2]);
-	ft_printf("coucou av[0]=%s av[2]=%s res=%d bang=%d\n", av[0], av[2], res, bang);
 	if ((bang && !res) || (!bang && res))
 		return (1);
 	return (0);
@@ -53,8 +52,6 @@ static uint8_t		single_str(char **av, int bang)
 	return (0);
 }
 
-void		print_args(char **av);
-
 uint8_t		ft_test(t_job *j, t_process *p)
 {
 	uint8_t		ret;
@@ -68,7 +65,6 @@ uint8_t		ft_test(t_job *j, t_process *p)
 		return (2);
 	if (!(av = retrieve_ops(p->av, &count, &bang)))
 		return (2);
-	print_args(av);
 	if (count >= 4)
 	{
 		ft_dprintf(2, "%s: test: Too many arguments\n", PROJECT);
@@ -81,6 +77,5 @@ uint8_t		ft_test(t_job *j, t_process *p)
 	else
 		ret = single_str(av, bang);
 	tabfree(av);
-	ft_printf("result=%d\n", ret);
 	return (ret);
 }
