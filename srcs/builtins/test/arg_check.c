@@ -4,6 +4,15 @@
 #include "ft_printf.h"
 #include "var.h"
 
+void		print_args(char **av)
+{
+	while (*av)
+	{
+		ft_printf("%s\n", *av);
+		av++;
+	}
+}
+
 int		check_int_args(char *s1, char *s2)
 {
 	if (!ft_strdigit(s1))
@@ -44,6 +53,7 @@ char		**retrieve_ops(char **p_av, int *i, int *bang)
 		*i += 1;
 	if (p_av[1] && ft_strequ(p_av[1], "!"))
 		*bang = 1;
+	ft_printf("i=%d brack=%d bang=%d\n", *i, brack, *bang);
 	if (!(res = ft_memalloc(sizeof(char *) * (*i - brack - *bang))))
 		return (NULL);
 	*i = 1 + *bang;
@@ -55,6 +65,7 @@ char		**retrieve_ops(char **p_av, int *i, int *bang)
 	}
 	res[*i - 1 - *bang] = NULL;
 	*i -= (1 + *bang);
+	ft_printf("i=%d brack=%d bang=%d\n", *i, brack, *bang);
 	return (res);
 }
 
@@ -64,8 +75,13 @@ int		check_closing_bracket(char **av)
 
 	i = 0;
 	while (av[i] && av[i + 1])
+	{
+		ft_printf("av[%d] %s\n", i, av[i]);
 		i++;
+	}
+		ft_printf("av[%d] %s\n", i, av[i]);
 	if (ft_strequ(av[i], "]"))
-		return (0);
-	return (1);
+		return (1);
+	ft_dprintf(2, "%s: [: missing `]'\n");
+	return (0);
 }
