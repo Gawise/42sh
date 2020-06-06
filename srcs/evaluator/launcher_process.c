@@ -127,7 +127,7 @@ void		run_process(t_cfg *shell, t_job *j, t_process *p)
 	p->status = RUNNING | (p->status & ~WAITING);
 	process_type(p);
 	process_assign(shell, p, p->assign); // not cmd != false
-	debug_print_process(j, p, "run_process");
+	debug_print_process(shell->debug, p, "Run_Process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		do_redir(p->fd);

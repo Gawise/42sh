@@ -48,8 +48,6 @@ static uint8_t	type_find(t_cfg *shell, t_process *ptype, t_list *env)
 
 uint8_t			ft_type(t_job *j, t_process *p)
 {
-
-	(void)j;
 	uint8_t		i;
 	t_process	ptype;
 	t_cfg		*shell;
