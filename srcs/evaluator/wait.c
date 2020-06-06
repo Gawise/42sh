@@ -7,7 +7,6 @@
 
 void			aplylyse_wstatus(t_process *p, int wstatus)
 {
-
 	if (WIFEXITED(wstatus))
 	{
 		p->ret = WEXITSTATUS(wstatus);
@@ -30,7 +29,7 @@ void			update_process(t_list *lst, pid_t child, int wstatus)
 	t_process *p;
 
 	if (child == -1)
-		return ; /*only debug dev*/
+		return ;
 	p = find_process_by_pid(lst, child);
 	aplylyse_wstatus(p, wstatus);
 }
@@ -64,6 +63,7 @@ void			wait_process(t_job *job)
 	pid_t		pid_child;
 	int32_t		wstatus;
 
+	debug_print_all_process(job->process, "Before Wait");
 	while (ft_lsthave(job->process, has_running))
 	{
 		wstatus = 0;
@@ -71,7 +71,6 @@ void			wait_process(t_job *job)
 		update_process(job->process, pid_child, wstatus);
 	}
 	update_job(job);
-	if (cfg_shell()->debug)
-		debug_print_all(job, job->process, "wait ending");
+	debug_print_all_process(job->process, "After Wait");
 	return ;
 }

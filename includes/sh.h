@@ -38,6 +38,7 @@
 typedef struct	s_cfg t_cfg;
 
 
+void		set_var(t_cfg *shell);
 void		exit_routine(t_cfg *shell, uint8_t ret);
 void		ft_ex(char *error);
 void		protect_malloc(void *malloc);

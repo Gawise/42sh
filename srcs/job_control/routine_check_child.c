@@ -107,14 +107,5 @@ void			check_child(t_cfg *shell, t_list *lstjob)
 	}
 	if (new == TRUE)
 		update_listjob(shell);
-	if (shell->debug)
-	{
-		t_list *job_debug = shell->job;
-		while (job_debug)
-		{
-			job = job_debug->data;
-			debug_print_all(job, job->process, "check_child");
-			job_debug = job_debug->next;
-		}
-	}
+	debug_print_everything(shell->job, "Routine Check_Child");
 }

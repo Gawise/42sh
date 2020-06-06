@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_assign.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: walden <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/06 15:04:58 by walden            #+#    #+#             */
+/*   Updated: 2020/06/06 15:08:56 by walden           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec.h"
 #include "libft.h"
 #include "sh.h"
@@ -20,7 +32,8 @@ static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 	}
 }
 
-static void		assign_for_b_special(t_cfg *shell, t_process *p, t_list *assignment)
+static void		assign_for_b_special(t_cfg *shell, t_process *p,
+		t_list *assignment)
 {
 	t_assignment	*assign;
 

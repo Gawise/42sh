@@ -39,7 +39,7 @@ uint8_t		var_check_name(char *name)
 
 uint8_t		ft_setvar(t_list **lst, char *name, char *value)
 {
-	t_list *find;
+	t_list	*find;
 	t_var	*var;
 
 	find = NULL;
@@ -57,7 +57,7 @@ uint8_t		ft_setvar(t_list **lst, char *name, char *value)
 	return (SUCCESS);
 }
 
-uint8_t		several_setvar(t_list  **var, char *str)
+uint8_t		several_setvar(t_list **var, char *str)
 {
 	char		*value;
 	char		*tmp;
@@ -65,7 +65,8 @@ uint8_t		several_setvar(t_list  **var, char *str)
 
 	value = NULL;
 	err = 0;
-	if ((tmp = ft_strchr(str, '=')) && (value = tmp +1))
+	if ((tmp = ft_strchr(str, '='))
+			&& (value = tmp + 1))
 		*tmp = '\0';
 	if (ft_setvar(var, str, value) == FAILURE)
 		err = FAILURE;
