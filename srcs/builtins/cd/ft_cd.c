@@ -20,7 +20,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int		cd_oldpwd(t_job *j, t_process *p)
+int				cd_oldpwd(t_job *j, t_process *p)
 {
 	char	**str;
 	char	*oldpwd;
@@ -44,7 +44,13 @@ int		cd_oldpwd(t_job *j, t_process *p)
 	return (ret);
 }
 
-uint8_t		ft_cd(t_job *job, t_process *p)
+static uint8_t	cd_too_many_args(void)
+{
+	ft_dprintf(2, "21sh: cd: too many arguments\n");
+	return (1);
+}
+
+uint8_t			ft_cd(t_job *job, t_process *p)
 {
 	char	opt;
 	char	*opr;
@@ -54,6 +60,8 @@ uint8_t		ft_cd(t_job *job, t_process *p)
 	i = 1;
 	if (!(opt = cd_getopt(p->av, &i)))
 		return (1);
+	if (p->av[i] && p->av[i + 1])
+		return (cd_too_many_args());
 	opr = p->av[i];
 	if (!opr)
 		return (cd_home(job, p));
