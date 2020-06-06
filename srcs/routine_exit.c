@@ -23,6 +23,7 @@ void	exit_routine(t_cfg *shell, uint8_t ret)
 			(int)shell->term_origin.c_iflag != -1)
 		set_termios(TCSADRAIN, &shell->term_origin);
 	close(shell->debug);
+	close(FD_NONINT);
 	clean_cfg(shell);
 	exit(ret);
 }

@@ -38,10 +38,10 @@ static uint16_t	set_debug(char **av, int *ac)
 		err = path_errors(av[*ac], TRUE, S_IWUSR);
 		argv_path_fail(av[*ac], "Debug mode fail", err);
 	}
-	if (dup2(fd, 259) == -1)
+	if (dup2(fd, FD_DEBUG) == -1)
 		ft_ex(EX);
 	close(fd);
-	fd = 259;
+	fd = FD_DEBUG;
 	*ac += 1;
 	return (fd);
 }
