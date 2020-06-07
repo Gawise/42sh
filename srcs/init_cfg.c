@@ -21,7 +21,7 @@ static void		argv_path_fail(char *path, char *mode, uint32_t err)
 	err = err >> 7;
 	while (!((err = err >> 1) & 1))
 		tmp++;
-	ft_dprintf(STDERR_FILENO, "%s; %s: %s: %s\n",
+	ft_dprintf(STDERR_FILENO, "%s: %s: %s: %s\n",
 			PROJECT, mode, path, taberr[tmp]);
 	exit_routine(cfg_shell(), 1);
 }
@@ -35,7 +35,7 @@ static uint16_t	set_debug(char **av, int *ac)
 		return (STDERR_FILENO);
 	if ((fd = open(av[*ac], O_CREAT | O_WRONLY, 0644)) == -1)
 	{
-		err = path_errors(av[*ac], TRUE, S_IWUSR);
+		err = check_access(av[*ac], S_IWUSR);
 		argv_path_fail(av[*ac], "Debug mode fail", err);
 	}
 	if (dup2(fd, FD_DEBUG) == -1)
@@ -51,7 +51,7 @@ static void		set_nonint(t_cfg *shell, char *path)
 	int32_t		err;
 
 	shell->file = (*path == '/') ? ft_strdup(path) : create_abs_path(path);
-	if ((err = path_errors(shell->file, TRUE, S_IRUSR)))
+	if ((err = check_access(shell->file, S_IRUSR)))
 		argv_path_fail(shell->file, "Non-interactive mode fail", err);
 	shell->interactive = 0;
 }
