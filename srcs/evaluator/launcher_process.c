@@ -14,24 +14,6 @@
 #include "sh.h"
 
 
-
-static uint8_t		ft_fg(t_job *j, t_process *p)
-{
-		printf("FG builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
-
-static uint8_t		ft_bg(t_job *j, t_process *p)
-{
-		printf("BG builtin manquant\n");
-		(void)j;
-		(void)p;
-		return (0);
-}
-
-
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
 	uint8_t		(*tab_f[11])(t_job *, t_process *);

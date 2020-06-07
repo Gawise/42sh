@@ -60,7 +60,7 @@ static uint8_t	deep_check(t_job *j, pid_t child, int32_t wstatus)
 	return (TRUE);
 }
 
-static void		update_listjob(t_cfg *shell)
+void		update_listjob(t_cfg *shell)
 {
 	uint8_t		ending_status;
 	t_list		*ljob;
