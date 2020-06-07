@@ -1,0 +1,7 @@
+bla=hgrdh
+bli=hgfdhgfdh
+blu=
+echo ${hfgdh:-"${hfg:+hfg}"}
+echo $?
+echo ${fdgh:-"aaaaa${bla:-fgd}bbbbb"}
+echo $?
