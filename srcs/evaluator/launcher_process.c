@@ -72,8 +72,8 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		if (job->fg)
 			if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
 				ft_ex(EX); //debug
-		set_signal_child();
 	}
+	set_signal_child();
 	do_pipe(p);
 	do_redir(p->fd);
 	if (p->setup & ERROR)
