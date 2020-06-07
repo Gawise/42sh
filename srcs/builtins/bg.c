@@ -59,7 +59,7 @@ uint8_t		put_job_in_bg(t_job *j, char *ope, uint8_t jid)
 	if (j->status == RUNNING)
 		return (print_bg_error(ope, jid));
 	ft_printf("[%d] %s &\n", j->id, j->cmd);
-	job_is_running(j);
+//	job_is_running(j);
 	set_termios(TCSADRAIN, &shell->term_origin);
 	kill(-j->pgid, SIGCONT);
 	update_listjob(shell);
@@ -86,7 +86,11 @@ int		bg_curr_job(t_job *j, int16_t jid)
 
 uint8_t		ft_bg(t_job *j, t_process *p)
 {
-	int16_t		jid;
+
+	(void)j;
+	(void)p;
+	return (0);
+/*	int16_t		jid;
 	uint8_t		i;
 	int8_t		ret;
 
@@ -111,6 +115,6 @@ uint8_t		ft_bg(t_job *j, t_process *p)
 		}
 		i++;
 	}
-	return (ret ? 1 : 0);
+	return (ret ? 1 : 0);   */
 }
 // si bg a un job fini, message special "job has terminated", je renvoie "job already in bg"
