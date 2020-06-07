@@ -1,0 +1,6 @@
+bla=aaaaaaaaaaaaaaaa
+bli='#bbbbbbbbbb'
+echo ${bla#aaa}
+echo $?
+echo ${bli#'#bb'}
+echo $?

@@ -2,7 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 
-t_lexer_flag	l_get_last_flag(t_lexer *lexer)
+t_lexer_flag		l_get_last_flag(t_lexer *lexer)
 {
 	t_list		*flag;
 
@@ -12,7 +12,7 @@ t_lexer_flag	l_get_last_flag(t_lexer *lexer)
 	return (0);
 }
 
-int				l_add_flag(t_lexer *lexer, char c)
+int					l_add_flag(t_lexer *lexer, char c)
 {
 	if (!(l_create_flag_queue(lexer)))
 		return (0);
@@ -27,7 +27,17 @@ int				l_add_flag(t_lexer *lexer, char c)
 	return (1);
 }
 
-int				l_flag_state_add(t_lexer *lexer, char c)
+static void			l_flag_handle_dquote(t_lexer *lexer, char c)
+{
+	if (c == '$')
+		l_build_exp(lexer, c);
+	else if (c == '\\')
+		l_bslash_add(lexer, c);
+	else
+		l_buffer_add(lexer, c);
+}
+
+int					l_flag_state_add(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
@@ -42,14 +52,7 @@ int				l_flag_state_add(t_lexer *lexer, char c)
 			return (l_complete_str(lexer, l_get_char(lexer)));
 	}
 	else if (flag == F_DQUOTE)
-	{
-		if (c == '$')
-			l_build_exp(lexer, c);
-		else if (c == '\\')
-			l_bslash_add(lexer, c);
-		else
-			l_buffer_add(lexer, c);
-	}
+		l_flag_handle_dquote(lexer, c);
 	else if ((flag == F_BRACKEXP && c == '}'))
 	{
 		l_buffer_add(lexer, c);
@@ -63,7 +66,7 @@ int				l_flag_state_add(t_lexer *lexer, char c)
 	return (1);
 }
 
-int				l_delim_flag(t_lexer *lexer, char c)
+int					l_delim_flag(t_lexer *lexer, char c)
 {
 	t_lexer_flag	flag;
 
@@ -86,10 +89,4 @@ int				l_delim_flag(t_lexer *lexer, char c)
 	if (!l_get_last_flag(lexer))
 		lexer->state = S_TK_WORD;
 	return (1);
-}
-
-void			del_flag_queue(void *data, size_t size)
-{
-	(void)size;
-	ft_memdel(&data);
 }

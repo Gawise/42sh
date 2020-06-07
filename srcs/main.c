@@ -15,11 +15,6 @@
 
 void	print_debug(t_list *elem);
 
-void	ft_ex(char *error)
-{
-	ft_dprintf(STDERR_FILENO,"%s: %s", PROJECT, error);
-	exit(EXIT_FAILURE);
-}
 
 int		lexer_routine(char **line, t_lexer *lexer)
 {
@@ -78,6 +73,7 @@ int		eval_routine(t_parser *parser)
 		return (0);
 	}
 	ft_lstdel(&parser->table, del_cmd_table);
+	protect_job(1);
 	return (1);
 }
 

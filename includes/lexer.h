@@ -78,7 +78,6 @@ t_lexer_flag	l_get_last_flag(t_lexer *lexer);
 int	l_add_flag(t_lexer *lexer, char c);
 int	l_flag_state_add(t_lexer *lexer, char c);
 int	l_delim_flag(t_lexer *lexer, char c);
-void	del_flag_queue(void *data, size_t size);
 
 /*
 **	buffer.c
@@ -115,7 +114,6 @@ void	l_set_flag(t_lexer *lexer, t_lexer_flag flag);
 void	l_unset_flag(t_lexer *lexer, t_lexer_flag flag);
 int	l_get_flag(t_lexer *lexer, t_lexer_flag flag);
 int	l_do_nothing(t_lexer *lexer, char c);
-int	l_complete_str(t_lexer *lexer, char c);
 
 /*
 **	quote.c
@@ -146,6 +144,7 @@ int		l_delim_token(t_lexer *lexer, char c);
 void	del_token(void *data, size_t size);
 void	tabfree(char **tab);
 void	del_str(void *data, size_t size);
+void	del_flag_queue(void *data, size_t size);
 
 /*
 **	misc.c
@@ -154,6 +153,12 @@ void	del_str(void *data, size_t size);
 int		lex_err(t_lexer *lexer, char c);
 char	l_get_char(t_lexer *lexer);
 t_char_type	l_get_char_type(char c);
+
+/*
+**	prompt.c
+*/
+
+int			l_complete_str(t_lexer *lexer, char c);
 
 /*
 **	state/start.c

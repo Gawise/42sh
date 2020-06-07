@@ -44,7 +44,7 @@ static uint8_t	lvl_and_or(t_cfg *shell, t_list *lst)
 	return (0);
 }
 
-static uint8_t		lvl_cmd_table(t_cfg *shell, t_list *lst)
+static uint8_t	lvl_cmd_table(t_cfg *shell, t_list *lst)
 {
 	t_cmd_table		*cmd;
 

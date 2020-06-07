@@ -68,6 +68,7 @@ char			*read_nonint(t_cfg *cfg)
 	return (line);
 }
 
+
 void			read_input(void)
 {
 	int			len;
@@ -86,9 +87,11 @@ void			read_input(void)
 			break ;
 		if (len < 0)
 			stop = -1;
-		buf[len] = '\0';
+		else
+			buf[len] = '\0';
 		if (cs->history)
 			cs->history->data = cs->input;
+		cs->read_error = (len < 0 ? 1 : 0);
 		stop = (stop >= 0 ? check_keys(buf) : stop);
 	}
 }
@@ -136,6 +139,8 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 	signal(SIGINT, sig_handler);
 	ret = NULL;
 	read_input();
+	if (cs->read_error == 1)
+		return (ft_strnew(0));
 	end_key(cs);
 	if (!cs->sig_int)
 		tputs(tgoto(tgetstr("cm", NULL), 0, cs->row), 1, &my_putchar);

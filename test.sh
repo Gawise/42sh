@@ -179,6 +179,8 @@ run_test_group () {
 	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
 	output_print "${group_basename^^}"
 	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
+	GROUP_FAIL=0
+	GROUP_SUCCESS=0
 	for i in "${dirs[@]}"
 	do
 		make_test $group/$i
@@ -192,8 +194,6 @@ run_test_group () {
 		fi
 	done
 	output_print "$GROUP_FAIL/$(($GROUP_FAIL + $GROUP_SUCCESS)) tests failed"
-	GROUP_FAIL=0
-	GROUP_SUCCESS=0
 }
 
 run_tests () {
@@ -297,7 +297,8 @@ read -p "Which test do you wish to perform?
 	14)	quoting
 	15)	redirections
 	16)	signals
-	17)	exit
+	17)	parameter_exp
+	18)	exit
     > " ret
 case $ret in
 	0 ) ;;
@@ -317,7 +318,8 @@ case $ret in
 	14 ) TEST_DIRS="quoting";;
 	15 ) TEST_DIRS="redirections";;
 	16 ) TEST_DIRS="signals";;
-	17 ) exit;;
+	17 ) TEST_DIRS="parameter_exp";;
+	18 ) exit;;
 esac
 
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]

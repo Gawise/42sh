@@ -3,7 +3,6 @@
 #include "sh.h"
 #include "ft_printf.h"
 
-
 void		cpy_var_list(void *dst, void *src)
 {
 	t_var *d;

@@ -2,85 +2,90 @@
 #include "struct.h"
 #include "sh.h"
 
-void	debug_print_all(t_job *j, t_list *process, char *where)
+void	debug_print_job(int32_t fd_debug, t_job *j, char *where)
 {
-	t_cfg		*shell;
-	t_process	*p;
-
-	shell = cfg_shell();
-	if (!shell->debug)
+	if (!fd_debug)
 		return ;
-	ft_dprintf(shell->debug, "\n\n-----------\t [DEBUG] Print all\t %s\n", where);
-	ft_dprintf(shell->debug, "\t---- [PROCESS]\n");
-
-	while (process)
-	{
-		p = process->data;
-		ft_dprintf(shell->debug, "CMD = [%s]\tPATH = [%s]\t PID = [%d]\n", p->cmd, p->path, p->pid);
-		ft_dprintf(shell->debug, "SETUP = [%032b]\n", p->setup);
-		ft_dprintf(shell->debug, "STATUS = [%d]\t RET = [%d]\n", p->status, p->ret);
-		process = process->next;
-	}
-	ft_dprintf(shell->debug, "\t---- [JOB]\n");
-	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
-	ft_dprintf(shell->debug, "STATUS = [%d]\tRET = [%d]\n", j->status, j->ret);
-	ft_dprintf(shell->debug, "-----------\n", where);
+	ft_dprintf(fd_debug, "\t----> [Print JOB]  [%s]\n", where);
+	ft_dprintf(fd_debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n",
+			j->cmd, j->id, j->fg);
+	ft_dprintf(fd_debug, "STATUS = [%d]\tRET = [%d]]\n",
+			j->status, j->ret);
+	ft_dprintf(fd_debug, "-----------\n");
 }
 
-void	debug_print_process(t_job *j, t_process *p, char *where)
+void	debug_print_process(int32_t fd_debug, t_process *p, char *where)
 {
-	t_cfg		*shell;
+	int16_t		*t;
+	t_list		*fd;
 
-	shell = cfg_shell();
-	if (!shell->debug)
+	if (!fd_debug)
 		return ;
-	ft_dprintf(shell->debug, "\n\n-----------\t [DEBUG] Print process\t %s\n", where);
-	ft_dprintf(shell->debug, "\t---- [JOB]\n");
-	ft_dprintf(shell->debug, "CMD = [%s]\tID = [%d]\tFG = [%d]\n", j->cmd, j->id, j->fg);
-	ft_dprintf(shell->debug, "\t---- [PROCESS]\n");
-	ft_dprintf(shell->debug, "CMD = [%s]\tPATH = [%s]\tPID = [%d]\n", p->cmd, p->path, p->pid);
-	ft_dprintf(shell->debug, "SETUP = [%032b]\n", p->setup);
-	ft_dprintf(shell->debug, "STATUS = [%d]\n", p->status);
-	ft_dprintf(shell->debug, "\t---- \n");
-}
-
-void	debug_print_lstfd(t_list *fd)
-{
-	int16_t	*t;
-	t_cfg	*shell;
-
-	shell = cfg_shell();
-	if (!shell->debug)
-		return ;
-	while(fd)
+	fd = p->fd;
+	ft_dprintf(fd_debug, "\t----> [Print Process]  [%s]\n", where);
+	ft_dprintf(fd_debug, "CMD = [%s]\tPATH = [%s]\tPID = [%d]\n",
+			p->cmd, p->path, p->pid);
+	ft_dprintf(fd_debug, "SETUP = [%032b]\n", p->setup);
+	ft_dprintf(fd_debug, "STATUS = [%d]\t RET = [%d]\n",
+		p->status, p->ret);
+	if (!fd)
+		ft_dprintf(fd_debug, "No redirection in all process job\n");
+	while (fd)
 	{
 		t = fd->data;
-		ft_dprintf(shell->debug, "fd[0] = [%d]\tfd[1] = [%d]\n", t[0], t[1]);
+		ft_dprintf(fd_debug, "fd[0] = [%d]\tfd[1] = [%d]\n", t[0], t[1]);
 		fd = fd->next;
 	}
-
 }
 
-void	debug_print_allfdjob(t_list *process)
+void	debug_print_all_process(t_list *process, char *where)
 {
-	t_process	*p;
 	t_cfg		*shell;
 
 	shell = cfg_shell();
-	p = process->data;
 	if (!shell->debug)
 		return ;
-	if (!p->fd)
-	{
-		ft_dprintf(shell->debug, "No redirection in all process job\n");
-		return ;
-	}
-	ft_dprintf(shell->debug, "Print all fd\n");
+	ft_dprintf(shell->debug,
+			"\n\n-----------\t [DEBUG] [All Process]\t[%s]\n", where);
 	while (process)
 	{
-		p = process->data;
-		ft_dprintf(shell->debug, "Process [%s]\n", p->cmd);
-		debug_print_lstfd(p->fd);
+		debug_print_process(shell->debug, process->data, 0);
 		process = process->next;
+	}
+	ft_dprintf(shell->debug, "\n");
+}
+
+void	debug_print_all_job(t_list *job, char *where)
+{
+	t_cfg		*shell;
+
+	shell = cfg_shell();
+	if (!shell->debug)
+		return ;
+	ft_dprintf(shell->debug,
+			"\n\n-----------\t [DEBUG] [All Job]\t[%s]\n", where);
+	while (job)
+	{
+		debug_print_job(shell->debug, job->data, 0);
+		job = job->next;
+	}
+}
+
+void	debug_print_everything(t_list *job, char *where)
+{
+	t_cfg		*shell;
+	t_job		*j;
+
+	shell = cfg_shell();
+	if (!shell->debug)
+		return ;
+	ft_dprintf(shell->debug,
+			"\n\n-----------\t [DEBUG] [EveryThings]\t[%s]\n", where);
+	while (job)
+	{
+		j = job->data;
+		debug_print_job(shell->debug, j, 0);
+		debug_print_all_process(j->process, where);
+		job = job->next;
 	}
 }

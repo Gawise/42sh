@@ -42,7 +42,7 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			ft_ex("[Parent process] close error:"); ///debug
+			ft_ex(EXUEPTD); ///debug
 	//if (process->setup & ERROR)
 	//	process->status = FAILED; // pour bg mais pourquoi ?
 	if (cfg_shell()->interactive) //singelton obliger?
@@ -52,7 +52,7 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 		setpgid(process->pid, job->pgid);
 		if (job->fg)// pour tous les process ?
 			if (tcsetpgrp(STDIN_FILENO, job->pgid))
-				ft_ex("[PARENT PROCESS] error tcsetpgrp"); //debug
+				ft_ex(EX); //debug
 	}
 	ft_del_tab((void **)envp);
 	return (SUCCESS);
@@ -62,7 +62,7 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
-			ft_ex("[child process] close error:"); //debug
+			ft_ex(EXUEPTD); ///debug
 	p->pid = getpid();
 	if (cfg_shell()->interactive) //singelton obliger?
 	{
@@ -71,7 +71,7 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 		setpgid(p->pid, job->pgid);
 		if (job->fg)
 			if (tcsetpgrp(STDIN_FILENO, job->pgid) == -1)
-				ft_ex("[CHILD PROCESS] error tcsetpgrp"); //debug
+				ft_ex(EX); //debug
 		set_signal_child();
 	}
 	do_pipe(p);
@@ -106,11 +106,10 @@ uint8_t		fork_process(t_job *job, t_process *p)
 
 void		run_process(t_cfg *shell, t_job *j, t_process *p)
 {
-
 	p->status = RUNNING | (p->status & ~WAITING);
 	process_type(p);
 	process_assign(shell, p, p->assign); // not cmd != false
-	debug_print_process(j, p, "run_process");
+	debug_print_process(shell->debug, p, "Run_Process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
 		do_redir(p->fd);
