@@ -3,6 +3,22 @@
 #include "lexer.h"
 #include "sh.h"
 
+int		count_nl(char *src)
+{
+	int	cnt;
+	int	i;
+
+	cnt = 0;
+	i = 0;
+	while (src[i])
+	{
+		if (src[i] == '\n')
+			cnt++;
+		i++;
+	}
+	return (cnt);
+}
+
 char	*escape_nl(char *src)
 {
 	char	*str;
@@ -10,18 +26,11 @@ char	*escape_nl(char *src)
 	int	i;
 	int	j;
 
-	cnt = 0;
-	i = 0;
 	if (!src)
 		return (NULL);
-	while (src[i])
-	{
-		if (src[i] == '\n')
-			cnt++;
-		i++;
-	}
 	i = 0;
 	j = 0;
+	cnt = count_nl(src);
 	str = ft_strnew(ft_strlen(src) + cnt);
 	while (src[i])
 	{
@@ -38,57 +47,12 @@ char	*escape_nl(char *src)
 	return (str);
 }
 
-void	print_debug(t_list *elem)
-{
-	t_token *token = elem->data;
-	char	*str;
-	if (token->type == TOKEN)
-		str = ft_strdup("TOKEN");
-	if (token->type == WORD)
-		str = ft_strdup("WORD");
-	if (token->type == ASSIGNMENT_WORD)
-		str = ft_strdup("ASSIGNMENT_WORD");
-	if (token->type == NEWLINE)
-	{
-		ft_dprintf(cfg_shell()->debug, "str=%10.10s\ttype= %15s\n", "\\n", "NEWLINE");
-		return ;
-	}
-	if (token->type == IO_NUMBER)
-		str = ft_strdup("IO_NUMBER");
-	if (token->type == AND_IF)
-		str = ft_strdup("AND_IF");
-	if (token->type == AMP)
-		str = ft_strdup("AMP");
-	if (token->type == OR_IF)
-		str = ft_strdup("OR_IF");
-	if (token->type == PIPE)
-		str = ft_strdup("PIPE");
-	if (token->type == SEMI)
-		str = ft_strdup("SEMI");
-	if (token->type == LESS)
-		str = ft_strdup("LESS");
-	if (token->type == DLESS)
-		str = ft_strdup("DLESS");
-	if (token->type == GREAT)
-		str = ft_strdup("GREAT");
-	if (token->type == DGREAT)
-		str = ft_strdup("DGREAT");
-	if (token->type == LESSAND)
-		str = ft_strdup("LESSAND");
-	if (token->type == GREATAND)
-		str = ft_strdup("GREATAND");
-	if (token->type == DLESSDASH)
-		str = ft_strdup("DLESSDASH");
-	ft_dprintf(cfg_shell()->debug, "str=%30s\ttype= %15s\t%p\n", escape_nl(token->str), str, token);
-	ft_strdel(&str);
-}
-
 void	print_flag_queue(t_list *elem)
 {
 	t_lexer_flag	*flag;
 
 	flag = (t_lexer_flag *)elem->data;
-	ft_printf("%d\t%.8b\n", *flag, *flag);
+	ft_dprintf(cfg_shell()->debug, "%d\t%.8b\n", *flag, *flag);
 }
 
 char	*get_flag_name(t_lexer_flag flag)

@@ -182,8 +182,11 @@ INCLUDES += var.h
 
 ## DEBUG ##
 
-DBSRCS += lexer.c
-DBSRCS += parser.c
+DBSRCS += lexer/lexer.c
+DBSRCS += lexer/misc.c
+DBSRCS += parser/parser.c
+DBSRCS += parser/get.c
+DBSRCS += parser/print_cmd.c
 
 SRC += main.c
 SRC += init_shell.c
@@ -214,6 +217,8 @@ OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)debug/lexer
+OPATHS += $(OPATH)debug/parser
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control
 
