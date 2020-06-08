@@ -103,7 +103,8 @@ char			*a_quote_removal(char **str)
 
 	flag = 0;
 	i = 0;
-	cpy = *str;
+	if (!(cpy = *str))
+		return (NULL);
 	if (!(res = ft_strnew(sizeof(char) * ft_strlen(*str))))
 		ft_ex(EXMALLOC);
 	tmp = res;

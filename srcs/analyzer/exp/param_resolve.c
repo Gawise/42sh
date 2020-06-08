@@ -10,7 +10,7 @@ int		print_error_parameter(t_exp *exp, char **str, char *param)
 
 	if ((ret = substitute_word(exp, str)) < 0)
 		return (ret);
-	ft_dprintf(2, "%s: %s\n", param, exp->word);
+	ft_dprintf(2, "21sh: %s: %s\n", param, exp->word);
 	return (-2);
 }
 
@@ -90,12 +90,13 @@ int		resolve_pattern_param(char **str, t_exp *exp, char *param)
 	ret = -1;
 	type = **str == '#' ? 0 : 1;
 	(*str)++;
-	if (ft_strchr("#%", *(*str + 1)))
+	if ((!type && **str == '#') || (type && **str == '%'))
 		(*str)++;
 	if (!(exp->param = resolve_parameter(param, 0))
 	|| (ret = rec_word_parse(exp, str)) < 0
 	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
 		return (ret);
+	exp->word = (void *)a_quote_removal((char **)&exp->word);
 	if (**str == '}')
 		(*str)++;
 	substitute_pattern(exp, type);

@@ -21,6 +21,12 @@ static int		arg_exp(t_simple_cmd *cmd)
 	{
 		if ((ret = exp_main((char **)&lst->data, 0)) < 0)
 			return (ret == -1 ? exp_err((char *)lst->data) : -1);
+		lst = lst->next;
+	}
+	lst = cmd->args;
+	// fsplit
+	while (lst)
+	{
 		lst->data = (void *)a_quote_removal((char **)&lst->data);
 		lst = lst->next;
 	}
@@ -54,6 +60,8 @@ int				word_expansions(t_simple_cmd *cmd)
 		ft_dprintf(debug, "\n----------- expansions -----------\n\n");
 	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
 		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
+	// fsplit
+	cmd->cmd_name = (void *)a_quote_removal((char **)&cmd->cmd_name);
 	if (arg_exp(cmd) < 0 || assign_exp(cmd) < 0)
 		return (-1);
 	return (1);
