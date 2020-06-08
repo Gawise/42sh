@@ -1,5 +1,9 @@
+# binary
 21sh
 21sh_db
+
+# history
+.21sh_history
 
 # Object files
 *.o

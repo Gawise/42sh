@@ -12,6 +12,7 @@
 
 void		set_var(t_cfg *shell)
 {
+	char	*sl;
 	char	*pid;
 
 	pid = ft_itoa(shell->pid);
@@ -26,6 +27,9 @@ void		set_var(t_cfg *shell)
 	ft_strdel(&pid);
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");
+	sl = ft_itoa(ft_atoi(find_var_value(shell->env, "SHLVL")) + 1);
+	ft_setvar(&shell->env, "SHLVL", sl);
+	ft_strdel(&sl);
 }
 
 void		hdl_sighup(int sig)
@@ -59,13 +63,6 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	}
 	ft_ex(EXFD);
 	return (0);
-}
-
-t_cfg		*cfg_shell(void)
-{
-	static t_cfg shell;
-
-	return (&shell);
 }
 
 t_cfg		*init_shell(char **env, char **av, int ac)
