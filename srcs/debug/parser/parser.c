@@ -10,6 +10,7 @@ int	get_nb_word_list(t_list *list);
 char	*get_redir_op(t_token_type type);
 char	*get_and_or_type_str(t_and_or *and_or);
 void	print_s_cmd(t_list *cmd_list);
+void	print_line(void);
 
 void	print_assignment(t_list *assignment)
 {
@@ -40,19 +41,19 @@ void	print_andor(t_list *and_or)
 	t_and_or	*and_or_cont;
 	t_list		*cmd_list;
 	int		n_cmd;
+	char		*str;
 
 	n_cmd = 1;
 	and_or_cont = (t_and_or *)and_or->data;
 	cmd_list = (t_list*)and_or_cont->s_cmd;
-	ft_dprintf(cfg_shell()->debug,
-	"\t----------------------------------------\n");
+	print_line();
 	ft_dprintf(cfg_shell()->debug, "\t| %10s | %10s | %10s |\n", "type",
 	"cmd_nb", "background");
 	ft_dprintf(cfg_shell()->debug, "\t| %10s | %10d | %10d |\n",
-	get_and_or_type_str(and_or_cont), get_nb_cmd(cmd_list),
+	(str = get_and_or_type_str(and_or_cont)), get_nb_cmd(cmd_list),
 	and_or_cont->background);
-	ft_dprintf(cfg_shell()->debug,
-	"\t----------------------------------------\n\n");
+	ft_strdel(&str);
+	print_line();
 	while (cmd_list)
 	{
 		ft_dprintf(cfg_shell()->debug, "\t\tcmd %d:\n", n_cmd);

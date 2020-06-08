@@ -83,3 +83,9 @@ void	print_s_cmd(t_list *cmd_list)
 	handle_redir(cmd);
 	handle_args(args, n_arg, nb_args);
 }
+
+void	print_line(void)
+{
+	ft_dprintf(cfg_shell()->debug,
+	"\t----------------------------------------\n");
+}

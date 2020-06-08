@@ -39,6 +39,7 @@ void	print_debug(t_list *elem)
 {
 	t_token *token;
 	char	**tab;
+	char	*nl;
 
 	tab = token_debug_init();
 	token = elem->data;
@@ -46,7 +47,10 @@ void	print_debug(t_list *elem)
 		ft_dprintf(cfg_shell()->debug, "str=%10.10s\ttype= %15s\n",
 		"\\n", "NEWLINE");
 	else
+	{
 		ft_dprintf(cfg_shell()->debug, "str=%30s\ttype= %15s\t%p\n",
-		escape_nl(token->str), tab[token->type], token);
+		(nl = escape_nl(token->str)), tab[token->type], token);
+		ft_strdel(&nl);
+	}
 	tabfree(tab);
 }
