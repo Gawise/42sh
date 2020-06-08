@@ -1,3 +1,4 @@
+#include "exec.h"
 #include "struct.h"
 #include "libft.h"
 #include "sh.h"
@@ -17,7 +18,7 @@ static void		argv_path_fail(char *path, char *mode, uint32_t err)
 	taberr[3] = STR_LOOP;
 	taberr[4] = STR_NTL;
 	if (!err)
-		ft_ex(USAGE);
+		err = E_NOENT;
 	err = err >> 7;
 	while (!((err = err >> 1) & 1))
 		tmp++;
@@ -51,7 +52,7 @@ static void		set_nonint(t_cfg *shell, char *path)
 	int32_t		err;
 
 	shell->file = (*path == '/') ? ft_strdup(path) : create_abs_path(path);
-	if (((err = check_access(shell->file, R_OK))) > TRUE)
+	if (((err = check_access(shell->file, R_OK))) != TRUE)
 		argv_path_fail(shell->file, "Non-interactive mode fail", err);
 	shell->interactive = 0;
 }
