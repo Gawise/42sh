@@ -3,14 +3,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "sh.h"
-
-int	get_nb_cmd(t_list *cmd);
-int	get_nb_and_or(t_list *and_or);
-int	get_nb_word_list(t_list *list);
-char	*get_redir_op(t_token_type type);
-char	*get_and_or_type_str(t_and_or *and_or);
-void	print_s_cmd(t_list *cmd_list);
-void	print_line(void);
+#include "debug.h"
 
 void	print_assignment(t_list *assignment)
 {
@@ -29,18 +22,19 @@ void	print_redir(t_list *redirection)
 	redir = (t_redir *)redirection->data;
 	operator = get_redir_op(redir->type);
 	if (redir->io_num >= 0)
-		ft_dprintf(cfg_shell()->debug, "\t\t| %7s | %6s | %10s |\n", redir->io_num, operator, redir->file);
+		ft_dprintf(cfg_shell()->debug, "\t\t| %7s | %6s | %10s |\n",
+		redir->io_num, operator, redir->file);
 	else
-		ft_dprintf(cfg_shell()->debug, "\t\t| %7c | %6s | %10s |\n", '-', operator, redir->file);
+		ft_dprintf(cfg_shell()->debug, "\t\t| %7c | %6s | %10s |\n",
+		'-', operator, redir->file);
 	free(operator);
 }
-
 
 void	print_andor(t_list *and_or)
 {
 	t_and_or	*and_or_cont;
 	t_list		*cmd_list;
-	int		n_cmd;
+	int			n_cmd;
 	char		*str;
 
 	n_cmd = 1;
@@ -68,7 +62,7 @@ void	print_cmd_table(t_list *table)
 {
 	t_list		*and_or;
 	t_cmd_table	*table_cont;
-	int		n_andor;
+	int			n_andor;
 
 	n_andor = 1;
 	table_cont = (t_cmd_table *)table->data;
@@ -94,8 +88,9 @@ void	print_cmd_table(t_list *table)
 void	print_parser(t_parser *parser)
 {
 	t_list	*table;
-	int i = 1;
+	int		i;
 
+	i = 1;
 	table = parser->table;
 	while (table)
 	{

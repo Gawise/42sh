@@ -12,15 +12,18 @@ static void	print_lexer_debug(t_lexer *lexer, char c, t_lexer_flag flag)
 	flag_str = NULL;
 	if (c == '\n')
 		ft_dprintf(cfg_shell()->debug, "->\t%s\t%20s\t%s\n\n",
-		"\\n", (state = get_state_str(lexer)), (flag_str = get_flag_name(flag)));
+		"\\n", (state = get_state_str(lexer)),
+		(flag_str = get_flag_name(flag)));
 	else
 		ft_dprintf(cfg_shell()->debug, "->\t%c\t%20s\t%s\n",
-		c, (state = get_state_str(lexer)), (flag_str = get_flag_name(flag)));
+		c, (state = get_state_str(lexer)),
+		(flag_str = get_flag_name(flag)));
 	ft_strdel(&state);
 	ft_strdel(&flag_str);
 }
 
-int	do_lexing(t_lexer *lexer, int (*token_builder[9][12])(t_lexer *, char))
+int			do_lexing(t_lexer *lexer,
+			int (*token_builder[9][12])(t_lexer *, char))
 {
 	char			c;
 	t_lexer_flag	flag;
@@ -38,7 +41,7 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[9][12])(t_lexer *, char))
 	return (1);
 }
 
-int	ft_lexer(char **str, t_lexer *lexer)
+int			ft_lexer(char **str, t_lexer *lexer)
 {
 	int	(*token_builder[9][12])(t_lexer *, char);
 

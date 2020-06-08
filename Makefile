@@ -171,6 +171,7 @@ BTSRCS += type.c
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += debug.h
 INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h

@@ -2,11 +2,7 @@
 #include "ft_printf.h"
 #include "lexer.h"
 #include "sh.h"
-
-char	*escape_nl(char *src);
-void	print_flag_queue(t_list *elem);
-char	*get_flag_name(t_lexer_flag flag);
-char	*get_state_str(t_lexer *lexer);
+#include "debug.h"
 
 static char	**token_debug_init(void)
 {
@@ -35,7 +31,7 @@ static char	**token_debug_init(void)
 	return (tab);
 }
 
-void	print_debug(t_list *elem)
+void		print_debug(t_list *elem)
 {
 	t_token *token;
 	char	**tab;

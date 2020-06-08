@@ -5,8 +5,8 @@
 
 int		count_nl(char *src)
 {
-	int	cnt;
-	int	i;
+	int		cnt;
+	int		i;
 
 	cnt = 0;
 	i = 0;
@@ -22,9 +22,9 @@ int		count_nl(char *src)
 char	*escape_nl(char *src)
 {
 	char	*str;
-	int	cnt;
-	int	i;
-	int	j;
+	int		cnt;
+	int		i;
+	int		j;
 
 	if (!src)
 		return (NULL);

@@ -4,10 +4,11 @@
 #include "parser.h"
 #include "sh.h"
 
-int	get_nb_cmd(t_list *cmd)
+int		get_nb_cmd(t_list *cmd)
 {
-	int nb = 1;
+	int nb;
 
+	nb = 1;
 	if (!cmd->data)
 		return (0);
 	while ((cmd = cmd->next))
@@ -15,10 +16,11 @@ int	get_nb_cmd(t_list *cmd)
 	return (nb);
 }
 
-int	get_nb_and_or(t_list *and_or)
+int		get_nb_and_or(t_list *and_or)
 {
-	int nb = 1;
+	int nb;
 
+	nb = 1;
 	if (!and_or->data)
 		return (0);
 	while ((and_or = and_or->next))
@@ -26,10 +28,11 @@ int	get_nb_and_or(t_list *and_or)
 	return (nb);
 }
 
-int	get_nb_word_list(t_list *list)
+int		get_nb_word_list(t_list *list)
 {
-	int nb = 1;
+	int nb;
 
+	nb = 1;
 	if (!list || !list->data)
 		return (0);
 	while ((list = list->next))

@@ -3,11 +3,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "sh.h"
-
-int	get_nb_cmd(t_list *cmd);
-void	print_assignment(t_list *assignment);
-void	print_redir(t_list *redirection);
-int	get_nb_word_list(t_list *list);
+#include "debug.h"
 
 static void	handle_redir(t_simple_cmd *cmd)
 {
@@ -57,11 +53,11 @@ static void	handle_args(t_list *args, int n_arg, int nb_args)
 	}
 }
 
-void	print_s_cmd(t_list *cmd_list)
+void		print_s_cmd(t_list *cmd_list)
 {
-	t_list		*args;
-	int		n_arg;
-	int		nb_args;
+	t_list			*args;
+	int				n_arg;
+	int				nb_args;
 	t_simple_cmd	*cmd;
 
 	n_arg = 0;
@@ -84,7 +80,7 @@ void	print_s_cmd(t_list *cmd_list)
 	handle_args(args, n_arg, nb_args);
 }
 
-void	print_line(void)
+void		print_line(void)
 {
 	ft_dprintf(cfg_shell()->debug,
 	"\t----------------------------------------\n");
