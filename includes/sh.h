@@ -44,8 +44,7 @@
 # include <stdint.h>
 # include <stddef.h>
 
-typedef struct s_cfg	t_cfg;
-
+void		build_prompt_ps1(uint8_t update);
 int			lexer_routine(char **line, t_lexer *lexer);
 int			parser_routine(t_lexer *lexer, t_parser *parser);
 int			line_edition_routine(char **line);

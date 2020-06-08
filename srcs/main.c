@@ -23,6 +23,7 @@ int		main(int ac, char **av, char **env)
 	shell = init_shell(env, av, ac);
 	while (1)
 	{
+		build_prompt_ps1(0);
 		if ((ret = line_edition_routine(&line)) <= 0
 		|| (ret = lexer_routine(&line, &lexer)) <= 0
 		|| (ret = parser_routine(&lexer, &parser)) <= 0
