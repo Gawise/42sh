@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cursor.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/08 17:09:02 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/11 17:25:55 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "libft.h"
 #include "line_edition.h"
@@ -48,7 +37,7 @@ t_cs_line	*cs_master(char *prompt, int init)
 
 	if (init == 1)
 	{
-		ft_bzero(&cs, 19);
+		ft_bzero(&cs, 20);
 		cs.history = NULL;
 		get_cs_line_position(&cs.min_col, &cs.min_row);
 		cs.col = 0;

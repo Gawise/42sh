@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+LESRCS += history_keys.c
 
 ## LEXER ##
 
@@ -48,6 +49,7 @@ LEXSRCS += inhib.c
 LEXSRCS += lexer.c
 LEXSRCS += misc.c
 LEXSRCS += newline.c
+LEXSRCS += prompt.c
 LEXSRCS += quote.c
 LEXSRCS += redir.c
 LEXSRCS += token.c
@@ -100,6 +102,7 @@ ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
 ANASRCS += exp/exp.c
+ANASRCS += exp/exp_getenv.c
 ANASRCS += exp/exp_tools.c
 ANASRCS += exp/parameter.c
 ANASRCS += exp/param_recursive.c
@@ -139,10 +142,11 @@ JBSRCS += routine_check_child.c
 
 ## COMMON TOOLS  ##
 
-TOOLSRCS += path_errors.c
 TOOLSRCS += tools_path.c
-TOOLSRCS += setvar_add.c
 TOOLSRCS += tools_var.c
+TOOLSRCS += tools_sh.c
+TOOLSRCS += path_errors.c
+TOOLSRCS += setvar_add.c
 TOOLSRCS += all_signal.c
 
 ## BUILTIN ##
@@ -153,16 +157,18 @@ BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
 BTSRCS += echo.c
-BTSRCS += jobs.c
-BTSRCS += tools_job_id.c
-BTSRCS += print_jobs.c
-BTSRCS += tools_job.c
+BTSRCS += jobs/jobs.c
+BTSRCS += jobs/tools_job_id.c
+BTSRCS += jobs/print_jobs.c
+BTSRCS += jobs/tools_job.c
 BTSRCS += cd/chdir_errors.c
 BTSRCS += cd/ft_cd.c
 BTSRCS += cd/ft_cd2.c
 BTSRCS += cd/ft_cd_core.c
 BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
+BTSRCS += fg.c
+BTSRCS += bg.c
 
 ## INCLUDES ##
 
@@ -210,6 +216,7 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control

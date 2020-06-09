@@ -4,7 +4,7 @@ SHELL_DIR=$(dirname $(readlink -f "$0"))
 TESTER_DIR=$SHELL_DIR/tester
 TMP_DIR=$TESTER_DIR/tmp
 LOG_DIR=$TESTER_DIR/log
-TEST_DIRS=$(ls -r $TESTER_DIR/units)
+TEST_DIRS=$(ls $TESTER_DIR/units | sort)
 FAIL_TESTS=0
 SUCCESS_TESTS=0
 TEST_RET=
@@ -21,7 +21,7 @@ output_print () {
 }
 
 print_fail () {
-	printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print $(printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}"))
 	output_print "\e[1;41m$1\e[0m"
 	if [ -z "$2" ]
 	then
@@ -55,7 +55,7 @@ print_fail () {
 	else
 		output_print "LEAKS \e[1;32mSUCCESS\e[0m"
 	fi
-	printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print $(printf "%.0s-" $(eval "echo {1.."$(($TERM_SIZE))"}"))
 }
 
 move_shell_redir () {
@@ -176,9 +176,11 @@ run_test_group () {
 	local group=$1
 	local group_basename=$(basename $group)
 	local dirs=($(ls $group))
-	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
 	output_print "${group_basename^^}"
-	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
+	GROUP_FAIL=0
+	GROUP_SUCCESS=0
 	for i in "${dirs[@]}"
 	do
 		make_test $group/$i
@@ -192,8 +194,6 @@ run_test_group () {
 		fi
 	done
 	output_print "$GROUP_FAIL/$(($GROUP_FAIL + $GROUP_SUCCESS)) tests failed"
-	GROUP_FAIL=0
-	GROUP_SUCCESS=0
 }
 
 run_tests () {
@@ -203,10 +203,14 @@ run_tests () {
 		run_test_group $test_group
 		rm -f $TMP_DIR/*
 	done
-	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
+	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
 	output_print "TOTAL"
-	printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}")
-	echo "$FAIL_TESTS out of $(($FAIL_TESTS + $SUCCESS_TESTS)) failed"
+	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
+	output_print "$(echo "$FAIL_TESTS out of $(($FAIL_TESTS + $SUCCESS_TESTS)) failed")"
+	if [ -n "$OUPUT_FILE" ]
+	then
+		echo "$FAIL_TESTS out of $(($FAIL_TESTS + $SUCCESS_TESTS)) failed"
+	fi
 }
 
 print_usage () {
@@ -274,6 +278,50 @@ list_vars () {
 
 list_vars $@
 get_term_size
+
+read -p "Which test do you wish to perform?
+	0)	All
+	1)	42pdf_corr
+	2)	builtin_cd
+	3)	builtin_echo
+	4)	builtin_env
+	5)	builtin_exit
+	6)	builtin_hash
+	7)	builtin_setenv
+	8)	builtin_type
+	9)	builtin_unsetenv
+	10)	error_handling
+	11)	heredocs
+	12)	logical_ops
+	13)	pipes
+	14)	quoting
+	15)	redirections
+	16)	signals
+	17)	parameter_exp
+	18)	exit
+    > " ret
+case $ret in
+	0 ) ;;
+	1 ) TEST_DIRS="42pdf_corr";;
+	2 ) TEST_DIRS="builtin_cd";;
+	3 ) TEST_DIRS="builtin_echo";;
+	4 ) TEST_DIRS="builtin_env";;
+	5 ) TEST_DIRS="builtin_exit";;
+	6 ) TEST_DIRS="units/builtin_hash";;
+	7 ) TEST_DIRS="units/builtin_setenv";;
+	8 ) TEST_DIRS="units/builtin_type";;
+	9 ) TEST_DIRS="units/builtin_unsetenv";;
+	10 ) TEST_DIRS="error_handling";;
+	11 ) TEST_DIRS="heredocs";;
+	12 ) TEST_DIRS="logical_ops";;
+	13 ) TEST_DIRS="pipes";;
+	14 ) TEST_DIRS="quoting";;
+	15 ) TEST_DIRS="redirections";;
+	16 ) TEST_DIRS="signals";;
+	17 ) TEST_DIRS="parameter_exp";;
+	18 ) exit;;
+esac
+
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]
 then
 	run_tests $TEST_DIRS

@@ -39,7 +39,7 @@ void	unset_term(struct termios *old_term)
 
 int		term_check(struct termios *new_term, int tty)
 {
-	int 	ret;
+	int		ret;
 	char	*term;
 	t_cfg	*cfg;
 

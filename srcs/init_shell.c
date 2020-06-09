@@ -8,6 +8,25 @@
 #include <termios.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <signal.h>
+
+void		set_var(t_cfg *shell)
+{
+	char	*pid;
+
+	pid = ft_itoa(shell->pid);
+	setvar_add(&shell->sp, "$", pid);
+	setvar_add(&shell->sp, "?", "0");
+	setvar_add(&shell->sp, "!", "0");
+	setvar_add(&shell->sp, "*", 0);
+	setvar_add(&shell->sp, "@", 0);
+	setvar_add(&shell->sp, "#", 0);
+	setvar_add(&shell->sp, "-", 0);
+	setvar_add(&shell->sp, "0", 0);
+	ft_strdel(&pid);
+	ft_setvar(&shell->intern, "PS1", NAME_SH);
+	ft_setvar(&shell->intern, "PS2", "> ");
+}
 
 void		hdl_sighup(int sig)
 {
@@ -26,7 +45,7 @@ void		hdl_sighup(int sig)
 	}
 	if (shell->cur_job)
 		kill(-shell->cur_job, sig);
-	ft_printf("\n%s:\t%d hangup\n", NAME_SH, shell->pid);
+	ft_printf("\n%s:\t%d hangup\n", PROJECT, shell->pid);
 	exit_routine(shell, 129);
 }
 
@@ -35,7 +54,7 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	if (isatty(tty))
 	{
 		if ((tcgetattr(tty, &cfg->term_origin) == FALSE))
-			perror("[TERM ORIGIN] ERROR TCGETATTR"); ///perror
+			ft_ex(EX);
 		return (1);
 	}
 	ft_ex(EXFD);
@@ -64,9 +83,9 @@ t_cfg		*init_shell(char **env, char **av, int ac)
 		set_signal_ign();
 		signal(SIGHUP, hdl_sighup);
 		if (setpgid(shell->pid, shell->pid) < 0)
-			perror("[INIT SHELL] error setpgid");  //perror
+			ft_ex(EX);
 		if (tcsetpgrp(shell_terminal, shell->pid))
-			perror("[INIT SHELL] error tcsetpgrp"); //perror
+			ft_ex(EX);
 	}
 	return (shell);
 }

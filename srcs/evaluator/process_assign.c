@@ -20,7 +20,8 @@ static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 	}
 }
 
-static void		assign_for_b_special(t_cfg *shell, t_process *p, t_list *assignment)
+static void		assign_for_b_special(t_cfg *shell, t_process *p,
+		t_list *assignment)
 {
 	t_assignment	*assign;
 

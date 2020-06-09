@@ -68,7 +68,7 @@ int			check_whole_path(char *path)
 int			check_chdir_errors(char **error, char *path, char *opr)
 {
 	char	*taberr[5];
-	int 	ret;
+	int		ret;
 
 	taberr[0] = STR_NTL;
 	taberr[1] = STR_NOENT;

@@ -7,24 +7,17 @@
 #include "line_edition.h"
 #include "sh.h"
 
-static void	a_handle_backslash(char **str, char **tmp, int *flag)
+static void		a_handle_backslash(char **str, char **tmp, int *flag)
 {
 	if (*flag == '\'')
 		**tmp = '\\';
 	else if (*flag == '\"')
 	{
-		if (ft_strchr("\"\\", str[0][1]))
-		{
+		if (ft_strchr("\"\\\n", str[0][1]))
 			str[0]++;
-			**tmp = **str;
-		}
-		else if (str[0][1] == '\n')
-		{
-			str[0]++;
+		if (str[0][0] == '\n')
 			return ;
-		}
-		else
-			**tmp = **str;
+		**tmp = **str;
 	}
 	else if (*flag == '\\')
 	{
@@ -34,17 +27,15 @@ static void	a_handle_backslash(char **str, char **tmp, int *flag)
 	else
 	{
 		if (str[0][1] == '\n')
-		{
 			str[0]++;
-			return ;
-		}
-		*flag = '\\';
+		else
+			*flag = '\\';
 		return ;
 	}
 	tmp[0]++;
 }
 
-static void	a_handle_d_quote(char **tmp, int *flag)
+static void		a_handle_d_quote(char **tmp, int *flag)
 {
 	if (*flag == '\\')
 		**tmp = '\"';
@@ -63,7 +54,7 @@ static void	a_handle_d_quote(char **tmp, int *flag)
 	tmp[0]++;
 }
 
-static void	a_handle_s_quote(char **tmp, int *flag)
+static void		a_handle_s_quote(char **tmp, int *flag)
 {
 	if (*flag == '\\')
 		**tmp = '\\';
@@ -82,7 +73,7 @@ static void	a_handle_s_quote(char **tmp, int *flag)
 	tmp[0]++;
 }
 
-void	a_flag_handle(char **str, char **tmp, int *flag)
+void			a_flag_handle(char **str, char **tmp, int *flag)
 {
 	if (**str == '\'')
 		a_handle_s_quote(tmp, flag);
@@ -102,7 +93,7 @@ void	a_flag_handle(char **str, char **tmp, int *flag)
 	}
 }
 
-char	*a_quote_removal(char **str)
+char			*a_quote_removal(char **str)
 {
 	char	*tmp;
 	char	*res;

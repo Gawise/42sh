@@ -24,13 +24,7 @@ char	*resolve_parameter(char *str, int hash)
 		type = 1;
 	else if (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1)))
 		return (NULL);
-	if (type && (res = find_var_value(cfg_shell()->sp, str))
-	&& !(res = ft_strdup(res)))
-		ft_ex("Cannot allocate memory\n");
-	else if (!type && !hash && (res = find_var_value(cfg_shell()->env, str))
-	&& !(res = ft_strdup(res)))
-		ft_ex("Cannot allocate memory\n");
-	else if (!type && hash && (res = find_var_value(cfg_shell()->env, str + 1))
+	if ((res = exp_getenv(str, type, hash))
 	&& !(res = ft_strdup(res)))
 		ft_ex("Cannot allocate memory\n");
 	if (!res && !(res = ft_strnew(0)))

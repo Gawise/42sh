@@ -12,6 +12,7 @@ void	set_signal_child(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGSTOP, SIG_DFL);
+	signal(SIGTERM, SIG_DFL);
 }
 
 void	set_signal_ign(void)
@@ -24,6 +25,4 @@ void	set_signal_ign(void)
 	signal(SIGSTOP, SIG_IGN);
 	signal(SIGCONT, SIG_IGN);
 	signal(SIGTERM, SIG_IGN);
-
-//	signal(SIGCHLD, SIG_IGN); //for job control
 }

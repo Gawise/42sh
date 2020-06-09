@@ -10,7 +10,7 @@ char		*create_abs_path(char *s)
 	char		*tmp;
 
 	if (!(buf = getcwd(0, 0)))
-		perror("getcwd");       ////////perror
+		ft_ex(EX);
 	ft_asprintf(&tmp, "%s/%s", buf, s);
 	ft_strdel(&buf);
 	return (tmp);
@@ -33,7 +33,7 @@ char		*remove_file_name(char *s)
 
 	dst = ft_strdup(s);
 	i = ft_strrchri(dst, '/');
-	dst[i + 1] = '\0'; /// possible leaks ?
+	dst[i + 1] = '\0';
 	return (dst);
 }
 
@@ -43,6 +43,7 @@ int8_t		check_right(char *path, int right)
 		return (FALSE);
 	return (SUCCESS);
 }
+
 uint32_t	check_access(char *path, int right)
 {
 	char		*tmp;
@@ -61,7 +62,7 @@ uint32_t	check_access(char *path, int right)
 	tmp = remove_file_name(path);
 	if (access(tmp, F_OK))
 		ret = E_NOENT;
-	else if (access(tmp, right))
+	else if (access(tmp, X_OK | W_OK))
 		ret = E_ACCES;
 	ft_strdel(&tmp);
 	return (ret);

@@ -91,15 +91,15 @@ static int		a_and_or_job_str(t_and_or *and_or)
 	res = NULL;
 	cmd_lst = and_or->s_cmd;
 	if (cmd_lst->data && !(res = get_cmd_str((t_simple_cmd *)cmd_lst->data)))
-		return (0);
+		return (1);
 	cmd_lst = cmd_lst->next;
 	while (cmd_lst)
 	{
 		if (cmd_lst->data
 		&& !(str = get_cmd_str((t_simple_cmd *)cmd_lst->data)))
-			return (0);
+			return (1);
 		if (cmd_lst->data && ft_asprintf(&tmp, "%s | %s", res, str) == -1)
-			return (0);
+			ft_ex(EXMALLOC);
 		ft_strdel(&str);
 		ft_strdel(&res);
 		res = tmp;
@@ -109,24 +109,17 @@ static int		a_and_or_job_str(t_and_or *and_or)
 	return (1);
 }
 
-int				a_set_jobs_str(t_parser *parser)
+int				a_set_jobs_str(t_cmd_table *cmd_table)
 {
-	t_list		*lst;
-	t_cmd_table	*cmd_table;
 	t_list		*and_or;
 
-	lst = parser->table;
-	while (lst)
+	if (!cmd_table)
+		return (1);
+	and_or = cmd_table->and_or;
+	while (and_or)
 	{
-		if (!(cmd_table = (t_cmd_table *)lst->data))
-			return (1);
-		and_or = cmd_table->and_or;
-		while (and_or)
-		{
-			a_and_or_job_str((t_and_or *)and_or->data);
-			and_or = and_or->next;
-		}
-		lst = lst->next;
+		a_and_or_job_str((t_and_or *)and_or->data);
+		and_or = and_or->next;
 	}
 	return (1);
 }
