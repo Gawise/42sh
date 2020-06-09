@@ -3,7 +3,27 @@
 #include "lexer.h"
 #include "sh.h"
 
-int	do_lexing(t_lexer *lexer, int (*token_builder[9][12])(t_lexer *, char))
+static void	print_lexer_debug(t_lexer *lexer, char c, t_lexer_flag flag)
+{
+	char	*state;
+	char	*flag_str;
+
+	state = NULL;
+	flag_str = NULL;
+	if (c == '\n')
+		ft_dprintf(cfg_shell()->debug, "->\t%s\t%20s\t%s\n\n",
+		"\\n", (state = get_state_str(lexer)),
+		(flag_str = get_flag_name(flag)));
+	else
+		ft_dprintf(cfg_shell()->debug, "->\t%c\t%20s\t%s\n",
+		c, (state = get_state_str(lexer)),
+		(flag_str = get_flag_name(flag)));
+	ft_strdel(&state);
+	ft_strdel(&flag_str);
+}
+
+int			do_lexing(t_lexer *lexer,
+			int (*token_builder[9][12])(t_lexer *, char))
 {
 	char			c;
 	t_lexer_flag	flag;
@@ -14,21 +34,14 @@ int	do_lexing(t_lexer *lexer, int (*token_builder[9][12])(t_lexer *, char))
 		if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 			return (0);
 		if (cfg_shell()->debug)
-		{
-			if (c == '\n')
-				ft_dprintf(cfg_shell()->debug, "->\t%s\t%20s\t%s\n\n",
-						"\\n", get_state_str(lexer), get_flag_name(flag));
-			else
-				ft_dprintf(cfg_shell()->debug, "->\t%c\t%20s\t%s\n",
-						c, get_state_str(lexer), get_flag_name(flag));
-		}
+			print_lexer_debug(lexer, c, flag);
 	}
 	if (!token_builder[lexer->state][l_get_char_type(c)](lexer, c))
 		return (0);
 	return (1);
 }
 
-int	ft_lexer(char **str, t_lexer *lexer)
+int			ft_lexer(char **str, t_lexer *lexer)
 {
 	int	(*token_builder[9][12])(t_lexer *, char);
 

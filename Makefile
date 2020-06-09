@@ -174,6 +174,7 @@ BTSRCS += bg.c
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += debug.h
 INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
@@ -185,14 +186,18 @@ INCLUDES += var.h
 
 ## DEBUG ##
 
-DBSRCS += lexer.c
-DBSRCS += parser.c
+DBSRCS += lexer/lexer.c
+DBSRCS += lexer/misc.c
+DBSRCS += parser/parser.c
+DBSRCS += parser/get.c
+DBSRCS += parser/print_cmd.c
 
 SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
 SRC += destructor.c
 SRC += routine_exit.c
+SRC += startup_routine.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
@@ -218,6 +223,8 @@ OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)debug/lexer
+OPATHS += $(OPATH)debug/parser
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control
 

@@ -7,7 +7,6 @@
 #include "job_control.h"
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <signal.h>
 
 uint8_t		print_bg_error(char *s, uint8_t jid)
 {
