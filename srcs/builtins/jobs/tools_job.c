@@ -58,11 +58,11 @@ char		get_curr(t_list *job, uint8_t stop)
 		else
 			return (' ');
 	}
-	else // plusieurs job suspendus
+	else
 		return (get_curr_multi(job, nb));
 }
 
-int		str_is_digit(char *ope)
+int			str_is_digit(char *ope)
 {
 	while (*ope)
 		if (!ft_isdigit(*ope++))

@@ -39,3 +39,52 @@ void	cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 	do_my_dup2(STDERR_FILENO, job->std[2]);
 	term_create_eval(&shell->term_origin, &job->term_eval);
 }
+
+void	g_curr(void)
+{
+	t_list	*job;
+	int	st;
+
+	job = cfg_shell()->job;
+	st = find_stopped_job(job);
+	if (st == 0)
+	{
+		while (job)
+		{
+			if (!job->next)
+				((t_job *)job->data)->cur = '+';
+			else if (!(job->next->next))
+				((t_job *)job->data)->cur = '-';
+			else
+				((t_job *)job->data)->cur = ' ';
+			job = job->next;
+		}
+	}
+	else if (st == 1)
+	{
+		while (job)
+		{
+			if (((t_job *)job->data)->status == STOPPED)
+				((t_job *)job->data)->cur = '+';
+			else if ((!job->next) || (!(job->next)->next &&
+			(((t_job *)(job->next)->data)->status == STOPPED)))
+				((t_job *)job->data)->cur = '-';
+			else
+				((t_job *)job->data)->cur = ' ';
+			job = job->next;
+		}
+	}
+	else
+	{
+		while (job)
+		{
+			if (((t_job *)job->data)->prio == 0)
+				((t_job *)job->data)->cur = ' ';
+			else if (((t_job *)job->data)->prio == 1)
+				((t_job *)job->data)->cur = '-';
+			else if (((t_job *)job->data)->prio == 2)
+				((t_job *)job->data)->cur = '+';
+			job = job->next;
+		}
+	} 
+}

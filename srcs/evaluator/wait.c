@@ -26,12 +26,25 @@ void			aplylyse_wstatus(t_process *p, int wstatus)
 
 void			update_process(t_list *lst, pid_t child, int wstatus)
 {
-	t_process *p;
+	t_process	*p;
 
 	if (child == -1)
 		return ;
 	p = find_process_by_pid(lst, child);
 	aplylyse_wstatus(p, wstatus);
+}
+
+void			update_prio(void)
+{
+	t_list		*job;
+
+	job = cfg_shell()->job;
+	while (job)
+	{
+		if (((t_job *)job->data)->prio)
+			((t_job *)job->data)->prio -= 1;
+		job = job->next;
+	}
 }
 
 static void		update_job(t_job *j)
@@ -43,6 +56,9 @@ static void		update_job(t_job *j)
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = STOPPED;
+		if (j->prio != 2)
+			update_prio_fg();
+		j->prio = 2;
 		if (!j->id)
 			add_job_cfg(j);
 		print_message_signal(j->ret - 128, j);

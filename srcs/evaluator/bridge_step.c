@@ -20,6 +20,7 @@ static uint8_t	lvl_simple_cmd(t_cfg *s, t_list *s_cmd, char *cmd, uint8_t fg)
 	t_job		job;
 
 	cmd_to_job(s, &job, s_cmd, cmd);
+	g_curr();
 	if ((job.fg = fg) && s->interactive)
 		set_termios(TCSADRAIN, &job.term_eval);
 	ret_job = run_job(s, &job, job.process);

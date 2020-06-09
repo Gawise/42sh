@@ -12,7 +12,7 @@ void		job_is_running(t_job *j)
 {
 	t_list		*list;
 	t_process	*p;
-	
+
 	list = j->process;
 	while (list)
 	{
@@ -32,7 +32,7 @@ uint8_t		print_fg_error(char **s)
 		ft_dprintf(STDERR_FILENO, "21sh: fg: %s: no such job\n", s[2]);
 	else
 		ft_dprintf(STDERR_FILENO, "21sh: fg: %s: no such job\n", s[1]);
-	return (1);	
+	return (1);
 }
 
 int16_t		get_fg_jid(t_process *p)
@@ -45,12 +45,13 @@ int16_t		get_fg_jid(t_process *p)
 	{
 		if (!p->av[2])
 			jid = get_job_id("+");
- 		else
+		else
 			jid = get_job_id(p->av[2]);
 	}
 	else if (p->av[1][0] == '-' && p->av[1][1])
 	{
-		ft_dprintf(STDERR_FILENO, "21sh: fg: -%c: invalid option\n", p->av[1][1]);
+		ft_dprintf(STDERR_FILENO, "21sh: fg: -%c", p->av[1][1]);
+		ft_dprintf(STDERR_FILENO, ": invalid option\n");
 		ft_dprintf(STDERR_FILENO, "fg : usage fg [job_spec]\n");
 		return (-1);
 	}
@@ -59,12 +60,26 @@ int16_t		get_fg_jid(t_process *p)
 	return (jid);
 }
 
+int			put_job_in_fg(t_job *j, t_cfg *shell)
+{
+	ft_printf("%s\n", j->cmd);
+	job_is_running(j);
+	j->fg = 1;
+	if (j->prio != 2)
+		update_prio_fg();
+	tcsetpgrp(STDIN_FILENO, j->pgid);
+	set_termios(TCSADRAIN, &shell->term_origin);
+	kill(-j->pgid, SIGCONT);
+	wait_process(j);
+	return (j->ret);
+}
+
 uint8_t		ft_fg(t_job *j, t_process *p)
 {
 	t_list		*job;
 	t_cfg		*shell;
 	int16_t		jid;
-	int		ret;
+	int			ret;
 
 	ret = 0;
 	shell = cfg_shell();
@@ -77,21 +92,13 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	{
 		j = job->data;
 		if (j->id == jid)
-			break;
+			break ;
 		if (!job->next)
 			return (print_fg_error(p->av));
 		job = job->next;
 	}
-	ft_printf("%s\n", j->cmd);
-	job_is_running(j);
-	tcsetpgrp(STDIN_FILENO, j->pgid);
-//	if (cfg_shell()->interactive) // ????
-	set_termios(TCSADRAIN, &shell->term_origin);
-	kill(-j->pgid, SIGCONT);
-	wait_process(j);
-	ret = j->ret;
+	ret = put_job_in_fg(j, shell);
 	update_listjob(shell);
+	update_prio_bg();
 	return (ret);
-}		
-// si fg (job), alors job devient le curr, a faire ????
-// si fg job(fini) , message no such job alp "job has terminated"
+}

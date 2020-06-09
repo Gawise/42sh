@@ -118,6 +118,13 @@ int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
 void			hash_usage_error(void);
 int				hash_not_found(char *cmd);
+void			job_is_running(t_job *j);
+void			g_curr(void);
+void			update_prio(void);
+uint8_t			get_curr_id(char c);
+void			update_prio_bg(void);
+void			update_prio_fg(void);
+
 
 /*
 *****************************************************

@@ -168,8 +168,10 @@ BTSRCS += cd/ft_cd2.c
 BTSRCS += cd/ft_cd_core.c
 BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
-BTSRCS += fg.c
-BTSRCS += bg.c
+BTSRCS += fg/fg.c
+BTSRCS += fg/tools_fg.c
+BTSRCS += bg/bg.c
+BTSRCS += bg/tools_bg.c
 
 ## INCLUDES ##
 
@@ -222,6 +224,8 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/fg
+OPATHS += $(OPATH)builtins/bg
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)builtins/hash
 OPATHS += $(OPATH)debug
