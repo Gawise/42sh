@@ -3,19 +3,9 @@
 #include "sh.h"
 #include "ft_printf.h"
 #include "var.h"
+#include "exec.h"
 
-static void	hash_usage_error(void)
-{
-	ft_dprintf(2, "hash: usage: hash [-r] [name ...]\n");
-}
-
-static int	hash_not_found(char *cmd)
-{
-	ft_dprintf(2, "hash: no such command: %s\n", cmd);
-	return (0);
-}
-
-int		hash_check_opt(t_process *p, int *ac)
+int			hash_check_opt(t_process *p, int *ac)
 {
 	int		i;
 	int		ret;
@@ -36,7 +26,7 @@ int		hash_check_opt(t_process *p, int *ac)
 	return (r_opt);
 }
 
-int		hash_fill_map(t_hash_map **map, char *path, char *cmd)
+int			hash_fill_map(t_hash_map **map, char *path, char *cmd)
 {
 	char	*file;
 
@@ -51,7 +41,7 @@ int		hash_fill_map(t_hash_map **map, char *path, char *cmd)
 	return (1);
 }
 
-static void		hash_print_node(t_list *lst)
+static void	hash_print_node(t_list *lst)
 {
 	t_hash_node	*node;
 
@@ -81,9 +71,9 @@ void		hash_print_tab(t_hash_map *map)
 
 uint8_t		ft_hash(t_job *j, t_process *p)
 {
-	int		r_opt;
+	int			r_opt;
 	t_hash_map	**map;
-	int		ac;
+	int			ac;
 
 	r_opt = 0;
 	ac = 1;

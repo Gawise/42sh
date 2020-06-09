@@ -116,6 +116,8 @@ int				check_chdir_errors(char **error, char *path,
 									char *opr);
 int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
+void			hash_usage_error(void);
+int				hash_not_found(char *cmd);
 
 /*
 *****************************************************

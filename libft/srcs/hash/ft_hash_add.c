@@ -1,6 +1,7 @@
 #include "libft.h"
 
-int		ft_hash_add(t_hash_map *map, char *key, void *value, void (*del)(void *))
+int		ft_hash_add(t_hash_map *map, char *key,
+		void *value, void (*del)(void *))
 {
 	uint32_t	hash;
 	t_list		*lst;
