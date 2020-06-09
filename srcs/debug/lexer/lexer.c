@@ -10,7 +10,7 @@ static char	**token_debug_init(void)
 
 	tab = NULL;
 	if (!(tab = (char **)malloc(sizeof(char *) * 18)))
-		return (NULL);
+		ft_ex(EXMALLOC);
 	tab[TOKEN] = ft_strdup("TOKEN");
 	tab[WORD] = ft_strdup("WORD");
 	tab[ASSIGNMENT_WORD] = ft_strdup("ASSIGNMENT_WORD");
@@ -28,6 +28,7 @@ static char	**token_debug_init(void)
 	tab[LESSAND] = ft_strdup("LESSAND");
 	tab[GREATAND] = ft_strdup("GREATAND");
 	tab[DLESSDASH] = ft_strdup("DLESSDASH");
+	tab[DLESSDASH + 1] = NULL;
 	return (tab);
 }
 
