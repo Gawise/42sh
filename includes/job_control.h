@@ -1,7 +1,6 @@
 #ifndef JOB_CONTROL_H
 # define JOB_CONTROL_H
 
-
 int32_t		job_has_finish(void *job, void *status);
 
 void		add_job_cfg(t_job *job);

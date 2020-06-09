@@ -152,7 +152,8 @@ TOOLSRCS += all_signal.c
 ## BUILTIN ##
 
 BTSRCS += exit.c
-BTSRCS += hash.c
+BTSRCS += hash/hash.c
+BTSRCS += hash/utils.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
@@ -222,6 +223,7 @@ OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)builtins/jobs
+OPATHS += $(OPATH)builtins/hash
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)debug/lexer
 OPATHS += $(OPATH)debug/parser

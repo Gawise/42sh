@@ -79,14 +79,16 @@ char			*ft_itoa(int n);
 
 t_hash_map		*ft_hash_init(uint32_t size);
 uint32_t		ft_hash_str(t_hash_map *map, char *key);
-int				ft_hash_add(t_hash_map *map, char *key, void *value, void (*del)(void *));
+int				ft_hash_add(t_hash_map *map, char *key, void *value,
+				void (*del)(void *));
 t_hash_node		*ft_hash_get_node(t_hash_map *map, char *key);
 void			*ft_hash_lookup(t_hash_map *map, char *key);
 t_list			*ft_hash_get_list(t_hash_map *map, char *key);
 void			ft_hash_delone(t_hash_map *map, char *key, void (*del)(void *));
 void			ft_hash_del_list(t_list **lst, void (*del)(void *));
 void			ft_hash_del_map(t_hash_map **map, void (*del)(void *data));
-void			ft_hash_reset(t_hash_map **map, void (*del)(void * data), uint32_t size);
+void			ft_hash_reset(t_hash_map **map,
+				void (*del)(void *data), uint32_t size);
 
 /*
 ** INPUT
@@ -203,7 +205,7 @@ char			*ft_strnlclnjoin(char const *s1, char const *s2, size_t n);
 char			*ft_strclnjoin(char const *s1, char const *s2);
 char			*ft_strlclnjoin(char const *s1, char const *s2);
 int				ft_isname(char *str);
-char        	*ft_strtrimoc(char const *si, char oc);
+char			*ft_strtrimoc(char const *si, char oc);
 
 /*
 ** SYSTEM
