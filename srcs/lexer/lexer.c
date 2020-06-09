@@ -44,7 +44,8 @@ int				do_lexing(t_lexer *lexer,
 static int		lexer_error_display(t_lexer *lexer)
 {
 	if (l_get_last_flag(lexer) || l_get_last_here(lexer))
-			ft_dprintf(2, "%s: syntax error: unexpected end of file\n", PROJECT);
+		ft_dprintf(2, "%s: syntax error: unexpected end of file\n",
+		PROJECT);
 	return (0);
 }
 
