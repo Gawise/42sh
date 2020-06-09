@@ -3,7 +3,7 @@
 #include "lexer.h"
 #include "sh.h"
 
-static void	print_lexer_debug(t_lexer *lexer, char c, t_lexer_flag flag)
+static void		print_lexer_debug(t_lexer *lexer, char c, t_lexer_flag flag)
 {
 	char	*state;
 	char	*flag_str;
@@ -22,8 +22,8 @@ static void	print_lexer_debug(t_lexer *lexer, char c, t_lexer_flag flag)
 	ft_strdel(&flag_str);
 }
 
-int			do_lexing(t_lexer *lexer,
-			int (*token_builder[9][12])(t_lexer *, char))
+int				do_lexing(t_lexer *lexer,
+				int (*token_builder[9][12])(t_lexer *, char))
 {
 	char			c;
 	t_lexer_flag	flag;
@@ -41,7 +41,14 @@ int			do_lexing(t_lexer *lexer,
 	return (1);
 }
 
-int			ft_lexer(char **str, t_lexer *lexer)
+static int		lexer_error_display(t_lexer *lexer)
+{
+	if (l_get_last_flag(lexer) || l_get_last_here(lexer))
+			ft_dprintf(2, "%s: syntax error: unexpected end of file\n", PROJECT);
+	return (0);
+}
+
+int				ft_lexer(char **str, t_lexer *lexer)
 {
 	int	(*token_builder[9][12])(t_lexer *, char);
 
@@ -49,9 +56,9 @@ int			ft_lexer(char **str, t_lexer *lexer)
 	lexer->curr = *str;
 	init_lexer_states(token_builder);
 	if (!do_lexing(lexer, token_builder))
-		return (0);
+		return (lexer_error_display(lexer));
 	while (l_get_last_flag(lexer) || l_get_last_here(lexer))
 		if (!do_lexing(lexer, token_builder))
-			return (0);
+			return (lexer_error_display(lexer));
 	return (1);
 }
