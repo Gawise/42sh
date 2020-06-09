@@ -149,7 +149,7 @@ make_test () {
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 $SHELL_DIR/$SHELL_FILE $1/input >$LOG_DIR/stdout.sh 2>$LOG_DIR/stderr.sh
 	local sh_exit=$?
 	local redir_files=($(move_shell_redir $1))
-	rm -f $TMP_DIR/*
+	rm -rf $TMP_DIR/*
 	cd $TMP_DIR
 	env_setup $1/setup
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 /bin/bash --posix $1/input >$LOG_DIR/stdout.bash 2>$LOG_DIR/stderr.bash
@@ -169,7 +169,7 @@ make_test () {
 		output_print "\e[1;42m$(basename $1)\e[0m"
 		TEST_RET=0
 	fi
-	rm -f $LOG_DIR/*
+	rm -rf $LOG_DIR/*
 }
 
 run_test_group () {

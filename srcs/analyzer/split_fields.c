@@ -24,7 +24,7 @@ static int		nbwords(char *str, char *set)
 		if (!ft_strchr(set, *str))
 		{
 			words++;
-			while (*str && (bs || quote || !ft_strchr(set, *str)))
+			while (*str && (quote || !ft_strchr(set, *str)))
 			{
 				if (!bs && ft_strchr("\'\"\\", **str)
 					process_quotes(&quote, &bs, str);
@@ -48,7 +48,7 @@ static int		word_len(char *str, char *set)
 	quote = 0;
 	bs = 0;
 	ret = 0;
-	while (*str && (bs || quote || !ft_strchr(set, *str)))
+	while (*str && (quote || !ft_strchr(set, *str)))
 	{
 		if (!bs && ft_strchr("\'\"\\", **str)
 			process_quotes(&quote, &bs, str);
