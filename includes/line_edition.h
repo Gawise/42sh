@@ -6,19 +6,18 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 20:47:25 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/08 16:56:10 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/08 15:52:26 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_SELECT_H
-# define FT_SELECT_H
+#ifndef LINE_EDITION_H
+# define LINE_EDITION_H
 
 # include <sys/ioctl.h>
 # include <fcntl.h>
 # include <termios.h>
 # include <term.h>
 # include "struct.h"
-# define PROMPT_SIZE 15
 # include "libft.h"
 
 # define READ_SIZE 8
@@ -28,22 +27,43 @@
 # define LINE_UP "\e[1;2A"
 # define HISTORY_UP "\e[A"
 # define HISTORY_DOWN "\e[B"
-# define MV_WORD_RIGHT "\e[1;5C"//"\e[1;2C"
-# define MV_WORD_LEFT "\e[1;5D"//"\e[1;2D"
 # define HOME_KEY "\e[H"
 # define END_KEY "\e[F"
-# define CLIP_ARROW_RIGHT "\e[1;4C"
-# define CLIP_ARROW_LEFT "\e[1;4D"
-# define CLIP_ARROW_UP "\e[1;4A"
-# define CLIP_ARROW_DOWN "\e[1;4B"
 # define REVBACK_SPACE "\e[3~"
-# define HOME_KEY_BIS (char)1
-# define END_KEY_BIS (char)5
-# define COPY_CLIP "\ec"//(char)11
-# define CUT_CLIP "\ek"//(char)12
-# define PASTE_CLIP "\ev"//(char)16
-# define BACK_SPACE (char)127
-# define CTRL_D (char)4
+# define HOME_KEY_BIS 1
+# define END_KEY_BIS 5
+# define BACK_SPACE 127
+# define CTRL_D 4
+
+# if __APPLE__
+#  define MV_WORD_RIGHT "\e[1;2C"
+#  define MV_WORD_LEFT "\e[1;2D"
+# else
+#  define MV_WORD_RIGHT "\e[1;5C"
+#  define MV_WORD_LEFT "\e[1;5D"
+# endif
+
+# if __APPLE__
+#  define CLIP_ARROW_RIGHT "\e[1;10C"
+#  define CLIP_ARROW_LEFT "\e[1;10D"
+#  define CLIP_ARROW_UP "\e[1;10A"
+#  define CLIP_ARROW_DOWN "\e[1;10B"
+# else
+#  define CLIP_ARROW_RIGHT "\e[1;4C"
+#  define CLIP_ARROW_LEFT "\e[1;4D"
+#  define CLIP_ARROW_UP "\e[1;4A"
+#  define CLIP_ARROW_DOWN "\e[1;4B"
+# endif
+
+# if __APPLE__
+#  define COPY_CLIP "\x0B"
+#  define CUT_CLIP "\x0C"
+#  define PASTE_CLIP "\x10"
+# else
+#  define COPY_CLIP "\ec"
+#  define CUT_CLIP "\ek"
+#  define PASTE_CLIP "\ev"
+# endif
 
 t_cs_line		*cs_master(char *prompt, int init);
 void			space_bar(t_cs_line *cs);
@@ -80,7 +100,6 @@ void			join_input(t_cs_line *cs, char *input);
 void			print_prompt(t_cs_line *cs);
 void			history_up(t_cs_line *cs);
 void			history_down(t_cs_line *cs);
-t_dlist			*init_history(void);
 void			mv_word_left(t_cs_line *cs);
 void			mv_word_right(t_cs_line *cs);
 void			update_history(t_dlist *hs);
@@ -102,5 +121,6 @@ void			init_char_keys(t_hash_map **map);
 void			init_input_map(t_hash_map *map);
 int				ft_strcheck(char *s, char *oc);
 void			sigterm_handler(int sig);
+char			**split_pos(const char *s);
 
 #endif
