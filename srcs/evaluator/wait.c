@@ -41,7 +41,7 @@ void			update_prio(void)
 	job = cfg_shell()->job;
 	while (job)
 	{
-		if (((t_job *)job->data)->prio)
+		if (((t_job *)job->data)->prio != 0)
 			((t_job *)job->data)->prio -= 1;
 		job = job->next;
 	}
@@ -56,8 +56,7 @@ static void		update_job(t_job *j)
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = STOPPED;
-		if (j->prio != 2)
-			update_prio_fg();
+		update_prio();
 		j->prio = 2;
 		if (!j->id)
 			add_job_cfg(j);

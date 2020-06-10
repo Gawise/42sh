@@ -2,15 +2,22 @@
 #include "exec.h"
 #include "struct.h"
 #include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
-#include "job_control.h"
-#include <sys/types.h>
-#include <sys/wait.h>
+
+uint8_t		print_bg_error(char *s, uint8_t jid)
+{
+	if (!jid)
+	{
+		ft_dprintf(STDERR_FILENO, "21sh: bg: %s: no such job\n", s);
+		return (1);
+	}
+	ft_dprintf(STDERR_FILENO, "21sh: bg: job %d already in background\n", jid);
+	return (0);
+}
 
 void		last_prio(int pos)
 {
-	t_list *job;
+	t_list	*job;
 	int		stop;
 
 	job = cfg_shell()->job;
@@ -20,7 +27,7 @@ void		last_prio(int pos)
 		if (((t_job *)job->data)->prio == 0 &&
 		(((t_job *)job->data)->status == STOPPED) && stop == pos)
 		{
-			((t_job *)job->data)->prio = 1; //?,
+			((t_job *)job->data)->prio = 1;
 			return ;
 		}
 		job = job->next;
@@ -34,7 +41,8 @@ void		update_last_prio(t_list *job)
 	while (job)
 	{
 		n = find_stopped_job(job);
-		if (((t_job *)job->data)->prio)
+		if (((t_job *)job->data)->prio &&
+		((t_job *)job->data)->status == STOPPED)
 		{
 			((t_job *)job->data)->prio = 2;
 			if (n == 1)
@@ -46,12 +54,12 @@ void		update_last_prio(t_list *job)
 	}
 }
 
-void		update_prio_bg()
+void		update_prio_bg(void)
 {
 	t_list	*job;
 	int		stop;
 
-	job = cfg_shell()->job;	
+	job = cfg_shell()->job;
 	if ((stop = find_stopped_job(job)) <= 1)
 		return ;
 	else if (stop == 2)

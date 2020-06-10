@@ -40,10 +40,42 @@ void	cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd)
 	term_create_eval(&shell->term_origin, &job->term_eval);
 }
 
+void	g_curr_one(t_list *job)
+{
+	while (job)
+	{
+		if (((t_job *)job->data)->status == STOPPED)
+		{
+			((t_job *)job->data)->cur = '+';
+			((t_job *)job->data)->prio = 2;
+		}
+		else if ((!job->next) || (!(job->next)->next &&
+		(((t_job *)(job->next)->data)->status == STOPPED)))
+			((t_job *)job->data)->cur = '-';
+		else
+			((t_job *)job->data)->cur = ' ';
+		job = job->next;
+	}
+}
+
+void	g_curr_multi(t_list *job)
+{
+	while (job)
+	{
+		if (((t_job *)job->data)->prio == 0)
+			((t_job *)job->data)->cur = ' ';
+		else if (((t_job *)job->data)->prio == 1)
+			((t_job *)job->data)->cur = '-';
+		else if (((t_job *)job->data)->prio == 2)
+			((t_job *)job->data)->cur = '+';
+		job = job->next;
+	}
+}
+
 void	g_curr(void)
 {
 	t_list	*job;
-	int	st;
+	int		st;
 
 	job = cfg_shell()->job;
 	st = find_stopped_job(job);
@@ -61,30 +93,7 @@ void	g_curr(void)
 		}
 	}
 	else if (st == 1)
-	{
-		while (job)
-		{
-			if (((t_job *)job->data)->status == STOPPED)
-				((t_job *)job->data)->cur = '+';
-			else if ((!job->next) || (!(job->next)->next &&
-			(((t_job *)(job->next)->data)->status == STOPPED)))
-				((t_job *)job->data)->cur = '-';
-			else
-				((t_job *)job->data)->cur = ' ';
-			job = job->next;
-		}
-	}
+		g_curr_one(job);
 	else
-	{
-		while (job)
-		{
-			if (((t_job *)job->data)->prio == 0)
-				((t_job *)job->data)->cur = ' ';
-			else if (((t_job *)job->data)->prio == 1)
-				((t_job *)job->data)->cur = '-';
-			else if (((t_job *)job->data)->prio == 2)
-				((t_job *)job->data)->cur = '+';
-			job = job->next;
-		}
-	} 
+		g_curr_multi(job);
 }

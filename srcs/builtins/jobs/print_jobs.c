@@ -2,19 +2,30 @@
 #include "exec.h"
 #include "struct.h"
 #include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
+#include <signal.h>
 
-char	*j_stat(t_job *job)
+char	*j_stat(t_job *j)
 {
 	char	*ret;
 
-	if (job->status == 32)
+	if (j->status == 32)
 		ret = ft_strdup("Done");
-	else if (job->status == 4)
-		ret = ft_strdup("Stopped(SIGSTP)");
+	else if (j->status == 4)
+/*	{
+		if (j->ret == SIGTTOU + 128)
+			ret = ft_strdup("Stopped(SIGTTOU)");
+		else if (j->ret == SIGTTIN + 128)
+			ret = ft_strdup("Stopped(SIGTTIN)");
+		else if (j->ret == SIGSTOP + 128)
+			ret = ft_strdup("Stopped(SIGSTOP)");
+		else
+			ret = ft_strdup("Stopped(SIGTSTP)");
+	}*/
+		ret = ft_strdup("Stopped(SIGTSTP)");
 	else
 		ret = ft_strdup("Running");
+	protect_malloc(ret);
 	return (ret);
 }
 
@@ -41,6 +52,7 @@ void	print_jobs(char opt, t_job *j)
 	{
 		j = job->data;
 		st = j_stat(j);
+		protect_malloc(st);
 		if (opt == 'r')
 			ft_printf("[%d]%c %-24s %s", j->id, j->cur, st, j->cmd);
 		else
@@ -61,6 +73,7 @@ void	print_job_opte(char opt, t_job *j)
 	char	*st;
 
 	st = j_stat(j);
+	protect_malloc(st);
 	if (opt == 'l')
 		ft_printf("[%d]%c %d %-24s %s", j->id, j->cur, j->pgid, st, j->cmd);
 	else

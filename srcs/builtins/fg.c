@@ -2,13 +2,11 @@
 #include "exec.h"
 #include "struct.h"
 #include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
 #include "job_control.h"
-#include <sys/types.h>
 #include <sys/wait.h>
 
-void		job_is_running(t_job *j)
+void	job_is_running(t_job *j)
 {
 	t_list		*list;
 	t_process	*p;
@@ -24,7 +22,7 @@ void		job_is_running(t_job *j)
 	j->status = RUNNING;
 }
 
-uint8_t		print_fg_error(char **s)
+uint8_t	print_fg_error(char **s)
 {
 	if ((!s[1]) || ((!ft_strcmp(s[1], "--")) && (!s[2])))
 		ft_dprintf(STDERR_FILENO, "21sh: fg: current: no such job\n");
@@ -35,7 +33,7 @@ uint8_t		print_fg_error(char **s)
 	return (1);
 }
 
-int16_t		get_fg_jid(t_process *p)
+int16_t	get_fg_jid(t_process *p)
 {
 	int16_t		jid;
 
@@ -60,29 +58,34 @@ int16_t		get_fg_jid(t_process *p)
 	return (jid);
 }
 
-int			put_job_in_fg(t_job *j, t_cfg *shell)
+int		put_job_in_fg(t_job *j)
 {
+	t_cfg	*shell;
+
+	shell = cfg_shell();
 	ft_printf("%s\n", j->cmd);
 	job_is_running(j);
 	j->fg = 1;
-	if (j->prio != 2)
-		update_prio_fg();
+	if (j->prio)
+		update_prio_bg();
 	tcsetpgrp(STDIN_FILENO, j->pgid);
 	set_termios(TCSADRAIN, &shell->term_origin);
 	kill(-j->pgid, SIGCONT);
 	wait_process(j);
+	update_listjob(shell);
 	return (j->ret);
 }
 
-uint8_t		ft_fg(t_job *j, t_process *p)
+uint8_t	ft_fg(t_job *j, t_process *p)
 {
 	t_list		*job;
-	t_cfg		*shell;
 	int16_t		jid;
-	int			ret;
 
-	ret = 0;
-	shell = cfg_shell();
+	if (!cfg_shell()->interactive)
+	{
+		ft_dprintf(STDERR_FILENO, "fg: no job control\n");
+		return (1);
+	}
 	job = cfg_shell()->job;
 	if ((jid = get_fg_jid(p)) == -1)
 		return (2);
@@ -97,8 +100,5 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 			return (print_fg_error(p->av));
 		job = job->next;
 	}
-	ret = put_job_in_fg(j, shell);
-	update_listjob(shell);
-	update_prio_bg();
-	return (ret);
+	return (put_job_in_fg(j));
 }

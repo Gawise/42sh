@@ -2,22 +2,9 @@
 #include "exec.h"
 #include "struct.h"
 #include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
 #include "job_control.h"
-#include <sys/types.h>
 #include <sys/wait.h>
-
-uint8_t		print_bg_error(char *s, uint8_t jid)
-{
-	if (!jid)
-	{
-		ft_dprintf(STDERR_FILENO, "21sh: bg: %s: no such job\n", s);
-		return (1);
-	}
-	ft_dprintf(STDERR_FILENO, "21sh: bg: job %d already in background\n", jid);
-	return (0);
-}
 
 int16_t		get_bg_first_id(char *str)
 {
@@ -36,6 +23,18 @@ int16_t		get_bg_first_id(char *str)
 	else
 		jid = get_job_id(str);
 	return (jid);
+}
+
+void		job_in_bg(t_job *j, t_cfg *shell)
+{
+	ft_printf("[%d] %s &\n", j->id, j->cmd);
+	job_is_running(j);
+	j->fg = 0;
+	if (j->prio)
+		update_prio_bg();
+	j->prio = 0;
+	set_termios(TCSADRAIN, &shell->term_origin);
+	kill(-j->pgid, SIGCONT);
 }
 
 uint8_t		put_job_in_bg(t_job *j, char *ope, uint8_t jid)
@@ -58,14 +57,7 @@ uint8_t		put_job_in_bg(t_job *j, char *ope, uint8_t jid)
 	}
 	if (j->status == RUNNING)
 		return (print_bg_error(ope, jid));
-	ft_printf("[%d] %s &\n", j->id, j->cmd);
-	job_is_running(j);
-	j->fg = 0;
-	if (j->prio)
-		update_prio_bg();
-	j->prio = 0;
-	set_termios(TCSADRAIN, &shell->term_origin);
-	kill(-j->pgid, SIGCONT);
+	job_in_bg(j, shell);
 	update_listjob(shell);
 	return (0);
 }
@@ -94,6 +86,9 @@ uint8_t		ft_bg(t_job *j, t_process *p)
 	uint8_t		i;
 	int8_t		ret;
 
+	if (!cfg_shell()->interactive)
+		if (ft_dprintf(STDERR_FILENO, "bg: no job control\n"))
+			return (1);
 	ret = 0;
 	i = 1;
 	jid = 0;
@@ -101,16 +96,15 @@ uint8_t		ft_bg(t_job *j, t_process *p)
 		return (FAILURE);
 	while (p->av[i])
 	{
-		if (i == 1 && (jid = get_bg_first_id(p->av[1])) == -1)
+		if (i++ == 1 && (jid = get_bg_first_id(p->av[1])) == -1)
 			return (2);
-		else if (i == 1 && jid >= 0)
-			ret += put_job_in_bg(j, p->av[i], jid);
+		else if (--i == 1 && jid >= 0)
+			ret += put_job_in_bg(j, p->av[i++], jid);
 		else
 		{
 			jid = get_job_id(p->av[i]);
-			ret += put_job_in_bg(j, p->av[i], jid);
+			ret += put_job_in_bg(j, p->av[i++], jid);
 		}
-		i++;
 	}
 	return (ret ? 1 : 0);
 }

@@ -1,9 +1,6 @@
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
-#include "sh.h"
-#include "var.h"
-#include "ft_printf.h"
 
 int8_t		find_stopped_job(t_list *job)
 {

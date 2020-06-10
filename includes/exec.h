@@ -124,7 +124,7 @@ void			update_prio(void);
 uint8_t			get_curr_id(char c);
 void			update_prio_bg(void);
 void			update_prio_fg(void);
-
+uint8_t			print_bg_error(char *s, uint8_t jid);
 
 /*
 *****************************************************

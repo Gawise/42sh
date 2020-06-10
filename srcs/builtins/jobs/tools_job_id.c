@@ -1,10 +1,6 @@
 #include "libft.h"
 #include "exec.h"
-#include "struct.h"
 #include "sh.h"
-#include "var.h"
-#include "ft_printf.h"
-#include "job_control.h"
 
 uint8_t		get_curr_id(char c)
 {

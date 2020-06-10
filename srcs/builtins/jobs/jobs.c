@@ -1,8 +1,6 @@
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
-#include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
 
 int		print_jobs_error(char c)
