@@ -272,7 +272,7 @@ $(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 $(OPATHS) :
 	$(MKDIR) $@
 
-$(LIB) :
+$(LIB) : FORCE
 	$(MAKE) -C $(LPATH)
 
 $(LIBDB) :
@@ -305,5 +305,7 @@ norme:
 	norminette $(LPATH)/$(SPATH)
 	norminette $(LPATH)/$(IPATH)
 
-.PHONY: all clean fclean norme re debug
+FORCE:
+
+.PHONY: all clean fclean norme re debug FORCE
 .SILENT:
