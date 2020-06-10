@@ -1,34 +1,26 @@
-#include "parser.h"
-#include "exec.h"
 #include "libft.h"
+#include "ft_printf.h"
+#include "exec.h"
 #include "var.h"
 #include "sh.h"
-#include "ft_printf.h"
-#include "job_control.h"
-#include <unistd.h>
 
-#include <termios.h>
-
-#include <stdlib.h>
-
-#include "sh.h"
-
-void		kick_off_child(t_job *j, t_process *p, char **envp)
+static void			kick_off_child(t_job *j, t_process *p, char **envp)
 {
 	if (p->setup & ERROR)
 	{
-		ft_dprintf(STDERR_FILENO,"%s", p->message);
+		ft_dprintf(STDERR_FILENO, "%s", p->message);
 		exit(p->ret);
 	}
 	if (p->setup & BUILTIN)
-		exit(builtin_process(j, p));  //que faire de envp??????
+		exit(builtin_process(j, p));
 	if (p->setup & NOCMD)
 		exit(0);
 	if ((execve(p->path, p->av, envp)) == -1)
 		ft_ex(EXEXEC);
 }
 
-uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp)
+static uint8_t		parent_process(t_job *job, t_process *process,
+		int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
@@ -46,7 +38,8 @@ uint8_t		parent_process(t_job *job, t_process *process, int fd_pipe, char **envp
 	return (SUCCESS);
 }
 
-uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
+static uint8_t		child_process(t_job *job, t_process *p,
+		int fd_pipe, char **envp)
 {
 	if (fd_pipe)
 		if (close(fd_pipe) == -1)
@@ -68,7 +61,7 @@ uint8_t		child_process(t_job *job, t_process *p, int fd_pipe, char **envp)
 	exit(1);
 }
 
-uint8_t		fork_process(t_job *job, t_process *p)
+static uint8_t		fork_process(t_job *job, t_process *p)
 {
 	char	**envp;
 
@@ -82,7 +75,7 @@ uint8_t		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
-void		run_process(t_cfg *shell, t_job *j, t_process *p)
+void				run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	p->status = RUNNING | (p->status & ~WAITING);
 	process_type(p);
@@ -92,7 +85,7 @@ void		run_process(t_cfg *shell, t_job *j, t_process *p)
 	{
 		do_redir(p->fd);
 		if (p->setup & R_ERROR)
-			ft_dprintf(STDERR_FILENO,"%s", p->message);
+			ft_dprintf(STDERR_FILENO, "%s", p->message);
 		if ((p->setup & R_ERROR) &&
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);
