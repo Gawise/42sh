@@ -181,7 +181,7 @@ COMPIL = $(CC) -c
 COMPILDB = $(CC) -g -c
 
 IFLAGS = -I$(PATHI)
-CFLAGS = -g -Wall -Werror -Wextra $(IFLAGS)
+CFLAGS = -Wall -Werror -Wextra $(IFLAGS)
 DBFLAGS = -fsanitize=address $(CFLAGS)
 
 OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
@@ -190,8 +190,7 @@ OBJD = $(patsubst %.c, $(PATHO)db%.o, $(SRCS))
 all : $(NAME)
 debug : $(NAMEDB)
 
-
-$(NAME) : $(PATHO) $(OBJS)
+$(NAME) : $(PATHO) $(OBJS) Makefile
 	ar rc $@ $(OBJS)
 	ranlib $@
 	printf "\t\t\t$(GREEN)$@ is ready.\n$(NC)"
