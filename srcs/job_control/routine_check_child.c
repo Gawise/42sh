@@ -65,6 +65,7 @@ void		update_listjob(t_cfg *shell)
 	uint8_t		ending_status;
 	t_list		*ljob;
 	t_job		*j;
+	t_process	*p;
 
 	ending_status = (FAILED | COMPLETED | KILLED);
 	while (ft_lstdelif(&shell->job, &ending_status, job_has_finish, del_struct_job) == SUCCESS)
@@ -78,8 +79,11 @@ void		update_listjob(t_cfg *shell)
 		j = ljob->data;
 		if (find_process_by_status(j->process, RUNNING))
 			j->status = RUNNING;
-		else if (find_process_by_status(j->process, STOPPED))
+		else if ((p = find_process_by_status(j->process, STOPPED)))
+		{
+			j->ret = p->ret;
 			j->status = STOPPED;
+		}
 		else
 			ft_dprintf(shell->debug, "job has lost [%d] [%s]\n",j->pgid, j->cmd); //debug
 		if (!ljob->next)
