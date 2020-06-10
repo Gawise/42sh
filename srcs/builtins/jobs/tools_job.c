@@ -1,9 +1,6 @@
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
-#include "sh.h"
-#include "var.h"
-#include "ft_printf.h"
 
 int8_t		find_stopped_job(t_list *job)
 {
@@ -58,11 +55,11 @@ char		get_curr(t_list *job, uint8_t stop)
 		else
 			return (' ');
 	}
-	else // plusieurs job suspendus
+	else
 		return (get_curr_multi(job, nb));
 }
 
-int		str_is_digit(char *ope)
+int			str_is_digit(char *ope)
 {
 	while (*ope)
 		if (!ft_isdigit(*ope++))

@@ -14,7 +14,7 @@ uint32_t	redir_gear(t_process *p, t_redir *r, uint32_t target,
 	path = NULL;
 	if ((error = path_gearing(r, &path, right)))
 		return (redir_errors_handling(p, error, path, 0));
-	if ((error  = right_fifo(path, &right)))
+	if ((error = right_fifo(path, &right)))
 		return (redir_errors_handling(p, error, path, 0));
 	if ((source = open(path, right, 0644)) == -1)
 		ft_ex(EXUEPTD);

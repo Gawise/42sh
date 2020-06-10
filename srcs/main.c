@@ -3,9 +3,7 @@
 #include "var.h"
 #include "job_control.h"
 
-void	print_debug(t_list *elem);
-
-t_cfg		*cfg_shell(void)
+t_cfg	*cfg_shell(void)
 {
 	static t_cfg shell;
 
@@ -14,7 +12,7 @@ t_cfg		*cfg_shell(void)
 
 int		main(int ac, char **av, char **env)
 {
-	int		ret;
+	int			ret;
 	char		*line;
 	t_lexer		lexer;
 	t_parser	parser;
@@ -33,10 +31,7 @@ int		main(int ac, char **av, char **env)
 			if (ret == -1)
 				break ;
 			else if (!ret && !shell->interactive)
-			{
-				clean_cfg(shell);
-				exit(2);
-			}
+				exit_routine(shell, 2);
 		}
 	}
 	exit_routine(shell, ft_atoi(find_var_value(shell->sp, "?")));
