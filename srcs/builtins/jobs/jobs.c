@@ -1,11 +1,9 @@
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
-#include "sh.h"
-#include "var.h"
 #include "ft_printf.h"
 
-int	print_jobs_error(char c)
+int		print_jobs_error(char c)
 {
 	ft_dprintf(STDERR_FILENO, "21sh: jobs: -%c: invalid option\n", c);
 	ft_dprintf(STDERR_FILENO, "jobs : usage: jobs [-lp] [job_id...]\n");
@@ -77,8 +75,8 @@ uint8_t	ft_multi_jobs(t_job *j, char **tab, int ac, char opt)
 uint8_t	ft_jobs(t_job *j, t_process *p)
 {
 	char	opt;
-	int	ac;
-	int	i;
+	int		ac;
+	int		i;
 
 	ac = 1;
 	i = 0;
