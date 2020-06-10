@@ -143,6 +143,8 @@ t_list			*find_job_by_status(t_list *lst, uint8_t want);
 ****************** PROCESS **************************
 *****************************************************
 */
+
+uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
 void			process_type(t_process *p);
