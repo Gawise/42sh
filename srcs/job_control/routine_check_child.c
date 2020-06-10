@@ -6,42 +6,15 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-/*static void		one_process_change(t_process *p)
-{
-	if (p->status == (STOPPED | KILLED))
-		print_message_signal(p->ret, p->pid, p->cmd); 
-	
-	if (p->status == STOPPED)
-	{
-		if (p->ret == 20)
-			ft_printf("\t%d Stopped(SIGTSTP)\t%s\n", p->pid, p->cmd);
-		else
-			ft_printf("\t%d Stopped(SIGSTOP)\t%s\n", p->pid, p->cmd);
-	}
-	else if (p->status == KILLED)
-	{
-		if (p->ret == 3)
-			ft_printf("\t%d Quit(SIGQUIT)\t%s\n", p->pid, p->cmd);
-		else
-			ft_printf("\t%d Killed(SIGKILL)\t%s\n", p->pid, p->cmd);
-	}
-} */
-
 static void		job_done(t_job *j, t_process *last_p)
 {
 	j->status = last_p->status;
 	j->ret = last_p->ret;
 	if (last_p->status & (FAILED | COMPLETED))
-		ft_printf("[%d]\tDone(%d)\t%s\n", j->id, j->ret, j->cmd);
+		ft_dprintf(STDERR_FILENO,
+				"[%d]\tDone(%d)\t%s\n", j->id, j->ret, j->cmd);
 	else if (last_p->status & KILLED)
-	{
-		j->ret = print_message_signal(j->ret, j);
-/*		j->ret += 128;
-		if (last_p->ret == 3)
-			ft_printf("[%d]\tQuit(SIGQUIT)(%d)\t%s\n", j->id, j->ret, j->cmd);
-		else
-			ft_printf("[%d]\tKilled(SIGKILL)(%d)\t%s\n", j->id, j->ret, j->cmd); */
-	}
+		j->ret = print_message_signal(j->ret, j, 0);
 }
 
 static uint8_t	deep_check(t_job *j, pid_t child, int32_t wstatus)
@@ -55,24 +28,29 @@ static uint8_t	deep_check(t_job *j, pid_t child, int32_t wstatus)
 		job_done(j, find_process_by_pid(j->process, last_child));
 	else if (child > 0)
 		deep_check(j, child, wstatus);
-//	else
-//		one_process_change(find_process_by_pid(j->process, last_child));
+	else
+		one_process_change(find_process_by_pid(j->process, last_child));
 	return (TRUE);
 }
 
-void		update_listjob(t_cfg *shell)
+static void		update_delete(t_cfg *shell)
 {
 	uint8_t		ending_status;
+
+	ending_status = (FAILED | COMPLETED | KILLED);
+	while (ft_lstdelif(&shell->job, &ending_status, job_has_finish,
+				del_struct_job) == SUCCESS)
+		;
+}
+
+void			update_listjob(t_cfg *shell)
+{
 	t_list		*ljob;
 	t_job		*j;
 	t_process	*p;
 
-	ending_status = (FAILED | COMPLETED | KILLED);
-	while (ft_lstdelif(&shell->job, &ending_status, job_has_finish, del_struct_job) == SUCCESS)
-		;
-	ljob = shell->job;
-
-	if (!ljob)
+	update_delete(shell);
+	if (!(ljob = shell->job))
 		shell->active_job = 0;
 	while (ljob)
 	{
@@ -85,7 +63,7 @@ void		update_listjob(t_cfg *shell)
 			j->status = STOPPED;
 		}
 		else
-			ft_dprintf(shell->debug, "job has lost [%d] [%s]\n",j->pgid, j->cmd); //debug
+			ft_ex(EXUEPTD);
 		if (!ljob->next)
 			shell->active_job = j->id;
 		ljob = ljob->next;

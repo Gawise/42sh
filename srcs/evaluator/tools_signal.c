@@ -31,14 +31,30 @@ char		**create_message_signal(char **tab)
 	return (tab);
 }
 
-uint8_t		print_message_signal(uint8_t sig, t_job *j)
+uint8_t		print_message_signal(uint8_t sig, t_job *j, t_process *p)
 {
 	char	*tab[32];
 
+
 	create_message_signal(tab);
-	if ((sig < 19 || sig > 22) && tab[sig] && j->fg)
-		ft_dprintf(STDERR_FILENO, "%s\n", tab[sig]);
-	else if (tab[sig])
-		ft_dprintf(STDERR_FILENO, "[%d]\t+ %s  %s\n", j->id, tab[sig], j->cmd);
-	return (sig + 128);
+	if (j)
+	{
+		if ((sig < 19 || sig > 22) && tab[sig] && j->fg)
+			ft_dprintf(STDERR_FILENO, "%s\n", tab[sig]);
+		else if (tab[sig])
+			ft_dprintf(STDERR_FILENO, "[%d]\t+ %s  %s\n", j->id, tab[sig], j->cmd);
+		return (sig + 128);
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "%s\t%s\n", tab[sig], p->cmd);
+		return (sig + 128);
+	}
 }
+
+void		one_process_change(t_process *p)
+{
+	if (p->status & (STOPPED | KILLED))
+		print_message_signal(p->ret, 0, p);
+}
+

@@ -190,7 +190,7 @@ uint32_t		process_errors_handling(t_process *p, uint32_t	err);
 *****************************************************
 */
 char			**create_message_signal(char **tab);
-uint8_t			print_message_signal(uint8_t sig, t_job *j);
+uint8_t			print_message_signal(uint8_t sig, t_job *j, t_process *p);
 
 /*
 *****************************************************
