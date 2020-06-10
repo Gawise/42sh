@@ -81,7 +81,7 @@ void		position_reader(char *buf, t_cs_line *cs)
 	i = 0;
 	if (buf && cs)
 	{
-		while (i <= 32)
+		while (i <= 31)
 		{
 			if (read(cs->tty, &buf[i], 1) != 1 || buf[i] == 'R')
 				break ;

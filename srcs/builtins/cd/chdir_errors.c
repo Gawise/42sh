@@ -21,8 +21,15 @@ int			check_enotdir(char *path)
 	struct stat		buf;
 
 	if (!lstat(path, &buf))
+	{
 		if (!(S_IFDIR == (S_IFMT & buf.st_mode)))
-			return (0);
+		{
+			if ((S_IFLNK == (S_IFMT & buf.st_mode) && !stat(path, &buf)
+				&& !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				|| !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				return (0);
+		}
+	}
 	return (1);
 }
 

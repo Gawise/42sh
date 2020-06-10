@@ -173,6 +173,10 @@ PATHO = objs/
 PATHS = srcs/
 PATHI = includes/
 
+INC += $(PATHI)/ft_printf.h
+INC += $(PATHI)/get_next_line.h
+INC += $(PATHI)/libft.h
+
 CLEANUP = rm -rf
 MKDIR = mkdir -p
 
@@ -181,7 +185,7 @@ COMPIL = $(CC) -c
 COMPILDB = $(CC) -g -c
 
 IFLAGS = -I$(PATHI)
-CFLAGS = -g -Wall -Werror -Wextra $(IFLAGS)
+CFLAGS = -Wall -Werror -Wextra $(IFLAGS)
 DBFLAGS = -fsanitize=address $(CFLAGS)
 
 OBJS = $(patsubst %.c, $(PATHO)%.o, $(SRCS))
@@ -190,8 +194,7 @@ OBJD = $(patsubst %.c, $(PATHO)db%.o, $(SRCS))
 all : $(NAME)
 debug : $(NAMEDB)
 
-
-$(NAME) : $(PATHO) $(OBJS)
+$(NAME) : $(PATHO) $(OBJS) Makefile $(INC)
 	ar rc $@ $(OBJS)
 	ranlib $@
 	printf "\t\t\t$(GREEN)$@ is ready.\n$(NC)"

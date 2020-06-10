@@ -35,6 +35,11 @@ uint32_t			builtin_search(t_process *p)
 
 uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 {
+	if (!find_var(env, "PATH"))
+	{
+		ft_hash_reset(&cfg_shell()->map, free, 128);
+		return (0);
+	}
 	if ((p->path = ft_strdup(ft_hash_lookup(shell->map, p->cmd))))
 	{
 		if (!(ERROR & path_errors(p->path, 1, S_IXUSR)))
