@@ -29,7 +29,6 @@ int		lexer_routine(char **line, t_lexer *lexer)
 
 int		parser_routine(t_lexer *lexer, t_parser *parser)
 {
-	check_child(cfg_shell(), cfg_shell()->job);
 	if (cfg_shell()->debug)
 		ft_dprintf(cfg_shell()->debug, "\n----------- parsing -----------\n\n");
 	init_parser(parser);

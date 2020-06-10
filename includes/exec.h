@@ -143,6 +143,8 @@ t_list			*find_job_by_status(t_list *lst, uint8_t want);
 ****************** PROCESS **************************
 *****************************************************
 */
+
+uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
 void			process_type(t_process *p);
@@ -188,7 +190,7 @@ uint32_t		process_errors_handling(t_process *p, uint32_t	err);
 *****************************************************
 */
 char			**create_message_signal(char **tab);
-uint8_t			print_message_signal(uint8_t sig, t_job *j);
+uint8_t			print_message_signal(uint8_t sig, t_job *j, t_process *p);
 
 /*
 *****************************************************

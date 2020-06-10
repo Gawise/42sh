@@ -29,6 +29,30 @@ t_process	*find_process_by_status(t_list *lst, uint8_t want)
 	return (NULL);
 }
 
+uint8_t		builtin_process(t_job *j, t_process *p)
+{
+	uint8_t		(*tab_f[11])(t_job *, t_process *);
+
+	tab_f[0] = ft_echo;
+	tab_f[1] = ft_cd;
+	tab_f[2] = ft_env;
+	tab_f[3] = ft_setenv;
+	tab_f[4] = ft_unsetenv;
+	tab_f[5] = ft_hash;
+	tab_f[6] = ft_exit;
+	tab_f[7] = ft_jobs;
+	tab_f[8] = ft_fg;
+	tab_f[9] = ft_bg;
+	tab_f[10] = ft_type;
+	if (p->status == FAILED)
+		return (p->ret);
+	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
+		p->status = FAILED;
+	else
+		p->status = COMPLETED;
+	return (p->ret);
+}
+
 void		process_type(t_process *p)
 {
 	uint32_t	err;
