@@ -1,9 +1,0 @@
-function wleaks()
-{
-	while 1; do leaks $1; sleep 1;clear; done
-}
-
-function wlsof()
-{
-	while 1; do lsof -p $(ps | grep $1 | head -n 1 | cut -d ' ' -f1); sleep 1;clear; done
-}
