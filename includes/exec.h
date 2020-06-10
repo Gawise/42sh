@@ -174,6 +174,7 @@ void			close_fd(t_list *lst);
 void			job_redir(t_list *process);
 void			do_redir(t_list *fd);
 int32_t			create_fd_null(void);
+uint32_t		right_fifo(char *path, uint32_t *right);
 
 /*
 *****************************************************
