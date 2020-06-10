@@ -5,6 +5,10 @@
 
 # define ERROR					48
 
+# define SAVE_IN				256
+# define SAVE_OUT				257
+# define SAVE_ERR				258
+
 /*
 *****************************************************
 ******************* Process SETUP *******************

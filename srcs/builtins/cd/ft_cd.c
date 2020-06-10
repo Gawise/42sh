@@ -34,7 +34,7 @@ int				cd_oldpwd(t_job *j, t_process *p)
 
 static uint8_t	cd_too_many_args(void)
 {
-	ft_dprintf(2, "21sh: cd: too many arguments\n");
+	ft_dprintf(2, "%s: cd: too many arguments\n", PROJECT);
 	return (1);
 }
 
