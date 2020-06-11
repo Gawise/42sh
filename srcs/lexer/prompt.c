@@ -21,6 +21,8 @@ static char		*l_get_prompt_prefix(t_lexer *lexer)
 			return (ft_strdup("bslash> "));
 		else if (flag == F_BRACKEXP)
 			return (ft_strdup("braceparam> "));
+		else if (flag == F_PAREXP)
+			return (ft_strdup("cmdsubst> "));
 	}
 	else if ((here = l_get_last_here(lexer)))
 		return (ft_strdup("heredoc> "));

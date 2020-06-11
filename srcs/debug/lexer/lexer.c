@@ -41,7 +41,7 @@ void		print_debug(t_list *elem)
 	tab = token_debug_init();
 	token = elem->data;
 	if (token->type == NEWLINE)
-		ft_dprintf(cfg_shell()->debug, "str=%10.10s\ttype= %15s\n",
+		ft_dprintf(cfg_shell()->debug, "str=%30.10s\ttype= %15s\n",
 		"\\n", "NEWLINE");
 	else
 	{

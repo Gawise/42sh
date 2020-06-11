@@ -67,6 +67,8 @@ char	*get_flag_name(t_lexer_flag flag)
 		return (ft_strdup("F_BSLASH"));
 	else if (flag == F_BRACKEXP)
 		return (ft_strdup("F_BRACKEXP"));
+	else if (flag == F_PAREXP)
+		return (ft_strdup("F_PAREXP"));
 	return (NULL);
 }
 

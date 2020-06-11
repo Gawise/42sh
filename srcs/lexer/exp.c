@@ -22,7 +22,7 @@ int	l_build_exp(t_lexer *lexer, char c)
 int	l_exp_brack(t_lexer *lexer, char c)
 {
 	l_buffer_add(lexer, c);
-	if (c == '{')
+	if (ft_strchr("{(", c))
 	{
 		l_add_flag(lexer, c);
 		lexer->state = S_FLAG;

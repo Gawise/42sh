@@ -44,7 +44,7 @@ t_char_type	l_get_char_type(char c)
 		return (C_DIGIT);
 	else if (ft_strchr(" \t", c))
 		return (C_BLANK);
-	else if (ft_strchr("{}", c))
+	else if (ft_strchr("{}()", c))
 		return (C_BRACK);
 	else
 		return (C_OTHER);
