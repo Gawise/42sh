@@ -143,6 +143,7 @@ get_std_diff () {
 }
 
 make_test () {
+	rm -Rf $TMP_DIR/*
 	REDIR_FILE=""
 	cd $TMP_DIR
 	env_setup $1/setup

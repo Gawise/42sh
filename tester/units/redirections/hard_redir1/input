@@ -1,1 +1,2 @@
-ls . unknowpath 3>&1 1>&2 2>&3 | 15>redir15 ls -Rl ~ $OLDPWD nullpart 2>&15 >&2 15&- | 14<redir cat -e <&14 14&-
+echo 1 >out >&2 2>err; echo 2 >out 2>err; cat err && cat out
+ls . unknowpath 3>&1 1>&2 2>&3 | 15>redir15 ls -l ~ $OLDPWD nullpart 2>&15 >&2 15>&- | 14<redir15 cat -e <&14 14>&-
