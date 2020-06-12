@@ -16,6 +16,12 @@ int		print_error_parameter(t_exp *exp, char **str, char *param)
 
 	if ((ret = substitute_word(exp, str)) < 0)
 		return (ret);
+	if (!exp->word || !*exp->word)
+	{
+		free(exp->word);
+		if (!(exp->word = ft_strdup("parameter null or not set")))
+			ft_ex(EXMALLOC);
+	}
 	ft_dprintf(2, "21sh: %s: %s\n", param, exp->word);
 	return (-2);
 }

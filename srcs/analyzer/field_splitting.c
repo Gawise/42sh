@@ -77,7 +77,8 @@ void			field_splitting(t_simple_cmd *cmd)
 		ft_ex(EXMALLOC);
 	if (!ifs && !(ifs = ft_strdup(" \t\n")))
 		ft_ex(EXMALLOC);
-	split_fields(cmd->cmd_name, ifs, &res);
+	if (cmd->cmd_name)
+		split_fields(cmd->cmd_name, ifs, &res);
 	lst = cmd->args;
 	while (lst)
 	{

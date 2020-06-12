@@ -57,6 +57,8 @@ int		resolve_brace_param(char **str, t_exp *exp, char *param)
 
 	(*str)++;
 	hash = *param == '#' ? 1 : 0;
+	if (!param || !*param)
+		return (-1);
 	if (!(exp->param = resolve_parameter(param, hash)))
 		return (-1);
 	if (hash)

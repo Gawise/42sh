@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/11 14:29:08 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:09 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/06/12 05:19:46 by pacharbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,18 @@ int			check_chdir_errors(char **error, char *path, char *opr)
 		return (FAILURE);
 	}
 	return (SUCCESS);
+}
+
+int			chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd)
+{
+	char	*error;
+
+	error = NULL;
+	check_chdir_errors(&error, curpath, opr);
+	ft_strdel(&oldpwd);
+	ft_strdel(&pwd);
+	ft_strdel(&curpath);
+	if (!error)
+		ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
+	return (display_cd_errors(error));
 }

@@ -6,7 +6,7 @@
 /*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/11 14:29:23 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:24 by guaubret         ###   ########.fr       */
+/*   Updated: 2020/06/12 05:09:52 by pacharbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ static char		*ft_del_dotdots(char *curpath, char *opr)
 char			*cd_del_dotcomponents(char *curpath, char *opr)
 {
 	if (!(curpath = ft_del_dots(curpath)))
-		return (0);
+		ft_ex(EXMALLOC);
 	if (!(curpath = ft_del_dotdots(curpath, opr)))
-		return (0);
+		ft_ex(EXMALLOC);
 	return (curpath);
 }
