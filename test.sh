@@ -148,14 +148,12 @@ make_test () {
 	cd $TMP_DIR
 	env_setup $1/setup
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 $SHELL_DIR/$SHELL_FILE $1/input >$LOG_DIR/stdout.sh 2>$LOG_DIR/stderr.sh
-	sleep 2
 	local sh_exit=$?
 	local redir_files=($(move_shell_redir $1))
 	rm -rf $TMP_DIR/*
 	cd $TMP_DIR
 	env_setup $1/setup
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 /bin/bash --posix $1/input >$LOG_DIR/stdout.bash 2>$LOG_DIR/stderr.bash
-	sleep 2
 	local bash_exit=$?
 	move_bash_redir $1
 	rm -f $TMP_DIR/*

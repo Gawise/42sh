@@ -141,6 +141,8 @@ void			cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 uint8_t			run_job(t_cfg *shell, t_job *job, t_list *process);
 void			wait_process(t_job *job);
 t_list			*find_job_by_status(t_list *lst, uint8_t want);
+void			builtin_save_fd(t_job *j);
+void			builtin_restor_fd(t_job *j);
 
 /*
 *****************************************************

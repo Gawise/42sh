@@ -37,7 +37,6 @@ uint32_t	right_fifo(char *path, uint32_t *right)
 	return (SUCCESS);
 }
 
-#include "ft_printf.h"
 void		builtin_save_fd(t_job *j)
 {
 	uint8_t		i;
@@ -49,7 +48,6 @@ void		builtin_save_fd(t_job *j)
 	fd[2] = SAVE_ERR;
 	while (i < 3)
 	{
-
 		if (!bad_fd(i))
 		{
 			j->std[i] = fd[i];
@@ -59,14 +57,7 @@ void		builtin_save_fd(t_job *j)
 			j->std[i] = -1;
 		i++;
 	}
-/*	j->std[1] = SAVE_OUT;
-	j->std[2] = SAVE_ERR;
-	do_my_dup2(STDOUT_FILENO, j->std[1]);
-	do_my_dup2(STDERR_FILENO, j->std[2]);
-	*/
-
 }
-
 
 void		builtin_restor_fd(t_job *j)
 {
