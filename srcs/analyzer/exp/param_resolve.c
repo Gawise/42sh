@@ -4,16 +4,6 @@
 #include "var.h"
 #include "ft_printf.h"
 
-int		print_error_parameter(t_exp *exp, char **str, char *param)
-{
-	int	ret;
-
-	if ((ret = substitute_word(exp, str)) < 0)
-		return (ret);
-	ft_dprintf(2, "21sh: %s: %s\n", param, exp->word);
-	return (-2);
-}
-
 char	*resolve_parameter(char *str, int hash)
 {
 	char	*res;

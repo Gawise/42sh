@@ -46,8 +46,15 @@ void		**args_to_tab(t_list *lst, char *cmd);
 ** exp.c
 */
 
-int	word_expansions(t_simple_cmd *cmd);
-int	exp_main(char **word, int assign);
+int			word_expansions(t_simple_cmd *cmd);
+int			exp_main(char **word, int assign);
+
+/*
+** exp_errors.c
+*/
+
+int			exp_err(char *word);
+int			print_error_parameter(t_exp *exp, char **str, char *param);
 
 /*
 ** exp_getenv.c
@@ -64,6 +71,12 @@ void	init_exp(t_exp *exp);
 void	free_exp_content(t_exp *exp);
 void	exp_flush_buf(t_exp *exp, char **str);
 void	exp_add_to_buf(t_exp *exp, char **str, char **res);
+
+/*
+** field_splitting.c
+*/
+
+void			field_splitting(t_simple_cmd *cmd);
 
 /*
 ** parameter.c
