@@ -6,6 +6,6 @@ ls . unknowpath 3>&1 1>&2 2>&3
 echo . unknowpath 3>&1 1>&2 2>&3
 echo "bla" > test.txt
 echo bli > test2.txt
-ls -1  ~ >test1 ; ls -1 ~ >>test1
+ls -1  ~ >test1 ; ls -1 ~ >>test1 ; cat test1 test2.txt test.txt
 ls . unknowpath >&- 2>&1
 ls . unknowpath >/dev/null 2>&1
