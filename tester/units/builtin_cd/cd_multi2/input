@@ -3,9 +3,10 @@ pwd
 cd /
 HOME=/ cd $HOME
 pwd
-OLDPWD=/home/deh cd $OLDPWD 
+OLDPWD=/home/deh cd $OLDPWD
 pwd
 cd ~
 pwd
-env -i cd ~
+cd / ; pwd ; HOME= ; cd ~ ; pwd
+cd / ; pwd ; HOME=gg ; cd ~ ; pwd
 cd unknowpath

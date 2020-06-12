@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   chdir_errors.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/11 14:29:08 by guaubret          #+#    #+#             */
-/*   Updated: 2020/06/12 05:19:46 by pacharbo         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
@@ -33,8 +21,15 @@ int			check_enotdir(char *path)
 	struct stat		buf;
 
 	if (!lstat(path, &buf))
+	{
 		if (!(S_IFDIR == (S_IFMT & buf.st_mode)))
-			return (0);
+		{
+			if ((S_IFLNK == (S_IFMT & buf.st_mode) && !stat(path, &buf)
+				&& !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				|| !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				return (0);
+		}
+	}
 	return (1);
 }
 

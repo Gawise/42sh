@@ -84,10 +84,11 @@ void			a_flag_handle(char **str, char **tmp, int *flag)
 	else
 	{
 		if (*flag == '\\')
+		{
 			*flag = 0;
-		if (ft_strchr("\\\"", *flag) && **str != '\n')
 			**tmp = **str;
-		if (*flag == '\'')
+		}
+		else if (*flag)
 			**tmp = **str;
 		tmp[0]++;
 	}

@@ -23,6 +23,14 @@ void	set_term(int tty, char *prompt, struct termios *new_term)
 	cs = cs_master(NULL, 0);
 	get_cs_line_position(&cs->min_col, &cs->min_row);
 	cs_set();
+	if (cs->min_col > 0)
+	{
+		if (cs->min_row >= cs->screen.y - 1)
+			ft_putstr_fd("\n", cs->tty);
+		else
+			cs->min_row += 1;
+		cs->min_col = 0;
+	}
 	cs->tty = tty;
 	move_cs(&cs);
 }
@@ -39,7 +47,7 @@ void	unset_term(struct termios *old_term)
 
 int		term_check(struct termios *new_term, int tty)
 {
-	int 	ret;
+	int		ret;
 	char	*term;
 	t_cfg	*cfg;
 

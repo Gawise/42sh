@@ -43,8 +43,9 @@ static void		update_job(t_job *j)
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = STOPPED;
-		add_job_cfg(j);
-		print_message_signal(j->ret - 128, j);
+		if (!j->id)
+			add_job_cfg(j);
+		print_message_signal(j->ret - 128, j, 0);
 	}
 	else
 	{
@@ -52,7 +53,7 @@ static void		update_job(t_job *j)
 		tmp = lst->data;
 		j->status = ((t_process *)(lst->data))->status;
 		if (j->status == KILLED)
-			j->ret = print_message_signal(tmp->ret, j);
+			j->ret = print_message_signal(tmp->ret, j, 0);
 		else
 			j->ret = tmp->ret;
 	}

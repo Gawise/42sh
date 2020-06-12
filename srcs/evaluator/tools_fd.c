@@ -1,4 +1,6 @@
 #include "sh.h"
+#include "exec.h"
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -19,5 +21,18 @@ uint8_t		bad_fd(int fd)
 
 	if (fstat(fd, &buf) == FALSE)
 		return (FAILURE);
+	return (SUCCESS);
+}
+
+uint32_t	right_fifo(char *path, uint32_t *right)
+{
+	struct stat buf;
+
+	lstat(path, &buf);
+	if (!S_ISFIFO(buf.st_mode))
+		return (0);
+	if (access(path, R_OK | W_OK) != SUCCESS)
+		return (E_ACCES);
+	*right = O_RDWR;
 	return (SUCCESS);
 }

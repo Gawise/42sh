@@ -3,7 +3,7 @@
 #include "var.h"
 #include "sh.h"
 #include "ft_printf.h"
-#include "exec.h" // only for db
+#include "exec.h"
 #include "job_control.h"
 
 t_list			*find_job_by_status(t_list *lst, uint8_t want)
@@ -57,11 +57,12 @@ static void		cpy_lst_process(void *copy, void *process)
 	c->ret = p->ret;
 }
 
-void          	ft_cpy_job(t_job *job, t_job *copy)
+void			ft_cpy_job(t_job *job, t_job *copy)
 {
 	ft_bzero(copy, sizeof(t_job));
 	copy->cmd = ft_strdup(job->cmd);
-	copy->process = ft_lstdup(job->process, job->process->size, cpy_lst_process);
+	copy->process =
+		ft_lstdup(job->process, job->process->size, cpy_lst_process);
 	copy->pgid = job->pgid;
 	copy->fg = job->fg;
 	copy->status = job->status;

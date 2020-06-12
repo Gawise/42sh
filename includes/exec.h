@@ -5,6 +5,10 @@
 
 # define ERROR					48
 
+# define SAVE_IN				256
+# define SAVE_OUT				257
+# define SAVE_ERR				258
+
 /*
 *****************************************************
 ******************* Process SETUP *******************
@@ -54,7 +58,7 @@
 *****************************************************
 */
 # define S_SIGHUP				"Hangup"
-# define S_SIGINT				"\n"
+# define S_SIGINT				""
 # define S_SIGQUIT				"Quit"
 # define S_SIGILL				"Illegal instruction"
 # define S_SIGTRAP				"Trace/Breakpoint trap"
@@ -81,6 +85,9 @@
 ******************* BUILTIN *************************
 *****************************************************
 */
+
+uint8_t			ft_bg(t_job *j, t_process *p);
+uint8_t			ft_fg(t_job *j, t_process *p);
 uint8_t			ft_echo(t_job *j, t_process *p);
 uint8_t			ft_type(t_job *j, t_process *p);
 uint8_t			ft_setenv(t_job *j, t_process *p);
@@ -103,7 +110,7 @@ char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 char			*cd_del_dotcomponents(char *curpath, char *opr);
 int				display_cd_errors(char *error);
-uint8_t			get_job_id(char *ope);
+int16_t			get_job_id(char *ope);
 int				print_job_ope(char opt, t_job *j, int8_t ope);
 void			print_jobs(char opt, t_job *j);
 void			print_jobs_opt(t_job *j);
@@ -114,6 +121,8 @@ int				check_chdir_errors(char **error, char *path,
 									char *opr);
 int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
+void			hash_usage_error(void);
+int				hash_not_found(char *cmd);
 
 /*
 *****************************************************
@@ -139,6 +148,8 @@ t_list			*find_job_by_status(t_list *lst, uint8_t want);
 ****************** PROCESS **************************
 *****************************************************
 */
+
+uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
 void			process_type(t_process *p);
@@ -168,6 +179,7 @@ void			close_fd(t_list *lst);
 void			job_redir(t_list *process);
 void			do_redir(t_list *fd);
 int32_t			create_fd_null(void);
+uint32_t		right_fifo(char *path, uint32_t *right);
 
 /*
 *****************************************************
@@ -184,7 +196,7 @@ uint32_t		process_errors_handling(t_process *p, uint32_t	err);
 *****************************************************
 */
 char			**create_message_signal(char **tab);
-uint8_t			print_message_signal(uint8_t sig, t_job *j);
+uint8_t			print_message_signal(uint8_t sig, t_job *j, t_process *p);
 
 /*
 *****************************************************

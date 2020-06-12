@@ -1,4 +1,3 @@
-#include "struct.h"
 #include "exec.h"
 #include "libft.h"
 

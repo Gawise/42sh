@@ -12,6 +12,7 @@ void	set_signal_child(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGSTOP, SIG_DFL);
+	signal(SIGTERM, SIG_DFL);
 }
 
 void	set_signal_ign(void)

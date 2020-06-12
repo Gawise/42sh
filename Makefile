@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+LESRCS += history_keys.c
 
 ## LEXER ##
 
@@ -153,26 +154,30 @@ TOOLSRCS += all_signal.c
 ## BUILTIN ##
 
 BTSRCS += exit.c
-BTSRCS += hash.c
+BTSRCS += hash/hash.c
+BTSRCS += hash/utils.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c
 BTSRCS += echo.c
-BTSRCS += jobs.c
-BTSRCS += tools_job_id.c
-BTSRCS += print_jobs.c
-BTSRCS += tools_job.c
+BTSRCS += jobs/jobs.c
+BTSRCS += jobs/tools_job_id.c
+BTSRCS += jobs/print_jobs.c
+BTSRCS += jobs/tools_job.c
 BTSRCS += cd/chdir_errors.c
 BTSRCS += cd/ft_cd.c
 BTSRCS += cd/ft_cd2.c
 BTSRCS += cd/ft_cd_core.c
 BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
+BTSRCS += fg.c
+BTSRCS += bg.c
 
 ## INCLUDES ##
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += debug.h
 INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
@@ -184,14 +189,18 @@ INCLUDES += var.h
 
 ## DEBUG ##
 
-DBSRCS += lexer.c
-DBSRCS += parser.c
+DBSRCS += lexer/lexer.c
+DBSRCS += lexer/misc.c
+DBSRCS += parser/parser.c
+DBSRCS += parser/get.c
+DBSRCS += parser/print_cmd.c
 
 SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
 SRC += destructor.c
 SRC += routine_exit.c
+SRC += startup_routine.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
@@ -215,7 +224,11 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/jobs
+OPATHS += $(OPATH)builtins/hash
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)debug/lexer
+OPATHS += $(OPATH)debug/parser
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control
 
@@ -236,7 +249,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -g -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -g -fsanitize=address
@@ -261,7 +274,7 @@ $(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 $(OPATHS) :
 	$(MKDIR) $@
 
-$(LIB) :
+$(LIB) : FORCE
 	$(MAKE) -C $(LPATH)
 
 $(LIBDB) :
@@ -294,5 +307,7 @@ norme:
 	norminette $(LPATH)/$(SPATH)
 	norminette $(LPATH)/$(IPATH)
 
-.PHONY: all clean fclean norme re debug
+FORCE:
+
+.PHONY: all clean fclean norme re debug FORCE
 .SILENT:
