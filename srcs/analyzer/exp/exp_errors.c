@@ -5,7 +5,7 @@
 
 int		exp_err(char *word)
 {
-	ft_dprintf(2, "%s: Bad Substitution\n", word);
+	ft_dprintf(2, "%s: %s: Bad Substitution\n", PROJECT, word);
 	ft_setvar(&cfg_shell()->sp, "?", "1");
 	return (-1);
 }
@@ -22,6 +22,7 @@ int		print_error_parameter(t_exp *exp, char **str, char *param)
 		if (!(exp->word = ft_strdup("parameter null or not set")))
 			ft_ex(EXMALLOC);
 	}
-	ft_dprintf(2, "21sh: %s: %s\n", param, exp->word);
+	ft_dprintf(2, "%s: %s: %s\n", PROJECT, param, exp->word);
+	ft_setvar(&cfg_shell()->sp, "?", "1");
 	return (-2);
 }
