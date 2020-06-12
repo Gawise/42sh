@@ -75,6 +75,10 @@ static uint8_t		fork_process(t_job *job, t_process *p)
 	return (0);
 }
 
+
+void		builtin_save_fd(t_job *j);
+void		builtin_restor_fd(t_job *j);
+
 void				run_process(t_cfg *shell, t_job *j, t_process *p)
 {
 	p->status = RUNNING | (p->status & ~WAITING);
@@ -83,6 +87,7 @@ void				run_process(t_cfg *shell, t_job *j, t_process *p)
 	debug_print_process(shell->debug, p, "Run_Process");
 	if (p->setup & BUILTIN && !(p->setup & PIPE_ON) && j->fg)
 	{
+		builtin_save_fd(j);
 		do_redir(p->fd);
 		if (p->setup & R_ERROR)
 			ft_dprintf(STDERR_FILENO, "%s", p->message);
@@ -90,9 +95,10 @@ void				run_process(t_cfg *shell, t_job *j, t_process *p)
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);
 		builtin_process(j, p);
-		do_my_dup2(j->std[0], STDIN_FILENO);
-		do_my_dup2(j->std[1], STDOUT_FILENO);
-		do_my_dup2(j->std[2], STDERR_FILENO);
+		builtin_restor_fd(j);
+//		do_my_dup2(j->std[0], STDIN_FILENO);
+//		do_my_dup2(j->std[1], STDOUT_FILENO);
+//		do_my_dup2(j->std[2], STDERR_FILENO);
 	}
 	else
 		fork_process(j, p);

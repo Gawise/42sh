@@ -1,0 +1,1 @@
+ls . unknowpath 3>&1 1>&2 2>&3 | 15>redir15 ls -Rl ~ $OLDPWD nullpart 2>&15 >&2 15&- | 14<redir cat -e <&14 14&-
