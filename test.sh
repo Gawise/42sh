@@ -148,12 +148,14 @@ make_test () {
 	cd $TMP_DIR
 	env_setup $1/setup
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 $SHELL_DIR/$SHELL_FILE $1/input >$LOG_DIR/stdout.sh 2>$LOG_DIR/stderr.sh
+	sleep 2
 	local sh_exit=$?
 	local redir_files=($(move_shell_redir $1))
-	rm -f $TMP_DIR/*
+	rm -rf $TMP_DIR/*
 	cd $TMP_DIR
 	env_setup $1/setup
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 /bin/bash --posix $1/input >$LOG_DIR/stdout.bash 2>$LOG_DIR/stderr.bash
+	sleep 2
 	local bash_exit=$?
 	move_bash_redir $1
 	rm -f $TMP_DIR/*
@@ -291,15 +293,16 @@ read -p "Which test do you wish to perform?
 	7)	builtin_setenv
 	8)	builtin_type
 	9)	builtin_unsetenv
-	10)	error_handling
-	11)	heredocs
-	12)	logical_ops
-	13)	pipes
-	14)	quoting
-	15)	redirections
-	16)	signals
-	17)	parameter_exp
-	18)	exit
+	10)	current
+	11)	error_handling
+	12)	heredocs
+	13)	logical_ops
+	14)	pipes
+	15)	quoting
+	16)	redirections
+	17)	signals
+	18)	parameter_exp
+	19)	exit
     > " ret
 case $ret in
 	0 ) ;;
@@ -308,19 +311,20 @@ case $ret in
 	3 ) TEST_DIRS="builtin_echo";;
 	4 ) TEST_DIRS="builtin_env";;
 	5 ) TEST_DIRS="builtin_exit";;
-	6 ) TEST_DIRS="units/builtin_hash";;
-	7 ) TEST_DIRS="units/builtin_setenv";;
-	8 ) TEST_DIRS="units/builtin_type";;
-	9 ) TEST_DIRS="units/builtin_unsetenv";;
-	10 ) TEST_DIRS="error_handling";;
-	11 ) TEST_DIRS="heredocs";;
+	6 ) TEST_DIRS="builtin_hash";;
+	7 ) TEST_DIRS="builtin_setenv";;
+	8 ) TEST_DIRS="builtin_type";;
+	9 ) TEST_DIRS="builtin_unsetenv";;
+	10 ) TEST_DIRS="current";;
+	11 ) TEST_DIRS="error_handling";;
+	12 ) TEST_DIRS="heredocs";;
 	12 ) TEST_DIRS="logical_ops";;
-	13 ) TEST_DIRS="pipes";;
-	14 ) TEST_DIRS="quoting";;
-	15 ) TEST_DIRS="redirections";;
-	16 ) TEST_DIRS="signals";;
-	17 ) TEST_DIRS="parameter_exp";;
-	18 ) exit;;
+	14 ) TEST_DIRS="pipes";;
+	15 ) TEST_DIRS="quoting";;
+	16 ) TEST_DIRS="redirections";;
+	17 ) TEST_DIRS="signals";;
+	18 ) TEST_DIRS="parameter_exp";;
+	19 ) exit;;
 esac
 
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]
