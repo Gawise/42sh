@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "sh.h"
 #include "exec.h"
 #include <unistd.h>
@@ -29,6 +30,7 @@ uint32_t	right_fifo(char *path, uint32_t *right)
 	struct stat buf;
 
 	lstat(path, &buf);
+	ft_bzero(&buf, sizeof(struct stat));
 	if (!S_ISFIFO(buf.st_mode))
 		return (0);
 	if (access(path, R_OK | W_OK) != SUCCESS)
