@@ -58,8 +58,7 @@ void			l_flush_delim(t_lexer *lexer)
 
 int				l_hd_body_flush(t_lexer *lexer, char c)
 {
-	if (ft_strnequ(lexer->buffer, lexer->curr_here->delim,
-	ft_strlen(lexer->curr_here->delim)) || !c)
+	if (ft_strequ(lexer->buffer, lexer->curr_here->delim) || !c)
 	{
 		ft_bzero(lexer->buffer, L_BUFF_SIZE);
 		lexer->buff_i = 0;
