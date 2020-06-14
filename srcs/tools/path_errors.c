@@ -22,7 +22,7 @@ uint8_t			c_enoent(char *path)
 	char			*tmp;
 
 	ret = 0;
-	if (!*path || !strcmp(path, "/"))
+	if (!*path || !ft_strcmp(path, "/"))
 		return (1);
 	if (!(tmp = ft_strrchr(path, '/')))
 		return (0);
