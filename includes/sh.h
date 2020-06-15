@@ -6,8 +6,13 @@
 # define TRUE				1
 # define FALSE				-1
 
-# define FD_NONINT			259
-# define FD_DEBUG			260
+# if __APPLE__
+#  define FD_NONINT         250
+#  define FD_DEBUG          251
+# else
+#  define FD_NONINT			259
+#  define FD_DEBUG			260
+# endif
 
 # define PROJECT			"21sh"
 # define NAME_SH			"21sh-1.0$ "
