@@ -75,7 +75,6 @@ int		cd_set_relativepath(t_list **env, char *curpath, char *opr, char *pwd)
 	}
 	ft_strdel(&pwd);
 	ret = cd_change_directory(env, curpath, opr, oldpath);
-	ft_strdel(&oldpath);
 	return (ret);
 }
 
@@ -111,28 +110,20 @@ int		cd_logically(t_list **env, char *curpath, char *opr)
 int		cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd)
 {
 	char	*oldpwd;
-	char	*error;
 	char	*str;
 
-	error = NULL;
 	if ((str = find_var_value(*env, "PWD")))
 		oldpwd = ft_strdup(str);
 	else if (!(oldpwd = getcwd(NULL, 0)))
 		ft_ex(EX);
 	if (chdir(curpath) == -1)
-	{
-		check_chdir_errors(&error, curpath, opr);
-		ft_strdel(&oldpwd);
-		ft_strdel(&curpath);
-		if (!error)
-			ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
-		return (display_cd_errors(error));
-	}
+		chdir_errors(curpath, opr, pwd, oldpwd);
 	ft_strdel(&curpath);
 	if (!pwd && !(pwd = getcwd(NULL, 0)))
 		ft_ex(EX);
 	ft_setvar(&cfg_shell()->env, "PWD", pwd);
 	ft_setvar(&cfg_shell()->env, "OLDPWD", oldpwd);
 	ft_strdel(&oldpwd);
+	ft_strdel(&pwd);
 	return (0);
 }

@@ -1,4 +1,3 @@
-
 #include "ft_printf.h"
 #include <termios.h>
 #include <term.h>

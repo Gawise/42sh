@@ -54,7 +54,8 @@ int				word_expansions(t_simple_cmd *cmd)
 		ft_dprintf(debug, "\n----------- expansions -----------\n\n");
 	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
 		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
-	cmd->cmd_name = (void *)a_quote_removal((char **)&cmd->cmd_name);
+	if (cmd->cmd_name)
+		cmd->cmd_name = (void *)a_quote_removal((char **)&cmd->cmd_name);
 	if (arg_exp(cmd) < 0 || assign_exp(cmd) < 0)
 		return (-1);
 	return (1);

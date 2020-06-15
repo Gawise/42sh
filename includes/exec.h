@@ -5,9 +5,15 @@
 
 # define ERROR					48
 
-# define SAVE_IN				256
-# define SAVE_OUT				257
-# define SAVE_ERR				258
+# if __APPLE__
+#  define SAVE_IN               252
+#  define SAVE_OUT              253
+#  define SAVE_ERR              254
+# else
+#  define SAVE_IN				256
+#  define SAVE_OUT				257
+#  define SAVE_ERR				258
+# endif
 
 /*
 *****************************************************
@@ -107,6 +113,7 @@ char			cd_getopt(char **str, int *i);
 int				cd_home(t_job *job, t_process *p);
 char			*cd_setcurpath(t_list **env, char *opr);
 int				cd_logically(t_list **env, char *curpath, char *opr);
+int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
 char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
