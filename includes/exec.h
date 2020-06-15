@@ -110,6 +110,7 @@ char			cd_getopt(char **str, int *i);
 int				cd_home(t_job *job, t_process *p);
 char			*cd_setcurpath(t_list **env, char *opr);
 int				cd_logically(t_list **env, char *curpath, char *opr);
+int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
 char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);

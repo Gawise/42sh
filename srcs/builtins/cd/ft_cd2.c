@@ -111,8 +111,8 @@ static char		*ft_del_dotdots(char *curpath, char *opr)
 char			*cd_del_dotcomponents(char *curpath, char *opr)
 {
 	if (!(curpath = ft_del_dots(curpath)))
-		return (0);
+		ft_ex(EXMALLOC);
 	if (!(curpath = ft_del_dotdots(curpath, opr)))
-		return (0);
+		ft_ex(EXMALLOC);
 	return (curpath);
 }
