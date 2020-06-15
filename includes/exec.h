@@ -39,6 +39,7 @@
 # define B_FG					131072
 # define B_BG					147456
 # define B_TYPE					163840
+# define B_EXPORT				184320
 
 /*
 *****************************************************
@@ -86,6 +87,8 @@
 *****************************************************
 */
 
+
+uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
 uint8_t			ft_echo(t_job *j, t_process *p);

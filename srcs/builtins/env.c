@@ -87,7 +87,7 @@ uint8_t			ft_env(t_job *j, t_process *p)
 		return (FAILURE);
 	add_new_var(p, &shell_cpy, &ac);
 	if (!p->av[ac])
-		ft_print_env_lst(shell_cpy.env);
+		ft_print_export_lst(shell_cpy.env, 0);
 	else
 	{
 		j_cpy = create_new_instance(&shell_cpy, j, p, ac);

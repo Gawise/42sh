@@ -154,6 +154,7 @@ TOOLSRCS += all_signal.c
 BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
+BTSRCS += export.c
 BTSRCS += env.c
 BTSRCS += setenv.c
 BTSRCS += unsetenv.c

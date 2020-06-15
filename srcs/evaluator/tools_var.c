@@ -3,14 +3,16 @@
 #include "sh.h"
 #include "ft_printf.h"
 
-uint8_t		ft_print_env_lst(t_list *lst)
+uint8_t		ft_print_export_lst(t_list *lst, uint8_t i)
 {
 	t_var	*env;
-
+	char *export;
+	
+	export = (i > 0) ? "export " : "";
 	while (lst)
 	{
 		env = lst->data;
-		ft_printf("%s=%s\n", env->ctab[0], env->ctab[1]);
+		ft_printf("%s%s=%s\n", export, env->ctab[0], env->ctab[1]);
 		lst = lst->next;
 	}
 	return (SUCCESS);
