@@ -10,10 +10,10 @@ uint32_t			builtin_search(t_process *p)
 		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
 		return ((p->setup |= B_ECHO) + 1);
-	if (!ft_strcmp(p->cmd, "setenv"))
-		return (p->setup |= B_SETENV);
-	if (!ft_strcmp(p->cmd, "unsetenv"))
-		return (p->setup |= B_UNSETENV);
+	if (!ft_strcmp(p->cmd, "set"))
+		return (p->setup |= B_SET);
+	if (!ft_strcmp(p->cmd, "unset"))
+		return (p->setup |= B_UNSET);
 	if (!ft_strcmp(p->cmd, "env"))
 		return (p->setup |= B_ENV);
 	if (!ft_strcmp(p->cmd, "cd"))

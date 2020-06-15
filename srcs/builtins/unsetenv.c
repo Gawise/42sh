@@ -17,13 +17,17 @@ void		unsetvar_del(void *delete, size_t size)
 	free(delete);
 }
 
-uint8_t		ft_unsetenv(t_job *j, t_process *p)
+uint8_t		ft_unset(t_job *j, t_process *p)
 {
 	int		i;
 
 	(void)j;
 	i = 0;
 	while (p->av[++i])
+	{
 		ft_lstdelif(&cfg_shell()->env, p->av[i], unsetvar_find, unsetvar_del);
+		ft_lstdelif(&cfg_shell()->intern, p->av[i], unsetvar_find, unsetvar_del);
+
+	}
 	return (SUCCESS);
 }

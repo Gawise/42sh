@@ -15,7 +15,7 @@ void		unsetvar_del(void *delete, size_t size);
 int32_t		unsetvar_find(void *elem, void *var);
 char		**create_tab_var(t_list *list, int count);
 uint8_t		several_setvar(t_list **var, char *str);
-uint8_t		ft_print_export_lst(t_list *lst, uint8_t i);
+uint8_t		ft_print_var_lst(t_list *lst, uint8_t i);
 uint8_t		ft_setvar(t_list **lst, char *name, char *value);
 
 

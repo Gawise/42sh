@@ -4,9 +4,12 @@
 #include "var.h"
 #include "sh.h"
 
-static int8_t		error(void)
+static int8_t		export_error(char err)
 {
-	ft_printf("error\n");
+	char	*usage;
+
+	usage = "export: usage: export [name[=value] ...] or export -p";
+	ft_dprintf(STDERR_FILENO, "%s: export: -%c: invalid option\n%s\n", PROJECT, err, usage);
 	return (-1);
 }
 
@@ -16,8 +19,8 @@ static void			just_export(t_cfg *shell, char *name)
 
 	if ((value = find_var_value(shell->intern, name)))
 	{
-		ft_lstdelif(&shell->intern, name, unsetvar_find, unsetvar_del);
 		ft_setvar(&shell->env, name, value);
+		ft_lstdelif(&shell->intern, name, unsetvar_find, unsetvar_del);
 	}
 }
 
@@ -40,7 +43,7 @@ static uint8_t		check_opt(t_process *p, int32_t *ac)
 	while ((ret = ft_getopt(ac, &i, p->av, "p")) != -1)
 	{
 		if (ret == '?')
-			return (error());
+			return (export_error(p->av[*ac][i]));
 		if (ret == 'p')
 			opt = TRUE;
 	}
@@ -60,7 +63,7 @@ uint8_t		ft_export(t_job *j, t_process *p)
 	ac = 1;
 	shell = cfg_shell();
 	if ((ret = check_opt(p, &ac)) > 0)
-		return (ft_print_export_lst(shell->env, 1)); //manque export
+		return (ft_print_var_lst(shell->env, 1)); //manque export
 	if (ret == -1)
 		return (FAILURE);
 	while (p->av[ac])

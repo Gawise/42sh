@@ -3,7 +3,7 @@
 #include "sh.h"
 #include "ft_printf.h"
 
-uint8_t		ft_print_export_lst(t_list *lst, uint8_t i)
+uint8_t		ft_print_var_lst(t_list *lst, uint8_t i)
 {
 	t_var	*env;
 	char *export;
