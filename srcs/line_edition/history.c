@@ -35,7 +35,9 @@ static char	*get_home(void)
 
 static void	history_updater(t_cs_line *cs, t_dlist *hs, int fd)
 {
-	int	len;
+	int		len;
+	t_cfg	*cfg;
+	char	*nb;
 
 	len = ft_strlen(cs->input);
 	if (!(hs->prev && hs->prev->data && (cs->input[len - 1] = '\0')
@@ -45,6 +47,11 @@ static void	history_updater(t_cs_line *cs, t_dlist *hs, int fd)
 		hs->data = (void *)ft_strdup(cs->input);
 		cs->input[len - 1] = '\n';
 		ft_putstr_fd(cs->input, fd);
+		cfg = cfg_shell();
+		cfg->hist_nb += 1;
+		nb = ft_itoa(cfg->hist_nb);
+		ft_hash_add(cfg->hist_map, nb, ft_strdup((char *)hs->data), NULL);
+		ft_strdel(&nb);
 	}
 	else
 		ft_dlstdelone(&hs);
@@ -74,6 +81,28 @@ void		update_history(t_dlist *hs)
 	}
 }
 
+static void init_history(t_dlist *hs, int fd, char **line)
+{
+    char    *nb;
+    t_cfg   *cfg;
+    int     i;
+
+    if (hs && line && (cfg = cfg_shell()))
+    {
+        cfg->hist_map = ft_hash_init(1);
+        i = 0;
+        while (get_next_line(fd, line) > 0 && ++i)
+        {
+            ft_dlstaddtail(&hs, ft_dlstnew(*line, 1));
+            nb = ft_itoa(i);
+            ft_hash_add(cfg->hist_map, nb, ft_strdup(*line), NULL);
+            ft_strdel(&nb);
+        }
+		cfg->hist_nb = i;
+        close(fd);
+    }
+}
+
 t_dlist		*get_history(void)
 {
 	t_dlist	*hs;
@@ -86,9 +115,7 @@ t_dlist		*get_history(void)
 		if ((fd = open(line, O_RDONLY)) > 0)
 		{
 			ft_strdel(&line);
-			while (get_next_line(fd, &line) > 0)
-				ft_dlstaddtail(&hs, ft_dlstnew(line, 1));
-			close(fd);
+			init_history(hs, fd, &line);
 		}
 		else
 			ft_strdel(&line);

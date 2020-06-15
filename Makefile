@@ -170,6 +170,7 @@ BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
 BTSRCS += fg.c
 BTSRCS += bg.c
+BTSRCS += fc.c
 
 ## INCLUDES ##
 

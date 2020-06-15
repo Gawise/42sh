@@ -22,12 +22,14 @@ typedef struct	s_cfg
 	t_list			*sp;
 	t_list			*job;
 	t_dlist			*history;
+	t_hash_map		*hist_map;
 	t_hash_map		*map;
 	t_hash_map		*input_map;
 	uint32_t		cur_job;
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;
+	int				hist_nb;
 }				t_cfg;
 
 /*
