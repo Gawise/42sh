@@ -1,0 +1,12 @@
+OLDPWD=/tmp cd -
+pwd
+cd /
+HOME=/ cd $HOME
+pwd
+OLDPWD=/home/deh cd $OLDPWD
+pwd
+cd ~
+pwd
+cd / ; pwd ; HOME= ; cd ~ ; pwd
+cd / ; pwd ; HOME=gg ; cd ~ ; pwd
+cd unknowpath

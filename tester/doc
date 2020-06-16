@@ -1,0 +1,8 @@
+Pour ajouter un test:
+ - Creer un nouveau dossier dans tester/units/
+ - Ajouter un fichier 'input' qui sera l'entree du shell
+ - Si on redirige vers des fichiers, lister le chemin des fichiers dans un fichier 'redir'
+ - Pour effectuer des actions dans l'environement de test (creation de fichiers, dossiers etc.), creer un script 'setup'
+ - Pour predefinir la sortie standard ou d'erreur au lieu de celles de bash, ecrire l'output dans un fichier 'stdout' ou 'stderr' dans le dossier du test
+
+/!\ Tout est fait dans le dossier tester/tmp donc le script 'setup' et le fichier 'redir' doivent etre ecrits en consequence

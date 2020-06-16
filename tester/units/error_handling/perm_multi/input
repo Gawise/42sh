@@ -1,0 +1,9 @@
+touch file_no_r file_no_w; mkdir rep_no_x rep_no_w rep_no_r ; chmod -r file_no_r rep_no_r ; chmod -w file_no_w rep_no_w ;chmod -x rep_no_x
+ls -l;
+2>err.txt cat <file_no_r | 2>>err.txt cat >file_no_w;
+ls 2>&1 | 2>>err.txt cat -e >rep_no_x/test;
+2>>err.txt cat < rep_no_r/test
+2>>err.txt ls > rep_no_w/test
+2>>err.txt cd rep_no_x;
+cat err.txt | rev | cut -d ' ' -f 1 | rev
+rm -rf rep_no_r rep_no_w rep_no_x

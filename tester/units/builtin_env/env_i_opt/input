@@ -1,0 +1,1 @@
+env -i PATH=/bin bash -c "ls; ls -l /dev | grep stdout; echo $HOME"

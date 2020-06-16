@@ -1,0 +1,1 @@
+cd -L /tmp; cd -P ..; pwd

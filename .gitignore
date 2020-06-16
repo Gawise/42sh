@@ -1,3 +1,10 @@
+# binary
+21sh
+21sh_db
+
+# history
+.21sh_history
+
 # Object files
 *.o
 *.ko
@@ -24,5 +31,5 @@
 # Vscode
 *.json
 
-# Git lig
-libft/.git
+# Tags file
+tags
