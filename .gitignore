@@ -1,9 +1,9 @@
 # binary
-21sh
-21sh_db
+42sh
+42sh_db
 
 # history
-.21sh_history
+.42sh_history
 
 # Object files
 *.o
