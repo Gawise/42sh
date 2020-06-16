@@ -29,8 +29,8 @@ uint32_t	right_fifo(char *path, uint32_t *right)
 {
 	struct stat buf;
 
-	lstat(path, &buf);
 	ft_bzero(&buf, sizeof(struct stat));
+	lstat(path, &buf);
 	if (!S_ISFIFO(buf.st_mode))
 		return (0);
 	if (access(path, R_OK | W_OK) != SUCCESS)
