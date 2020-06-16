@@ -288,9 +288,9 @@ read -p "Which test do you wish to perform?
 	4)	builtin_env
 	5)	builtin_exit
 	6)	builtin_hash
-	7)	builtin_setenv
+	7)	[place dispo]
 	8)	builtin_type
-	9)	builtin_unsetenv
+	9)	[place dispo]
 	10)	current
 	11)	error_handling
 	12)	heredocs
@@ -310,9 +310,9 @@ case $ret in
 	4 ) TEST_DIRS="builtin_env";;
 	5 ) TEST_DIRS="builtin_exit";;
 	6 ) TEST_DIRS="builtin_hash";;
-	7 ) TEST_DIRS="builtin_setenv";;
+	7 ) TEST_DIRS="dispo1";;
 	8 ) TEST_DIRS="builtin_type";;
-	9 ) TEST_DIRS="builtin_unsetenv";;
+	9 ) TEST_DIRS="dispo2";;
 	10 ) TEST_DIRS="current";;
 	11 ) TEST_DIRS="error_handling";;
 	12 ) TEST_DIRS="heredocs";;

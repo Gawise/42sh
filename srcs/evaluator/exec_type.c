@@ -36,9 +36,13 @@ uint32_t			builtin_search(t_process *p)
 	return (0);
 }
 
-uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
+static uint8_t		find_binary(t_cfg *shell, t_process *p, t_list *env)
 {
-	if (!find_var(env, "PATH"))
+	char	*var_path;
+
+	if (!(var_path = find_var_value(env, "PATH")))
+		var_path = find_var_value(shell->intern, "PATH");
+	if (!var_path)
 	{
 		ft_hash_reset(&cfg_shell()->map, free, 128);
 		return (0);
@@ -49,11 +53,11 @@ uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
 			return (TRUE);
 		ft_strdel(&p->path);
 		ft_hash_delone(shell->map, p->cmd, free);
-		if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+		if ((p->path = ft_which(var_path, p->cmd)))
 			ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 		return (p->path ? 1 : 0);
 	}
-	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+	if (!(p->path = ft_which(var_path, p->cmd)))
 		return (0);
 	ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 	return (TRUE);
@@ -63,7 +67,7 @@ static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
-	else if (find_binary(env, p, cfg_shell()))
+	else if (find_binary(cfg_shell(), p, env))
 		p->setup |= EXEC;
 	else
 		return (*err |= E_UNFOUND);

@@ -1,1 +1,1 @@
-directory=/ ls_opt=-atr; ls  
+directory=/ ls_opt=-atr; ls ${ls_opt} ${directory}
