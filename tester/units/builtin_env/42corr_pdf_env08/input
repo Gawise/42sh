@@ -1,0 +1,1 @@
+unset LS_COLORS; a=a b=b; unset a b; env | grep -E '(a|b)=' ; set | grep -E '(a|b)='

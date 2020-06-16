@@ -1,0 +1,16 @@
+a=hello b=world; b=42 echo ${a}-${b} ${b} && b=42 && echo ${a}-world ${b}
+a=hello b=world; b=42 echo ${a}_${b} && echo ${b} hello_world world
+directory=/ ls_opt=-atr; ls ${ls_opt} ${directory}
+echo ${EMPTY} | cat -e
+a=hello b=world unset LS_COLORS; set | grep -E '(a|b)=' | cat -e
+a=hello b=world; env | grep -E '(a|b)='
+bbb=worldddd; export bbb; printenv bbb
+ONESHOT= env | grep ONESHOT; env | grep ONESHOT
+unset LS_COLORS; a=a b=b; unset a b; env | grep -E '(a|b)=' ; set | grep -E '(a|b)='
+unset PATH; PATH=/bin:/usr/bin ; mkdir testdir; echo 0 ; ls -1 | grep testdir ; rm -rf testdir
+a=hello b=world; unset LS_COLORS; set | grep -E '(a|b)=' | sort
+unset a b LS_COLORS; a=hello b=world ls; set | grep -E '(a|b)='
+unset LS_COLORS; a=hello b=world; unset a b; set | grep -E '(a|b)='
+unset LS_COLORS; a=hello b=world unset a b; set | grep -E '(a|b)='
+unset LS_COLORS; qwert=qwert asd= zxcv=zxcv set | grep -e qwert -e asd -e zxcv ; env | grep -e qwert -e asd -e zxcv;
+unset LS_COLORS; qwert=qwert asd= zxcv=zxcv ; set | grep -e qwert -e asd -e zxcv | cat -e | sort ; env | grep -e qwert -e asd -e zxcv | sort;

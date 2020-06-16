@@ -1,0 +1,1 @@
+unset LS_COLORS; qwert=qwert asd= zxcv=zxcv ; set | grep -e qwert -e asd -e zxcv | cat -e | sort ; env | grep -e qwert -e asd -e zxcv | sort;

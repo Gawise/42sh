@@ -37,14 +37,15 @@
 # define B_ECHO					0
 # define B_CD					16384
 # define B_ENV					32768
-# define B_SETENV				49152
-# define B_UNSETENV				65536
+# define B_SET					57344 //49152
+# define B_UNSET				73728  //65536
 # define B_HASH					81920
 # define B_EXIT					106496
 # define B_JOBS					114688
 # define B_FG					131072
 # define B_BG					147456
 # define B_TYPE					163840
+# define B_EXPORT				184320
 
 /*
 *****************************************************
@@ -92,12 +93,14 @@
 *****************************************************
 */
 
+
+uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
 uint8_t			ft_echo(t_job *j, t_process *p);
 uint8_t			ft_type(t_job *j, t_process *p);
-uint8_t			ft_setenv(t_job *j, t_process *p);
-uint8_t			ft_unsetenv(t_job *j, t_process *p);
+uint8_t			ft_set(t_job *j, t_process *p);
+uint8_t			ft_unset(t_job *j, t_process *p);
 uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 int8_t			protect_job(int8_t update);
