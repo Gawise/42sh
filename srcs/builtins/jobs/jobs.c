@@ -2,10 +2,11 @@
 #include "exec.h"
 #include "struct.h"
 #include "ft_printf.h"
+#include "sh.h"
 
 int		print_jobs_error(char c)
 {
-	ft_dprintf(STDERR_FILENO, "21sh: jobs: -%c: invalid option\n", c);
+	ft_dprintf(STDERR_FILENO, "%s: jobs: -%c: invalid option\n", PROJECT, c);
 	ft_dprintf(STDERR_FILENO, "jobs : usage: jobs [-lp] [job_id...]\n");
 	return (2);
 }
@@ -60,10 +61,10 @@ uint8_t	ft_multi_jobs(t_job *j, char **tab, int ac, char opt)
 		{
 			if (ope == -1)
 			{
-				ft_dprintf(STDERR_FILENO, "21sh: jobs: %s", tab[ac]);
+				ft_dprintf(STDERR_FILENO, "%s: jobs: %s", PROJECT, tab[ac]);
 				ft_dprintf(STDERR_FILENO, ": ambiguous job spec\n");
 			}
-			ft_dprintf(STDERR_FILENO, "21sh: jobs: %s", tab[ac]);
+			ft_dprintf(STDERR_FILENO, "%s: jobs: %s", PROJECT, tab[ac]);
 			ft_dprintf(STDERR_FILENO, ": no such job\n");
 			ret++;
 		}

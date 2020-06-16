@@ -1,5 +1,5 @@
-NAME = 21sh
-NAMEDB = 21sh_db
+NAME = 42sh
+NAMEDB = 42sh_db
 
 # Reset
 NC=\033[0m
