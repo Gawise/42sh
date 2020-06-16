@@ -325,7 +325,7 @@ case $ret in
 	19 ) exit;;
 esac
 
-if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]
+if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "42sh_db" ]
 then
 	run_tests $TEST_DIRS
 fi

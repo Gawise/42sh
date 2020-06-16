@@ -14,11 +14,11 @@
 #  define FD_DEBUG			260
 # endif
 
-# define PROJECT			"21sh"
-# define NAME_SH			"21sh-1.0$ "
+# define PROJECT			"42sh"
+# define NAME_SH			"42h-1.0$ "
 # define COLOR_SH			"\e[0;32m"
 # define COLOR_SUBPROMPT	"\e[0;31m"
-# define USAGE				"Usage: 21sh [-d [path]] [file]\nexit\n"
+# define USAGE				"Usage: 42sh [-d [path]] [file]\nexit\n"
 
 /*
 **********************************
