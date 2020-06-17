@@ -69,11 +69,11 @@ int		eval_routine(t_parser *parser)
 	return (1);
 }
 
-int		analyzer_routine(t_cmd_table *cmd)
+int		analyzer_routine(t_and_or *and_or)
 {
-	if (a_make_args_tab(cmd) < 0)
+	if (a_make_args_tab(and_or) < 0)
 		return (0);
-	a_set_jobs_str(cmd);
-	a_remove_leading_tabs(cmd);
+	a_set_jobs_str(and_or);
+	a_remove_leading_tabs(and_or);
 	return (1);
 }

@@ -54,7 +54,7 @@ int			lexer_routine(char **line, t_lexer *lexer);
 int			parser_routine(t_lexer *lexer, t_parser *parser);
 int			line_edition_routine(char **line);
 int			eval_routine(t_parser *parser);
-int			analyzer_routine(t_cmd_table *cmd);
+int			analyzer_routine(t_and_or *and_or);
 void		set_var(t_cfg *shell);
 void		exit_routine(t_cfg *shell, uint8_t ret);
 void		ft_ex(char *error);
