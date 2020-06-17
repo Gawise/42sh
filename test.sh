@@ -170,7 +170,7 @@ make_test () {
 		output_print "\e[1;42m$(basename $1)\e[0m"
 		TEST_RET=0
 	fi
-	rm -f $LOG_DIR/*
+	rm -rf $LOG_DIR/*
 }
 
 run_test_group () {

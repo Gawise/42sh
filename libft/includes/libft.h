@@ -114,6 +114,8 @@ t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 uint32_t		ft_lstcount(t_list *elem);
+void            ft_lstfree(void *data, size_t size);
+
 /*
 ** MEMORY
 */

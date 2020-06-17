@@ -102,6 +102,7 @@ ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
 ANASRCS += exp/exp.c
+ANASRCS += exp/exp_errors.c
 ANASRCS += exp/exp_getenv.c
 ANASRCS += exp/exp_tools.c
 ANASRCS += exp/parameter.c
@@ -111,6 +112,7 @@ ANASRCS += exp/param_substitution.c
 ANASRCS += exp/tilde_exp.c
 ANASRCS += exp/tilde_assign.c
 ANASRCS += exp/word_parameter.c
+ANASRCS += field_splitting.c
 ANASRCS += quote_removal.c
 
 ## EVAL ##
