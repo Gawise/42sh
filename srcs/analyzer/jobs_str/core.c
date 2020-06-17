@@ -109,17 +109,8 @@ static int		a_and_or_job_str(t_and_or *and_or)
 	return (1);
 }
 
-int				a_set_jobs_str(t_cmd_table *cmd_table)
+void			a_set_jobs_str(t_and_or *and_or)
 {
-	t_list		*and_or;
-
-	if (!cmd_table)
-		return (1);
-	and_or = cmd_table->and_or;
-	while (and_or)
-	{
-		a_and_or_job_str((t_and_or *)and_or->data);
-		and_or = and_or->next;
-	}
-	return (1);
+	if (and_or)
+		a_and_or_job_str(and_or);
 }

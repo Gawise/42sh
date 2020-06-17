@@ -69,14 +69,8 @@ static void		a_trim_commands(t_and_or *and_or)
 	}
 }
 
-void			a_remove_leading_tabs(t_cmd_table *table)
+void			a_remove_leading_tabs(t_and_or *and_or)
 {
-	t_list		*lst_and;
-
-	lst_and = table->and_or;
-	while (lst_and)
-	{
-		a_trim_commands(lst_and->data);
-		lst_and = lst_and->next;
-	}
+	if (and_or)
+		a_trim_commands(and_or);
 }

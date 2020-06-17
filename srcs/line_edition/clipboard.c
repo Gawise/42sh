@@ -1,4 +1,3 @@
-
 #include "libft.h"
 #include "get_next_line.h"
 #include "line_edition.h"

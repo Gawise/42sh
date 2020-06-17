@@ -30,9 +30,6 @@ void	routine_clean_job(void *del, size_t u)
 	j = del;
 	ft_strdel(&j->cmd);
 	ft_lstdel(&j->process, del_struct_process);
-	close(j->std[0]);
-	close(j->std[1]);
-	close(j->std[2]);
 	ft_bzero(j, u);
 }
 

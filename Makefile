@@ -1,5 +1,5 @@
-NAME = 21sh
-NAMEDB = 21sh_db
+NAME = 42sh
+NAMEDB = 42sh_db
 
 # Reset
 NC=\033[0m
@@ -156,9 +156,10 @@ TOOLSRCS += all_signal.c
 BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
+BTSRCS += export.c
 BTSRCS += env.c
-BTSRCS += setenv.c
-BTSRCS += unsetenv.c
+BTSRCS += set.c
+BTSRCS += unset.c
 BTSRCS += echo.c
 BTSRCS += jobs/jobs.c
 BTSRCS += jobs/tools_job_id.c

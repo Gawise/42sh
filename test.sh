@@ -143,6 +143,7 @@ get_std_diff () {
 }
 
 make_test () {
+	rm -rf $TMP_DIR/*
 	REDIR_FILE=""
 	cd $TMP_DIR
 	env_setup $1/setup
@@ -287,18 +288,17 @@ read -p "Which test do you wish to perform?
 	4)	builtin_env
 	5)	builtin_exit
 	6)	builtin_hash
-	7)	builtin_setenv
-	8)	builtin_type
-	9)	builtin_unsetenv
-	10)	error_handling
-	11)	heredocs
-	12)	logical_ops
-	13)	pipes
-	14)	quoting
-	15)	redirections
-	16)	signals
-	17)	parameter_exp
-	18)	exit
+	7)	builtin_type
+	8)	current
+	9)	error_handling
+	10)	heredocs
+	11)	logical_ops
+	12)	pipes
+	13)	quoting
+	14)	redirections
+	15)	signals
+	16)	parameter_exp
+	17)	exit
     > " ret
 case $ret in
 	0 ) ;;
@@ -307,22 +307,21 @@ case $ret in
 	3 ) TEST_DIRS="builtin_echo";;
 	4 ) TEST_DIRS="builtin_env";;
 	5 ) TEST_DIRS="builtin_exit";;
-	6 ) TEST_DIRS="units/builtin_hash";;
-	7 ) TEST_DIRS="units/builtin_setenv";;
-	8 ) TEST_DIRS="units/builtin_type";;
-	9 ) TEST_DIRS="units/builtin_unsetenv";;
-	10 ) TEST_DIRS="error_handling";;
-	11 ) TEST_DIRS="heredocs";;
-	12 ) TEST_DIRS="logical_ops";;
-	13 ) TEST_DIRS="pipes";;
-	14 ) TEST_DIRS="quoting";;
-	15 ) TEST_DIRS="redirections";;
-	16 ) TEST_DIRS="signals";;
-	17 ) TEST_DIRS="parameter_exp";;
-	18 ) exit;;
+	6 ) TEST_DIRS="builtin_hash";;
+	7 ) TEST_DIRS="builtin_type";;
+	8 ) TEST_DIRS="current";;
+	9 ) TEST_DIRS="error_handling";;
+	10 ) TEST_DIRS="heredocs";;
+	11 ) TEST_DIRS="logical_ops";;
+	12 ) TEST_DIRS="pipes";;
+	13 ) TEST_DIRS="quoting";;
+	14 ) TEST_DIRS="redirections";;
+	15 ) TEST_DIRS="signals";;
+	16 ) TEST_DIRS="parameter_exp";;
+	17 ) exit;;
 esac
 
-if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "21sh_db" ]
+if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "42sh_db" ]
 then
 	run_tests $TEST_DIRS
 fi

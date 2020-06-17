@@ -1,4 +1,3 @@
-
 #include "line_edition.h"
 #include <sys/stat.h>
 #include <sys/types.h>

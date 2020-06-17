@@ -1,4 +1,3 @@
-
 #include "line_edition.h"
 #include "sh.h"
 #include "struct.h"

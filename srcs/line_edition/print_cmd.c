@@ -1,4 +1,3 @@
-
 #include "line_edition.h"
 #include "struct.h"
 #include <sys/stat.h>

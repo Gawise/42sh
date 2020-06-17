@@ -10,7 +10,8 @@ char	*resolve_parameter(char *str, int hash)
 	int		type;
 
 	type = 0;
-	if ((ft_strlen(str) == 1 && ft_strchr("@*#?-$!", *str)) || ft_isdigit(*str))
+	if ((((!hash && ft_strlen(str) == 1) || (hash && ft_strlen(str) == 2))
+	&& ft_strchr("@*#?-$!", *str)) || ft_isdigit(*str))
 		type = 1;
 	else if (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1)))
 		return (NULL);

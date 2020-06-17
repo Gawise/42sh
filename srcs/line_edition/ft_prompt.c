@@ -1,4 +1,3 @@
-
 #include "ft_printf.h"
 #include <termios.h>
 #include <term.h>
@@ -106,7 +105,7 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 		ft_dlstdelone(&cs->history);
 	}
 	ft_strdel(&cs->clipboard);
-	return (ret);
+	return (!ret && !cs->sig_int && !cs->sig_eof ? ft_strdup("\n") : ret);
 }
 
 char			*ft_prompt(char *prompt, char *color)

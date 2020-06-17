@@ -5,9 +5,15 @@
 
 # define ERROR					48
 
-# define SAVE_IN				256
-# define SAVE_OUT				257
-# define SAVE_ERR				258
+# if __APPLE__
+#  define SAVE_IN               252
+#  define SAVE_OUT              253
+#  define SAVE_ERR              254
+# else
+#  define SAVE_IN				256
+#  define SAVE_OUT				257
+#  define SAVE_ERR				258
+# endif
 
 /*
 *****************************************************
@@ -31,14 +37,15 @@
 # define B_ECHO					0
 # define B_CD					16384
 # define B_ENV					32768
-# define B_SETENV				49152
-# define B_UNSETENV				65536
+# define B_SET					57344 //49152
+# define B_UNSET				73728  //65536
 # define B_HASH					81920
 # define B_EXIT					106496
 # define B_JOBS					114688
 # define B_FG					131072
 # define B_BG					147456
 # define B_TYPE					163840
+# define B_EXPORT				184320
 
 /*
 *****************************************************
@@ -86,12 +93,14 @@
 *****************************************************
 */
 
+
+uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
 uint8_t			ft_echo(t_job *j, t_process *p);
 uint8_t			ft_type(t_job *j, t_process *p);
-uint8_t			ft_setenv(t_job *j, t_process *p);
-uint8_t			ft_unsetenv(t_job *j, t_process *p);
+uint8_t			ft_set(t_job *j, t_process *p);
+uint8_t			ft_unset(t_job *j, t_process *p);
 uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 int8_t			protect_job(int8_t update);
@@ -108,7 +117,8 @@ int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
 char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
-char			*cd_del_dotcomponents(char *curpath, char *opr);
+char			*cd_del_dotcomponents(char *curpath,
+char *opr, char **pwd, t_list **env);
 int				display_cd_errors(char *error);
 int16_t			get_job_id(char *ope);
 int				print_job_ope(char opt, t_job *j, int8_t ope);
@@ -142,6 +152,8 @@ void			cmd_to_job(t_cfg *shell, t_job *job, t_list *s_cmd, char *cmd);
 uint8_t			run_job(t_cfg *shell, t_job *job, t_list *process);
 void			wait_process(t_job *job);
 t_list			*find_job_by_status(t_list *lst, uint8_t want);
+void			builtin_save_fd(t_job *j);
+void			builtin_restor_fd(t_job *j);
 
 /*
 *****************************************************

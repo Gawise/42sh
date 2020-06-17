@@ -55,12 +55,14 @@ char		*ft_strrep(char *str, char *rem, char *rep)
 	size_t	replen;
 
 	replen = rep ? ft_strlen(rep) : 0;
-	if (!str || !rem)
-		return (0);
+	if (!str)
+		return (NULL);
+	if (!rem)
+		return (ft_strdup(str));
 	if (!(occurence = ft_strstr(str, rem)))
 		return (str);
 	if (!(ret = ft_strnew(ft_strlen(str) - ft_strlen(rem) + replen)))
-		return (0);
+		return (NULL);
 	ft_strncpy(ret, str, occurence - str);
 	if (replen)
 		ft_strcat(ret, rep);

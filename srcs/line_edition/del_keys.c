@@ -1,4 +1,3 @@
-
 #include "libft.h"
 #include "struct.h"
 #include "line_edition.h"

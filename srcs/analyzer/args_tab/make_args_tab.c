@@ -38,15 +38,9 @@ int	mat_s_cmd(t_list *s_cmd_lst)
 	return (1);
 }
 
-int	mat_and_or(t_list *and_or_lst)
+int	a_make_args_tab(t_and_or *and_or)
 {
-	t_and_or	*and_or;
-
-	and_or = (t_and_or *)and_or_lst->data;
-	return (args_tab_iter(and_or->s_cmd, &mat_s_cmd));
-}
-
-int	a_make_args_tab(t_cmd_table *table)
-{
-	return (args_tab_iter(table->and_or, &mat_and_or));
+	if (and_or)
+		return (args_tab_iter(and_or->s_cmd, &mat_s_cmd));
+	return (1);
 }
