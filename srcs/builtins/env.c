@@ -38,7 +38,7 @@ uint8_t			add_new_var(t_process *p, t_cfg *shell_cpy, int32_t *ac)
 	while (ft_strchr(p->av[*ac], '='))
 	{
 		if (several_setvar(&shell_cpy->env, p->av[*ac]) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n",
+			ft_dprintf(STDERR_FILENO, "'%s': Not a valid identifier\n",
 					p->av[*ac]);
 		*ac += 1;
 	}
