@@ -1,1 +1,1 @@
-foo=foobarfoo; echo ${foo%%o*}
+foo=foobarfoo; echo ${foo%%fo*}
