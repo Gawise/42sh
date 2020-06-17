@@ -4,16 +4,16 @@
 # include "struct.h"
 # include <pwd.h>
 
-int		analyzer_routine(t_cmd_table *cmd);
+int		analyzer_routine(t_and_or *and_or);
 
 char	*get_redir_str(t_list *redir_lst);
 char	*get_args_str(char **args);
 
-int		a_set_jobs_str(t_cmd_table *cmd);
+void	a_set_jobs_str(t_and_or *and_or);
 
-void	a_remove_leading_tabs(t_cmd_table *cmd);
+void	a_remove_leading_tabs(t_and_or *and_or);
 
-int		a_make_args_tab(t_cmd_table *cmd);
+int		a_make_args_tab(t_and_or *and_or);
 
 void	**args_to_tab(t_list *lst, char *cmd);
 

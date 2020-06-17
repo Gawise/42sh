@@ -72,7 +72,8 @@ static char		*ft_del_dotdots2(char *curpath, int i)
 	if (!(tmp = ft_strdup(curpath)))
 		return (0);
 	tmp[i - 1] = '\0';
-	tmp2 = ft_strrchr(tmp, '/') + 1;
+	tmp2 = ft_strrchr(tmp, '/');
+	tmp2 = tmp2 ? tmp2 + 1 : tmp2;
 	tmp[i - 1] = '/';
 	if (tmp[i + 2])
 		tmp[i + 3] = '\0';
@@ -108,8 +109,26 @@ static char		*ft_del_dotdots(char *curpath, char *opr)
 	return (curpath);
 }
 
-char			*cd_del_dotcomponents(char *curpath, char *opr)
+char			*cd_del_dotcomponents(char *curpath,
+char *opr, char **pwd, t_list **env)
 {
+	char	*tmp;
+
+	if (!(*pwd = ft_strdup(find_var_value(*env, "PWD"))))
+		if (!(*pwd = getcwd(NULL, 0)))
+			ft_ex(EX);
+	if (!ft_strchr(*pwd, '/'))
+	{
+		ft_strdel(&curpath);
+		ft_dprintf(2, "%s: cd: bad value for PWD\n", PROJECT);
+		return (NULL);
+	}
+	if (*curpath != '/')
+	{
+		tmp = curpath;
+		curpath = ft_pathjoin(*pwd, curpath);
+		ft_strdel(&tmp);
+	}
 	if (!(curpath = ft_del_dots(curpath)))
 		ft_ex(EXMALLOC);
 	if (!(curpath = ft_del_dotdots(curpath, opr)))

@@ -8,8 +8,10 @@ char	*exp_getenv(char *str, int type, int hash)
 	char	*res;
 
 	res = NULL;
-	if (type)
+	if (type && !hash)
 		return (find_var_value(cfg_shell()->sp, str));
+	if (type && hash)
+		return (find_var_value(cfg_shell()->sp, str + 1));
 	if (!type && !hash)
 	{
 		if (!(res = find_var_value(cfg_shell()->env, str)))
