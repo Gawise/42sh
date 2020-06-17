@@ -6,30 +6,37 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/15 22:43:35 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/17 18:44:05 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "line_edition.h"
 #include "libft.h"
 #include <struct.h>
 #include <sh.h>
 #include "ft_printf.h"
 
-uint8_t static	fc_erro(char c)
+uint8_t static	fc_erro(char *s)
 {
 	char    *usage;
 	char	*usage2;
-	//char	*usage3;
 
     usage = " : fc [-r][-e editor] [first[last]]\n        ";
 	usage2 = "fc -l[-nr] [first[last]]\n        fc -s[old=new] [first]\n";
-    ft_dprintf(2, "fc: illegal option -- %c\nusage%s%s", c, usage, usage2);
+    ft_dprintf(2, "fc: illegal option -- %s\nusage%s%s", s, usage, usage2);
     return (-1);
+}
+
+int		range_error(void)
+{
+	ft_printf("fc : history specification out of range");
+	return (-1);
 }
 
 static uint8_t  check_opt(t_process *p, int32_t *ac)
 {
     int32_t     i;
+	int			z;
     int8_t      ret;
     int8_t      flags;
 
@@ -39,7 +46,13 @@ static uint8_t  check_opt(t_process *p, int32_t *ac)
     while ((ret = ft_getopt(ac, &i, p->av, fl)) != -1)
     {
         if (ret == '?')
-            return (fc_erro(p->av[*ac][i]));
+		{
+			z = i;
+			while (p->av[*ac][z])
+				if (!ft_isdigit(p->av[*ac][z++]))
+					return (fc_erro(&p->av[*ac][i]));
+			break ;
+		}
 		flags |= (char)ret == 'e' ? 1 : 0;
 		flags |= (char)ret == 'l' ? 2 : 0;
 		flags |= (char)ret == 'n' ? 4 : 0;
@@ -56,7 +69,7 @@ char			*create_histfile()
 	else
 		return (ft_strdup("/tmp/edit_hist"));
 }
-
+/*
 char			*init_file(t_cfg *cfg, t_point cmd_nb)
 {
 	t_dlist	*hist;
@@ -81,30 +94,92 @@ char			*init_file(t_cfg *cfg, t_point cmd_nb)
 	close(fd);
 	return (filename);
 }
+*/
+static t_point         get_range(int8_t *fl, char **av, int ac, t_cfg *cfg)
+{
+    t_point t;
 
-void			print_hist(int8_t fl, char **av, int ac)
+    if (av && av[ac])
+    {
+        if (!av[ac + 1] || (t.y = ft_atoi(av[ac + 1])) == 0 || t.y > cfg->hist_nb)
+            t.y = cfg->hist_nb - 1;
+        if (t.y < 0)
+            t.y = cfg->hist_nb + t.y;
+		if ((t.x = ft_atoi(av[ac])) == 0 || t.x > cfg->hist_nb)
+            t.x = cfg->hist_nb - 1;
+        if (t.x < 0)
+            t.x = cfg->hist_nb + t.x;
+        if (t.x > t.y)
+        {
+            t = (t_point){t.y, t.x};
+            *fl = (*fl & 8 ? *fl ^ 8 : *fl | 8);
+        }
+    }
+    else
+    {
+		(void)fl;
+        t.y = cfg->hist_nb - 1;
+        t.x = (cfg->hist_nb <= 15 ? 1 : cfg->hist_nb - 15);
+    }
+    return (t);
+}
+
+static int		check_range(char **av, int ac)
+{
+	int	i;
+	int	z;
+	if (av && av[ac])
+	{
+		i = ac;
+		while (av[i])
+		{
+			z = 0;
+			if (av[i][z] == '-')
+				z = 1;
+			while (av[i][z])
+				if (!ft_isdigit(av[i][z++]))
+					return (range_error());
+			i++;
+		}
+	}
+	return (1);
+}
+
+static int		ft_intlen(int nb)
+{
+	unsigned int	n;
+	int				ret;
+
+	if (nb < 0)
+		n = nb * (-1);
+	else
+		n = (unsigned int)nb;
+	if (n == 0)
+		return (1);
+	ret = 0;
+	while (n && ret++)
+		n /= 10;
+	return (ret);
+}
+
+void			print_hist(int8_t *fl, char **av, int ac)
 {
 	t_point	range;
 	int		order;
 	t_cfg	*cfg;
 	char	*key;
 
-	if (av && (cfg = cfg_shell()))
+	if (av && (cfg = cfg_shell()) && check_range(av, ac) == 1)
 	{
-		range = (t_point){0, 0};
-		range.x = (av[ac] ? ft_atoi(av[ac]) : 0);
-		range.y = (av[ac] && av[ac + 1] ? ft_atoi(av[ac + 1]) : cfg->hist_nb - 20);
-		range.y = (range.y < 0 ? 1 : range.y);
-		order = (range.x > range.y ? -1 : 1);
-		range.x = (range.x == 0 ? cfg->hist_nb : range.x);
-		range.y = (range.y == 0 && range.x != cfg->hist_nb ? cfg->hist_nb : range.y);
-		if (fl & 8)
+		range = get_range(fl, av, ac, cfg);
+		if (*fl & 8)
 			range = (t_point){range.y, range.x};
-		while (range.x - order != range.y && range.x < cfg->hist_nb && range.x > 0)
+		order = (range.x > range.y ? -1 : 1);
+		while (range.x - order != range.y && range.x > 0)
 		{
-			if (!(fl & 4))
+			if (!(*fl & 4))
                 ft_putnbr(range.x);
-            ft_putstr((fl & 4 ? "       " : "     "));
+            putchar_n(' ', (!(*fl & 4) ? 12 - ft_intlen(range.x) : 12));
             key = ft_itoa(range.x);
 			ft_putendl((char *)ft_hash_lookup(cfg->hist_map, key));
 			ft_strdel(&key);
@@ -124,7 +199,7 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 	if (j && p)
 	{
 		if (fl & 2)
-			print_hist(fl, p->av, ac);
+			print_hist(&fl, p->av, ac);
 		return (SUCCESS);
 	}
 	return (SUCCESS);
