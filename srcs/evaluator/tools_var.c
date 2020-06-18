@@ -45,7 +45,7 @@ char 		**create_var_tab(char *s)
 	char	*tmp;
 	char	**tab;
 
-	tab = ft_memalloc(sizeof(char *) * 3);;
+	tab = ft_memalloc(sizeof(char *) * 3);
 	protect_malloc(tab);
 	if ((tmp = ft_strchr(s, '=')))
 	{
@@ -73,7 +73,6 @@ void		create_lst_var(t_list **lst, char **tab)
 	while (tab[i])
 	{
 		var.ctab = create_var_tab(tab[i]);
-		//var.ctab = ft_strsplit(tab[i], "=");
 		ft_lst_push_back(lst, &var, sizeof(t_var));
 		i++;
 	}
