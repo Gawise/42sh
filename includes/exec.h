@@ -46,6 +46,7 @@
 # define B_BG					147456
 # define B_TYPE					163840
 # define B_EXPORT				184320
+# define B_ALIAS				196608
 
 /*
 *****************************************************
