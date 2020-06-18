@@ -97,7 +97,7 @@ int		parse_param_exp(char **word, t_exp exp)
 		if ((!exp.bs && ft_strchr("\'\"\\$", *str)
 		&& (ret = param_dispatch(&exp, &str)) < 0) || !*str)
 			break ;
-		if (exp.bs || (*str != '$'))
+		if (exp.bs || *str != '$' || exp.quote == 1)
 			exp_add_to_buf(&exp, &str, &exp.res);
 		if (exp.bs)
 			exp.bs--;
