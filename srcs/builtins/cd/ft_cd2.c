@@ -116,12 +116,12 @@ char *opr, char **pwd, t_list **env)
 
 	if (!(*pwd = ft_strdup(find_var_value(*env, "PWD"))))
 		if (!(*pwd = getcwd(NULL, 0)))
-			ft_ex(EX);
+			ft_ex(EXMALLOC);
 	if (!ft_strchr(*pwd, '/'))
 	{
-		ft_strdel(&curpath);
-		ft_dprintf(2, "%s: cd: bad value for PWD\n", PROJECT);
-		return (NULL);
+		ft_strdel(pwd);
+		if (!(*pwd = getcwd(NULL, 0)))
+			ft_ex(EXMALLOC);
 	}
 	if (*curpath != '/')
 	{
