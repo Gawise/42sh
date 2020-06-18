@@ -62,6 +62,8 @@ int		eval_routine(t_parser *parser)
 	&& ft_eval(parser->table))
 	{
 		ft_lstdel(&parser->table, del_cmd_table);
+		if (cfg_shell()->interactive)
+			return (0);
 		return (-1);
 	}
 	ft_lstdel(&parser->table, del_cmd_table);

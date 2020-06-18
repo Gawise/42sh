@@ -17,6 +17,8 @@ int		cd_home(t_job *job, t_process *p)
 	home = find_var_value(p->env, "HOME");
 	if (!home || !*home)
 	{
+		if (!*home)
+			return (0);
 		ft_dprintf(2, "%s: cd: HOME not set\n", NAME_SH);
 		return (1);
 	}

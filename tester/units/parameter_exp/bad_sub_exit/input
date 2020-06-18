@@ -1,0 +1,2 @@
+echo here && echo ${...} && echo not here ; echo still not here
+echo not gud
