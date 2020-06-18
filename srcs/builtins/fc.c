@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/17 21:46:27 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/18 20:14:42 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,30 @@ static uint8_t  check_opt(t_process *p, int32_t *ac)
 
 char			*get_histfilename()
 {
-	if (access("/tmp", W_OK | R_OK) < 0)
-		return (ft_strdup("./edit_hist"));
-	else
-		return (ft_strdup("/tmp/edit_hist"));
+	char	*name;
+	char	*tmp;
+	char	*prefix;
+	int		i;
+
+	prefix = "/tmp";
+	name = "/edit_hist";
+	if (access(prefix, W_OK | R_OK) < 0)
+		prefix = ".";
+	i = 0;
+	ft_asprintf(&name, "%s%s", prefix, name);
+	prefix = name;
+	while (access(prefix, F_OK) == -1 || i == 0)
+	{
+		i++;
+		tmp = ft_itoa(i);
+		ft_asprintf(&prefix, "%s_%s", name, tmp);
+		ft_strdel(&tmp);
+		printf("%s\n", prefix);
+	}
+	ft_strdel(&name);
+	name = prefix;
+	printf("%s\n", name);
+	return (name);
 }
 
 char			*create_tmphist(int8_t *fl, char **av, int ac)
@@ -126,6 +146,7 @@ char			*create_tmphist(int8_t *fl, char **av, int ac)
 		ft_strdel(&key);
 		range.x += order;
 	}
+	close(fd);
 	return (file);
 }
 
@@ -195,7 +216,7 @@ int			print_hist(int8_t *fl, char **av, int ac)
 	return (-1);
 }
 
-void		exec_hist(char *file)
+void		exec_hist(int8_t fl, char *file)
 {
 	t_lexer     lexer;
 	t_parser    parser;
@@ -213,9 +234,8 @@ void		exec_hist(char *file)
 			if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
 					|| (ret = eval_routine(&parser)) <= 0)
-				if (ret == -1)
 					break ;
-			if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
+			if (!(fl & 1) && ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
 			{
 				cfg_shell()->hist_nb += 1;
 				nb = ft_itoa(cfg_shell()->hist_nb);
@@ -237,18 +257,21 @@ int			edit_hist(int8_t *fl, char **av, int ac)
 
 	if ((hist = create_tmphist(fl, av, (av[ac] ? ac + 1 : ac))))
 	{
-		if (!av[ac] && !find_var_value(cfg_shell()->sp, "FCEDIT"))
+		if ((!av[ac] || !ft_strisalpha(av[ac])) && !find_var_value(
+			cfg_shell()->sp, "FCEDIT"))
 			ft_asprintf(&cmd, "%s %s", "ed", hist);
-		else if (!av[ac])
+		else if (!av[ac] || !ft_strisalpha(av[ac]))
 			ft_asprintf(&cmd, "%s %s", find_var_value(cfg_shell()->sp,
 						"FCEDIT"), hist);
 		else
 			ft_asprintf(&cmd, "%s %s", av[ac], hist);
+		ft_printf("%s", cmd);
+	//	return (1);
 		if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 				|| (ret = parser_routine(&lexer, &parser)) <= 0
 				|| (ret = eval_routine(&parser)) <= 0)
 			return (0);
-		exec_hist(hist);
+		exec_hist(*fl, hist);
 		ft_strdel(&hist);
 		return (1);
 	}
@@ -259,12 +282,20 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 {
 	int8_t	fl;
 	int32_t	ac;
+	t_dlist	*hs;
 
 	ac = 1;
 	if ((fl = check_opt(p, &ac)) < 0)
 		return (FAILURE);
 	if (j && p)
 	{
+		if (fl & 1)
+		{
+			hs = cfg_shell()->history;
+			while (hs->next)
+				hs = hs->next;
+			ft_dlstdelone(&hs);
+		}
 		if (fl & 1 && !edit_hist(&fl, p->av, ac))
 			return (FAILURE);
 		if (fl & 2 && !print_hist(&fl, p->av, ac))
