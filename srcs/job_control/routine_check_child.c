@@ -55,18 +55,26 @@ void			update_listjob(t_cfg *shell)
 	while (ljob)
 	{
 		j = ljob->data;
-		if (find_process_by_status(j->process, RUNNING))
-			j->status = RUNNING;
-		else if ((p = find_process_by_status(j->process, STOPPED)))
-		{
-			j->ret = p->ret;
-			j->status = STOPPED;
-		}
-		else
-			ft_ex(EXUEPTD);
 		if (!ljob->next)
 			shell->active_job = j->id;
-		ljob = ljob->next;
+		if (find_process_by_status(j->process, RUNNING))
+		{
+			j->status = RUNNING;
+			ljob = ljob->next;
+		}
+		else if ((p = find_process_by_status(j->process, STOPPED)))
+		{
+			ljob = ljob->next;
+			if (!ljob->next)
+				shell->active_job = j->id;
+			j->ret = p->ret;
+			if (j->status & STOPPED)
+				continue ;
+			j->status = STOPPED;
+			job_become_cur(shell, j);
+		}
+		else //protect de securité peut etre enlever a la fin
+			ft_ex(EXUEPTD);
 	}
 }
 

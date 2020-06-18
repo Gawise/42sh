@@ -4,6 +4,8 @@
 #include "ft_printf.h"
 #include "sh.h"
 
+#include "job_control.h"
+
 int		print_jobs_error(char c)
 {
 	ft_dprintf(STDERR_FILENO, "%s: jobs: -%c: invalid option\n", PROJECT, c);
@@ -75,7 +77,7 @@ uint8_t	ft_multi_jobs(t_job *j, char **tab, int ac, char opt)
 
 uint8_t	ft_jobs(t_job *j, t_process *p)
 {
-	char	opt;
+/*	char	opt;
 	int		ac;
 	int		i;
 
@@ -88,6 +90,7 @@ uint8_t	ft_jobs(t_job *j, t_process *p)
 	if (opt == 'r' || opt == 'l')
 		print_jobs(opt, j);
 	else
-		print_jobs_opt(j);
+		print_jobs_opt(j);*/
+	ft_jobs2(j, p);
 	return (0);
 }

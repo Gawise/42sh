@@ -160,6 +160,7 @@ BTSRCS += set.c
 BTSRCS += unset.c
 BTSRCS += echo.c
 BTSRCS += jobs/jobs.c
+BTSRCS += jobs/job2.c
 BTSRCS += jobs/tools_job_id.c
 BTSRCS += jobs/print_jobs.c
 BTSRCS += jobs/tools_job.c

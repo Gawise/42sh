@@ -29,7 +29,10 @@ void			add_job_cfg(t_job *job)
 	shell->active_job++;
 	job->id = shell->active_job;
 	ft_cpy_job(job, &jc);
-	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
+	if (job->status & STOPPED) ///rajout condition
+		ft_lst_push_front(&shell->job, &jc, sizeof(t_job));
+	else
+		ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
 	ft_bzero(&jc, sizeof(t_job));
 	debug_print_job(shell->debug, &jc, "add_job_cfg");
 }
