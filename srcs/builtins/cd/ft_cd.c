@@ -27,8 +27,8 @@ int				cd_oldpwd(t_job *j, t_process *p)
 	str[2] = NULL;
 	tabfree(p->av);
 	p->av = str;
-	ret = ft_cd(j, p);
-	ft_printf("%s\n", oldpwd);
+	if (!(ret = ft_cd(j, p)))
+		ft_printf("%s\n", oldpwd);
 	return (ret);
 }
 
