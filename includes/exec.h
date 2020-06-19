@@ -114,7 +114,8 @@ int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
 char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
-char			*cd_del_dotcomponents(char *curpath, char *opr);
+char			*cd_del_dotcomponents(char *curpath,
+char *opr, char **pwd, t_list **env);
 int				display_cd_errors(char *error);
 int16_t			get_job_id(char *ope);
 int				print_job_ope(char opt, t_job *j, int8_t ope);

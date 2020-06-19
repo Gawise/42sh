@@ -15,8 +15,10 @@ int		cd_home(t_job *job, t_process *p)
 	int		ret;
 
 	home = find_var_value(p->env, "HOME");
-	if (!home)
+	if (!home || !*home)
 	{
+		if (!*home)
+			return (0);
 		ft_dprintf(2, "%s: cd: HOME not set\n", NAME_SH);
 		return (1);
 	}
@@ -80,22 +82,15 @@ int		cd_set_relativepath(t_list **env, char *curpath, char *opr, char *pwd)
 
 int		cd_logically(t_list **env, char *curpath, char *opr)
 {
-	char	*tmp;
 	char	*pwd;
 	char	*error;
 
 	error = NULL;
-	if (!(pwd = ft_strdup(find_var_value(*env, "PWD"))))
-		if (!(pwd = getcwd(NULL, 0)))
-			ft_ex(EX);
-	if (*curpath != '/')
+	if (!(curpath = cd_del_dotcomponents(curpath, opr, &pwd, env)))
 	{
-		tmp = curpath;
-		curpath = ft_pathjoin(pwd, curpath);
-		ft_strdel(&tmp);
-	}
-	if (!(curpath = cd_del_dotcomponents(curpath, opr)))
+		ft_strdel(&pwd);
 		return (1);
+	}
 	if (check_chdir_errors(&error, curpath, opr)
 			&& ft_strcmp(ft_strrchr(error, ':'), ": Not a directory\n"))
 	{
@@ -117,7 +112,7 @@ int		cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd)
 	else if (!(oldpwd = getcwd(NULL, 0)))
 		ft_ex(EX);
 	if (chdir(curpath) == -1)
-		chdir_errors(curpath, opr, pwd, oldpwd);
+		return (chdir_errors(curpath, opr, pwd, oldpwd));
 	ft_strdel(&curpath);
 	if (!pwd && !(pwd = getcwd(NULL, 0)))
 		ft_ex(EX);
