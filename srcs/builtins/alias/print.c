@@ -3,11 +3,10 @@
 #include "lexer.h"
 #include "parser.h"
 #include "var.h"
-#include "line_edition.h"
 #include "sh.h"
 #include "exec.h"
 
-void	fill_quoted_string(char *src, char *res)
+static void	fill_quoted_string(char *src, char *res)
 {
 	int		i;
 	int		j;
@@ -18,8 +17,8 @@ void	fill_quoted_string(char *src, char *res)
 	{
 		if (src[i] == '\'')
 		{
-			ft_strncpy(res + j, "\'\\\'\'");
-			j += 3;
+			ft_strcpy(res + j, "\'\\\'\'");
+			j += 4;
 		}
 		else
 		{
@@ -30,9 +29,9 @@ void	fill_quoted_string(char *src, char *res)
 	}
 }
 
-void	print_alias(t_var *var)
+static void	print_alias(t_var *var)
 {
-	char	quoted;
+	char	*quoted;
 	int		i;
 	int		cnt;
 
@@ -43,13 +42,13 @@ void	print_alias(t_var *var)
 	while (var->ctab[1][i])
 		if (var->ctab[1][i++] == '\'')
 			cnt++;
-	if (!(quoted = ft_strnew(ft_strlen(var->ctab[1]) + (cnt * 3))))
+	if (!(quoted = ft_strnew(ft_strlen(var->ctab[1]) + (cnt * 4))))
 		ft_ex(EXMALLOC);
 	fill_quoted_string(var->ctab[1], quoted);
 	ft_printf("%s=\'%s\'\n", var->ctab[0], quoted);
 }
 
-int		print_single_alias(char *name)
+int			print_single_alias(char *name)
 {
 	t_var	*var;
 
@@ -62,7 +61,7 @@ int		print_single_alias(char *name)
 	return (1);
 }
 
-void	print_all_alias(void)
+void		print_all_alias(void)
 {
 	t_list	*list;
 
@@ -70,6 +69,6 @@ void	print_all_alias(void)
 	while (list)
 	{
 		print_alias(list->data);
-		list = list->next
+		list = list->next;
 	}
 }

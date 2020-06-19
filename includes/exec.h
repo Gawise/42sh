@@ -20,33 +20,34 @@
 ******************* Process SETUP *******************
 *****************************************************
 */
-# define PIPE_ON				1
-# define EXEC					2
-# define BUILTIN				4
-# define NOCMD					8
-# define R_ERROR				16
-# define P_ERROR				32
-# define E_BADFD				64
-# define E_UNFOUND				128
-# define E_ISDIR				256
-# define E_NOENT				512
-# define E_ACCES				1024
-# define E_LOOP					2048
-# define E_NTL					4096
-# define B_SPECIAL				8192
+# define PIPE_ON				0x1
+# define EXEC					0x2
+# define BUILTIN				0x4
+# define NOCMD					0x8
+# define R_ERROR				0x10
+# define P_ERROR				0x20
+# define E_BADFD				0x40
+# define E_UNFOUND				0x80
+# define E_ISDIR				0x100
+# define E_NOENT				0x200
+# define E_ACCES				0x400
+# define E_LOOP					0x800
+# define E_NTL					0x1000
+# define B_SPECIAL				0x2000
 # define B_ECHO					0
-# define B_CD					16384
-# define B_ENV					32768
-# define B_SET					57344 //49152
-# define B_UNSET				73728  //65536
-# define B_HASH					81920
-# define B_EXIT					106496
-# define B_JOBS					114688
-# define B_FG					131072
-# define B_BG					147456
-# define B_TYPE					163840
-# define B_EXPORT				184320
-# define B_ALIAS				196608
+# define B_CD					0x4000
+# define B_ENV					0x8000
+# define B_SET					0xE00 //49152
+# define B_UNSET				0x12000  //65536
+# define B_HASH					0x14000
+# define B_EXIT					0x1A000
+# define B_JOBS					0x1C000
+# define B_FG					0x20000
+# define B_BG					0x24000
+# define B_TYPE					0x28000
+# define B_EXPORT				0x2D000
+# define B_ALIAS				0x30000
+# define B_UNALIAS				0x34000
 
 /*
 *****************************************************
@@ -133,12 +134,20 @@ int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
 void			hash_usage_error(void);
 int				hash_not_found(char *cmd);
+int				print_single_alias(char *name);
+void			print_all_alias(void);
+t_list			*search_alias_list(char *name);
+t_var			*search_alias_var(char *name);
+char			*search_alias_value(char *name);
+uint8_t			ft_unalias(t_job *j, t_process *p);
+uint8_t			ft_alias(t_job *j, t_process *p);
 
 /*
 *****************************************************
 ******************* TERMIOS *************************
 *****************************************************
 */
+
 void			term_create_eval(struct termios *origin, struct termios *eval);
 void			set_termios(int32_t mode, struct termios *term);
 

@@ -28,6 +28,7 @@ typedef struct	s_cfg
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;
+	t_list			*alias;
 }				t_cfg;
 
 /*

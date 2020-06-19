@@ -3,20 +3,19 @@
 #include "lexer.h"
 #include "parser.h"
 #include "var.h"
-#include "line_edition.h"
 #include "sh.h"
 #include "exec.h"
 
-int					check_alias_name(char *name)
+static int			check_alias_name(char *name)
 {
 	int		i;
 
 	i = 0;
 	while (name[i])
 	{
-		if (!ft_isalnum(name[i]) || !ft_strchr("_!%,@", name[i]))
-				return (0);
-		i++
+		if (!ft_isalnum(name[i]) && !ft_strchr("_!%,@", name[i]))
+			return (0);
+		i++;
 	}
 	return (1);
 }
@@ -46,7 +45,7 @@ static	uint8_t		make_alias(char *assign)
 	int		i;
 
 	i = 0;
-	if ((tmp = ft_strchr(assign[i], '=')))
+	if ((tmp = ft_strchr(assign, '=')))
 	{
 		if (!(name = ft_strsub(assign, 0, tmp - assign)))
 				ft_ex(EXMALLOC);
@@ -65,11 +64,10 @@ static	uint8_t		make_alias(char *assign)
 uint8_t				ft_alias(t_job *j, t_process *p)
 {
 	int	i;
-	int	ret;
 
-	i = 0;
-	ret = 0;
-	if (!p->av || !p->av[0])
+	i = 1;
+	(void)j;
+	if (!p->av || !p->av[1])
 		print_all_alias();
 	else
 		while (p->av[i])

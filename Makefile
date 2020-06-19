@@ -171,6 +171,10 @@ BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
 BTSRCS += fg.c
 BTSRCS += bg.c
+BTSRCS += alias/alias.c
+BTSRCS += alias/print.c
+BTSRCS += alias/tools.c
+BTSRCS += alias/unalias.c
 
 ## INCLUDES ##
 
@@ -225,6 +229,7 @@ OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)builtins/hash
+OPATHS += $(OPATH)builtins/alias
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)debug/lexer
 OPATHS += $(OPATH)debug/parser
