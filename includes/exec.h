@@ -136,9 +136,9 @@ void			hash_usage_error(void);
 int				hash_not_found(char *cmd);
 int				print_single_alias(char *name);
 void			print_all_alias(void);
-t_list			*search_alias_list(char *name);
-t_var			*search_alias_var(char *name);
-char			*search_alias_value(char *name);
+t_list			*search_alias_list(char *name, t_list *list);
+t_var			*search_alias_var(char *name, t_list *list);
+char			*search_alias_value(char *name, t_list *list);
 uint8_t			ft_unalias(t_job *j, t_process *p);
 uint8_t			ft_alias(t_job *j, t_process *p);
 

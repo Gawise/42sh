@@ -52,7 +52,7 @@ int			print_single_alias(char *name)
 {
 	t_var	*var;
 
-	if ((var = search_alias_var(name)))
+	if ((var = search_alias_var(name, cfg_shell()->alias)))
 	{
 		print_alias(var);
 		return (0);

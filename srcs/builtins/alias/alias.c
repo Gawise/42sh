@@ -24,7 +24,7 @@ static	uint8_t		add_alias(char *name, char *value)
 {
 	t_var	*var;
 
-	if ((var = search_alias_var(name)))
+	if ((var = search_alias_var(name, cfg_shell()->alias)))
 	{
 		ft_strdel(&var->ctab[1]);
 		if (!(var->ctab[1] = ft_strdup(value)))

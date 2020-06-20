@@ -7,7 +7,10 @@ int	p_cmd_name(t_token *token, t_parser *parser)
 	t_cmd_table		*table;
 	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
+	t_list			*alias_cpy;
 
+	if (search_alias_var(token->str, alias_src))
+				return (p_expand_alias(token, parser, NULL));
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
 		return (0);
 	table = (t_cmd_table *)parser->curr_table->data;
