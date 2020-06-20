@@ -46,6 +46,7 @@ static void		update_delete(t_cfg *shell)
 void			update_listjob(t_cfg *shell)
 {
 	t_list		*ljob;
+	t_list		*tmp;
 	t_job		*j;
 	t_process	*p;
 
@@ -55,26 +56,24 @@ void			update_listjob(t_cfg *shell)
 	while (ljob)
 	{
 		j = ljob->data;
+		tmp = ljob->next;
 		if (!ljob->next)
 			shell->active_job = j->id;
 		if (find_process_by_status(j->process, RUNNING))
-		{
 			j->status = RUNNING;
-			ljob = ljob->next;
-		}
-		else if ((p = find_process_by_status(j->process, STOPPED)))
+		else if (((p = find_process_by_status(j->process, STOPPED)) &&
+					!(j->status & STOPPED)))
 		{
-			ljob = ljob->next;
-			if (!ljob->next)
-				shell->active_job = j->id;
 			j->ret = p->ret;
-			if (j->status & STOPPED)
-				continue ;
 			j->status = STOPPED;
 			job_become_cur(shell, j);
 		}
-		else //protect de securité peut etre enlever a la fin
-			ft_ex(EXUEPTD);
+		else if (!(j->status & STOPPED))//protect de securité peut etre enlever a la fin
+			ft_printf("update list enfant perdu?\n ");
+//			ft_ex(EXUEPTD);
+		if (!tmp)
+			shell->active_job = j->id;
+		ljob = tmp;
 	}
 }
 
