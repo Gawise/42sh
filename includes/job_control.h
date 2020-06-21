@@ -4,7 +4,9 @@
 
 uint8_t		ft_jobs2(t_job *j, t_process *p);
 
-void		job_become_cur(t_cfg *shell, t_job *j);
+
+void		nb_job_active(t_cfg *shell);
+void		job_become_cur(t_cfg *shell, t_job **j);
 void		one_process_change(t_process *p);
 int32_t		job_has_finish(void *job, void *status);
 void		add_job_cfg(t_job *job);

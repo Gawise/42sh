@@ -57,24 +57,21 @@ void			update_listjob(t_cfg *shell)
 	{
 		j = ljob->data;
 		tmp = ljob->next;
-		if (!ljob->next)
-			shell->active_job = j->id;
 		if (find_process_by_status(j->process, RUNNING))
 			j->status = RUNNING;
 		else if (((p = find_process_by_status(j->process, STOPPED)) &&
 					!(j->status & STOPPED)))
 		{
-			j->ret = p->ret;
+			j->ret = p->ret + 128;
 			j->status = STOPPED;
-			job_become_cur(shell, j);
+			job_become_cur(shell, &j);
 		}
 		else if (!(j->status & STOPPED))//protect de securité peut etre enlever a la fin
 			ft_printf("update list enfant perdu?\n ");
 //			ft_ex(EXUEPTD);
-		if (!tmp)
-			shell->active_job = j->id;
 		ljob = tmp;
 	}
+	nb_job_active(shell);
 }
 
 void			check_child(t_cfg *shell, t_list *lstjob)

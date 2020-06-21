@@ -3,7 +3,7 @@
 #include "job_control.h"
 #include "sh.h"
 
-int32_t			focus_job(void *data1, void *data2)
+int32_t		focus_job(void *data1, void *data2)
 {
 	t_job *j;
 
@@ -14,7 +14,7 @@ int32_t			focus_job(void *data1, void *data2)
 
 }
 
-int32_t			job_has_finish(void *job, void *status)
+int32_t		job_has_finish(void *job, void *status)
 {
 	t_job	*j;
 	uint8_t	ending_status;
@@ -26,12 +26,30 @@ int32_t			job_has_finish(void *job, void *status)
 	return (0);
 }
 
-void		job_become_cur(t_cfg *shell, t_job *j)
+void		nb_job_active(t_cfg *shell)
+{
+	uint8_t	nb;
+	t_list	*lst;
+	t_job	*j;
+	
+	nb = 0;
+	lst = shell->job;
+	while (lst)
+	{
+		j = lst->data;
+		nb = (nb < j->id) ? j->id : nb;
+		lst = lst->next;
+	}
+	shell->active_job = nb;
+}
+
+void		job_become_cur(t_cfg *shell, t_job **j)
 {
 	t_job	jc;
 
-	ft_cpy_job(j, &jc);
+	ft_cpy_job(*j, &jc);
 	protect_malloc(&jc);
-	ft_lstdelif(&shell->job, &j->pgid, focus_job, del_struct_job);
+	ft_lstdelif(&shell->job, &(*(j))->pgid, focus_job, del_struct_job);
+	*j = 0;
 	ft_lst_push_front(&shell->job, &jc, sizeof(t_job));
 }
