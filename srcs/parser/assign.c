@@ -59,7 +59,7 @@ int		p_assign_join(t_token *token, t_parser *parser)
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
 	lst = ft_lstgettail(cmd->args);
-	if (!(token->str = ft_strlclnjoin((char *)lst->data, token->str)))
+	if (!(token->str = ft_strclnjoin((char *)lst->data, token->str)))
 		return (0);
 	if (token->type == WORD)
 	{
