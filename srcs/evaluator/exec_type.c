@@ -32,6 +32,10 @@ uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_TYPE);
 	if (!ft_strcmp(p->cmd, "export"))
 		return (p->setup |= B_EXPORT);
+	if (!ft_strcmp(p->cmd, "alias"))
+		return (p->setup |= B_ALIAS);
+	if (!ft_strcmp(p->cmd, "unalias"))
+		return (p->setup |= B_UNALIAS);
 
 	return (0);
 }

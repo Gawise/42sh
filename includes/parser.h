@@ -4,6 +4,10 @@
 # include "struct.h"
 
 int				ft_parser(t_lexer *lexer, t_parser *parser);
+int				p_tokeniter(t_list *token, t_parser *parser,
+		int (*table_builder[10][17])(t_token *, t_parser *), int alias_flag);
+
+int				p_expand_alias(t_token *token, t_parser *parser);
 
 t_cmd_table		*init_cmd_table(void);
 t_and_or		*init_and_or(void);

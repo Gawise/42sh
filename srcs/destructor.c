@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "sh.h"
 #include "exec.h"
+#include "var.h"
 #include <unistd.h>
 
 void	del_struct_tvar(void *del, size_t u)
@@ -23,5 +24,6 @@ void	clean_cfg(t_cfg *shell)
 	ft_hash_del_map(&shell->map, free);
 	ft_hash_del_map(&shell->input_map, NULL);
 	ft_strdel(&shell->file);
+	ft_lstdel(&shell->alias, unsetvar_del);
 	ft_bzero(shell, sizeof(t_cfg));
 }

@@ -28,6 +28,7 @@ typedef struct	s_cfg
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;
+	t_list			*alias;
 }				t_cfg;
 
 /*
@@ -186,6 +187,7 @@ typedef struct	s_parser
 {
 	int				state;
 	int				prev_state;
+	int				space_flag;
 	t_token_type	pmt_prefix;
 	t_list			*table;
 	t_list			*curr_table;
