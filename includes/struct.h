@@ -24,6 +24,8 @@ typedef struct	s_cfg
 	t_dlist			*history;
 	t_hash_map		*map;
 	t_hash_map		*input_map;
+	t_hash_map		*test_bin;
+	t_hash_map		*test_un;
 	uint32_t		cur_job;
 	char			*file;
 	uint8_t			active_job;

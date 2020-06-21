@@ -57,6 +57,7 @@ SRCS += ft_strclr.c
 SRCS += ft_strcmp.c
 SRCS += ft_strcpy.c
 SRCS += ft_strdel.c
+SRCS += ft_strdigit.c
 SRCS += ft_strdup.c
 SRCS += ft_strequ.c
 SRCS += ft_striter.c

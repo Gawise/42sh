@@ -1,0 +1,1 @@
+test -f /usr/share/man/man2/execve.2 && echo ok || echo wrong

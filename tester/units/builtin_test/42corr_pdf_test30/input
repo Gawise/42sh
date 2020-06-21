@@ -1,0 +1,1 @@
+test 'abc' != 'abc' && echo ok || echo wrong
