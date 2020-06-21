@@ -8,6 +8,8 @@
 # include "struct.h"
 # include "libft.h"
 
+# define HIST_DELIM "&;<>|"
+
 # define READ_SIZE 8
 # define ARROW_LEFT "\e[D"
 # define ARROW_RIGHT "\e[C"

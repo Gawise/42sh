@@ -6,7 +6,7 @@
 # include <termios.h>
 
 # define L_BUFF_SIZE	256
-# define EXP_BSIZE	5
+# define EXP_BSIZE	200
 
 typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
