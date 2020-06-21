@@ -69,6 +69,7 @@ LEXSRCS += state/word.c
 
 ## PARSER ##
 
+PARSRCS += alias.c
 PARSRCS += amp.c
 PARSRCS += and_or.c
 PARSRCS += assign.c

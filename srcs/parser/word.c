@@ -1,16 +1,18 @@
 #include "libft.h"
+#include "ft_printf.h"
 #include "lexer.h"
 #include "parser.h"
+#include "exec.h"
+#include "sh.h"
 
 int	p_cmd_name(t_token *token, t_parser *parser)
 {
 	t_cmd_table		*table;
 	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
-	t_list			*alias_cpy;
 
-	if (search_alias_var(token->str, alias_src))
-				return (p_expand_alias(token, parser, NULL));
+	if (search_alias_var(token->str, cfg_shell()->alias))
+		return (p_expand_alias(token, parser));
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
 		return (0);
 	table = (t_cmd_table *)parser->curr_table->data;
@@ -29,6 +31,8 @@ int	p_add_arg(t_token *token, t_parser *parser)
 	t_simple_cmd	*cmd;
 	char			*str;
 
+	if (parser->space_flag && search_alias_var(token->str, cfg_shell()->alias))
+		return (p_expand_alias(token, parser));
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
@@ -53,6 +57,8 @@ int	p_file_name(t_token *token, t_parser *parser)
 	t_simple_cmd	*cmd;
 	t_redir			*redir;
 
+	if (parser->space_flag && search_alias_var(token->str, cfg_shell()->alias))
+		return (p_expand_alias(token, parser));
 	table = (t_cmd_table *)parser->curr_table->data;
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;

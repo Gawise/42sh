@@ -187,6 +187,7 @@ typedef struct	s_parser
 {
 	int				state;
 	int				prev_state;
+	int				space_flag;
 	t_token_type	pmt_prefix;
 	t_list			*table;
 	t_list			*curr_table;

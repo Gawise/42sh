@@ -2,6 +2,8 @@
 #include "lexer.h"
 #include "parser.h"
 #include "ft_printf.h"
+#include "exec.h"
+#include "sh.h"
 
 int		p_assign_val(t_token *token, t_parser *parser)
 {
@@ -57,9 +59,15 @@ int		p_assign_join(t_token *token, t_parser *parser)
 	and_or = (t_and_or *)table->curr_and_or->data;
 	cmd = (t_simple_cmd *)and_or->curr_s_cmd->data;
 	lst = ft_lstgettail(cmd->args);
-	if (!(lst->data = ft_strlclnjoin((char *)lst->data, token->str)))
+	if (!(token->str = ft_strlclnjoin((char *)lst->data, token->str)))
 		return (0);
 	if (token->type == WORD)
+	{
+		if (search_alias_var(token->str, cfg_shell()->alias))
+			return (p_expand_alias(token, parser));
 		parser->state = S_PARSER_CMD_ARGS;
+	}
+	lst->data = token->str;
+	token->str = NULL;
 	return (1);
 }
