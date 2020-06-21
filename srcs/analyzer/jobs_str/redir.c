@@ -23,6 +23,8 @@ static char		*get_redir_type_str(t_token_type type)
 		return (ft_strdup(">&"));
 	else if (type == DLESSDASH)
 		return (ft_strdup("<<-"));
+	else
+		return (ft_strnew(0));
 	return (NULL);
 }
 

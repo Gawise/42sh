@@ -10,10 +10,10 @@ uint32_t			builtin_search(t_process *p)
 		return (0);
 	if (!ft_strcmp(p->cmd, "echo"))
 		return ((p->setup |= B_ECHO) + 1);
-	if (!ft_strcmp(p->cmd, "setenv"))
-		return (p->setup |= B_SETENV);
-	if (!ft_strcmp(p->cmd, "unsetenv"))
-		return (p->setup |= B_UNSETENV);
+	if (!ft_strcmp(p->cmd, "set"))
+		return (p->setup |= B_SET);
+	if (!ft_strcmp(p->cmd, "unset"))
+		return (p->setup |= B_UNSET);
 	if (!ft_strcmp(p->cmd, "env"))
 		return (p->setup |= B_ENV);
 	if (!ft_strcmp(p->cmd, "cd"))
@@ -32,22 +32,37 @@ uint32_t			builtin_search(t_process *p)
 		return (p->setup |= B_TYPE);
 	if (!ft_strcmp(p->cmd, "test") || !ft_strcmp(p->cmd, "["))
 		return (p->setup |= B_TEST);
+	if (!ft_strcmp(p->cmd, "export"))
+		return (p->setup |= B_EXPORT);
+	if (!ft_strcmp(p->cmd, "alias"))
+		return (p->setup |= B_ALIAS);
+	if (!ft_strcmp(p->cmd, "unalias"))
+		return (p->setup |= B_UNALIAS);
 	return (0);
 }
 
-uint8_t				find_binary(t_list *env, t_process *p, t_cfg *shell)
+static uint8_t		find_binary(t_cfg *shell, t_process *p, t_list *env)
 {
+	char	*var_path;
+
+	if (!(var_path = find_var_value(env, "PATH")))
+		var_path = find_var_value(shell->intern, "PATH");
+	if (!var_path)
+	{
+		ft_hash_reset(&cfg_shell()->map, free, 128);
+		return (0);
+	}
 	if ((p->path = ft_strdup(ft_hash_lookup(shell->map, p->cmd))))
 	{
 		if (!(ERROR & path_errors(p->path, 1, S_IXUSR)))
 			return (TRUE);
 		ft_strdel(&p->path);
 		ft_hash_delone(shell->map, p->cmd, free);
-		if ((p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+		if ((p->path = ft_which(var_path, p->cmd)))
 			ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 		return (p->path ? 1 : 0);
 	}
-	if (!(p->path = ft_which(find_var_value(env, "PATH"), p->cmd)))
+	if (!(p->path = ft_which(var_path, p->cmd)))
 		return (0);
 	ft_hash_add(shell->map, p->cmd, ft_strdup(p->path), free);
 	return (TRUE);
@@ -57,7 +72,7 @@ static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 {
 	if (builtin_search(p))
 		p->setup |= BUILTIN;
-	else if (find_binary(env, p, cfg_shell()))
+	else if (find_binary(cfg_shell(), p, env))
 		p->setup |= EXEC;
 	else
 		return (*err |= E_UNFOUND);

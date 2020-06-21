@@ -1,61 +1,89 @@
-#include "sh.h"
 #include "analyzer.h"
 #include "libft.h"
 #include "ft_printf.h"
+#include "sh.h"
 #include "var.h"
 
-static int		exp_err(char *word)
+static int		first_call_exp(t_simple_cmd *cmd)
 {
-	ft_dprintf(2, "%s: Bad Substitution\n", word);
-	ft_setvar(&cfg_shell()->sp, "?", "1");
-	return (-1);
-}
+	t_list			*lst;
+	int				ret;
 
-static int		arg_exp(t_simple_cmd *cmd)
-{
-	t_list	*lst;
-	int		ret;
-
+	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
+		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
 	lst = cmd->args;
 	while (lst)
 	{
 		if ((ret = exp_main((char **)&lst->data, 0)) < 0)
 			return (ret == -1 ? exp_err((char *)lst->data) : -1);
-		lst->data = (void *)a_quote_removal((char **)&lst->data);
 		lst = lst->next;
 	}
 	return (1);
 }
 
-static int		assign_exp(t_simple_cmd *cmd)
+static int		second_call_exp(t_simple_cmd *cmd)
 {
 	t_list			*lst;
 	int				ret;
 	t_assignment	*assign;
+	t_redir			*redir;
 
 	lst = cmd->assign;
-	while (lst)
+	while (lst && (assign = lst->data))
 	{
-		assign = lst->data;
-		if ((ret = exp_main((char **)&assign->val, 1)) < 0)
+		if ((ret = exp_main(&assign->val, 1)) < 0)
 			return (ret == -1 ? exp_err((char *)assign->val) : -1);
-		assign->val = a_quote_removal((char **)&assign->val);
+		lst = lst->next;
+	}
+	lst = cmd->redir;
+	while (lst && (redir = lst->data))
+	{
+		if ((ret = exp_main(&redir->file, 1)) < 0)
+			return (ret == -1 ? exp_err((char *)redir->file) : -1);
 		lst = lst->next;
 	}
 	return (1);
 }
 
+static void		call_quote_removal(t_simple_cmd *cmd)
+{
+	t_list			*lst;
+	t_assignment	*assign;
+	t_redir			*redir;
+
+	cmd->cmd_name = (void *)a_quote_removal((char **)&cmd->cmd_name);
+	lst = cmd->args;
+	while (lst)
+	{
+		lst->data = (void *)a_quote_removal((char **)&lst->data);
+		lst = lst->next;
+	}
+	lst = cmd->assign;
+	while (lst)
+	{
+		assign = lst->data;
+		assign->val = a_quote_removal((char **)&assign->val);
+		lst = lst->next;
+	}
+	lst = cmd->redir;
+	while (lst)
+	{
+		redir = lst->data;
+		redir->file = a_quote_removal((char **)&redir->file);
+		lst = lst->next;
+	}
+}
+
 int				word_expansions(t_simple_cmd *cmd)
 {
-	int				ret;
 	int				debug;
 
 	if ((debug = cfg_shell()->debug))
 		ft_dprintf(debug, "\n----------- expansions -----------\n\n");
-	if (cmd->cmd_name && (ret = exp_main(&cmd->cmd_name, 0)) < 0)
-		return (ret == -1 ? exp_err(cmd->cmd_name) : -1);
-	if (arg_exp(cmd) < 0 || assign_exp(cmd) < 0)
+	if (first_call_exp(cmd) < 0 || second_call_exp(cmd) < 0)
 		return (-1);
+	field_splitting(cmd);
+	call_quote_removal(cmd);
 	return (1);
 }
 

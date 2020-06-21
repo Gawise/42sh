@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   keys2.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/16 12:58:26 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/11 15:27:43 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "line_edition.h"
 #include "sh.h"
 #include "struct.h"
@@ -90,14 +78,12 @@ int		check_keys(char *caps)
 	int				ret;
 	t_cs_line		*cs;
 	void			(*fct)();
-	t_cfg			*cfg;
 
-	if (!(cfg = cfg_shell()))
+	if (!(cfg_shell()))
 		return (-1);
 	ret = 0;
-	cs = cs_master(NULL, 0);
-	fct = ft_hash_lookup(cfg->input_map, caps);
-	if (caps[0] == (char)4)
+	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
+	if ((cs = cs_master(NULL, 0)) && caps[0] == (char)4)
 		ret = ctrl_d(cs);
 	else if (fct && (ret = (caps[0] == (char)4 ? -1 : 0)) <= 0)
 		fct(cs);

@@ -1,15 +1,33 @@
 #include "libft.h"
 
-t_list	*ft_lstdup(t_list *lst, size_t size, void (*cplst)(void *, void *))
+static t_list	*dup_item(t_list *lst, size_t size, void (*cplst)(void *, void *))
 {
 	t_list	*new;
 
-	if (!(lst && lst->data))
+	if (!(new = ft_lstnew(0, 0))
+	|| !(new->data = ft_memalloc(size)))
 		return (NULL);
-	new = ft_lstnew(0, 0);
-	new->data = ft_memalloc(size);
 	new->size = size;
 	cplst(new->data, lst->data);
-	new->next = ft_lstdup(lst->next, size, cplst);
 	return (new);
+}
+
+t_list			*ft_lstdup(t_list *lst, size_t size, void (*cplst)(void *, void *))
+{
+	t_list	*new;
+	t_list	*ret;
+
+	if (!(new = dup_item(lst, size, cplst)))
+			return (NULL);
+	ret = new;
+	lst = lst->next;
+	while (lst)
+	{
+		if (!(new->next = dup_item(lst, size, cplst)))
+			return (NULL);
+		lst = lst->next;
+		new = new->next;
+	}
+	new->next = NULL;
+	return (ret);
 }

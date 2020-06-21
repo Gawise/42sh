@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   chdir_errors.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/11 14:29:08 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:09 by guaubret         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
@@ -33,8 +21,15 @@ int			check_enotdir(char *path)
 	struct stat		buf;
 
 	if (!lstat(path, &buf))
+	{
 		if (!(S_IFDIR == (S_IFMT & buf.st_mode)))
-			return (0);
+		{
+			if ((S_IFLNK == (S_IFMT & buf.st_mode) && !stat(path, &buf)
+				&& !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				|| !(S_IFDIR == (S_IFMT & buf.st_mode)))
+				return (0);
+		}
+	}
 	return (1);
 }
 
@@ -68,7 +63,7 @@ int			check_whole_path(char *path)
 int			check_chdir_errors(char **error, char *path, char *opr)
 {
 	char	*taberr[5];
-	int 	ret;
+	int		ret;
 
 	taberr[0] = STR_NTL;
 	taberr[1] = STR_NOENT;
@@ -87,4 +82,18 @@ int			check_chdir_errors(char **error, char *path, char *opr)
 		return (FAILURE);
 	}
 	return (SUCCESS);
+}
+
+int			chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd)
+{
+	char	*error;
+
+	error = NULL;
+	check_chdir_errors(&error, curpath, opr);
+	ft_strdel(&oldpwd);
+	ft_strdel(&pwd);
+	ft_strdel(&curpath);
+	if (!error)
+		ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
+	return (display_cd_errors(error));
 }

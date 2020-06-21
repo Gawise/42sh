@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cursor_position.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/08 16:20:12 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/10 16:17:51 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "line_edition.h"
 #include "struct.h"
 #include "libft.h"
@@ -83,4 +71,48 @@ int			get_line(t_cs_line *cs)
 		}
 	}
 	return (cr.x);
+}
+
+void		position_reader(char *buf, t_cs_line *cs)
+{
+	int	i;
+
+	i = 0;
+	if (buf && cs)
+	{
+		while (i <= 31)
+		{
+			if (read(cs->tty, &buf[i], 1) != 1 || buf[i] == 'R')
+				break ;
+			if (buf[i] == '\n')
+				i -= 1;
+			i++;
+		}
+		buf[i] = '\0';
+	}
+}
+
+void		get_cs_line_position(int *col, int *row)
+{
+	char		buf[33];
+	char		**n;
+	t_cs_line	*cs;
+
+	ft_bzero(&buf, 32);
+	cs = cs_master(NULL, 0);
+	if (read(cs->tty, &buf, 0) == -1)
+		return ;
+	write(cs->tty, "\033[6n", ft_strlen("\033[6n"));
+	position_reader(&buf[0], cs);
+	if (!(n = split_pos(buf)))
+	{
+		*col = 0;
+		*row = 0;
+		return ;
+	}
+	*row = ft_atoi(n[0]) - 1;
+	*col = ft_atoi(n[1]) - 1;
+	ft_strdel(&n[0]);
+	ft_strdel(&n[1]);
+	free(n);
 }

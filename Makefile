@@ -1,5 +1,5 @@
-NAME = 21sh
-NAMEDB = 21sh_db
+NAME = 42sh
+NAMEDB = 42sh_db
 
 # Reset
 NC=\033[0m
@@ -32,6 +32,7 @@ LESRCS += arrow_keys.c
 LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
+LESRCS += history_keys.c
 
 ## LEXER ##
 
@@ -68,6 +69,7 @@ LEXSRCS += state/word.c
 
 ## PARSER ##
 
+PARSRCS += alias.c
 PARSRCS += amp.c
 PARSRCS += and_or.c
 PARSRCS += assign.c
@@ -101,6 +103,7 @@ ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
 ANASRCS += exp/exp.c
+ANASRCS += exp/exp_errors.c
 ANASRCS += exp/exp_getenv.c
 ANASRCS += exp/exp_tools.c
 ANASRCS += exp/parameter.c
@@ -110,6 +113,7 @@ ANASRCS += exp/param_substitution.c
 ANASRCS += exp/tilde_exp.c
 ANASRCS += exp/tilde_assign.c
 ANASRCS += exp/word_parameter.c
+ANASRCS += field_splitting.c
 ANASRCS += quote_removal.c
 
 ## EVAL ##
@@ -151,15 +155,17 @@ TOOLSRCS += all_signal.c
 ## BUILTIN ##
 
 BTSRCS += exit.c
-BTSRCS += hash.c
+BTSRCS += hash/hash.c
+BTSRCS += hash/utils.c
+BTSRCS += export.c
 BTSRCS += env.c
-BTSRCS += setenv.c
-BTSRCS += unsetenv.c
+BTSRCS += set.c
+BTSRCS += unset.c
 BTSRCS += echo.c
-BTSRCS += jobs.c
-BTSRCS += tools_job_id.c
-BTSRCS += print_jobs.c
-BTSRCS += tools_job.c
+BTSRCS += jobs/jobs.c
+BTSRCS += jobs/tools_job_id.c
+BTSRCS += jobs/print_jobs.c
+BTSRCS += jobs/tools_job.c
 BTSRCS += cd/chdir_errors.c
 BTSRCS += cd/ft_cd.c
 BTSRCS += cd/ft_cd2.c
@@ -193,11 +199,18 @@ BTSRCS += test/symlink.c
 BTSRCS += test/write.c
 BTSRCS += test/zero.c
 BTSRCS += test/size.c
+BTSRCS += fg.c
+BTSRCS += bg.c
+BTSRCS += alias/alias.c
+BTSRCS += alias/print.c
+BTSRCS += alias/tools.c
+BTSRCS += alias/unalias.c
 
 ## INCLUDES ##
 
 INCLUDES += analyzer.h
 INCLUDES += exec.h
+INCLUDES += debug.h
 INCLUDES += job_control.h
 INCLUDES += lexer.h
 INCLUDES += line_edition.h
@@ -209,14 +222,18 @@ INCLUDES += var.h
 
 ## DEBUG ##
 
-DBSRCS += lexer.c
-DBSRCS += parser.c
+DBSRCS += lexer/lexer.c
+DBSRCS += lexer/misc.c
+DBSRCS += parser/parser.c
+DBSRCS += parser/get.c
+DBSRCS += parser/print_cmd.c
 
 SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
 SRC += destructor.c
 SRC += routine_exit.c
+SRC += startup_routine.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))
@@ -241,7 +258,12 @@ OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
 OPATHS += $(OPATH)builtins/test
+OPATHS += $(OPATH)builtins/jobs
+OPATHS += $(OPATH)builtins/hash
+OPATHS += $(OPATH)builtins/alias
 OPATHS += $(OPATH)debug
+OPATHS += $(OPATH)debug/lexer
+OPATHS += $(OPATH)debug/parser
 OPATHS += $(OPATH)tools
 OPATHS += $(OPATH)job_control
 
@@ -262,7 +284,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -g -Wall -Werror -Wextra
+WFLAGS = -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -g -fsanitize=address
@@ -287,7 +309,7 @@ $(OBJS) : $(OPATH)%.o : $(SPATH)%.c $(INCS)
 $(OPATHS) :
 	$(MKDIR) $@
 
-$(LIB) :
+$(LIB) : FORCE
 	$(MAKE) -C $(LPATH)
 
 $(LIBDB) :
@@ -320,5 +342,7 @@ norme:
 	norminette $(LPATH)/$(SPATH)
 	norminette $(LPATH)/$(IPATH)
 
-.PHONY: all clean fclean norme re debug
+FORCE:
+
+.PHONY: all clean fclean norme re debug FORCE
 .SILENT:

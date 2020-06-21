@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_cmd.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/23 14:45:32 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/11 16:43:15 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "line_edition.h"
 #include "struct.h"
 #include <sys/stat.h>
@@ -18,7 +6,7 @@
 #include <sys/ioctl.h>
 #include "sh.h"
 
-void	print_prompt(t_cs_line *cs)
+void			print_prompt(t_cs_line *cs)
 {
 	int			len;
 	t_cfg		*cfg;
@@ -46,7 +34,7 @@ void	print_prompt(t_cs_line *cs)
 	}
 }
 
-void	cmdline_printer(t_cs_line *cs, t_point start, t_point end)
+void			cmdline_printer(t_cs_line *cs, t_point start, t_point end)
 {
 	char	oc;
 
@@ -73,7 +61,7 @@ void	cmdline_printer(t_cs_line *cs, t_point start, t_point end)
 	}
 }
 
-void	print_cmdline(t_cs_line *cs)
+void			print_cmdline(t_cs_line *cs)
 {
 	t_point		z;
 	t_point		start;
@@ -94,5 +82,41 @@ void	print_cmdline(t_cs_line *cs)
 			? cs->clipb.y : end.x;
 		cmdline_printer(cs, start, end);
 		move_cs(&cs);
+	}
+}
+
+static void		clear_line(t_point *col, struct winsize ws, t_cs_line *cs,
+int dl_p)
+{
+	if (col->y++ == cs->min_row)
+	{
+		if (dl_p == 1)
+			tputs(tgetstr("ce", NULL), 1, &my_putchar);
+		tputs(tgoto(tgetstr("cm", NULL), 0, cs->min_row + 1), 1, &my_putchar);
+	}
+	else if (col->y - 1 != cs->min_row && col->y - 1 < ws.ws_row)
+		tputs(tgetstr("dl", NULL), ws.ws_col, &my_putchar);
+}
+
+void			ft_clear(int del_prompt)
+{
+	t_point			col;
+	t_cs_line		*cs;
+	struct winsize	ws;
+	int				col_prompt;
+
+	if ((cs = cs_master(NULL, 0)))
+	{
+		col.x = cs->min_col;
+		col.y = cs->min_row;
+		ioctl(cs->tty, TIOCGWINSZ, &ws);
+		col_prompt = (int)ft_strlen(cs->prompt);
+		col_prompt -= (col_prompt > cs->screen.x ? cs->screen.x : 0);
+		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
+			1, &my_putchar);
+		while (col.y < ws.ws_row)
+			clear_line(&col, ws, cs, del_prompt);
+		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
+			1, &my_putchar);
 	}
 }

@@ -14,16 +14,16 @@ static char		*l_get_prompt_prefix(t_lexer *lexer)
 	if ((flag = l_get_last_flag(lexer)))
 	{
 		if (flag == F_DQUOTE)
-			return (ft_strdup("dquote"));
+			return (ft_strdup("dquote> "));
 		else if (flag == F_SQUOTE)
-			return (ft_strdup("squote"));
+			return (ft_strdup("squote> "));
 		else if (flag == F_BSLASH)
-			return (ft_strdup("bslash"));
+			return (ft_strdup("bslash> "));
 		else if (flag == F_BRACKEXP)
-			return (ft_strdup("braceparam"));
+			return (ft_strdup("braceparam> "));
 	}
 	else if ((here = l_get_last_here(lexer)))
-		return (ft_strdup("heredoc"));
+		return (ft_strdup("heredoc> "));
 	return (ft_strnew(0));
 }
 
@@ -31,12 +31,12 @@ static int		l_get_prompt(t_lexer *lexer, char **new, char **pmt_prefix)
 {
 	if (cfg_shell()->interactive)
 	{
-		if (!(*pmt_prefix = l_get_prompt_prefix(lexer))
-		|| ft_dprintf(0, "%s", *pmt_prefix) == -1)
+		if (!(*pmt_prefix = l_get_prompt_prefix(lexer)))
 			ft_ex(EXMALLOC);
 	}
-	if (!(*new = ft_prompt(find_var_value(cfg_shell()->intern, "PS2"),
-	COLOR_SUBPROMPT)))
+	else
+		*pmt_prefix = NULL;
+	if (!(*new = ft_prompt(*pmt_prefix, COLOR_SUBPROMPT)))
 	{
 		if (cfg_shell()->interactive)
 			ft_strdel(pmt_prefix);

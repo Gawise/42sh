@@ -35,7 +35,6 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 		wait_process(job);
 	else if (job->fg)
 	{
-	/*	tcsetpgrp(STDIN_FILENO, job->pgid) // seulememt ici du coup ?? */
 		shell->cur_job = job->pgid;
 		wait_process(job);
 		shell->cur_job = 0;
@@ -47,6 +46,7 @@ uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 	ret = ft_itoa(job->ret);
 	setvar_update(find_var(shell->sp, "?"), ret);
 	ft_strdel(&ret);
+	debug_print_job(shell->debug, job, "Ending job");
 	return (job->ret);
 }
 
@@ -54,7 +54,6 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 {
 	job->status |= RUNNING;
 	ft_lstiter(job->process, job_redir);
-	debug_print_allfdjob(process);
 	while (process)
 	{
 		routine_process(shell, process, &job->pipe);
@@ -62,7 +61,7 @@ uint8_t		run_job(t_cfg *shell, t_job *job, t_list *process)
 		process = process->next;
 		if (job->pipe.tmp)
 			if (close(job->pipe.tmp) == -1)
-				ft_ex(EXUEPTD); //debug
+				ft_ex(EXUEPTD);
 	}
 	return (routine_ending_job(shell, job));
 }

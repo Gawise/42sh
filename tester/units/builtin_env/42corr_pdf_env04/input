@@ -1,0 +1,1 @@
+a=hello b=world unset LS_COLORS; set | grep -E '(a|b)='

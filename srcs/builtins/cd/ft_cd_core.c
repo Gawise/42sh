@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_cd_core.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/11 14:29:33 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:35 by guaubret         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "exec.h"
 #include "lexer.h"
@@ -27,8 +15,10 @@ int		cd_home(t_job *job, t_process *p)
 	int		ret;
 
 	home = find_var_value(p->env, "HOME");
-	if (!home)
+	if (!home || !*home)
 	{
+		if (!*home)
+			return (0);
 		ft_dprintf(2, "%s: cd: HOME not set\n", NAME_SH);
 		return (1);
 	}
@@ -87,28 +77,20 @@ int		cd_set_relativepath(t_list **env, char *curpath, char *opr, char *pwd)
 	}
 	ft_strdel(&pwd);
 	ret = cd_change_directory(env, curpath, opr, oldpath);
-	ft_strdel(&oldpath);
 	return (ret);
 }
 
 int		cd_logically(t_list **env, char *curpath, char *opr)
 {
-	char	*tmp;
 	char	*pwd;
 	char	*error;
 
 	error = NULL;
-	if (!(pwd = ft_strdup(find_var_value(*env, "PWD"))))
-		if (!(pwd = getcwd(NULL, 0)))
-			ft_ex(EX);
-	if (*curpath != '/')
+	if (!(curpath = cd_del_dotcomponents(curpath, opr, &pwd, env)))
 	{
-		tmp = curpath;
-		curpath = ft_pathjoin(pwd, curpath);
-		ft_strdel(&tmp);
-	}
-	if (!(curpath = cd_del_dotcomponents(curpath, opr)))
+		ft_strdel(&pwd);
 		return (1);
+	}
 	if (check_chdir_errors(&error, curpath, opr)
 			&& ft_strcmp(ft_strrchr(error, ':'), ": Not a directory\n"))
 	{
@@ -123,28 +105,20 @@ int		cd_logically(t_list **env, char *curpath, char *opr)
 int		cd_change_directory(t_list **env, char *curpath, char *opr, char *pwd)
 {
 	char	*oldpwd;
-	char	*error;
 	char	*str;
 
-	error = NULL;
 	if ((str = find_var_value(*env, "PWD")))
 		oldpwd = ft_strdup(str);
 	else if (!(oldpwd = getcwd(NULL, 0)))
 		ft_ex(EX);
 	if (chdir(curpath) == -1)
-	{
-		check_chdir_errors(&error, curpath, opr);
-		ft_strdel(&oldpwd);
-		ft_strdel(&curpath);
-		if (!error)
-			ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
-		return (display_cd_errors(error));
-	}
+		return (chdir_errors(curpath, opr, pwd, oldpwd));
 	ft_strdel(&curpath);
 	if (!pwd && !(pwd = getcwd(NULL, 0)))
 		ft_ex(EX);
 	ft_setvar(&cfg_shell()->env, "PWD", pwd);
 	ft_setvar(&cfg_shell()->env, "OLDPWD", oldpwd);
 	ft_strdel(&oldpwd);
+	ft_strdel(&pwd);
 	return (0);
 }

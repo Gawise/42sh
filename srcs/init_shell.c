@@ -8,6 +8,29 @@
 #include <termios.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <signal.h>
+
+void		set_var(t_cfg *shell)
+{
+	char	*sl;
+	char	*pid;
+
+	pid = ft_itoa(shell->pid);
+	setvar_add(&shell->sp, "$", pid);
+	setvar_add(&shell->sp, "?", "0");
+	setvar_add(&shell->sp, "!", "0");
+	setvar_add(&shell->sp, "*", 0);
+	setvar_add(&shell->sp, "@", 0);
+	setvar_add(&shell->sp, "#", 0);
+	setvar_add(&shell->sp, "-", 0);
+	setvar_add(&shell->sp, "0", 0);
+	ft_strdel(&pid);
+	ft_setvar(&shell->intern, "PS1", NAME_SH);
+	ft_setvar(&shell->intern, "PS2", "> ");
+	sl = ft_itoa(ft_atoi(find_var_value(shell->env, "SHLVL")) + 1);
+	ft_setvar(&shell->env, "SHLVL", sl);
+	ft_strdel(&sl);
+}
 
 void		hdl_sighup(int sig)
 {
@@ -35,18 +58,11 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	if (isatty(tty))
 	{
 		if ((tcgetattr(tty, &cfg->term_origin) == FALSE))
-			perror("[TERM ORIGIN] ERROR TCGETATTR"); ///perror
+			ft_ex(EX);
 		return (1);
 	}
 	ft_ex(EXFD);
 	return (0);
-}
-
-t_cfg		*cfg_shell(void)
-{
-	static t_cfg shell;
-
-	return (&shell);
 }
 
 t_cfg		*init_shell(char **env, char **av, int ac)
@@ -64,9 +80,9 @@ t_cfg		*init_shell(char **env, char **av, int ac)
 		set_signal_ign();
 		signal(SIGHUP, hdl_sighup);
 		if (setpgid(shell->pid, shell->pid) < 0)
-			perror("[INIT SHELL] error setpgid");  //perror
+			ft_ex(EX);
 		if (tcsetpgrp(shell_terminal, shell->pid))
-			perror("[INIT SHELL] error tcsetpgrp"); //perror
+			ft_ex(EX);
 	}
 	return (shell);
 }

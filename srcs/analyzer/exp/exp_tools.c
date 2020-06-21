@@ -35,7 +35,7 @@ void	exp_flush_buf(t_exp *exp, char **str)
 {
 	char	*tmp;
 
-	if (!str || !*str)
+	if (!*str)
 	{
 		if (!(*str = ft_strdup(exp->buf)))
 			ft_ex("Cannot allocate memory\n");

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tools_cd.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/11 14:29:38 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:39 by guaubret         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "exec.h"
 #include "struct.h"
@@ -67,12 +55,14 @@ char		*ft_strrep(char *str, char *rem, char *rep)
 	size_t	replen;
 
 	replen = rep ? ft_strlen(rep) : 0;
-	if (!str || !rem)
-		return (0);
+	if (!str)
+		return (NULL);
+	if (!rem)
+		return (ft_strdup(str));
 	if (!(occurence = ft_strstr(str, rem)))
 		return (str);
 	if (!(ret = ft_strnew(ft_strlen(str) - ft_strlen(rem) + replen)))
-		return (0);
+		return (NULL);
 	ft_strncpy(ret, str, occurence - str);
 	if (replen)
 		ft_strcat(ret, rep);

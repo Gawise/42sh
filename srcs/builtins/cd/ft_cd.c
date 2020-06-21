@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guaubret <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/11 14:29:27 by guaubret          #+#    #+#             */
-/*   Updated: 2020/04/11 14:29:28 by guaubret         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "exec.h"
 #include "lexer.h"
@@ -20,7 +8,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int		cd_oldpwd(t_job *j, t_process *p)
+int				cd_oldpwd(t_job *j, t_process *p)
 {
 	char	**str;
 	char	*oldpwd;
@@ -39,12 +27,18 @@ int		cd_oldpwd(t_job *j, t_process *p)
 	str[2] = NULL;
 	tabfree(p->av);
 	p->av = str;
-	ret = ft_cd(j, p);
-	ft_printf("%s\n", oldpwd);
+	if (!(ret = ft_cd(j, p)))
+		ft_printf("%s\n", oldpwd);
 	return (ret);
 }
 
-uint8_t		ft_cd(t_job *job, t_process *p)
+static uint8_t	cd_too_many_args(void)
+{
+	ft_dprintf(2, "%s: cd: too many arguments\n", PROJECT);
+	return (1);
+}
+
+uint8_t			ft_cd(t_job *job, t_process *p)
 {
 	char	opt;
 	char	*opr;
@@ -54,6 +48,8 @@ uint8_t		ft_cd(t_job *job, t_process *p)
 	i = 1;
 	if (!(opt = cd_getopt(p->av, &i)))
 		return (1);
+	if (p->av[i] && p->av[i + 1])
+		return (cd_too_many_args());
 	opr = p->av[i];
 	if (!opr)
 		return (cd_home(job, p));

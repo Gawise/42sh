@@ -20,15 +20,17 @@ static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 	}
 }
 
-static void		assign_for_b_special(t_cfg *shell, t_process *p, t_list *assignment)
+static void		assign_for_b_special(t_cfg *shell, t_process *p,
+		t_list *assignment)
 {
 	t_assignment	*assign;
 
+	(void)p;
 	while (assignment)
 	{
 		assign = assignment->data;
-		ft_setvar(&p->env, assign->var, assign->var);
-		ft_setvar(&shell->env, assign->var, assign->var);
+		ft_lstdelif(&shell->intern, assign->var, unsetvar_find, unsetvar_del);
+		ft_setvar(&shell->env, assign->var, assign->val);
 		assignment = assignment->next;
 	}
 }
@@ -41,7 +43,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 		return ;
 	if (p->setup & NOCMD && !(p->setup & PIPE_ON))
 		assign_for_currenv(shell, assignment);
-	else if (p->setup & B_SPECIAL)
+	else if (p->setup & B_SPECIAL && !(p->setup & PIPE_ON))
 		assign_for_b_special(shell, p, assignment);
 	else
 	{

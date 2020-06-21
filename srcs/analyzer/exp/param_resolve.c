@@ -4,23 +4,14 @@
 #include "var.h"
 #include "ft_printf.h"
 
-int		print_error_parameter(t_exp *exp, char **str, char *param)
-{
-	int	ret;
-
-	if ((ret = substitute_word(exp, str)) < 0)
-		return (ret);
-	ft_dprintf(2, "%s: %s\n", param, exp->word);
-	return (-2);
-}
-
 char	*resolve_parameter(char *str, int hash)
 {
 	char	*res;
 	int		type;
 
 	type = 0;
-	if ((ft_strlen(str) == 1 && ft_strchr("@*#?-$!", *str)) || ft_isdigit(*str))
+	if ((((!hash && ft_strlen(str) == 1) || (hash && ft_strlen(str) == 2))
+	&& ft_strchr("@*#?-$!", *str)) || ft_isdigit(*str))
 		type = 1;
 	else if (!ft_isname(str) && !(hash && *str == '#' && ft_isname(str + 1)))
 		return (NULL);
@@ -67,6 +58,8 @@ int		resolve_brace_param(char **str, t_exp *exp, char *param)
 
 	(*str)++;
 	hash = *param == '#' ? 1 : 0;
+	if (!param || !*param)
+		return (-1);
 	if (!(exp->param = resolve_parameter(param, hash)))
 		return (-1);
 	if (hash)
@@ -90,12 +83,13 @@ int		resolve_pattern_param(char **str, t_exp *exp, char *param)
 	ret = -1;
 	type = **str == '#' ? 0 : 1;
 	(*str)++;
-	if (ft_strchr("#%", *(*str + 1)))
+	if ((!type && **str == '#') || (type && **str == '%'))
 		(*str)++;
 	if (!(exp->param = resolve_parameter(param, 0))
 	|| (ret = rec_word_parse(exp, str)) < 0
 	|| (ret = exp_main(&exp->word, exp->assign)) < 0)
 		return (ret);
+	exp->word = (void *)a_quote_removal((char **)&exp->word);
 	if (**str == '}')
 		(*str)++;
 	substitute_pattern(exp, type);

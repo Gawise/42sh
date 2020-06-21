@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_prompt.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/08 17:15:04 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/11 17:23:43 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "libft.h"
 #include "ft_printf.h"
 #include <termios.h>
 #include <term.h>
@@ -23,7 +10,6 @@
 #include "sh.h"
 #include "get_next_line.h"
 #include <sys/ioctl.h>
-#include <stropts.h>
 #include <signal.h>
 
 static int		init_fd_nonint(t_cfg *cfg)
@@ -68,7 +54,6 @@ char			*read_nonint(t_cfg *cfg)
 	return (line);
 }
 
-
 void			read_input(void)
 {
 	int			len;
@@ -96,42 +81,6 @@ void			read_input(void)
 	}
 }
 
-static void		clear_line(t_point *col, struct winsize ws, t_cs_line *cs,
-int dl_p)
-{
-	if (col->y++ == cs->min_row)
-	{
-		if (dl_p == 1)
-			tputs(tgetstr("ce", NULL), 1, &my_putchar);
-		tputs(tgoto(tgetstr("cm", NULL), 0, cs->min_row + 1), 1, &my_putchar);
-	}
-	else if (col->y - 1 != cs->min_row && col->y - 1 < ws.ws_row)
-		tputs(tgetstr("dl", NULL), ws.ws_col, &my_putchar);
-}
-
-void			ft_clear(int del_prompt)
-{
-	t_point			col;
-	t_cs_line		*cs;
-	struct winsize	ws;
-	int				col_prompt;
-
-	if ((cs = cs_master(NULL, 0)))
-	{
-		col.x = cs->min_col;
-		col.y = cs->min_row;
-		ioctl(cs->tty, TIOCGWINSZ, &ws);
-		col_prompt = (int)ft_strlen(cs->prompt);
-		col_prompt -= (col_prompt > cs->screen.x ? cs->screen.x : 0);
-		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
-				1, &my_putchar);
-		while (col.y < ws.ws_row)
-			clear_line(&col, ws, cs, del_prompt);
-		tputs(tgoto(tgetstr("cm", NULL), cs->min_col + col_prompt, cs->min_row),
-				1, &my_putchar);
-	}
-}
-
 static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 {
 	char	*ret;
@@ -156,7 +105,7 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 		ft_dlstdelone(&cs->history);
 	}
 	ft_strdel(&cs->clipboard);
-	return (ret);
+	return (!ret && !cs->sig_int && !cs->sig_eof ? ft_strdup("\n") : ret);
 }
 
 char			*ft_prompt(char *prompt, char *color)

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/23 19:29:30 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/03/09 19:52:38 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include <unistd.h>
 #include "struct.h"
@@ -37,27 +25,27 @@ static int	echo_options(char **av, int *i, int *j)
 	return (flags);
 }
 
-uint8_t		ft_echo(t_job *j, t_process *p) 
+uint8_t		ft_echo(t_job *j, t_process *p)
 {
-    t_point i;
-    int     fl; 
-    char    **params;
+	t_point	i;
+	int		fl;
+	char	**params;
 
 	if (bad_fd(STDOUT_FILENO) == FAILURE)
 		return (1);
-    if (j && p && (params = p->av))
-    {
-        i = (t_point){1, 0}; 
-        if (((fl = echo_options(params, &i.x, &i.y)) & 1)) 
-            i.x = 0;
-        while (params[i.x])
-        {
-            ft_putstr(params[i.x++]);
-            ft_putstr(params[i.x] ? " " : NULL);
-        }
-        if (!(fl & 2)) 
-            ft_putchar('\n');
-        return (0);
-    }   
-    return (1);
+	if (j && p && (params = p->av))
+	{
+		i = (t_point){1, 0};
+		if (((fl = echo_options(params, &i.x, &i.y)) & 1))
+			i.x = 0;
+		while (params[i.x])
+		{
+			ft_putstr(params[i.x++]);
+			ft_putstr(params[i.x] ? " " : NULL);
+		}
+		if (!(fl & 2))
+			ft_putchar('\n');
+		return (0);
+	}
+	return (1);
 }
