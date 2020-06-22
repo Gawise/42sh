@@ -45,6 +45,7 @@ SRCS += get_next_line.c
 
 #-------------------------String-------------------------#
 SRCS += ft_isalnum.c
+SRCS += ft_strisalpha.c
 SRCS += ft_isalpha.c
 SRCS += ft_isascii.c
 SRCS += ft_isdigit.c

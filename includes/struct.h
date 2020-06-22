@@ -26,10 +26,13 @@ typedef struct	s_cfg
 	t_hash_map		*input_map;
 	t_hash_map		*test_bin;
 	t_hash_map		*test_un;
+	t_hash_map      *hist_map;
 	uint32_t		cur_job;
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;
+	int				hist_nb;
+	int				hist_start;
 	t_list			*alias;
 }				t_cfg;
 

@@ -49,6 +49,7 @@
 # define B_ALIAS				0x30000
 # define B_UNALIAS				0x34000
 # define B_TEST					0x38000
+# define B_FC					0x3C000
 
 /*
 *****************************************************
@@ -96,7 +97,7 @@
 *****************************************************
 */
 
-
+uint8_t     ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
