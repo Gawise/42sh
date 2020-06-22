@@ -152,6 +152,7 @@ void			ft_putnbr_fd(int n, int fd);
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
+int             ft_strisdigit(char *s);
 int				ft_strisalpha(char *s);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
