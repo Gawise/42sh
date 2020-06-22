@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/18 20:14:42 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/22 15:09:14 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,15 @@ char			*get_histfilename()
 	i = 0;
 	ft_asprintf(&name, "%s%s", prefix, name);
 	prefix = name;
-	while (access(prefix, F_OK) == -1 || i == 0)
+	while (access(prefix, F_OK) != -1 || i == 0)
 	{
 		i++;
 		tmp = ft_itoa(i);
 		ft_asprintf(&prefix, "%s_%s", name, tmp);
 		ft_strdel(&tmp);
-		printf("%s\n", prefix);
 	}
 	ft_strdel(&name);
 	name = prefix;
-	printf("%s\n", name);
 	return (name);
 }
 
@@ -230,6 +228,7 @@ void		exec_hist(int8_t fl, char *file)
 	{
 		while (get_next_line(fd, &cmd) > 0)
 		{
+			printf("cmd : %s\n", cmd);
 			hist_cmd = ft_strdup(cmd);
 			if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
@@ -265,8 +264,6 @@ int			edit_hist(int8_t *fl, char **av, int ac)
 						"FCEDIT"), hist);
 		else
 			ft_asprintf(&cmd, "%s %s", av[ac], hist);
-		ft_printf("%s", cmd);
-	//	return (1);
 		if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 				|| (ret = parser_routine(&lexer, &parser)) <= 0
 				|| (ret = eval_routine(&parser)) <= 0)

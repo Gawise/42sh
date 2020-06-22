@@ -3,7 +3,7 @@ pwd
 cd /
 HOME=/ cd $HOME
 pwd
-OLDPWD=/home/deh cd $OLDPWD
+OLDPWD=$HOME cd -
 pwd
 cd ~
 pwd

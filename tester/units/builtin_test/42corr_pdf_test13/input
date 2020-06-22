@@ -1,0 +1,1 @@
+test -f /dev/null && echo ok || echo wrong

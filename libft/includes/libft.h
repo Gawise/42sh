@@ -114,6 +114,8 @@ t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 uint32_t		ft_lstcount(t_list *elem);
+void            ft_lstfree(void *data, size_t size);
+
 /*
 ** MEMORY
 */
@@ -150,6 +152,7 @@ void			ft_putnbr_fd(int n, int fd);
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
+int				ft_strisalpha(char *s);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);
@@ -164,6 +167,7 @@ char			**ft_tabdup(char **t);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
 int				ft_strrchri(const char *s, int c);
+int				ft_strdigit(char *s1);
 char			*ft_strdup(const char *s1);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
@@ -194,7 +198,6 @@ char			*ft_strclnjoin(char const *s1, char const *s2);
 char			*ft_strlclnjoin(char const *s1, char const *s2);
 int				ft_isname(char *str);
 char			*ft_strtrimoc(char const *si, char oc);
-int				ft_strisalpha(char *s);
 
 /*
 ** SYSTEM

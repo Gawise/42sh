@@ -35,13 +35,19 @@ static uint8_t	lvl_and_or(t_cfg *shell, t_list *lst)
 	if (!lst)
 		return (0);
 	andor = lst->data;
+	if (!analyzer_routine(andor))
+		return (FAILURE);
 	ret_job = lvl_simple_cmd(shell, andor->s_cmd, andor->str,
 			!andor->background);
 	if (lst->next && condition_respected(andor, ret_job))
-		lvl_and_or(shell, lst->next);
+	{
+		if (lvl_and_or(shell, lst->next))
+			return (FAILURE);
+	}
 	else if (lst->next)
-		lvl_and_or(shell, lst->next->next);
-	return (0);
+		if (lvl_and_or(shell, lst->next->next))
+			return (FAILURE);
+	return (SUCCESS);
 }
 
 static uint8_t	lvl_cmd_table(t_cfg *shell, t_list *lst)
@@ -51,9 +57,8 @@ static uint8_t	lvl_cmd_table(t_cfg *shell, t_list *lst)
 	while (lst)
 	{
 		cmd = lst->data;
-		if (!analyzer_routine(cmd))
+		if (lvl_and_or(shell, cmd->and_or))
 			return (FAILURE);
-		lvl_and_or(shell, cmd->and_or);
 		lst = lst->next;
 	}
 	return (SUCCESS);

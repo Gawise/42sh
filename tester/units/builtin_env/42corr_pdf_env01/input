@@ -1,0 +1,2 @@
+a=hello b=world; b=42 echo ${a}-${b} ${b} && b=42 && echo ${a}-world ${b}
+a=hello b=world; b=42 echo ${a}_${b} && echo ${b} hello_world world

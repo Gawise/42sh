@@ -6,7 +6,7 @@
 # include <termios.h>
 
 # define L_BUFF_SIZE	256
-# define EXP_BSIZE	5
+# define EXP_BSIZE	200
 
 typedef struct s_list	t_list;
 typedef struct s_dlist	t_dlist;
@@ -22,14 +22,17 @@ typedef struct	s_cfg
 	t_list			*sp;
 	t_list			*job;
 	t_dlist			*history;
-	t_hash_map		*hist_map;
 	t_hash_map		*map;
 	t_hash_map		*input_map;
+	t_hash_map		*test_bin;
+	t_hash_map		*test_un;
+	t_hash_map      *hist_map;
 	uint32_t		cur_job;
 	char			*file;
 	uint8_t			active_job;
 	int32_t			debug;
 	int				hist_nb;
+	t_list			*alias;
 }				t_cfg;
 
 /*
@@ -188,6 +191,7 @@ typedef struct	s_parser
 {
 	int				state;
 	int				prev_state;
+	int				space_flag;
 	t_token_type	pmt_prefix;
 	t_list			*table;
 	t_list			*curr_table;

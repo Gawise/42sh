@@ -83,3 +83,17 @@ int			check_chdir_errors(char **error, char *path, char *opr)
 	}
 	return (SUCCESS);
 }
+
+int			chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd)
+{
+	char	*error;
+
+	error = NULL;
+	check_chdir_errors(&error, curpath, opr);
+	ft_strdel(&oldpwd);
+	ft_strdel(&pwd);
+	ft_strdel(&curpath);
+	if (!error)
+		ft_asprintf(&error, "%s: %s\n", opr, STR_ACCES);
+	return (display_cd_errors(error));
+}

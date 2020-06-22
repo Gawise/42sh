@@ -1,0 +1,1 @@
+test -r noread && echo ok || echo wrong

@@ -20,32 +20,37 @@
 ******************* Process SETUP *******************
 *****************************************************
 */
-# define PIPE_ON				1
-# define EXEC					2
-# define BUILTIN				4
-# define NOCMD					8
-# define R_ERROR				16
-# define P_ERROR				32
-# define E_BADFD				64
-# define E_UNFOUND				128
-# define E_ISDIR				256
-# define E_NOENT				512
-# define E_ACCES				1024
-# define E_LOOP					2048
-# define E_NTL					4096
-# define B_SPECIAL				8192
+# define PIPE_ON				0x1
+# define EXEC					0x2
+# define BUILTIN				0x4
+# define NOCMD					0x8
+# define R_ERROR				0x10
+# define P_ERROR				0x20
+# define E_BADFD				0x40
+# define E_UNFOUND				0x80
+# define E_ISDIR				0x100
+# define E_NOENT				0x200
+# define E_ACCES				0x400
+# define E_LOOP					0x800
+# define E_NTL					0x1000
+# define B_SPECIAL				0x2000
 # define B_ECHO					0
-# define B_CD					16384
-# define B_ENV					32768
-# define B_SETENV				49152
-# define B_UNSETENV				65536
-# define B_HASH					81920
-# define B_EXIT					106496
-# define B_JOBS					114688
-# define B_FG					131072
-# define B_BG					147456
-# define B_TYPE					163840
-# define B_FC					180224
+# define B_CD					0x4000
+# define B_ENV					0x8000
+# define B_SET					0xE000 //49152
+# define B_UNSET				0x12000  //65536
+# define B_HASH					0x14000
+# define B_EXIT					0x1A000
+# define B_JOBS					0x1C000
+# define B_FG					0x20000
+# define B_BG					0x24000
+# define B_TYPE					0x28000
+# define B_EXPORT				0x2D000
+# define B_ALIAS				0x30000
+# define B_UNALIAS				0x34000
+# define B_TEST					0x38000
+# define B_FC					0x3C000
+
 /*
 *****************************************************
 ***************** Process/Job STATUS ****************
@@ -92,13 +97,14 @@
 *****************************************************
 */
 
-uint8_t			ft_fc(t_job *j, t_process *p);
+uint8_t         ft_fc(t_job *j, t_process *p);
+uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
 uint8_t			ft_echo(t_job *j, t_process *p);
 uint8_t			ft_type(t_job *j, t_process *p);
-uint8_t			ft_setenv(t_job *j, t_process *p);
-uint8_t			ft_unsetenv(t_job *j, t_process *p);
+uint8_t			ft_set(t_job *j, t_process *p);
+uint8_t			ft_unset(t_job *j, t_process *p);
 uint8_t			ft_env(t_job *j, t_process *p);
 uint8_t			ft_exit(t_job *j, t_process *p);
 int8_t			protect_job(int8_t update);
@@ -111,10 +117,12 @@ char			cd_getopt(char **str, int *i);
 int				cd_home(t_job *job, t_process *p);
 char			*cd_setcurpath(t_list **env, char *opr);
 int				cd_logically(t_list **env, char *curpath, char *opr);
+int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
 char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
-char			*cd_del_dotcomponents(char *curpath, char *opr);
+char			*cd_del_dotcomponents(char *curpath,
+char *opr, char **pwd, t_list **env);
 int				display_cd_errors(char *error);
 int16_t			get_job_id(char *ope);
 int				print_job_ope(char opt, t_job *j, int8_t ope);
@@ -129,12 +137,49 @@ int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
 void			hash_usage_error(void);
 int				hash_not_found(char *cmd);
+int				print_single_alias(char *name);
+void			print_all_alias(void);
+t_list			*search_alias_list(char *name, t_list *list);
+t_var			*search_alias_var(char *name, t_list *list);
+char			*search_alias_value(char *name, t_list *list);
+uint8_t			ft_unalias(t_job *j, t_process *p);
+uint8_t			ft_alias(t_job *j, t_process *p);
 
+char		**retrieve_ops(char **p_av, int *i, int *bang);
+int		check_closing_bracket(char **av);
+uint8_t		ft_test(t_job *j, t_process *p);
+void		init_test_op(void);
+int		check_closing_bracket(char **av);
+char		**retrieve_ops(char **p_av, int *i, int *bang);
+uint8_t		test_write_file(char *path);
+uint8_t		test_len_string(char *s1);
+uint8_t		test_read_file(char *path);
+uint8_t		test_regular_file(char *path);
+uint8_t		test_setgid_file(char *path);
+uint8_t		test_setuid_file(char *path);
+uint8_t		test_size_file(char *path);
+uint8_t		test_socket_file(char *path);
+uint8_t		test_equal_string(char *s1, char *s2);
+uint8_t		test_diff_string(char *s1, char *s2);
+uint8_t		test_symlink_file(char *path);
+uint8_t		test_char_file(char *path);
+uint8_t		test_dir_file(char *path);
+uint8_t		test_exec_file(char *path);
+uint8_t		test_fifo_file(char *path);
+uint8_t		test_entry_file(char *path);
+uint8_t		test_equal_int(char *s1, char *s2);
+uint8_t		test_greator_int(char *s1, char *s2);
+uint8_t		test_greater_int(char *s1, char *s2);
+uint8_t		test_lessor_int(char *s1, char *s2);
+uint8_t		test_lesser_int(char *s1, char *s2);
+uint8_t		test_diff_int(char *s1, char *s2);
+uint8_t		test_bloc_file(char *path);
 /*
 *****************************************************
 ******************* TERMIOS *************************
 *****************************************************
 */
+
 void			term_create_eval(struct termios *origin, struct termios *eval);
 void			set_termios(int32_t mode, struct termios *term);
 

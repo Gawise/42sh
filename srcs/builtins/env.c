@@ -38,7 +38,7 @@ uint8_t			add_new_var(t_process *p, t_cfg *shell_cpy, int32_t *ac)
 	while (ft_strchr(p->av[*ac], '='))
 	{
 		if (several_setvar(&shell_cpy->env, p->av[*ac]) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "'%s': Not a valide identifier\n",
+			ft_dprintf(STDERR_FILENO, "'%s': Not a valid identifier\n",
 					p->av[*ac]);
 		*ac += 1;
 	}
@@ -87,7 +87,7 @@ uint8_t			ft_env(t_job *j, t_process *p)
 		return (FAILURE);
 	add_new_var(p, &shell_cpy, &ac);
 	if (!p->av[ac])
-		ft_print_env_lst(shell_cpy.env);
+		ft_print_var_lst(shell_cpy.env, 0);
 	else
 	{
 		j_cpy = create_new_instance(&shell_cpy, j, p, ac);

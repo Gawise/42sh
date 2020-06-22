@@ -1,0 +1,6 @@
+OLDPWD=$HOME
+PWD=hello
+cd ..
+cd -
+cd -
+pwd

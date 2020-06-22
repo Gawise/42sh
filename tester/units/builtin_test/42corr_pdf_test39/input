@@ -1,0 +1,1 @@
+test ! -d tempdir && echo "tempdir removed"

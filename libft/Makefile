@@ -44,8 +44,8 @@ SRCS += ft_getopt.c
 SRCS += get_next_line.c
 
 #-------------------------String-------------------------#
-SRCS += ft_strisalpha.c
 SRCS += ft_isalnum.c
+SRCS += ft_strisalpha.c
 SRCS += ft_isalpha.c
 SRCS += ft_isascii.c
 SRCS += ft_isdigit.c
@@ -58,6 +58,7 @@ SRCS += ft_strclr.c
 SRCS += ft_strcmp.c
 SRCS += ft_strcpy.c
 SRCS += ft_strdel.c
+SRCS += ft_strdigit.c
 SRCS += ft_strdup.c
 SRCS += ft_strequ.c
 SRCS += ft_striter.c
@@ -115,6 +116,7 @@ SRCS += ft_dlstdelone.c
 SRCS += ft_lsthave.c
 SRCS += ft_lstdup.c
 SRCS += ft_lstcount.c
+SRCS += ft_lstfree.c
 
 #-------------------------Conversion-----------------------#
 SRCS += ft_atoi.c

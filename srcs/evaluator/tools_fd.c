@@ -11,7 +11,7 @@ int32_t		create_fd_null(void)
 	int32_t	fd;
 
 	if ((fd = open("/dev/null", 0)) == -1)
-		if ((fd = open("/tmp/tmpfd2142sh", O_CREAT, 0644)) == -1)
+		if ((fd = open("/tmp/tmpfd42sh", O_CREAT, 0644)) == -1)
 			return (0);
 	return (fd);
 }
@@ -29,8 +29,8 @@ uint32_t	right_fifo(char *path, uint32_t *right)
 {
 	struct stat buf;
 
-	lstat(path, &buf);
 	ft_bzero(&buf, sizeof(struct stat));
+	lstat(path, &buf);
 	if (!S_ISFIFO(buf.st_mode))
 		return (0);
 	if (access(path, R_OK | W_OK) != SUCCESS)

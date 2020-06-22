@@ -1,5 +1,5 @@
-NAME = 21sh
-NAMEDB = 21sh_db
+NAME = 42sh
+NAMEDB = 42sh_db
 
 # Reset
 NC=\033[0m
@@ -69,6 +69,7 @@ LEXSRCS += state/word.c
 
 ## PARSER ##
 
+PARSRCS += alias.c
 PARSRCS += amp.c
 PARSRCS += and_or.c
 PARSRCS += assign.c
@@ -102,6 +103,7 @@ ANASRCS += jobs_str/core.c
 ANASRCS += jobs_str/redir.c
 ANASRCS += heredoc.c
 ANASRCS += exp/exp.c
+ANASRCS += exp/exp_errors.c
 ANASRCS += exp/exp_getenv.c
 ANASRCS += exp/exp_tools.c
 ANASRCS += exp/parameter.c
@@ -111,6 +113,7 @@ ANASRCS += exp/param_substitution.c
 ANASRCS += exp/tilde_exp.c
 ANASRCS += exp/tilde_assign.c
 ANASRCS += exp/word_parameter.c
+ANASRCS += field_splitting.c
 ANASRCS += quote_removal.c
 
 ## EVAL ##
@@ -151,12 +154,14 @@ TOOLSRCS += all_signal.c
 
 ## BUILTIN ##
 
+BTSRCS += fc.c
 BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
+BTSRCS += export.c
 BTSRCS += env.c
-BTSRCS += setenv.c
-BTSRCS += unsetenv.c
+BTSRCS += set.c
+BTSRCS += unset.c
 BTSRCS += echo.c
 BTSRCS += jobs/jobs.c
 BTSRCS += jobs/tools_job_id.c
@@ -168,9 +173,39 @@ BTSRCS += cd/ft_cd2.c
 BTSRCS += cd/ft_cd_core.c
 BTSRCS += cd/tools_cd.c
 BTSRCS += type.c
+BTSRCS += test/test.c
+BTSRCS += test/op_init.c
+BTSRCS += test/arg_check.c
+BTSRCS += test/block_file.c
+BTSRCS += test/char_file.c
+BTSRCS += test/dir_file.c
+BTSRCS += test/exec.c
+BTSRCS += test/fifo.c
+BTSRCS += test/file.c
+BTSRCS += test/int_eq.c
+BTSRCS += test/int_ge.c
+BTSRCS += test/int_gt.c
+BTSRCS += test/int_le.c
+BTSRCS += test/int_lt.c
+BTSRCS += test/int_neq.c
+BTSRCS += test/not.c
+BTSRCS += test/read.c
+BTSRCS += test/reg_file.c
+BTSRCS += test/setgid.c
+BTSRCS += test/setuid.c
+BTSRCS += test/socket.c
+BTSRCS += test/str_eq.c
+BTSRCS += test/str_neq.c
+BTSRCS += test/symlink.c
+BTSRCS += test/write.c
+BTSRCS += test/zero.c
+BTSRCS += test/size.c
 BTSRCS += fg.c
 BTSRCS += bg.c
-BTSRCS += fc.c
+BTSRCS += alias/alias.c
+BTSRCS += alias/print.c
+BTSRCS += alias/tools.c
+BTSRCS += alias/unalias.c
 
 ## INCLUDES ##
 
@@ -223,8 +258,10 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/test
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)builtins/hash
+OPATHS += $(OPATH)builtins/alias
 OPATHS += $(OPATH)debug
 OPATHS += $(OPATH)debug/lexer
 OPATHS += $(OPATH)debug/parser

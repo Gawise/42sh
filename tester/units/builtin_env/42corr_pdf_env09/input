@@ -1,0 +1,1 @@
+unset PATH; PATH=/bin:/usr/bin ; mkdir testdir; echo 0 ; ls -1 | grep testdir ; rm -rf testdir

@@ -1,0 +1,1 @@
+test -c /dev/console && echo ok || echo wrong
