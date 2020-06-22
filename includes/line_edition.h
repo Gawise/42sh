@@ -112,5 +112,6 @@ void			init_input_map(t_hash_map *map);
 int				ft_strcheck(char *s, char *oc);
 void			sigterm_handler(int sig);
 char			**split_pos(const char *s);
+void			update_history_file(t_dlist *hs, t_cfg *cfg);
 
 #endif

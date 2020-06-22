@@ -32,6 +32,7 @@ typedef struct	s_cfg
 	uint8_t			active_job;
 	int32_t			debug;
 	int				hist_nb;
+	int				hist_start;
 	t_list			*alias;
 }				t_cfg;
 

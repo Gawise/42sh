@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/22 15:09:14 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/22 17:20:31 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,8 @@ void		exec_hist(int8_t fl, char *file)
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
 					|| (ret = eval_routine(&parser)) <= 0)
 					break ;
-			if (!(fl & 1) && ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
+			(void) fl;
+			if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
 			{
 				cfg_shell()->hist_nb += 1;
 				nb = ft_itoa(cfg_shell()->hist_nb);
@@ -256,11 +257,11 @@ int			edit_hist(int8_t *fl, char **av, int ac)
 
 	if ((hist = create_tmphist(fl, av, (av[ac] ? ac + 1 : ac))))
 	{
-		if ((!av[ac] || !ft_strisalpha(av[ac])) && !find_var_value(
-			cfg_shell()->sp, "FCEDIT"))
+		if ((!av[ac]/* || !ft_strisalpha(av[ac])*/) && !find_var_value(
+			cfg_shell()->env, "FCEDIT"))
 			ft_asprintf(&cmd, "%s %s", "ed", hist);
 		else if (!av[ac] || !ft_strisalpha(av[ac]))
-			ft_asprintf(&cmd, "%s %s", find_var_value(cfg_shell()->sp,
+			ft_asprintf(&cmd, "%s %s", find_var_value(cfg_shell()->env,
 						"FCEDIT"), hist);
 		else
 			ft_asprintf(&cmd, "%s %s", av[ac], hist);
@@ -268,7 +269,8 @@ int			edit_hist(int8_t *fl, char **av, int ac)
 				|| (ret = parser_routine(&lexer, &parser)) <= 0
 				|| (ret = eval_routine(&parser)) <= 0)
 			return (0);
-		exec_hist(*fl, hist);
+		if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
+			exec_hist(*fl, hist);
 		ft_strdel(&hist);
 		return (1);
 	}
@@ -280,6 +282,7 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 	int8_t	fl;
 	int32_t	ac;
 	t_dlist	*hs;
+	char	*nb;
 
 	ac = 1;
 	if ((fl = check_opt(p, &ac)) < 0)
@@ -291,7 +294,11 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 			hs = cfg_shell()->history;
 			while (hs->next)
 				hs = hs->next;
+			nb = ft_itoa(cfg_shell()->hist_nb);
 			ft_dlstdelone(&hs);
+			ft_hash_delone(cfg_shell()->hist_map, nb, free);
+			cfg_shell()->hist_nb -= 1;
+			ft_strdel(&nb);
 		}
 		if (fl & 1 && !edit_hist(&fl, p->av, ac))
 			return (FAILURE);
