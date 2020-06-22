@@ -97,7 +97,7 @@
 *****************************************************
 */
 
-uint8_t         ft_fc(t_job *j, t_process *p);
+uint8_t     ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
