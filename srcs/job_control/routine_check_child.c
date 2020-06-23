@@ -64,6 +64,7 @@ void			update_listjob(t_cfg *shell)
 		{
 			j->ret = p->ret + 128;
 			j->status = STOPPED;
+			j->fg = 1;
 			job_become_cur(shell, &j);
 		}
 		else if (!(j->status & STOPPED))//protect de securité peut etre enlever a la fin

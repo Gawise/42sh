@@ -119,13 +119,8 @@ char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 char			*cd_del_dotcomponents(char *curpath, char *opr);
 int				display_cd_errors(char *error);
-int16_t			get_job_id(char *ope);
-int				print_job_ope(char opt, t_job *j, int8_t ope);
-void			print_jobs(char opt, t_job *j);
-void			print_jobs_opt(t_job *j);
-char			get_curr(t_list *job, uint8_t stop);
-int8_t			find_stopped_job(t_list *job);
-int				str_is_digit(char *str);
+uint8_t			print_jobs(t_cfg *shell, t_process *p, char opt, int32_t ac);
+void			print_this_job(t_job *j, uint8_t curr, char opt);
 int				check_chdir_errors(char **error, char *path,
 									char *opr);
 int				cd_change_directory(t_list **env, char *curpath,
