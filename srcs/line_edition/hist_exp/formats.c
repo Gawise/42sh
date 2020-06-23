@@ -6,11 +6,14 @@
 int		exp_last_cmd(char **src, t_exp *exp)
 {
 	char	*res;
+	char	*val;
 
 	*src += 1;
-	if (!(exp->word = ft_itoa(cfg_shell()->hist_nb - 1)))
+	if (!(val = ft_itoa(cfg_shell()->hist_nb - 1)))
 		ft_ex(EXMALLOC);
-	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->word)))
+	if (!(exp->word = ft_strdup("!")))
+		ft_ex(EXMALLOC);
+	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, val)))
 		return (0);
 	exp_substitute(exp, res);
 	return (1);
@@ -24,13 +27,13 @@ int		exp_digit(char **src, t_exp *exp)
 	val = ft_atoi(*src);
 	while (ft_isdigit(**src))
 		*src += 1;
-	if (val < 1 || val >= cfg_shell()->hist_nb)
-		return (0);
 	if (!(exp->word = ft_itoa(val)))
 		ft_ex(EXMALLOC);
+	if (val < 1 || val >= cfg_shell()->hist_nb)
+		return (0);
 	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->word)))
 		return (0);
-	exp_substitute(exp, exp->word);
+	exp_substitute(exp, res);
 	return (1);
 }
 
@@ -45,11 +48,11 @@ int		exp_minus(char **src, t_exp *exp)
 	while (ft_isdigit(**src))
 		*src += 1;
 	histsize = cfg_shell()->hist_nb;
+	if (!(exp->word = ft_itoa(val)))
+		ft_ex(EXMALLOC);
 	if (val >= 0 || histsize + val < 1)
 		return (0);
 	val += histsize;
-	if (!(exp->word = ft_itoa(val)))
-		ft_ex(EXMALLOC);
 	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->word)))
 		return (0);
 	exp_substitute(exp, res);
