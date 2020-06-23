@@ -8,7 +8,7 @@
 # include "struct.h"
 # include "libft.h"
 
-# define HIST_DELIM "&;<>|"
+# define HIST_DELIM "&;<>|\"\'\\"
 
 # define READ_SIZE 8
 # define ARROW_LEFT "\e[D"
@@ -113,5 +113,10 @@ int				ft_strcheck(char *s, char *oc);
 void			sigterm_handler(int sig);
 char			**split_pos(const char *s);
 void			update_history_file(t_dlist *hs, t_cfg *cfg);
+int				exp_last_cmd(char **src, t_exp *exp);
+int				exp_digit(char **src, t_exp *exp);
+int				exp_minus(char **src, t_exp *exp);
+int				exp_word(char **src, t_exp *exp);
+int				expand_history(char **line);
 
 #endif

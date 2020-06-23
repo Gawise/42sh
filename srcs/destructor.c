@@ -23,6 +23,9 @@ void	clean_cfg(t_cfg *shell)
 	ft_dlstdel(&shell->history);
 	ft_hash_del_map(&shell->map, free);
 	ft_hash_del_map(&shell->input_map, NULL);
+	ft_hash_del_map(&shell->test_un, NULL);
+	ft_hash_del_map(&shell->test_bin, NULL);
+	ft_hash_del_map(&shell->hist_map, free);
 	ft_strdel(&shell->file);
 	ft_lstdel(&shell->alias, unsetvar_del);
 	ft_bzero(shell, sizeof(t_cfg));
