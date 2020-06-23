@@ -1,84 +1,16 @@
 #include "line_edition.h"
 #include "ft_printf.h"
+#include "analyzer.h"
+#include "sh.h"
 
-int		exp_last_cmd(t_exp *exp)
-{
-	char	*res;
-
-	if (!(exp->word = ft_itoa(histsize - 1)))//nombre total d'entrees dans l'historique
-		ft_ex(EXMALLOC);
-	if (!(res = ft_hash_lookup(cfg_shell()->history, exp->word)))
-		return (0);
-	exp_substitute(exp, res);
-	return (1);
-}
-
-int		exp_digit(char **src, t_exp *exp)
-{
-	int		val;
-	char	*res;
-	
-	val = ft_atoi(*src);
-	if (val < 1 || val >= histsize)//nombre total d'entrees dans l'historique
-		return (0);
-	if (!(exp->word = ft_itoa(val)))
-		ft_ex(EXMALLOC);
-	if (!(res = ft_hash_lookup(cfg_shell()->history, exp->word)))
-		return (0);
-	exp_substitute(exp, exp->word);
-	return (1);
-}
-
-int		exp_minus(char **src, t_exp *exp)
-{
-	int		histsize;
-	int		val;
-	char	*res;
-
-	val = ft_atoi(*src);
-	histsize = 100000000000; //nombre total d'entrees dans l'historique
-	if (val || val < -(histsize))
-		return (0);
-	val += histsize;
-	if (!exp->word = ft_itoa(val))
-		ft_ex(EXMALLOC);
-	if (!(res = ft_hash_lookup(cfg_shell()->history, exp->word)))
-		return (0);
-	exp_substitute(exp, res);
-	return (1);
-}
-
-int		exp_word(char **src, t_exp *exp)
-{
-	int		index;
-	char	*res;
-
-	while (!ft_strchr(" \t\n", *str) && !ft_strchr(HIST_DELIM, *str))
-		exp_add_to_buf(exp, src, exp->word);
-	exp_flush_buf(exp, exp->word);
-	index = 10000000000; //nombre total d'entrees dans l'historique
-	while (index)
-	{
-		if (!(res = ft_hash_lookup(cfg_shell()->history, ft_itoa(index))))
-			return (0);
-		if (ft_strnequ(val, exp->word, ft_strlen(exp->word)))
-		{
-			exp_substitute(exp, res);
-			return (1);
-		}
-		index--;
-	}
-	return (0);
-}
-
-int		parse_hist_exp(char **src, t_exp *exp)
+static int		parse_hist_exp(char **src, t_exp *exp)
 {
 	char	*str;
 	int		ret;
 
 	str = *src;
 	if (*str == '!')
-		ret = exp_last_cmd(exp);
+		ret = exp_last_cmd(src, exp);
 	else if (ft_isdigit(*str))
 		ret = exp_digit(src, exp);
 	else if (*str == '-')
@@ -90,47 +22,81 @@ int		parse_hist_exp(char **src, t_exp *exp)
 	return (ret);
 }
 
-int		handle_exp_flag(char **src, t_exp *exp)
+static int		handle_exp_flag(char **src, t_exp *exp, int *flag)
 {
 	char	*str;
 
 	str = *src;
 	if (ft_strchr(" \t\n", *(str + 1)))
 	{
-		exp_add_to_buff(exp, src, exp->res);
+		exp_add_to_buf(exp, src, &exp->res);
 		return (1);
 	}
 	if (!ft_strchr(HIST_DELIM, *(str + 1)))
 	{
 		(*src)++;
-		exp_flush_buf(exp, exp->res);
+		exp_flush_buf(exp, &exp->res);
+		*flag = 1;
 		return (parse_hist_exp(src, exp));
 	}
 	return (0);
 }
 
-static int	hist_exp_error(t_exp *exp)
+static int		hist_exp_error(t_exp *exp)
 {
 	ft_dprintf(2, "%s: !%s: event not found\n", PROJECT, exp->word);
 	free_exp_content(exp);
 	return (0);
 }
 
-int		expand_history(char **line)
+static void		history_update(char *line)
+{
+	t_cfg	*shell;
+	char	*hist_nb;
+	t_dlist	*dlst;
+	char	*res;
+
+	shell = cfg_shell();
+	if (!(hist_nb = ft_itoa(shell->hist_nb)))
+		ft_ex(EXMALLOC);
+	if (!(res = ft_strdup(line)))
+		ft_ex(EXMALLOC);
+	res[ft_strlen(res) - 2] = 0;
+	ft_hash_add(shell->hist_map, hist_nb, res, free);
+	ft_strdel(&res);
+	dlst = shell->history;
+	while (dlst->next)
+		dlst = dlst->next;
+	if (!(res = ft_strdup(line)))
+		ft_ex(EXMALLOC);
+	res[ft_strlen(res) - 2] = 0;
+	dlst->data = res;
+}
+
+int				expand_history(char **line)
 {
 	char	*str;
 	t_exp	exp;
+	int		flag;
 
+	flag = 0;
 	str = *line;
 	init_exp(&exp);
 	while (*str)
 	{
-		if (*str == '!' && !handle_exp_flag(&str, &exp))
+		if (*str == '!' && !handle_exp_flag(&str, &exp, &flag))
 			return (hist_exp_error(&exp));
 		exp_add_to_buf(&exp, &str, &exp.res);
 	}
+	exp_flush_buf(&exp, &exp.res);
 	ft_strdel(line);
-	*line = exp.res;
-	ft_printf("%s", exp.res);
+	if (!(*line = ft_strdup(exp.res)))
+		ft_ex(EXMALLOC);
+	if (flag)
+	{
+		history_update(exp.res);
+		ft_printf("%s", exp.res);
+	}
 	free_exp_content(&exp);
+	return (1);
 }

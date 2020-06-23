@@ -53,7 +53,7 @@ int		line_edition_routine(char **line)
 		return (0);
 	else if (*line && (!line[0][0]))
 		return (-1);
-	return (1);
+	return (expand_history(line));
 }
 
 int		eval_routine(t_parser *parser)

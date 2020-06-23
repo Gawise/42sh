@@ -33,6 +33,8 @@ LESRCS += maj_arrow_keys.c
 LESRCS += del_keys.c
 LESRCS += other_keys.c
 LESRCS += history_keys.c
+LESRCS += hist_exp/hist_exp.c
+LESRCS += hist_exp/formats.c
 
 ## LEXER ##
 
@@ -247,6 +249,7 @@ SRC += $(addprefix debug/,$(DBSRCS))
 
 
 OPATHS += $(OPATH)line_edition
+OPATHS += $(OPATH)line_edition/hist_exp
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
@@ -285,7 +288,7 @@ LIPATH = libft/includes/
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libft_db.a
 
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -g -Wall -Werror -Wextra
 IFLAGS = -I $(IPATH) -I $(LIPATH)
 CFLAGS = $(WFLAGS) $(IFLAGS)
 DBFLAGS = -g -fsanitize=address
