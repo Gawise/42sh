@@ -61,7 +61,7 @@ static void		history_update(char *line)
 		ft_ex(EXMALLOC);
 	if (!(res = ft_strdup(line)))
 		ft_ex(EXMALLOC);
-	res[ft_strlen(res) - 2] = 0;
+	res[ft_strlen(res) - 1] = 0;
 	ft_hash_add(shell->hist_map, hist_nb, res, free);
 	ft_strdel(&res);
 	dlst = shell->history;
@@ -69,7 +69,7 @@ static void		history_update(char *line)
 		dlst = dlst->next;
 	if (!(res = ft_strdup(line)))
 		ft_ex(EXMALLOC);
-	res[ft_strlen(res) - 2] = 0;
+	res[ft_strlen(res) - 1] = 0;
 	dlst->data = res;
 }
 
