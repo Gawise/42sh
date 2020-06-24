@@ -31,7 +31,6 @@ t_process	*find_process_by_status(t_list *lst, uint8_t want)
 
 uint8_t		builtin_process(t_job *j, t_process *p)
 {
-
 	uint8_t		(*tab_f[16])(t_job *, t_process *);
 
 	tab_f[0] = ft_echo;

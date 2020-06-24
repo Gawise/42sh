@@ -97,6 +97,7 @@
 *****************************************************
 */
 
+
 uint8_t     ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
@@ -174,6 +175,24 @@ uint8_t		test_lessor_int(char *s1, char *s2);
 uint8_t		test_lesser_int(char *s1, char *s2);
 uint8_t		test_diff_int(char *s1, char *s2);
 uint8_t		test_bloc_file(char *path);
+
+int			print_hist(int8_t *fl, char **av, int ac);
+void		exec_hist(char *file);
+int			edit_hist(int8_t *fl, char **av, int ac);
+char		*get_hist_cmd(char *av, t_cfg *cfg);
+void		reexecute_cmd(char **av, int ac);
+char		*get_histfilename(void);
+char		*create_tmphist(int8_t *fl, char **av, int ac);
+uint8_t		fc_check_opt(t_process *p, int32_t *ac);
+t_point		get_range(int8_t *fl, char **av, int ac, t_cfg *cfg);
+int			check_range(char **av, int ac);
+int			ft_intlen(int nb);
+int			range_error(void);
+uint8_t		fc_usage(void);
+uint8_t		fc_bad_option(char *s);
+uint8_t		fc_bad_usage(char *s);
+uint8_t		fc_missing_arg(void);
+
 /*
 *****************************************************
 ******************* TERMIOS *************************
