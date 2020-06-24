@@ -265,6 +265,7 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/fc
 OPATHS += $(OPATH)builtins/test
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)builtins/hash
