@@ -230,6 +230,7 @@ DBSRCS += lexer/misc.c
 DBSRCS += parser/parser.c
 DBSRCS += parser/get.c
 DBSRCS += parser/print_cmd.c
+DBSRCS += analyzer.c
 
 SRC += main.c
 SRC += init_shell.c
