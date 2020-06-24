@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/24 15:09:19 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/06/24 16:25:59 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,174 +18,6 @@
 #include "ft_printf.h"
 #include "get_next_line.h"
 #include "var.h"
-
-uint8_t static	fc_erro(char *s)
-{
-	char    *usage;
-	char	*usage2;
-
-	usage = " : fc [-r][-e editor] [first[last]]\n        ";
-	usage2 = "fc -l[-nr] [first[last]]\n        fc -s[old=new] [first]\n";
-	ft_dprintf(2, "fc: invalid option -- %s\nusage%s%s", s, usage, usage2);
-	return (-1);
-}
-
-int		range_error(void)
-{
-	ft_printf("fc : history specification out of range");
-	return (-1);
-}
-
-static t_point         get_range(int8_t *fl, char **av, int ac, t_cfg *cfg)
-{
-	t_point t;
-
-	if (av && av[ac])
-	{
-		if (!av[ac + 1] || (t.y = ft_atoi(av[ac + 1])) == 0 || t.y > cfg->hist_nb)
-			t.y = cfg->hist_nb - 1;
-		if (t.y < 0)
-			t.y = cfg->hist_nb + t.y;
-		if ((t.x = ft_atoi(av[ac])) == 0 || t.x > cfg->hist_nb)
-			t.x = cfg->hist_nb - 1;
-		if (t.x < 0)
-			t.x = cfg->hist_nb + t.x;
-		if (t.x > t.y)
-		{
-			t = (t_point){t.y, t.x};
-			*fl = (*fl & 8 ? *fl ^ 8 : *fl | 8);
-		}
-	}
-	else
-	{
-		(void)fl;
-		t.y = cfg->hist_nb - 1;
-		t.x = (cfg->hist_nb <= 15 ? 1 : cfg->hist_nb - 15);
-	}
-	return (t);
-}
-
-static uint8_t  check_opt(t_process *p, int32_t *ac)
-{
-	int32_t     i;
-	int			z;
-	int8_t      ret;
-	int8_t      flags;
-
-	flags = 0;
-	i = 0;
-	char *fl = "elnrs";
-	while ((ret = ft_getopt(ac, &i, p->av, fl)) != -1)
-	{
-		if (ret == '?')
-		{
-			z = i;
-			while (p->av[*ac][z])
-				if (!ft_isdigit(p->av[*ac][z++]))
-					return (fc_erro(&p->av[*ac][i]));
-			break ;
-		}
-		flags |= (char)ret == 'e' ? 1 : 0;
-		flags |= (char)ret == 'l' ? 2 : 0;
-		flags |= (char)ret == 'n' ? 4 : 0;
-		flags |= (char)ret == 'r' ? 8 : 0;
-		flags |= (char)ret == 's' ? 16 : 0;
-		if ((flags & 1 && flags & 2))
-			return (fc_erro((!p->av[*ac] ? p->av[*ac - 1] : p->av[*ac])));
-	}
-	return (flags);
-}
-
-char			*get_histfilename()
-{
-	char	*name;
-	char	*tmp;
-	char	*prefix;
-	int		i;
-
-	prefix = "/tmp";
-	name = "/edit_hist";
-	if (access(prefix, W_OK | R_OK) < 0)
-		prefix = ".";
-	i = 0;
-	ft_asprintf(&name, "%s%s", prefix, name);
-	prefix = name;
-	while (access(prefix, F_OK) != -1 || i == 0)
-	{
-		i++;
-		tmp = ft_itoa(i);
-		ft_asprintf(&prefix, "%s_%s", name, tmp);
-		ft_strdel(&tmp);
-	}
-	ft_strdel(&name);
-	name = prefix;
-	return (name);
-}
-
-char			*create_tmphist(int8_t *fl, char **av, int ac)
-{
-	t_point	range;
-	char	*file;
-	int		fd;
-	int		order;
-	char	*key;
-
-	file = get_histfilename();
-	if (!file || (fd = open(file, O_CREAT | O_RDONLY | O_WRONLY, 0666)) < 0)
-		return (NULL);
-	range = get_range(fl, av, ac, cfg_shell());
-	if (*fl & 8)
-		range = (t_point){range.y, range.x};
-	order = (range.x > range.y ? -1 : 1);
-	while (range.x - order != range.y && range.x > 0)
-	{
-		key = ft_itoa(range.x);
-		ft_putstr_fd((char *)ft_hash_lookup(cfg_shell()->hist_map, key), fd);
-		ft_putstr_fd("\n", fd);
-		ft_strdel(&key);
-		range.x += order;
-	}
-	close(fd);
-	return (file);
-}
-
-static int		check_range(char **av, int ac)
-{
-	int	i;
-	int	z;
-	if (av && av[ac])
-	{
-		i = ac;
-		while (av[i])
-		{
-			z = 0;
-			if (av[i][z] == '-')
-				z = 1;
-			while (av[i][z])
-				if (!ft_isdigit(av[i][z++]))
-					return (range_error());
-			i++;
-		}
-	}
-	return (1);
-}
-
-static int		ft_intlen(int nb)
-{
-	unsigned int	n;
-	int				ret;
-
-	if (nb < 0)
-		n = nb * (-1);
-	else
-		n = (unsigned int)nb;
-	if (n == 0)
-		return (1);
-	ret = 0;
-	while (n && ret++ >= 0)
-		n /= 10;
-	return (ret);
-}
 
 int			print_hist(int8_t *fl, char **av, int ac)
 {
@@ -215,7 +47,7 @@ int			print_hist(int8_t *fl, char **av, int ac)
 	return (-1);
 }
 
-void		exec_hist(int8_t fl, char *file)
+void		exec_hist(char *file)
 {
 	t_lexer     lexer;
 	t_parser    parser;
@@ -235,7 +67,6 @@ void		exec_hist(int8_t fl, char *file)
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
 					|| (ret = eval_routine(&parser)) <= 0)
 				break ;
-			(void) fl;
 			if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
 			{
 				cfg_shell()->hist_nb += 1;
@@ -258,20 +89,21 @@ int			edit_hist(int8_t *fl, char **av, int ac)
 
 	if ((hist = create_tmphist(fl, av, (av[ac] ? ac + 1 : ac))))
 	{
-		if ((!av[ac]/* || !ft_strisalpha(av[ac])*/) && !find_var_value(
-					cfg_shell()->env, "FCEDIT"))
+		if (!(*fl & 1) && !find_var_value(cfg_shell()->env, "FCEDIT"))
 			ft_asprintf(&cmd, "%s %s", "ed", hist);
-		else if (!av[ac] || !ft_strisalpha(av[ac]))
+		else if (!(*fl & 1))
 			ft_asprintf(&cmd, "%s %s", find_var_value(cfg_shell()->env,
 						"FCEDIT"), hist);
-		else
+		else if (av[ac])
 			ft_asprintf(&cmd, "%s %s", av[ac], hist);
+		else
+			return (fc_missing_arg());
 		if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 				|| (ret = parser_routine(&lexer, &parser)) <= 0
 				|| (ret = eval_routine(&parser)) <= 0)
 			return (0);
 		if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
-			exec_hist(*fl, hist);
+			exec_hist(hist);
 		ft_strdel(&hist);
 		return (1);
 	}
@@ -284,6 +116,7 @@ char			*get_hist_cmd(char *av, t_cfg *cfg)
 	char	*nb;
 	int		n;
 	t_dlist	*hs;
+	int		i;
 
 	cmd = NULL;
 	if (av)
@@ -303,7 +136,10 @@ char			*get_hist_cmd(char *av, t_cfg *cfg)
 			n = ft_strlen(av);
 			while (hs->prev)
 			{
-				if (hs->data && ft_strnstr((char *)hs->data, av, n))
+				i = 0;
+				while (hs->data && ((char *)hs->data)[i] && ((char *)hs->data)[i] == ' ')
+					i++;
+				if (hs->data && ft_strnstr(&((char *)hs->data)[i], av, n))
 					return (ft_strdup((char *)hs->data));
 				hs = hs->prev;
 			}
@@ -324,8 +160,6 @@ void			reexecute_cmd(char **av, int ac)
 	char	*new;
 	char	*oc;
 	char	*cmd;
-	t_lexer	lexer;
-	t_parser parser;
 
 	old = NULL;
 	new = NULL;
@@ -344,23 +178,12 @@ void			reexecute_cmd(char **av, int ac)
 			cmd = ft_strrep(cmd, old, new);
 			ft_strdel(&oc);
 		}
-		ft_printf("%s\n", cmd);
-		oc = ft_strdup(cmd);
-		if (lexer_routine(&oc, &lexer) <= 0
-				|| parser_routine(&lexer, &parser) <= 0
-				|| eval_routine(&parser) <= 0)
-		{
-			ft_strdel(&cmd);
+		oc = get_histfilename();
+		if (!oc || (ac = open(oc, O_CREAT | O_WRONLY, 0666)) < 0)
 			return ;
-		}
-		cfg_shell()->hist_nb += 1;
-        oc = ft_itoa(cfg_shell()->hist_nb);
-		ft_dlstaddtail(&(cfg_shell()->history), ft_dlstnew(cmd, 0));
-        t_dlist *hs = cfg_shell()->history;
-        while (hs->next)
-            hs = hs->next;
-		ft_hash_add(cfg_shell()->hist_map, oc, ft_strdup(cmd), NULL);
-        ft_strdel(&oc);
+		ft_dprintf(ac, "%s", cmd);
+		exec_hist(oc);
+		close(ac);
 	}
 }
 
@@ -372,7 +195,7 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 	char	*nb;
 
 	ac = 1;
-	if ((fl = check_opt(p, &ac)) < 0)
+	if ((fl = fc_check_opt(p, &ac)) < 0)
 		return (FAILURE);
 	if (j && p)
 	{
@@ -387,7 +210,7 @@ uint8_t			ft_fc(t_job *j, t_process *p)
 			cfg_shell()->hist_nb -= 1;
 			ft_strdel(&nb);
 		}
-		if (fl & 1 && !edit_hist(&fl, p->av, ac))
+		if (((!(fl & 2) && !(fl & 16)) || fl & 1) && !edit_hist(&fl, p->av, ac))
 			return (FAILURE);
 		if (fl & 2 && !print_hist(&fl, p->av, ac))
 			return (FAILURE);
