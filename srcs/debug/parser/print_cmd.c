@@ -37,7 +37,7 @@ static void	handle_assign(t_simple_cmd *cmd)
 	}
 }
 
-static void	handle_args(t_list *args, int n_arg, int nb_args)
+void		handle_args(t_list *args, int n_arg, int nb_args)
 {
 	if (args)
 	{

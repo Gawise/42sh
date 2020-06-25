@@ -233,6 +233,7 @@ DBSRCS += lexer/misc.c
 DBSRCS += parser/parser.c
 DBSRCS += parser/get.c
 DBSRCS += parser/print_cmd.c
+DBSRCS += analyzer.c
 
 SRC += main.c
 SRC += init_shell.c
@@ -264,6 +265,7 @@ OPATHS += $(OPATH)analyzer/exp
 OPATHS += $(OPATH)evaluator
 OPATHS += $(OPATH)builtins
 OPATHS += $(OPATH)builtins/cd
+OPATHS += $(OPATH)builtins/fc
 OPATHS += $(OPATH)builtins/test
 OPATHS += $(OPATH)builtins/jobs
 OPATHS += $(OPATH)builtins/hash

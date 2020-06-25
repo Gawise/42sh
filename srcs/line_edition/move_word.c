@@ -20,7 +20,8 @@ void	mv_word_left(t_cs_line *cs)
 			i--;
 		cs->line_col = i;
 		cs->cr = get_line(cs);
-		if (cs->cr + cs->min_row - cs->scroll - 1 <= cs->min_row && cs->scroll)
+		if (cs->cr + cs->min_row - cs->scroll - 1 <= cs->min_row + (cs->scroll
+			|| cs->screen.x <= (int)ft_strlen(cs->prompt)) && cs->scroll)
 		{
 			cs->scroll = cs->cr - (cs->screen.y - (cs->min_row + (cs->screen.x
 						> 2 ? 0 : 1) + (cs->scroll > 0 ? 1 : 0)) - 1);

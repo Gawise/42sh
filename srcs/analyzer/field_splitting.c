@@ -1,4 +1,5 @@
 #include "analyzer.h"
+#include "debug.h"
 #include "sh.h"
 #include "var.h"
 #include "libft.h"
@@ -22,7 +23,7 @@ static int		word_len(char *str, char *set)
 	quote = 0;
 	bs = 0;
 	ret = 0;
-	while (*str && (quote || !ft_strchr(set, *str)))
+	while (*str && (quote || bs || !ft_strchr(set, *str)))
 	{
 		if (!bs && ft_strchr("\'\"\\", *str))
 			process_quotes(&quote, &bs, str);
@@ -72,6 +73,8 @@ void			field_splitting(t_simple_cmd *cmd)
 	t_list		*lst;
 
 	res = NULL;
+	if ((cfg_shell()->debug))
+		field_splitting_debug(cmd, "START");
 	if ((ifs = find_var_value(cfg_shell()->env, "IFS"))
 	&& (!(ifs = ft_strdup(ifs))))
 		ft_ex(EXMALLOC);
@@ -87,4 +90,6 @@ void			field_splitting(t_simple_cmd *cmd)
 	}
 	free(ifs);
 	cmd_replace(cmd, res);
+	if ((cfg_shell()->debug))
+		field_splitting_debug(cmd, "END");
 }

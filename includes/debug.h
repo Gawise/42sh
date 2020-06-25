@@ -1,5 +1,7 @@
 #ifndef DEBUG_H
 # define DEBUG_H
+#include "libft.h"
+#include "struct.h"
 
 int		get_nb_cmd(t_list *cmd);
 int		get_nb_and_or(t_list *and_or);
@@ -14,5 +16,7 @@ char	*get_flag_name(t_lexer_flag flag);
 char	*get_state_str(t_lexer *lexer);
 void	print_assignment(t_list *assignment);
 void	print_redir(t_list *redirection);
+void	handle_args(t_list *args, int n_arg, int nb_args);
+void	field_splitting_debug(t_simple_cmd *cmd, char *str);
 
 #endif
