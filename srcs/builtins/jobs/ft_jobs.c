@@ -3,15 +3,15 @@
 #include "exec.h"
 #include "sh.h"
 
-static int8_t			error(void)
+# define JOB_USG "jobs : usage: jobs [-lp] [job_id...]"
+
+static int8_t		error(char err)
 {
-	char c = '$';
-	ft_dprintf(STDERR_FILENO, "21sh: jobs: -%c: invalid option\n", c);
-	ft_dprintf(STDERR_FILENO, "jobs : usage: jobs [-lp] [job_id...]\n");
-	return (2);
+	ft_dprintf(STDERR_FILENO, "%s: jobs: -%c: invalid option\n%s\n", PROJECT, err, JOB_USG);
+	return (FAILURE);
 }
 
-static char			*state(t_job *j, uint8_t opt)
+static char		*state(t_job *j, uint8_t opt)
 {
 	char	*tab[4];
 	int16_t	s_ret;
@@ -44,7 +44,7 @@ void			print_this_job(t_job *j, uint8_t curr, char opt)
 		ft_printf("[%d]%c  %s \t %s %c\n", j->id, curr, state(j, 0), j->cmd, bg);
 }
 
-static void			print_all_jobs(t_cfg *shell, t_list *jobs, char opt)
+static void		print_all_jobs(t_cfg *shell, t_list *jobs, char opt)
 {
 	uint8_t		i;
 	uint8_t		c;
@@ -74,7 +74,7 @@ static char		jobs_opt(char **av, int *ac)
 	while ((ret = ft_getopt(ac, &i, av, "pl")) != -1)
 	{
 		if (ret == '?')
-			return (error());
+			return (error(av[*ac][i]));
 		opt = ret != -1 ? ret : opt;
 	}
 	return (opt);
@@ -90,7 +90,7 @@ uint8_t		ft_jobs(t_job *j, t_process *p)
 	(void)j;
 	ac = 1;
 	if ((opt = jobs_opt(p->av, &ac)) == FAILURE)
-		return (FAILURE);
+		return (2);
 	if (p->av[ac])
 		print_jobs(shell, p, opt, ac);
 	else

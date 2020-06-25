@@ -127,7 +127,7 @@ uint8_t		print_jobs(t_cfg *shell, t_process *p, char opt, int32_t ac)
 				ft_dprintf(STDERR_FILENO, "21sh: jobs: %s", p->av[ac]);
 				ft_dprintf(STDERR_FILENO, ": ambiguous job spec\n");
 			}
-			ft_dprintf(STDERR_FILENO, "21sh: jobs: %s", p->av[ac]);
+			ft_dprintf(STDERR_FILENO, "%s: jobs: %s", PROJECT, p->av[ac]);
 			ft_dprintf(STDERR_FILENO, ": no such job\n");
 			err++;
 		}
