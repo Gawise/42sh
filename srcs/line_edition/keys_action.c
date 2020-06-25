@@ -15,17 +15,18 @@ void	set_scroll(t_cs_line *cs)
 	if (cs)
 	{
 		cs->cr = get_line(cs);
-		if (cs->cr + cs->min_row >= cs->screen.y && cs->min_row > (cs->screen.x
-			<= (int)ft_strlen(cs->prompt) || cs->scroll ? 1 : 0))
+		if (cs->cr + cs->min_row >= cs->screen.y - (cs->screen.x
+			<= (int)ft_strlen(cs->prompt) ? 1 : 0))
 		{
-			scroll_add = cs->cr + cs->min_row - cs->screen.y + 1;
+			scroll_add = cs->cr + cs->min_row - cs->screen.y + 1 + (cs->screen.x
+            <= (int)ft_strlen(cs->prompt) ? 1 : 0);
 			while (cs->min_row - scroll_add < 0)
 				scroll_add--;
 			cs->min_row -= scroll_add;
 			tputs(tgoto(tgetstr("SF", NULL), 0, scroll_add), 1, &my_putchar);
 		}
 		if (cs->cr - cs->scroll + cs->min_row + (cs->screen.x <= (int)
-			ft_strlen(cs->prompt) || cs->scroll == 0 ? 1 : 0) >= cs->screen.y)
+			ft_strlen(cs->prompt) ? 1 : 0) >= cs->screen.y)
 			cs->scroll = cs->cr - (cs->screen.y - cs->min_row - 1);
 		if (cs->scroll < 0)
 			cs->scroll = 0;

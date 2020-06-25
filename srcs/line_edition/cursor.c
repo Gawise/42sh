@@ -25,7 +25,7 @@ void		move_cs(t_cs_line **cs)
 	{
 		pos = cs_pos(tmp);
 		tmp->col = pos.x;
-		tmp->row = pos.y;
+		tmp->row = pos.y ;//+ (tmp->min_row >= tmp->screen.y - 1 ? 1 : 0);
 		tputs(tgoto(tgetstr("cm", NULL), tmp->col, tmp->row), 1, &my_putchar);
 	}
 }

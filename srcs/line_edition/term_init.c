@@ -23,6 +23,11 @@ void	set_term(int tty, char *prompt, struct termios *new_term)
 	cs = cs_master(NULL, 0);
 	get_cs_line_position(&cs->min_col, &cs->min_row);
 	cs_set();
+	if (cs->min_row >= cs->screen.y - 1)
+	{
+		cs->min_row -= 1;
+		ft_putstr_fd("\n", cs->tty);
+	}
 	if (cs->min_col > 0)
 	{
 		if (cs->min_row >= cs->screen.y - 1)
