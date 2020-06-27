@@ -71,6 +71,7 @@ void	init_input_map(t_hash_map *map)
 	ft_hash_add(map, PASTE_CLIP, &paste_clip, NULL);
 	ft_hash_add(map, COPY_CLIP, &copy_clip, NULL);
 	ft_hash_add(map, CUT_CLIP, &cut_clip, NULL);
+	ft_hash_add(map, CTRL_R, &rev_i_search, NULL);
 	init_char_keys(&map);
 }
 
@@ -86,19 +87,32 @@ int		check_keys(char *caps)
 	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
 	if ((cs = cs_master(NULL, 0)) && caps[0] == (char)4)
 		ret = ctrl_d(cs);
-	else if (fct && (ret = (caps[0] == (char)4 ? -1 : 0)) <= 0)
-		fct(cs);
+	else if (fct && ret == 0)
+	{
+		if (ft_strcmp(caps, "\ex012") != 0 && caps[0] != 127)
+			ctrl_r_off(cs, caps);
+		if (!(cs->ctrl_r && history_search(cs, caps)))
+			fct(cs);
+	}
 	else if ((ft_strcmp(caps, "\n") == 0 || caps[0] == '\n') && (ret = -1) < 0)
+	{
+		history_search(cs, caps);
 		line_master(cs, caps);
+	}
 	else if (ft_strcmp(caps, "\033[6n") == 0)
 		ret = -1;
 	else if (caps[0] != 127 && ret == 0 && (caps[0] != '\033' && caps[0] >= 32)
 			&& (ret = 1))
 	{
+		if (cs->ctrl_r == 1)
+			history_search(cs, caps);
+		else
+		{
 		line_master(cs, caps);
 		if (ft_strchr(caps, '\n'))
 			ret = -1;
 		print_cmdline(cs);
+		}
 	}
 	return (ret);
 }

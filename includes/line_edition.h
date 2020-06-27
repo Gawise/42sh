@@ -24,6 +24,7 @@
 # define END_KEY_BIS 5
 # define BACK_SPACE 127
 # define CTRL_D 4
+# define CTRL_R "\x012"
 
 # if __APPLE__
 #  define MV_WORD_RIGHT "\e[1;2C"
@@ -118,5 +119,8 @@ int				exp_digit(char **src, t_exp *exp);
 int				exp_minus(char **src, t_exp *exp);
 int				exp_word(char **src, t_exp *exp);
 int				expand_history(char **line);
+int				rev_i_search(t_cs_line *cs);
+int				ctrl_r_off(t_cs_line *cs, char *caps);
+int				history_search(t_cs_line *cs, char *caps);
 
 #endif

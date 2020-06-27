@@ -247,6 +247,7 @@ typedef struct	s_cs_line
 	char			*input;
 	int				sig_int;
 	int				sig_eof;
+	int				ctrl_r;
 	int				cr;
 	char			*prompt;
 	char			*prompt_color;

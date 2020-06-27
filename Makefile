@@ -35,7 +35,7 @@ LESRCS += other_keys.c
 LESRCS += history_keys.c
 LESRCS += hist_exp/hist_exp.c
 LESRCS += hist_exp/formats.c
-
+LESRCS += reverse_i_search/prompt.c
 ## LEXER ##
 
 LEXSRCS += buffer.c

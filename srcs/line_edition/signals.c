@@ -41,6 +41,7 @@ void	sig_handler(int sig)
 		new_term.c_cc[VMIN] = 0;
 		tcsetattr(cs->tty, TCSANOW, &new_term);
 		cs->sig_int = (sig > 0 ? 1 : 0);
+		history_search(cs, "\0");
 		ft_strdel(&cs->old_history);
 	}
 }
