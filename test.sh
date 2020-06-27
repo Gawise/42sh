@@ -299,7 +299,8 @@ read -p "Which test do you wish to perform?
 	15)	redirections
 	16)	signals
 	17)	parameter_exp
-	18)	exit
+	18)	history
+	19)	exit
     > " ret
 case $ret in
 	0 ) ;;
@@ -320,7 +321,8 @@ case $ret in
 	15 ) TEST_DIRS="redirections";;
 	16 ) TEST_DIRS="signals";;
 	17 ) TEST_DIRS="parameter_exp";;
-	18 ) exit;;
+	18 ) TEST_DIRS="history";;
+	19 ) exit;;
 esac
 
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "42sh_db" ]

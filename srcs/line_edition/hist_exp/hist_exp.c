@@ -2,6 +2,7 @@
 #include "ft_printf.h"
 #include "analyzer.h"
 #include "sh.h"
+#include "var.h"
 
 static int		parse_hist_exp(char **src, t_exp *exp)
 {
@@ -39,13 +40,17 @@ static int		handle_exp_flag(char **src, t_exp *exp, int *flag)
 		*flag = 1;
 		return (parse_hist_exp(src, exp));
 	}
-	return (0);
+	exp_add_to_buf(exp, src, &exp->res);
+	return (1);
 }
 
 static int		hist_exp_error(t_exp *exp)
 {
 	ft_dprintf(2, "%s: !%s: event not found\n", PROJECT, exp->word);
 	free_exp_content(exp);
+	ft_setvar(&cfg_shell()->sp, "?", "127");
+	if (!cfg_shell()->interactive)
+		exit_routine(cfg_shell(), 127);
 	return (0);
 }
 
@@ -63,13 +68,14 @@ static void		history_update(char *line)
 		ft_ex(EXMALLOC);
 	res[ft_strlen(res) - 1] = 0;
 	ft_hash_add(shell->hist_map, hist_nb, res, free);
-	ft_strdel(&res);
+	free(hist_nb);
 	dlst = shell->history;
 	while (dlst->next)
 		dlst = dlst->next;
 	if (!(res = ft_strdup(line)))
 		ft_ex(EXMALLOC);
 	res[ft_strlen(res) - 1] = 0;
+	free(dlst->data);
 	dlst->data = res;
 }
 
