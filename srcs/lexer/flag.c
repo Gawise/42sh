@@ -45,20 +45,14 @@ int					l_flag_state_add(t_lexer *lexer, char c)
 	if (flag == F_BSLASH || (flag == F_BRACKEXP && c == '}'))
 	{
 		l_buffer_add(lexer, c);
+		if (c == '\n')
+			l_complete_str(lexer, l_get_char(lexer));
 		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
 		if (!l_get_last_flag(lexer))
 			lexer->state = S_TK_WORD;
-		if (c == '\n')
-			return (l_complete_str(lexer, l_get_char(lexer)));
 	}
 	else if (flag == F_DQUOTE)
 		l_flag_handle_dquote(lexer, c);
-	else if ((flag == F_BRACKEXP && c == '}'))
-	{
-		l_buffer_add(lexer, c);
-		lexer->state = S_TK_WORD;
-		ft_lstdeltail(&lexer->flag_queue, del_flag_queue);
-	}
 	else if ((flag == F_BRACKEXP && c == '$'))
 		l_build_exp(lexer, c);
 	else

@@ -14,7 +14,11 @@ int		exp_last_cmd(char **src, t_exp *exp)
 	if (!(exp->word = ft_strdup("!")))
 		ft_ex(EXMALLOC);
 	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, val)))
+	{
+		ft_strdel(&val);
 		return (0);
+	}
+	ft_strdel(&val);
 	exp_substitute(exp, res);
 	return (1);
 }
@@ -53,7 +57,9 @@ int		exp_minus(char **src, t_exp *exp)
 	if (val >= 0 || histsize + val < 1)
 		return (0);
 	val += histsize;
-	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->word)))
+	if (!(exp->param = ft_itoa(val)))
+			ft_ex(EXMALLOC);
+	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->param)))
 		return (0);
 	exp_substitute(exp, res);
 	return (1);
