@@ -254,6 +254,7 @@ SRC += $(addprefix debug/,$(DBSRCS))
 
 OPATHS += $(OPATH)line_edition
 OPATHS += $(OPATH)line_edition/hist_exp
+OPATHS += $(OPATH)line_edition/reverse_i_search
 OPATHS += $(OPATH)lexer
 OPATHS += $(OPATH)lexer/state
 OPATHS += $(OPATH)parser
