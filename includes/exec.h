@@ -87,6 +87,11 @@
 # define S_SIGTSTP				"Stopped(SIGTSTP)"
 # define S_SIGSTOP				"Stopped(SIGSTOP)"
 
+
+
+void		routine_fg_job(t_cfg *shell, t_job *j);
+void		update_last_return(t_cfg *shell, uint8_t jret);
+
 /*
 *****************************************************
 ******************* BUILTIN *************************

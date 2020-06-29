@@ -26,8 +26,11 @@ void			add_job_cfg(t_job *job)
 	t_job	jc;
 
 	shell = cfg_shell();
-	shell->active_job++;
-	job->id = shell->active_job;
+	if (!job->id)
+	{
+		shell->active_job++;
+		job->id = shell->active_job;
+	}
 	ft_cpy_job(job, &jc);
 	if (job->status & STOPPED) ///rajout condition
 		ft_lst_push_front(&shell->job, &jc, sizeof(t_job));
