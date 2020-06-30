@@ -138,6 +138,7 @@ int				cd_change_directory(t_list **env, char *curpath,
 									char *opr, char *pwd);
 void			hash_usage_error(void);
 int				hash_not_found(char *cmd);
+void			print_alias(t_var *var);
 int				print_single_alias(char *name);
 void			print_all_alias(void);
 t_list			*search_alias_list(char *name, t_list *list);

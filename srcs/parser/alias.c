@@ -6,6 +6,16 @@
 #include "sh.h"
 #include "exec.h"
 
+void			reset_alias_list(void)
+{
+	t_list	*src;
+
+	src = cfg_shell()->alias;
+	ft_lstdel(&cfg_shell()->alias_cpy, unsetvar_del);
+	if (!(cfg_shell()->alias_cpy = ft_lstdup(src, sizeof(t_var), cpy_var_list)))
+		ft_ex(EXMALLOC);
+}
+
 static t_var	*remove_alias_item(t_list **alias_lst, char *name)
 {
 	t_list	*res;
@@ -50,16 +60,21 @@ int				p_expand_alias(t_token *token, t_parser *parser)
 	t_var	*cpy;
 	t_lexer	lexer;
 	int		(*table_builder[10][17])(t_token *, t_parser *);
+	int		rec_flag;
 
+	rec_flag = 0;
+	if (!cfg_shell()->alias_rec && (rec_flag = 1))
+		cfg_shell()->alias_rec = 1;
 	ft_bzero(&lexer, sizeof(t_lexer));
-	cpy = remove_alias_item(&cfg_shell()->alias, token->str);
+	cpy = remove_alias_item(&cfg_shell()->alias_cpy, token->str);
 	ft_lexer(&cpy->ctab[1], &lexer);
 	p_init_state_machine(table_builder);
-	p_tokeniter(lexer.token_lst, parser, table_builder, 0);
+	p_tokeniter(lexer.token_lst, parser, table_builder);
 	ft_lstdel(&lexer.token_lst, del_token);
-	ft_lstpush(&cfg_shell()->alias, cpy, sizeof(t_var));
 	parser->space_flag = 0;
 	if (ft_strchr(" \t", get_last_char(cpy->ctab[1])))
 		parser->space_flag = 1;
+	if (rec_flag && !(cfg_shell()->alias_rec = 0))
+		reset_alias_list();
 	return (1);
 }

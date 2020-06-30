@@ -24,26 +24,14 @@ int		p_process_token(t_token *token, t_parser *parser,
 }
 
 int		p_tokeniter(t_list *token, t_parser *parser,
-	int (*table_builder[10][17])(t_token *, t_parser *), int alias_flag)
+		int (*table_builder[10][17])(t_token *, t_parser *))
 {
-	t_list	*src;
-	t_list	*cpy;
-
-	src = cfg_shell()->alias;
-	if (alias_flag && src)
-	{
-		cpy = ft_lstdup(src, src->size, cpy_var_list);
-		cfg_shell()->alias = cpy;
-	}
 	while (token)
 	{
 		if (!p_process_token(token->data, parser, table_builder))
 			return (0);
 		token = token->next;
 	}
-	ft_lstdel(&cfg_shell()->alias, unsetvar_del);
-	if (alias_flag)
-		cfg_shell()->alias = src;
 	return (1);
 }
 
@@ -56,7 +44,8 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	if (!lexer || !parser)
 		return (0);
 	p_init_state_machine(table_builder);
-	p_tokeniter(lexer->token_lst, parser, table_builder, 1);
+	reset_alias_list();
+	p_tokeniter(lexer->token_lst, parser, table_builder);
 	while (parser->state == S_PARSER_ANDIF_PIPE)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
@@ -68,7 +57,7 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 		ft_lexer(&pmt, lexer);
 		ft_strdel(&pmt);
 		ft_strdel(&pmt_prefix);
-		p_tokeniter(lexer->token_lst, parser, table_builder, 1);
+		p_tokeniter(lexer->token_lst, parser, table_builder);
 	}
 	return (1);
 }

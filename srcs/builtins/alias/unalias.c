@@ -14,6 +14,11 @@ uint8_t		ft_unalias(t_job *j, t_process *p)
 	(void)j;
 	list = &cfg_shell()->alias;
 	i = 1;
+	if (ft_strequ(p->av[1], "-a"))
+	{
+		ft_lstdel(&cfg_shell()->alias, unsetvar_del);
+		return (0);
+	}
 	while (p->av[i])
 	{
 		if (search_alias_var(p->av[i], cfg_shell()->alias))

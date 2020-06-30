@@ -11,7 +11,7 @@ int	p_cmd_name(t_token *token, t_parser *parser)
 	t_and_or		*and_or;
 	t_simple_cmd	*cmd;
 
-	if (search_alias_var(token->str, cfg_shell()->alias))
+	if (search_alias_var(token->str, cfg_shell()->alias_cpy))
 		return (p_expand_alias(token, parser));
 	if (parser->state == S_PARSER_TABLE_START && !p_add_table(parser))
 		return (0);

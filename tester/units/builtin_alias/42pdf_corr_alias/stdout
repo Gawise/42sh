@@ -1,0 +1,21 @@
+hello, world$
+hello='echo "hello, world"'
+hello=''
+abc$
+ls: cannot access 'DOESTNOEXIST': No such file or directory
+ls: cannot access 'DOESTNOEXIST': No such file or directory
+ls: cannot access 'DOESTNOEXIST': No such file or directory
+hello
+world
+mkdir: created directory 'abc'
+mkdir: created directory 'def'
+hello=''
+sub='echo abc|'
+rd='ls DOESTNOEXIST 2>>err'
+aa='echo hello'
+bb='echo world'
+mk='mkdir -v '
+abc='def'
+alias builtin redefined
+It should works
+infinite loop

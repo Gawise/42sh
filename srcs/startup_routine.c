@@ -34,7 +34,7 @@ int		parser_routine(t_lexer *lexer, t_parser *parser)
 	init_parser(parser);
 	if (!ft_parser(lexer, parser)
 	|| (parser->state == S_PARSER_TABLE_START
-	&& !parser->table))
+	&& !parser->table && cfg_shell()->interactive))
 	{
 		ft_lstdel(&parser->table, del_cmd_table);
 		ft_lstdel(&lexer->token_lst, del_token);

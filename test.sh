@@ -156,7 +156,7 @@ make_test () {
 	env LANG=us_US.UTF-8 GDM_LANG=us_US.utf8 LC_CTYPE=us_US.UTF-8 /bin/bash --posix $1/input >$LOG_DIR/stdout.bash 2>$LOG_DIR/stderr.bash
 	local bash_exit=$?
 	move_bash_redir $1
-	rm -f $TMP_DIR/*
+	rm -rf $TMP_DIR/*
 	redir_diff ${redir_files[@]} >$LOG_DIR/redir.diff
 	local stdout_diff=$(get_std_diff $1 "stdout")
 	local stderr_diff=$(get_std_diff $1 "stderr")
@@ -202,7 +202,7 @@ run_tests () {
 	do
 		local test_group="$TESTER_DIR/units/$i"
 		run_test_group $test_group
-		rm -f $TMP_DIR/*
+		rm -rf $TMP_DIR/*
 	done
 	output_print $(printf '=%.0s' $(eval "echo {1.."$(($TERM_SIZE))"}"))
 	output_print "TOTAL"
@@ -283,46 +283,48 @@ get_term_size
 read -p "Which test do you wish to perform?
 	0)	All
 	1)	42pdf_corr
-	2)	builtin_cd
-	3)	builtin_echo
-	4)	builtin_env
-	5)	builtin_exit
-	6)	builtin_hash
-	7)	builtin_type
-	8)	builtin_test
-	9)	current
-	10)	error_handling
-	11)	heredocs
-	12)	logical_ops
-	13)	pipes
-	14)	quoting
-	15)	redirections
-	16)	signals
-	17)	parameter_exp
-	18)	history
-	19)	exit
+	2)	builtin_alias
+	3)	builtin_cd
+	4)	builtin_echo
+	5)	builtin_env
+	6)	builtin_exit
+	7)	builtin_hash
+	8)	builtin_type
+	9)	builtin_test
+	10)	current
+	11)	error_handling
+	12)	heredocs
+	13)	logical_ops
+	14)	pipes
+	15)	quoting
+	16)	redirections
+	17)	signals
+	18)	parameter_exp
+	19)	history
+	20)	exit
     > " ret
 case $ret in
 	0 ) ;;
 	1 ) TEST_DIRS="42pdf_corr";;
-	2 ) TEST_DIRS="builtin_cd";;
-	3 ) TEST_DIRS="builtin_echo";;
-	4 ) TEST_DIRS="builtin_env";;
-	5 ) TEST_DIRS="builtin_exit";;
-	6 ) TEST_DIRS="builtin_hash";;
-	7 ) TEST_DIRS="builtin_type";;
-	8 ) TEST_DIRS="builtin_test";;
-	9 ) TEST_DIRS="current";;
-	10 ) TEST_DIRS="error_handling";;
-	11 ) TEST_DIRS="heredocs";;
-	12 ) TEST_DIRS="logical_ops";;
-	13 ) TEST_DIRS="pipes";;
-	14 ) TEST_DIRS="quoting";;
-	15 ) TEST_DIRS="redirections";;
-	16 ) TEST_DIRS="signals";;
-	17 ) TEST_DIRS="parameter_exp";;
-	18 ) TEST_DIRS="history";;
-	19 ) exit;;
+	2 ) TEST_DIRS="builtin_alias";;
+	3 ) TEST_DIRS="builtin_cd";;
+	4 ) TEST_DIRS="builtin_echo";;
+	5 ) TEST_DIRS="builtin_env";;
+	6 ) TEST_DIRS="builtin_exit";;
+	7 ) TEST_DIRS="builtin_hash";;
+	8 ) TEST_DIRS="builtin_type";;
+	9 ) TEST_DIRS="builtin_test";;
+	10 ) TEST_DIRS="current";;
+	11 ) TEST_DIRS="error_handling";;
+	12 ) TEST_DIRS="heredocs";;
+	13 ) TEST_DIRS="logical_ops";;
+	14 ) TEST_DIRS="pipes";;
+	15 ) TEST_DIRS="quoting";;
+	16 ) TEST_DIRS="redirections";;
+	17 ) TEST_DIRS="signals";;
+	18 ) TEST_DIRS="parameter_exp";;
+	19 ) TEST_DIRS="history";;
+	20 ) exit;;
 esac
 
 if [ -n "$SHELL_FILE" -a "$(basename $SHELL_FILE)" != "42sh_db" ]
