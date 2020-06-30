@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "lexer.h"
 #include "parser.h"
+#include "sh.h"
 
 int	p_add_table(t_parser *parser)
 {

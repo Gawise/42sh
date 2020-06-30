@@ -34,6 +34,8 @@ typedef struct	s_cfg
 	int				hist_nb;
 	int				hist_start;
 	t_list			*alias;
+	t_list			*alias_cpy;
+	int				alias_rec;
 }				t_cfg;
 
 /*

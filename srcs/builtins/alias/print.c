@@ -29,7 +29,7 @@ static void	fill_quoted_string(char *src, char *res)
 	}
 }
 
-static void	print_alias(t_var *var)
+void		print_alias(t_var *var)
 {
 	char	*quoted;
 	int		i;
@@ -46,6 +46,7 @@ static void	print_alias(t_var *var)
 		ft_ex(EXMALLOC);
 	fill_quoted_string(var->ctab[1], quoted);
 	ft_printf("%s=\'%s\'\n", var->ctab[0], quoted);
+	ft_strdel(&quoted);
 }
 
 int			print_single_alias(char *name)
