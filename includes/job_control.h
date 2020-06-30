@@ -5,6 +5,8 @@
 uint8_t		ft_jobs2(t_job *j, t_process *p);
 
 
+void	job_is_running(t_job *j);
+uint8_t		find_target(t_list *ljob, char *wanted, t_job **target, char *blt);
 int32_t		focus_job(void *data1, void *data2);
 
 void		nb_job_active(t_cfg *shell);

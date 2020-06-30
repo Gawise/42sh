@@ -4,7 +4,6 @@
 #include "job_control.h"
 #include "exec.h"
 #include <signal.h>
-//#include <sys/types.h>
 
 # define FG_USG "fg: usage: fg [job_spec]"
 
@@ -29,7 +28,7 @@ uint8_t		fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 	return (SUCCESS);
 }
 
-uint8_t		find_target(t_list *ljob, char *wanted, t_job **target)
+uint8_t		find_target(t_list *ljob, char *wanted, t_job **target, char *blt)
 {
 	uint8_t		curr;
 	int8_t		ret;
@@ -38,10 +37,10 @@ uint8_t		find_target(t_list *ljob, char *wanted, t_job **target)
 	if (wanted)
 	{
 		if ((ret = get_job(ljob, wanted, target, &curr)) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "%s: fg: %s: no such job\n", PROJECT, wanted);
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s: no such job\n", PROJECT, blt, wanted);
 	}
 	else if ((ret = get_job(ljob, "%", target, &curr)) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "%s: fg: current: no such job\n", PROJECT);
+			ft_dprintf(STDERR_FILENO, "%s: %s: current: no such job\n", PROJECT, blt);
 	return (ret);
 }
 
@@ -100,7 +99,7 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	ac = 1;
 	if (fg_opt(shell->interactive, p, &ac) != SUCCESS)
 		return (2);
-	if (find_target(shell->job, p->av[ac], &target) != SUCCESS)
+	if (find_target(shell->job, p->av[ac], &target, "fg") != SUCCESS)
 		return (1);
 	put_job_in_fg(shell, target);
 
