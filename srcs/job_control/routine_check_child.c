@@ -46,6 +46,7 @@ static void		update_delete(t_cfg *shell)
 void			update_listjob(t_cfg *shell)
 {
 	t_list		*ljob;
+	t_list		*tmp;
 	t_job		*j;
 	t_process	*p;
 
@@ -55,19 +56,23 @@ void			update_listjob(t_cfg *shell)
 	while (ljob)
 	{
 		j = ljob->data;
+		tmp = ljob->next;
 		if (find_process_by_status(j->process, RUNNING))
 			j->status = RUNNING;
-		else if ((p = find_process_by_status(j->process, STOPPED)))
+		else if (((p = find_process_by_status(j->process, STOPPED)) &&
+					!(j->status & STOPPED)))
 		{
-			j->ret = p->ret;
+			j->ret = p->ret + 128;
 			j->status = STOPPED;
+			j->fg = 1;
+			job_become_cur(shell, &j);
 		}
-		else
-			ft_ex(EXUEPTD);
-		if (!ljob->next)
-			shell->active_job = j->id;
-		ljob = ljob->next;
+		else if (!(j->status & STOPPED))//protect de securité peut etre enlever a la fin
+			ft_printf("update list enfant perdu?\n ");
+//			ft_ex(EXUEPTD);
+		ljob = tmp;
 	}
+	nb_job_active(shell);
 }
 
 void			check_child(t_cfg *shell, t_list *lstjob)
@@ -83,7 +88,7 @@ void			check_child(t_cfg *shell, t_list *lstjob)
 	while (lstjob)
 	{
 		job = lstjob->data;
-		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG)))
+		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG | WCONTINUED)))
 			new = deep_check(job, pid_child, wstatus);
 		lstjob = lstjob->next;
 	}

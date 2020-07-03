@@ -22,6 +22,8 @@ void			aplylyse_wstatus(t_process *p, int wstatus)
 		p->status = STOPPED;
 		p->ret = WSTOPSIG(wstatus);
 	}
+	else if (WIFCONTINUED(wstatus))
+		p->status = RUNNING;
 }
 
 void			update_process(t_list *lst, pid_t child, int wstatus)
@@ -43,8 +45,7 @@ static void		update_job(t_job *j)
 	{
 		j->ret = 128 + tmp->ret;
 		j->status = STOPPED;
-		if (!j->id)
-			add_job_cfg(j);
+		add_job_cfg(j);
 		print_message_signal(j->ret - 128, j, 0);
 	}
 	else

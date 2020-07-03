@@ -20,16 +20,46 @@ t_list			*find_job_by_status(t_list *lst, uint8_t want)
 	return (NULL);
 }
 
+void			insert_running_job(t_cfg *shell, t_list *ljob, t_job *jc)
+{
+	t_job	*j;
+	t_list	*tmp;
+	t_list	*new;
+
+	if (!shell->job || ((t_job *)(shell->job->data))->status & RUNNING)
+		ft_lst_push_front(&shell->job, jc, sizeof(t_job));
+	else
+	{
+		j = ljob->data;
+		new = ft_lstnew(jc, sizeof(t_job));
+		protect_malloc(new);
+		tmp = ljob;
+		while (ljob && (j->status & STOPPED))
+		{
+			tmp = ljob;
+			ljob = ljob->next;
+		}
+		tmp->next = new;
+		new->next = ljob;
+	}
+}
+
 void			add_job_cfg(t_job *job)
 {
 	t_cfg	*shell;
 	t_job	jc;
 
 	shell = cfg_shell();
-	shell->active_job++;
-	job->id = shell->active_job;
+	if (!job->id)
+	{
+		shell->active_job++;
+		job->id = shell->active_job;
+	}
 	ft_cpy_job(job, &jc);
-	ft_lst_push_back(&shell->job, &jc, sizeof(t_job));
+	if (job->status & STOPPED) ///rajout condition
+		ft_lst_push_front(&shell->job, &jc, sizeof(t_job));
+	else
+		insert_running_job(shell, shell->job, &jc);
 	ft_bzero(&jc, sizeof(t_job));
 	debug_print_job(shell->debug, &jc, "add_job_cfg");
 }

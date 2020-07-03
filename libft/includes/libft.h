@@ -199,6 +199,7 @@ char			*ft_strclnjoin(char const *s1, char const *s2);
 char			*ft_strlclnjoin(char const *s1, char const *s2);
 int				ft_isname(char *str);
 char			*ft_strtrimoc(char const *si, char oc);
+int				str_is_digit(char *ope);
 
 /*
 ** SYSTEM

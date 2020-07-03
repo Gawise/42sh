@@ -27,26 +27,34 @@ void		routine_process(t_cfg *shell, t_list *process, t_pipe *fd)
 	manage->setup |= PIPE_ON;
 }
 
+void		routine_fg_job(t_cfg *shell, t_job *j)
+{
+	shell->cur_job = j->pgid;
+	wait_process(j);
+	shell->cur_job = 0;
+	tcsetpgrp(STDIN_FILENO, shell->pid);
+	set_termios(TCSADRAIN, &shell->term_origin);
+}
+
+void		update_last_return(t_cfg *shell, uint8_t jret)
+{
+	char	*sp_ret;
+
+	sp_ret = ft_itoa(jret);
+	setvar_update(find_var(shell->sp, "?"), sp_ret);
+	ft_strdel(&sp_ret);
+}
+
 uint8_t		routine_ending_job(t_cfg *shell, t_job *job)
 {
-	char	*ret;
-
 	if (!shell->interactive)
 		wait_process(job);
 	else if (job->fg)
-	{
-		shell->cur_job = job->pgid;
-		wait_process(job);
-		shell->cur_job = 0;
-		tcsetpgrp(STDIN_FILENO, shell->pid);
-		set_termios(TCSADRAIN, &shell->term_origin);
-	}
+		routine_fg_job(shell, job);
 	else
 		set_job_background(job);
-	ret = ft_itoa(job->ret);
-	setvar_update(find_var(shell->sp, "?"), ret);
-	ft_strdel(&ret);
 	debug_print_job(shell->debug, job, "Ending job");
+	update_last_return(shell, job->ret);
 	return (job->ret);
 }
 
