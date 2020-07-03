@@ -5,9 +5,6 @@
 #include "exec.h"
 #include <signal.h>
 
-# define FG_USG "fg: usage: fg [job_spec]"
-
-
 uint8_t		fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 {
 	int32_t		i;
@@ -21,8 +18,8 @@ uint8_t		fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 	}
 	while ((ret = ft_getopt(ac, &i, p->av, "")) != -1)
 	{
-		if (ret == '?') //useless ? -- ?
-			ft_dprintf(STDERR_FILENO, "%s: fg: %c: invalide option\n%s\n", PROJECT, p->av[*ac][i], FG_USG);
+		ft_dprintf(STDERR_FILENO, "%s: fg: %c: invalide option\n%s\n",
+				PROJECT, p->av[*ac][i], FG_USG);
 		return (FAILURE);
 	}
 	return (SUCCESS);
@@ -37,16 +34,16 @@ uint8_t		find_target(t_list *ljob, char *wanted, t_job **target, char *blt)
 	if (wanted)
 	{
 		if ((ret = get_job(ljob, wanted, target, &curr)) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "%s: %s: %s: no such job\n", PROJECT, blt, wanted);
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s: no such job\n",
+					PROJECT, blt, wanted);
 	}
 	else if ((ret = get_job(ljob, "%", target, &curr)) == FAILURE)
-			ft_dprintf(STDERR_FILENO, "%s: %s: current: no such job\n", PROJECT, blt);
+		ft_dprintf(STDERR_FILENO, "%s: %s: current: no such job\n",
+					PROJECT, blt);
 	return (ret);
 }
 
-
-
-void	job_is_running(t_job *j)
+void		job_is_running(t_job *j)
 {
 	t_list		*lst;
 	t_process	*p;
@@ -72,9 +69,8 @@ void		put_job_in_fg(t_cfg *shell, t_job *target)
 	tmp = shell->cur_job;
 	job_is_running(target);
 	target->fg = TRUE;
-	ft_cpy_job(target, jcpy); //protct malloc ?
+	ft_cpy_job(target, jcpy);
 	ft_lstdelif(&shell->job, &target->pgid, focus_job, del_struct_job);
-	target = 0; // protect de dev
 	ft_printf("%s\n", jcpy->cmd);
 	tcsetpgrp(STDIN_FILENO, jcpy->pgid);
 	set_termios(TCSADRAIN, &jcpy->term_eval);
@@ -102,6 +98,5 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 	if (find_target(shell->job, p->av[ac], &target, "fg") != SUCCESS)
 		return (1);
 	put_job_in_fg(shell, target);
-
-	return (1);
+	return (SUCCESS);
 }

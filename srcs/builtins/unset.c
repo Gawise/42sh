@@ -27,8 +27,10 @@ uint8_t		ft_unset(t_job *j, t_process *p)
 	ret = 0;
 	while (p->av[++i])
 	{
-		ret += ft_lstdelif(&cfg_shell()->env, p->av[i], unsetvar_find, unsetvar_del);
-		ret += ft_lstdelif(&cfg_shell()->intern, p->av[i], unsetvar_find, unsetvar_del);
+		ret += ft_lstdelif(&cfg_shell()->env, p->av[i],
+				unsetvar_find, unsetvar_del);
+		ret += ft_lstdelif(&cfg_shell()->intern, p->av[i],
+				unsetvar_find, unsetvar_del);
 		ret -= 1;
 	}
 	return (ret);

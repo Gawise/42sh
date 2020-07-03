@@ -139,6 +139,7 @@ EVALSRCS += debug.c
 JBSRCS += tools_job.c
 JBSRCS += ft_lst.c
 JBSRCS += routine_check_child.c
+JBSRCS += job_id.c
 
 ## COMMON TOOLS  ##
 
@@ -160,7 +161,7 @@ BTSRCS += set.c
 BTSRCS += unset.c
 BTSRCS += echo.c
 BTSRCS += jobs/ft_jobs.c
-BTSRCS += jobs/job2.2.c
+BTSRCS += jobs/jobs_print.c
 BTSRCS += cd/chdir_errors.c
 BTSRCS += cd/ft_cd.c
 BTSRCS += cd/ft_cd2.c

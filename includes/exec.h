@@ -88,6 +88,9 @@
 # define S_SIGSTOP				"Stopped(SIGSTOP)"
 
 
+# define FG_USG "fg: usage: fg [job_spec]"
+# define JOB_USG "jobs : usage: jobs [-lp] [job_id...]"
+# define BG_USG "bg: usage: bg [job_spec ...]"
 
 void		routine_fg_job(t_cfg *shell, t_job *j);
 void		update_last_return(t_cfg *shell, uint8_t jret);
@@ -111,6 +114,8 @@ uint8_t			ft_exit(t_job *j, t_process *p);
 int8_t			protect_job(int8_t update);
 uint8_t			ft_hash(t_job *j, t_process *p);
 uint8_t			ft_jobs(t_job *j, t_process *p);
+uint8_t			print_jobs(t_cfg *shell, t_process *p, char opt, int32_t ac);
+uint8_t			print_all_jobs(t_cfg *shell, t_list *jobs, char opt);
 uint8_t			ft_cd(t_job *j, t_process *p);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 int				check_whole_path(char *path);
@@ -124,8 +129,6 @@ char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 char			*cd_del_dotcomponents(char *curpath, char *opr);
 int				display_cd_errors(char *error);
-uint8_t			print_jobs(t_cfg *shell, t_process *p, char opt, int32_t ac);
-void			print_this_job(t_job *j, uint8_t curr, char opt);
 int				check_chdir_errors(char **error, char *path,
 									char *opr);
 int				cd_change_directory(t_list **env, char *curpath,
@@ -153,6 +156,7 @@ void			wait_process(t_job *job);
 t_list			*find_job_by_status(t_list *lst, uint8_t want);
 void			builtin_save_fd(t_job *j);
 void			builtin_restor_fd(t_job *j);
+int16_t			get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr);
 
 /*
 *****************************************************

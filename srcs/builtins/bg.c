@@ -5,10 +5,6 @@
 #include "exec.h"
 #include <signal.h>
 
-
-# define BG_USG "bg: usage: bg [job_spec ...]"
-
-
 uint8_t		bg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 {
 	int32_t		i;
@@ -22,13 +18,12 @@ uint8_t		bg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 	}
 	while ((ret = ft_getopt(ac, &i, p->av, "")) != -1)
 	{
-		if (ret == '?') //useless ? -- ?
-			ft_dprintf(STDERR_FILENO, "%s: bg: %c: invalide option\n%s\n", PROJECT, p->av[*ac][i], BG_USG);
+		ft_dprintf(STDERR_FILENO, "%s: bg: %c: invalide option\n%s\n",
+				PROJECT, p->av[*ac][i], BG_USG);
 		return (FAILURE);
 	}
 	return (SUCCESS);
 }
-
 
 uint8_t		put_job_in_bg(t_cfg *shell, char *wanted)
 {
@@ -37,39 +32,28 @@ uint8_t		put_job_in_bg(t_cfg *shell, char *wanted)
 	target = 0;
 	if (find_target(shell->job, wanted, &target, "bg") == FAILURE)
 		return (FAILURE);
-	if (target->status & RUNNING) //running ou bg ?
+	if (!target->fg)
 	{
-		ft_dprintf(STDERR_FILENO, "%s: bg: job %d already in background\n", PROJECT, target->id);
+		ft_dprintf(STDERR_FILENO, "%s: bg: job %d already in background\n",
+				PROJECT, target->id);
 		return (SUCCESS);
 	}
-
 	job_is_running(target);
 	target->fg = 0;
-
 	kill(-target->pgid, SIGCONT);
-
 	set_job_background(target);
 	target->pgid = 0;
 	ft_lstdelif(&shell->job, &target->pgid, focus_job, del_struct_job);
-	
-	/*
-	jcpy = malloc(sizeof(t_job));
-	protect_malloc(jcpy);
-	ft_cpy_job(target, jcpy); //protct malloc ?
-	ft_lstdelif(&shell->job, &target->pgid, focus_job, del_struct_job);
-	target = 0; // protect de dev
-	*/
 	return (SUCCESS);
 }
 
-
 uint8_t		ft_bg(t_job *j, t_process *p)
 {
-	(void)j;
 	t_cfg		*shell;
 	int32_t		ac;
 	uint8_t		err;
 
+	(void)j;
 	shell = cfg_shell();
 	ac = 1;
 	err = 0;
@@ -85,9 +69,5 @@ uint8_t		ft_bg(t_job *j, t_process *p)
 			ac++;
 		}
 	}
-
-
-
-
-	return (SUCCESS);
+	return (err);
 }

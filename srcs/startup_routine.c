@@ -13,6 +13,7 @@ int		lexer_routine(char **line, t_lexer *lexer)
 {
 	set_signal_ign();
 	ft_bzero(lexer, sizeof(t_lexer));
+	check_child(cfg_shell(), cfg_shell()->job);
 	if (!ft_lexer(line, lexer))
 	{
 		ft_strdel(line);

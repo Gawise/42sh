@@ -3,64 +3,11 @@
 #include "exec.h"
 #include "sh.h"
 
-# define JOB_USG "jobs : usage: jobs [-lp] [job_id...]"
-
-static int8_t		error(char err)
+static int8_t	error(char err)
 {
-	ft_dprintf(STDERR_FILENO, "%s: jobs: -%c: invalid option\n%s\n", PROJECT, err, JOB_USG);
+	ft_dprintf(STDERR_FILENO, "%s: jobs: -%c: invalid option\n%s\n",
+			PROJECT, err, JOB_USG);
 	return (FAILURE);
-}
-
-static char		*state(t_job *j, uint8_t opt)
-{
-	char	*tab[4];
-	int16_t	s_ret;
-	
-	tab[0] = S_SIGSTOP;
-	tab[1] = S_SIGTSTP;
-	tab[2] = S_SIGTTIN;
-	tab[3] = S_SIGTTOU;
-	if (j->status & RUNNING)
-		return ("Running\t");
-	s_ret = j->ret - 19 - 128;
-	if (s_ret > -1 && s_ret < 4 && !opt)
-		return (tab[s_ret]);
-	if (j->status & STOPPED)
-		return ("Stopped\t");
-	return ("Unknown");
-}
-
-void			print_this_job(t_job *j, uint8_t curr, char opt)
-{
-	char bg;
-
-	bg = (j->fg) ? '\0': '&';
-	curr = (curr > 45) ? 32 : curr;
-	if (opt == 'p')
-		ft_printf("%d\n", j->pgid);
-	else if (opt == 'l')
-		ft_printf("[%d]%c  %d %s %s %c\n", j->id, curr, j->pgid, state(j, 1), j->cmd, bg);
-	else
-		ft_printf("[%d]%c  %s \t %s %c\n", j->id, curr, state(j, 0), j->cmd, bg);
-}
-
-static void		print_all_jobs(t_cfg *shell, t_list *jobs, char opt)
-{
-	uint8_t		i;
-	uint8_t		c;
-	t_job		*j;
-	t_list		*tmp;
-
-	i = 0;
-	while (i++ < shell->active_job)
-	{
-		c = 43;
-		tmp = jobs;
-		while (tmp && (j = tmp->data) && j->id != i && (c += 2))
-			tmp = tmp->next;
-		if (tmp)
-			print_this_job(j, c, opt);
-	}
 }
 
 static char		jobs_opt(char **av, int *ac)
@@ -80,7 +27,7 @@ static char		jobs_opt(char **av, int *ac)
 	return (opt);
 }
 
-uint8_t		ft_jobs(t_job *j, t_process *p)
+uint8_t			ft_jobs(t_job *j, t_process *p)
 {
 	int32_t		ac;
 	char		opt;
@@ -92,9 +39,8 @@ uint8_t		ft_jobs(t_job *j, t_process *p)
 	if ((opt = jobs_opt(p->av, &ac)) == FAILURE)
 		return (2);
 	if (p->av[ac])
-		print_jobs(shell, p, opt, ac);
+		return (print_jobs(shell, p, opt, ac));
 	else
-		print_all_jobs(shell, shell->job, opt);
-
+		return (print_all_jobs(shell, shell->job, opt));
 	return (0);
 }

@@ -90,6 +90,7 @@ SRCS += ft_wstrlen.c
 SRCS += ft_tabdup.c
 SRCS += ft_isname.c
 SRCS += ft_strtrimoc.c
+SRCS += ft_str_is_digit.c
 
 #-------------------------List-----------------------------#
 SRCS += ft_lstadd.c
