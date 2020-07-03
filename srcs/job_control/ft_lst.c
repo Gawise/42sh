@@ -11,7 +11,6 @@ int32_t		focus_job(void *data1, void *data2)
 	if (j->pgid  == *(pid_t * )(data2))
 		return (1);
 	return (0);
-
 }
 
 int32_t		job_has_finish(void *job, void *status)

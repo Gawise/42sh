@@ -22,6 +22,8 @@ void			aplylyse_wstatus(t_process *p, int wstatus)
 		p->status = STOPPED;
 		p->ret = WSTOPSIG(wstatus);
 	}
+	else if (WIFCONTINUED(wstatus))
+		p->status = RUNNING;
 }
 
 void			update_process(t_list *lst, pid_t child, int wstatus)

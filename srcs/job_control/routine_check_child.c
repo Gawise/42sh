@@ -88,7 +88,7 @@ void			check_child(t_cfg *shell, t_list *lstjob)
 	while (lstjob)
 	{
 		job = lstjob->data;
-		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG)))
+		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG | WCONTINUED)))
 			new = deep_check(job, pid_child, wstatus);
 		lstjob = lstjob->next;
 	}
