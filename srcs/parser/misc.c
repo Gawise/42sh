@@ -8,9 +8,10 @@
 
 int		syn_err(t_token *token, t_parser *parser)
 {
-	ft_printf("syntax error near unexpected token `%s\' state=%d\n",
+	ft_dprintf(2, "syntax error near unexpected token `%s\'\n",
 	token->str, parser->state);
 	parser->state = S_PARSER_SYNTAX_ERROR;
+	ft_setvar(&cfg_shell()->sp, "?", "2");
 	return (1);
 }
 
