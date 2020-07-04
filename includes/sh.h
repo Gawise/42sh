@@ -18,7 +18,7 @@
 # define NAME_SH			"42h-1.0$ "
 # define COLOR_SH			"\e[0;32m"
 # define COLOR_SUBPROMPT	"\e[0;31m"
-# define USAGE				"Usage: 42sh [-d [path]] [file]\nexit\n"
+# define USAGE				"Usage: 42sh -h [-d [path]] [file]\nexit\n"
 
 /*
 **********************************
@@ -49,6 +49,9 @@
 # include <stdint.h>
 # include <stddef.h>
 
+
+void		print_ressource(char *rsc);
+void		print_features(void);
 void		build_prompt_ps1(uint8_t update);
 int			lexer_routine(char **line, t_lexer *lexer);
 int			parser_routine(t_lexer *lexer, t_parser *parser);

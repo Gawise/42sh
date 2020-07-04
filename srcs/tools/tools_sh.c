@@ -38,3 +38,10 @@ void	build_prompt_ps1(uint8_t update)
 	ft_strdel(&pwd);
 	ft_strdel(&buf);
 }
+
+void	print_features(void)
+{
+	print_ressource("ressources/42sh_features.txt");
+	ft_printf("%s: %s\n", PROJECT, USAGE);
+	exit_routine(cfg_shell(), SUCCESS);
+}
