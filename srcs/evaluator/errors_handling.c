@@ -4,8 +4,8 @@
 
 uint32_t	process_errors_handling(t_process *p, uint32_t err)
 {
-	if (!p->cmd && (p->assign || p->redir))
-		return (NOCMD);
+//	if (!p->cmd && (p->assign || p->redir))
+//		return (NOCMD);
 	p->status |= FAILED;
 	if (err & E_UNFOUND)
 		ft_asprintf(&p->message, "%s: %s: %s\n", PROJECT, p->cmd, STR_UNFOUND);

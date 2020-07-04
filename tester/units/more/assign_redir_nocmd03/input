@@ -1,0 +1,1 @@
+rien=ls $rien | 2>ici 1>la | $rien | cat -e 
