@@ -102,6 +102,8 @@ uint32_t	process_redir(t_process *p, t_list *redir)
 	while (redir)
 	{
 		r = redir->data;
+		if (!r->file)
+			ft_ex(EXUEPTD);
 		if (r->type == DLESS || r->type == DLESSDASH)
 			error = redir_heredoc(p, r);
 		else if (r->type != LESSAND && r->type != GREATAND)

@@ -72,7 +72,9 @@ static uint8_t		find_binary(t_cfg *shell, t_process *p, t_list *env)
 
 static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 {
-	if (builtin_search(p))
+	if (!p->cmd)
+		p->setup |= NOCMD;
+	else if (builtin_search(p))
 		p->setup |= BUILTIN;
 	else if (find_binary(cfg_shell(), p, env))
 		p->setup |= EXEC;
@@ -83,7 +85,7 @@ static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 
 void				any_slash(t_list *env, t_process *p, uint32_t *err)
 {
-	if (find_type(env, p, err) || p->setup & BUILTIN)
+	if (find_type(env, p, err) || p->setup & (BUILTIN | NOCMD))
 		return ;
 	*err |= path_errors(p->path, 1, S_IXUSR);
 }
