@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/07/05 21:06:17 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/07/06 00:29:10 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ int			print_hist(int8_t *fl, char **av, int ac)
 	return (-1);
 }
 
+uint8_t		protect_fd(int8_t value)
+{
+	static uint8_t	protect = 0;
+
+	if (value > -1)
+		protect = value;
+	return (protect);
+
+}
+
 void		exec_hist(char *file)
 {
 	t_lexer     lexer;
@@ -59,6 +69,7 @@ void		exec_hist(char *file)
 
 	if (file && (fd = open(file, O_RDONLY)) >= 0)
 	{
+		protect_fd(1);
 		while (get_next_line(fd, &cmd) > 0)
 		{
 			hist_cmd = ft_strdup(cmd);
@@ -83,6 +94,7 @@ void		exec_hist(char *file)
 				ft_strdel(&nb);
 			}
 		}
+		protect_fd(0);
 	}
 }
 

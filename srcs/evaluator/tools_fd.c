@@ -48,6 +48,8 @@ void		builtin_save_fd(t_job *j)
 	fd[0] = SAVE_IN;
 	fd[1] = SAVE_OUT;
 	fd[2] = SAVE_ERR;
+	if (protect_fd(-1))
+		return ;
 	while (i < 3)
 	{
 		if (!bad_fd(i))
@@ -70,13 +72,15 @@ void		builtin_restor_fd(t_job *j)
 	fd[0] = SAVE_IN;
 	fd[1] = SAVE_OUT;
 	fd[2] = SAVE_ERR;
+	if (protect_fd(-1))
+		return ;
 	while (i < 3)
 	{
 		if (j->std[i] == -1)
 			close(i);
 		else
 		{
-			if (!bad_fd(j->std[i]))
+			if (!bad_fd(j->std[i])) //retirer ? voir fc et env
 				do_my_dup2(j->std[i], i);
 			close(j->std[i]);
 		}
