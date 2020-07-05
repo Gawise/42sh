@@ -38,10 +38,10 @@
     * ${parameter:?word}					 * Incremental research with Ctrl + R
     * ${parameter:+word}					 * Up and down arrow research in the history
     * ${#parameter}					         * History file save		
-    * ${parameter%}						 * Fc Built-in
-    * ${parameter%%}
-    * ${parameter#}
-    * ${parameter##}
+    * ${parameter%word}						 * Fc Built-in
+    * ${parameter#word}
+    * ${parameter%%word}
+    * ${parameter##word}
       
 ## Built-in according to POSIX Standards (except for set and unset)
 
