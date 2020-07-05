@@ -2,7 +2,7 @@
 #include "exec.h"
 #include "sh.h"
 
-static int16_t		get_job_id(t_list *ljob, uint8_t nb, t_job **j, uint8_t *curr)
+static int16_t	get_job_id(t_list *ljob, uint8_t nb, t_job **j, uint8_t *curr)
 {
 	while (ljob)
 	{
@@ -16,7 +16,7 @@ static int16_t		get_job_id(t_list *ljob, uint8_t nb, t_job **j, uint8_t *curr)
 	return (FAILURE);
 }
 
-static int16_t		get_curr_job(t_list *ljob, uint8_t id, t_job **j, uint8_t *curr)
+static int16_t	get_curr_job(t_list *ljob, uint8_t id, t_job **j, uint8_t *curr)
 {
 	while (ljob && id)
 	{
@@ -31,7 +31,7 @@ static int16_t		get_curr_job(t_list *ljob, uint8_t id, t_job **j, uint8_t *curr)
 		return (FAILURE);
 }
 
-static int16_t		get_sstr_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
+static int16_t	get_sstr_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
 {
 	while (ljob)
 	{
@@ -44,7 +44,7 @@ static int16_t		get_sstr_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
 	return (FAILURE);
 }
 
-static int16_t		get_str_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
+static int16_t	get_str_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
 {
 	int8_t	i;
 
@@ -65,12 +65,11 @@ static int16_t		get_str_id(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
 	return (FAILURE);
 }
 
-int16_t				get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
+int16_t			get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr)
 {
 	int8_t	ret;
 
 	ret = 0;
-
 	if (!ft_strcmp(ope, "%"))
 		return (get_curr_job(ljob, 1, j, curr));
 	if (*ope == '%')

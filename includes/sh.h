@@ -49,6 +49,8 @@
 # include <stdint.h>
 # include <stddef.h>
 
+
+void		init_builtin_map(t_hash_map *map);
 void		build_prompt_ps1(uint8_t update);
 int			lexer_routine(char **line, t_lexer *lexer);
 int			parser_routine(t_lexer *lexer, t_parser *parser);
