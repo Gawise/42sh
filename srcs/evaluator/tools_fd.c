@@ -76,7 +76,8 @@ void		builtin_restor_fd(t_job *j)
 			close(i);
 		else
 		{
-			do_my_dup2(j->std[i], i);
+			if (!bad_fd(j->std[i]))
+				do_my_dup2(j->std[i], i);
 			close(j->std[i]);
 		}
 		i++;
