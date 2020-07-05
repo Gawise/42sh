@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/24 16:25:59 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/07/05 17:19:21 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		exec_hist(char *file)
 	{
 		while (get_next_line(fd, &cmd) > 0)
 		{
-			printf("%s\n", cmd);
+			ft_printf("%s\n", cmd);
 			hist_cmd = ft_strdup(cmd);
 			if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
@@ -69,10 +69,18 @@ void		exec_hist(char *file)
 				break ;
 			if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
 			{
-				cfg_shell()->hist_nb += 1;
 				nb = ft_itoa(cfg_shell()->hist_nb);
-				ft_dlstaddtail(&cfg_shell()->history, ft_dlstnew(hist_cmd, 0));
-				ft_hash_add(cfg_shell()->hist_map, nb, ft_strdup(hist_cmd), NULL);
+				if (ft_strcmp(ft_hash_lookup(cfg_shell()->hist_map, nb),
+					hist_cmd) != 0)
+				{
+					ft_strdel(&nb);
+					cfg_shell()->hist_nb += 1;
+					nb = ft_itoa(cfg_shell()->hist_nb);
+					ft_dlstaddtail(&cfg_shell()->history, ft_dlstnew(hist_cmd,
+					0));
+					ft_hash_add(cfg_shell()->hist_map, nb, ft_strdup(hist_cmd),
+					NULL);
+				}
 				ft_strdel(&nb);
 			}
 		}

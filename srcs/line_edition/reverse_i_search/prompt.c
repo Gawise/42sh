@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 18:14:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/06/27 18:22:20 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/07/05 17:00:46 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,11 @@ int	history_search(t_cs_line *cs, char *caps)
 		else
 			input = ft_strdup(caps);
 		if (!hist || !hist->prev || !hist->data)
+		{
 			hist = cfg_shell()->history;
-		while (hist->next)
-			hist = hist->next;
+			while (hist->next)
+				hist = hist->next;
+		}
 		while (hist->prev && !ft_strstr((char *)hist->data, input))
 			hist = hist->prev;
 		ft_clear(1);

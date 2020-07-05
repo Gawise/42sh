@@ -41,8 +41,9 @@ static void	history_updater(t_cs_line *cs, t_dlist *hs)
 
 	len = ft_strlen(cs->input);
 	if (!(hs->prev && hs->prev->data && (cs->input[len - 1] = '\0')
-		== 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
+		!= 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
 	{
+		cs->input[len - 1] = '\0';
 		ft_strdel((char **)&hs->data);
 		hs->data = (void *)ft_strdup(cs->input);
 		cs->input[len - 1] = '\n';
