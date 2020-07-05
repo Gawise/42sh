@@ -4,43 +4,16 @@
 #include "var.h"
 #include "sh.h"
 
-uint32_t			builtin_search(t_process *p)
+uint32_t			builtin_search(t_cfg *shell, t_process *p)
 {
-	if (!p->cmd)
+	
+	int32_t		*builtin;
+
+	builtin = 0;
+	if (!((builtin = ft_hash_lookup(shell->builtin_map, p->cmd))))
 		return (0);
-	if (!ft_strcmp(p->cmd, "echo"))
-		return ((p->setup |= B_ECHO) + 1);
-	if (!ft_strcmp(p->cmd, "set"))
-		return (p->setup |= B_SET);
-	if (!ft_strcmp(p->cmd, "unset"))
-		return (p->setup |= B_UNSET);
-	if (!ft_strcmp(p->cmd, "env"))
-		return (p->setup |= B_ENV);
-	if (!ft_strcmp(p->cmd, "cd"))
-		return (p->setup |= B_CD);
-	if (!ft_strcmp(p->cmd, "exit"))
-		return (p->setup |= B_EXIT);
-	if (!ft_strcmp(p->cmd, "hash"))
-		return (p->setup |= B_HASH);
-	if (!ft_strcmp(p->cmd, "jobs"))
-		return (p->setup |= B_JOBS);
-	if (!ft_strcmp(p->cmd, "bg"))
-		return (p->setup |= B_BG);
-	if (!ft_strcmp(p->cmd, "fg"))
-		return (p->setup |= B_FG);
-	if (!ft_strcmp(p->cmd, "type"))
-		return (p->setup |= B_TYPE);
-	if (!ft_strcmp(p->cmd, "test") || !ft_strcmp(p->cmd, "["))
-		return (p->setup |= B_TEST);
-	if (!ft_strcmp(p->cmd, "export"))
-		return (p->setup |= B_EXPORT);
-	if (!ft_strcmp(p->cmd, "alias"))
-		return (p->setup |= B_ALIAS);
-	if (!ft_strcmp(p->cmd, "unalias"))
-		return (p->setup |= B_UNALIAS);
-	if (!ft_strcmp(p->cmd, "fc"))
-		return (p->setup |= B_FC);
-	return (0);
+	p->setup |= *builtin;
+	return (TRUE);
 }
 
 static uint8_t		find_binary(t_cfg *shell, t_process *p, t_list *env)
@@ -74,7 +47,7 @@ static uint16_t		find_type(t_list *env, t_process *p, uint32_t *err)
 {
 	if (!p->cmd)
 		p->setup |= NOCMD;
-	else if (builtin_search(p))
+	else if (builtin_search(cfg_shell(), p))
 		p->setup |= BUILTIN;
 	else if (find_binary(cfg_shell(), p, env))
 		p->setup |= EXEC;

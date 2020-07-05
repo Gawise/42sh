@@ -95,8 +95,10 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	set_var(shell);
 	shell->history = get_history();
 	if (!(shell->map = ft_hash_init(128))
-		|| !(shell->input_map = ft_hash_init(64)))
+		|| !(shell->input_map = ft_hash_init(64))
+		|| !(shell->builtin_map = ft_hash_init(16)))
 		ft_ex(EXMALLOC);
+	init_builtin_map(shell->builtin_map);
 	init_input_map(shell->input_map);
 	init_test_op();
 	set_shell_mode(av, ac, shell);

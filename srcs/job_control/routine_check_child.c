@@ -67,9 +67,6 @@ void			update_listjob(t_cfg *shell)
 			j->fg = 1;
 			job_become_cur(shell, &j);
 		}
-		else if (!(j->status & STOPPED))//protect de securité peut etre enlever a la fin
-			ft_printf("update list enfant perdu?\n ");
-//			ft_ex(EXUEPTD);
 		ljob = tmp;
 	}
 	nb_job_active(shell);
@@ -80,15 +77,17 @@ void			check_child(t_cfg *shell, t_list *lstjob)
 	pid_t		pid_child;
 	t_job		*job;
 	int32_t		wstatus;
+	int32_t		option;
 	uint8_t		new;
 
 	new = 0;
+	option = WUNTRACED | WNOHANG | WCONTINUED;
 	if (!shell->active_job)
 		return ;
 	while (lstjob)
 	{
 		job = lstjob->data;
-		if ((pid_child = waitpid(-job->pgid, &wstatus, WUNTRACED | WNOHANG | WCONTINUED)))
+		if ((pid_child = waitpid(-job->pgid, &wstatus, option)))
 			new = deep_check(job, pid_child, wstatus);
 		lstjob = lstjob->next;
 	}
