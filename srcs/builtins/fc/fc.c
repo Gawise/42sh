@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/07/05 17:19:21 by ambelghi         ###   ########.fr       */
+/*   Updated: 2020/07/05 21:06:17 by ambelghi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void		exec_hist(char *file)
 	{
 		while (get_next_line(fd, &cmd) > 0)
 		{
-			ft_printf("%s\n", cmd);
 			hist_cmd = ft_strdup(cmd);
 			if ((ret = lexer_routine(&cmd, &lexer)) <= 0
 					|| (ret = parser_routine(&lexer, &parser)) <= 0
@@ -190,8 +189,8 @@ void			reexecute_cmd(char **av, int ac)
 		if (!oc || (ac = open(oc, O_CREAT | O_WRONLY, 0666)) < 0)
 			return ;
 		ft_dprintf(ac, "%s", cmd);
-		exec_hist(oc);
 		close(ac);
+		exec_hist(oc);
 	}
 }
 
