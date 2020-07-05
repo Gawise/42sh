@@ -6,7 +6,6 @@
 
 uint32_t			builtin_search(t_cfg *shell, t_process *p)
 {
-	
 	int32_t		*builtin;
 
 	builtin = 0;
