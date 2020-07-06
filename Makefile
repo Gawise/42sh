@@ -161,6 +161,7 @@ BTSRCS += fc/fc.c
 BTSRCS += fc/errors.c
 BTSRCS += fc/history_file.c
 BTSRCS += fc/arg_process.c
+BTSRCS += fc/exec.c
 BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c

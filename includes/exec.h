@@ -106,7 +106,7 @@ void		update_last_return(t_cfg *shell, uint8_t jret);
 */
 
 
-uint8_t     ft_fc(t_job *j, t_process *p);
+uint8_t			ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
@@ -196,7 +196,8 @@ uint8_t		fc_usage(void);
 uint8_t		fc_bad_option(char *s);
 uint8_t		fc_bad_usage(char *s);
 uint8_t		fc_missing_arg(void);
-
+int			fc_exec_cmd(char *cmd);
+void		fc_hist_add(char *hist_cmd);
 /*
 *****************************************************
 ******************* TERMIOS *************************
