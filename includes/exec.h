@@ -36,9 +36,8 @@
 # define B_SPECIAL				0x2000
 # define B_ECHO					0
 # define B_CD					0x4000
-# define B_ENV					0x8000
-# define B_SET					0xE000 //49152
-# define B_UNSET				0x12000  //65536
+# define B_SET					0xE000
+# define B_UNSET				0x12000
 # define B_HASH					0x14000
 # define B_EXIT					0x1A000
 # define B_JOBS					0x1C000
