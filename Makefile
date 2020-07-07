@@ -165,7 +165,6 @@ BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
 BTSRCS += export.c
-BTSRCS += env.c
 BTSRCS += set.c
 BTSRCS += unset.c
 BTSRCS += echo.c

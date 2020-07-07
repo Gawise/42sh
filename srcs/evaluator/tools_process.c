@@ -35,7 +35,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 
 	tab_f[0] = ft_echo;
 	tab_f[1] = ft_cd;
-	tab_f[2] = ft_env;
+	tab_f[2] = 0;
 	tab_f[3] = ft_set;
 	tab_f[4] = ft_unset;
 	tab_f[5] = ft_hash;
