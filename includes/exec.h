@@ -192,12 +192,19 @@ t_point		get_range(int8_t *fl, char **av, int ac, t_cfg *cfg);
 int			check_range(char **av, int ac);
 int			ft_intlen(int nb);
 int			range_error(void);
-uint8_t		fc_usage(void);
-uint8_t		fc_bad_option(char *s);
-uint8_t		fc_bad_usage(char *s);
-uint8_t		fc_missing_arg(void);
+int			fc_usage(void);
+int			fc_bad_option(char *s);
+int			fc_bad_usage(char *s);
+int			fc_missing_arg(void);
 int			fc_exec_cmd(char *cmd);
 void		fc_hist_add(char *hist_cmd);
+char		*get_edit_cmd(int8_t *fl, char *hist, char **av, int ac);
+int			editor_launcher(char *cmd);
+char		*get_cmd_by_oc(t_cfg *cfg, char *av);
+char		*get_cmd_by_num(t_cfg *cfg, char *av);
+void        get_pattern(char **av, int *ac, char **old, char **n);
+void        del_fc_cmd(void);
+
 /*
 *****************************************************
 ******************* TERMIOS *************************
@@ -231,8 +238,6 @@ uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
 void			process_type(t_process *p);
-void			process_assign(t_cfg *shell, t_process *p, t_list *assignment);
-void			do_pipe(t_process *p);
 int32_t			has_running(t_list *lst);
 int32_t			has_stopped(t_list *lst);
 void			any_slash(t_list *env, t_process *p, uint32_t *err);
@@ -240,6 +245,7 @@ void			with_slash(t_process *p, uint32_t *err);
 uint32_t		builtin_search(t_cfg *shell, t_process *p);
 t_process		*find_process_by_status(t_list *lst, uint8_t want);
 t_process		*find_process_by_pid(t_list *lst, pid_t child);
+void			process_assign(t_cfg *shell, t_process *p, t_list *assignment);
 
 /*
 *****************************************************
@@ -258,6 +264,7 @@ void			job_redir(t_list *process);
 void			do_redir(t_list *fd);
 int32_t			create_fd_null(void);
 uint32_t		right_fifo(char *path, uint32_t *right);
+void			do_pipe(t_process *p);
 
 /*
 *****************************************************

@@ -7,10 +7,10 @@
 #include "get_next_line.h"
 #include "var.h"
 
-void        exec_hist(char *file)
+void	exec_hist(char *file)
 {
-	char        *cmd;
-	int         fd;
+	char	*cmd;
+	int		fd;
 
 	if (file && (fd = open(file, O_RDONLY)) >= 0)
 	{
@@ -27,8 +27,8 @@ void        exec_hist(char *file)
 
 int		fc_exec_cmd(char *cmd)
 {
-	t_lexer     lexer;
-    t_parser    parser;
+	t_lexer		lexer;
+	t_parser	parser;
 	char		*hist_cmd;
 	int			ret;
 
@@ -36,8 +36,8 @@ int		fc_exec_cmd(char *cmd)
 	if (cmd && (hist_cmd = ft_strdup(cmd)))
 	{
 		if ((ret = lexer_routine(&cmd, &lexer)) <= 0
-            || (ret = parser_routine(&lexer, &parser)) <= 0
-            || (ret = eval_routine(&parser)) <= 0)
+				|| (ret = parser_routine(&lexer, &parser)) <= 0
+				|| (ret = eval_routine(&parser)) <= 0)
 		{
 			ft_strdel(&hist_cmd);
 			return (ret);
