@@ -53,19 +53,25 @@ int		line_edition_routine(char **line)
 	, COLOR_SH)))
 		return (0);
 	else if (*line && (!line[0][0]))
-		return (-1);
+	{
+		sigterm_handler(0);
+		return (0);
+	}
 	return (expand_history(line));
 }
 
 int		eval_routine(t_parser *parser)
 {
+	t_cfg	*shell;
+
+	shell = cfg_shell();
 	if (parser->state != S_PARSER_SYNTAX_ERROR
 	&& ft_eval(parser->table))
 	{
 		ft_lstdel(&parser->table, del_cmd_table);
 		if (cfg_shell()->interactive)
 			return (0);
-		return (-1);
+		exit_routine(shell, ft_atoi(find_var_value(shell->sp, "?")));
 	}
 	ft_lstdel(&parser->table, del_cmd_table);
 	protect_job(1);

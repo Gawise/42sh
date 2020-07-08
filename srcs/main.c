@@ -23,14 +23,12 @@ int		main(int ac, char **av, char **env)
 	{
 		build_prompt_ps1(0);
 		check_child(cfg_shell(), cfg_shell()->job);
-		if ((ret = line_edition_routine(&line)) <= 0
-		|| (ret = lexer_routine(&line, &lexer)) <= 0
-		|| (ret = parser_routine(&lexer, &parser)) <= 0
-		|| (ret = eval_routine(&parser)) <= 0)
+		if (!(ret = line_edition_routine(&line))
+		|| !(ret = lexer_routine(&line, &lexer))
+		|| !(ret = parser_routine(&lexer, &parser))
+		|| !(ret = eval_routine(&parser)))
 		{
-			if (ret == -1)
-				break ;
-			else if (!ret && !shell->interactive)
+			if (!ret && !shell->interactive)
 				exit_routine(shell, 2);
 		}
 	}
