@@ -46,6 +46,8 @@ int	ctrl_r_off(t_cs_line *cs, char *caps)
 		ft_strdel(&cs->prompt);
 		cs->prompt = set_prompt(NULL);
 		cs->ctrl_r = 0;
+		if (caps[0] == (char)4)
+			print_cmdline(cs);
 	}
 	return (0);
 }
@@ -104,9 +106,9 @@ int	history_search(t_cs_line *cs, char *caps)
 	{
 		ctrl_r_off(cs, caps);
 		ft_strdel(&input);
-		if (hist && hist->data)
+		if (hist && hist->data && !cs->sig_int && !cs->sig_eof)
 		{
-		//	ft_strdel(&cs->input);
+			ft_strdel(&cs->input);
 			cs->input = ft_strdup((char *)hist->data);
 		}
 		hist = NULL;

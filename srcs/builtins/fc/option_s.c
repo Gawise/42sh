@@ -110,7 +110,9 @@ void	reexecute_cmd(char **av, int ac)
 		if (!oc || (ac = open(oc, O_CREAT | O_WRONLY, 0666)) < 0)
 			return ;
 		ft_dprintf(ac, "%s", cmd);
+		ft_strdel(&cmd);
 		close(ac);
 		exec_hist(oc);
+		ft_strdel(&oc);
 	}
 }

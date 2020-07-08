@@ -20,9 +20,10 @@ char	*get_histfilename(void)
 		prefix = ".";
 	i = 0;
 	ft_asprintf(&name, "%s%s", prefix, name);
-	prefix = name;
+	prefix = ft_strdup(name);
 	while (access(prefix, F_OK) != -1 || i == 0)
 	{
+		ft_strdel(&prefix);
 		i++;
 		tmp = ft_itoa(i);
 		ft_asprintf(&prefix, "%s_%s", name, tmp);

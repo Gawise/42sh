@@ -22,6 +22,7 @@ void	exec_hist(char *file)
 				break ;
 		}
 		protect_fd(0);
+		close(fd);
 	}
 }
 
@@ -65,6 +66,10 @@ void	fc_hist_add(char *hist_cmd)
 			ft_hash_add(cfg_shell()->hist_map, nb, ft_strdup(hist_cmd),
 					NULL);
 		}
+		else
+			ft_strdel(&hist_cmd);
 		ft_strdel(&nb);
 	}
+	else
+		ft_strdel(&hist_cmd);
 }

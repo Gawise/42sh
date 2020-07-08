@@ -20,7 +20,7 @@ int	fc_bad_option(char *s)
 
 int	fc_bad_usage(char *s)
 {
-	ft_dprintf(2, "fc : bad usage --%s\n", s);
+	ft_dprintf(2, "fc : bad usage -%s\n", s);
 	fc_usage();
 	return (-1);
 }

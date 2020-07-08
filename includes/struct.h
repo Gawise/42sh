@@ -37,6 +37,7 @@ typedef struct	s_cfg
 	t_list			*alias;
 	t_list			*alias_cpy;
 	int				alias_rec;
+	char			*clipboard;
 }				t_cfg;
 
 /*
@@ -254,7 +255,7 @@ typedef struct	s_cs_line
 	int				cr;
 	char			*prompt;
 	char			*prompt_color;
-	char			*clipboard;
+//	char			*clipboard;
 	t_dlist			*history;
 	t_point			clipb;
 	char			*old_history;

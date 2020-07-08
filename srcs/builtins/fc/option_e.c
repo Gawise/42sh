@@ -54,7 +54,10 @@ int		edit_hist(int8_t *fl, char **av, int ac)
 	if ((hist = create_tmphist(fl, av, (av[ac] ? ac + 1 : ac))))
 	{
 		if (!(cmd = get_edit_cmd(fl, hist, av, ac)) || !editor_launcher(cmd))
+		{
+			ft_strdel(&hist);
 			return (0);
+		}
 		if (ft_atoi(find_var_value(cfg_shell()->sp, "?")) == 0)
 			exec_hist(hist);
 		ft_strdel(&hist);

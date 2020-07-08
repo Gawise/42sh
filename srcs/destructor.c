@@ -16,6 +16,7 @@ void	del_struct_tvar(void *del, size_t u)
 
 void	clean_cfg(t_cfg *shell)
 {
+	ft_strdel(&shell->clipboard);
 	ft_lstdel(&shell->env, del_struct_tvar);
 	ft_lstdel(&shell->intern, del_struct_tvar);
 	ft_lstdel(&shell->sp, del_struct_tvar);

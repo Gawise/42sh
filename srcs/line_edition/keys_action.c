@@ -86,7 +86,12 @@ int		check_keys(char *caps)
 	ret = 0;
 	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
 	if ((cs = cs_master(NULL, 0)) && caps[0] == (char)4)
-		ret = ctrl_d(cs);
+	{
+		if (cs->ctrl_r)
+			ctrl_r_off(cs, caps);
+		else
+			ret = ctrl_d(cs);
+	}
 	else if (fct && ret == 0)
 	{
 		if (ft_strcmp(caps, "\ex012") != 0 && caps[0] != 127)

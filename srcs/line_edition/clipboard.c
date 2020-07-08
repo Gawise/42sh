@@ -3,6 +3,7 @@
 #include "line_edition.h"
 #include "struct.h"
 #include <stdlib.h>
+#include <sh.h>
 
 void	copy_clip(t_cs_line *cs)
 {
@@ -11,8 +12,8 @@ void	copy_clip(t_cs_line *cs)
 		if (cs->clipb.x > -1 && cs->clipb.y > -1 && cs->clipb.y
 			- cs->clipb.x > 0)
 		{
-			ft_strdel(&cs->clipboard);
-			cs->clipboard = ft_strsub(cs->input, cs->clipb.x, cs->clipb.y
+			ft_strdel(&cfg_shell()->clipboard);
+			cfg_shell()->clipboard = ft_strsub(cs->input, cs->clipb.x, cs->clipb.y
 			- cs->clipb.x);
 		}
 	}
@@ -20,9 +21,9 @@ void	copy_clip(t_cs_line *cs)
 
 void	paste_clip(t_cs_line *cs)
 {
-	if (cs && cs->clipboard)
+	if (cs && cfg_shell()->clipboard)
 	{
-		line_master(cs, cs->clipboard);
+		line_master(cs, cfg_shell()->clipboard);
 		cs->clipb = (t_point){0, 0};
 		print_cmdline(cs);
 	}

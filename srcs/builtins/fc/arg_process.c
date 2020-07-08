@@ -15,11 +15,11 @@ uint8_t	fc_check_opt(t_process *p, int32_t *ac)
 	int8_t	flags;
 
 	i = 0;
+	flags = 0;
 	while ((ret = ft_getopt(ac, &i, p->av, "elnrs")) != -1)
 	{
-		if ((flags = 0) == 0 && ret == '?')
+		if (ret == '?' && (z = i) >= 0)
 		{
-			z = i;
 			while (p->av[*ac][z])
 				if (!ft_isdigit(p->av[*ac][z++]))
 					return (fc_bad_option(&p->av[*ac][i]));
