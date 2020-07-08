@@ -36,6 +36,7 @@ LESRCS += history_keys.c
 LESRCS += hist_exp/hist_exp.c
 LESRCS += hist_exp/formats.c
 LESRCS += reverse_i_search/prompt.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -145,6 +146,7 @@ JBSRCS += tools_job.c
 JBSRCS += ft_lst.c
 JBSRCS += routine_check_child.c
 JBSRCS += job_id.c
+JBSRCS += struct_job.c
 
 ## COMMON TOOLS  ##
 
@@ -165,7 +167,6 @@ BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
 BTSRCS += export.c
-BTSRCS += env.c
 BTSRCS += set.c
 BTSRCS += unset.c
 BTSRCS += echo.c
@@ -238,8 +239,9 @@ SRC += main.c
 SRC += init_shell.c
 SRC += init_cfg.c
 SRC += destructor.c
-SRC += routine_exit.c
-SRC += startup_routine.c
+SRC += exit_routine.c
+SRC += launch_routine.c
+SRC += map_builtin.c
 SRC += $(addprefix line_edition/,$(LESRCS))
 SRC += $(addprefix lexer/,$(LEXSRCS))
 SRC += $(addprefix parser/,$(PARSRCS))

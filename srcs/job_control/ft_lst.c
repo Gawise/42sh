@@ -3,12 +3,28 @@
 #include "job_control.h"
 #include "sh.h"
 
+void		job_is_running(t_job *j)
+{
+	t_list		*lst;
+	t_process	*p;
+
+	lst = j->process;
+	while (lst)
+	{
+		p = lst->data;
+		if (p->status & STOPPED)
+			p->status = RUNNING;
+		lst = lst->next;
+	}
+	j->status = RUNNING;
+}
+
 int32_t		focus_job(void *data1, void *data2)
 {
 	t_job *j;
 
 	j = data1;
-	if (j->pgid  == *(pid_t * )(data2))
+	if (j->pgid == *(pid_t *)(data2))
 		return (1);
 	return (0);
 }
@@ -30,7 +46,7 @@ void		nb_job_active(t_cfg *shell)
 	uint8_t	nb;
 	t_list	*lst;
 	t_job	*j;
-	
+
 	nb = 0;
 	lst = shell->job;
 	while (lst)

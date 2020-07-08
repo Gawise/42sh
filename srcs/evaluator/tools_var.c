@@ -6,8 +6,8 @@
 uint8_t		ft_print_var_lst(t_list *lst, uint8_t i)
 {
 	t_var	*env;
-	char *export;
-	
+	char	*export;
+
 	export = (i > 0) ? "export " : "";
 	while (lst)
 	{
@@ -40,7 +40,7 @@ char		**create_tab_var(t_list *lst, int count)
 	return (tab);
 }
 
-char 		**create_var_tab(char *s)
+char		**create_var_tab(char *s)
 {
 	char	*tmp;
 	char	**tab;

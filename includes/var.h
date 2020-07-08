@@ -18,5 +18,4 @@ uint8_t		several_setvar(t_list **var, char *str);
 uint8_t		ft_print_var_lst(t_list *lst, uint8_t i);
 uint8_t		ft_setvar(t_list **lst, char *name, char *value);
 
-
 #endif
