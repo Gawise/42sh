@@ -55,6 +55,7 @@ int		line_edition_routine(char **line)
 	else if (*line && (!line[0][0]))
 	{
 		sigterm_handler(0);
+		protect_job(1);
 		return (0);
 	}
 	return (expand_history(line));
