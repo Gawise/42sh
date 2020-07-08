@@ -6,9 +6,9 @@
 # define ERROR					48
 
 # if __APPLE__
-#  define SAVE_IN               252
-#  define SAVE_OUT              253
-#  define SAVE_ERR              254
+#  define SAVE_IN				252
+#  define SAVE_OUT				253
+#  define SAVE_ERR				254
 # else
 #  define SAVE_IN				256
 #  define SAVE_OUT				257
@@ -90,13 +90,9 @@
 # define S_SIGTSTP				"Stopped(SIGTSTP)"
 # define S_SIGSTOP				"Stopped(SIGSTOP)"
 
-
-# define FG_USG "fg: usage: fg [job_spec]"
-# define JOB_USG "jobs : usage: jobs [-lp] [job_id...]"
-# define BG_USG "bg: usage: bg [job_spec ...]"
-
-void		routine_fg_job(t_cfg *shell, t_job *j);
-void		update_last_return(t_cfg *shell, uint8_t jret);
+# define FG_USG 				"fg: usage: fg [job_spec]"
+# define JOB_USG 				"jobs : usage: jobs [-lp] [job_id...]"
+# define BG_USG 				"bg: usage: bg [job_spec ...]"
 
 /*
 *****************************************************
@@ -104,8 +100,8 @@ void		update_last_return(t_cfg *shell, uint8_t jret);
 *****************************************************
 */
 
-
-uint8_t     ft_fc(t_job *j, t_process *p);
+void			routine_fg_job(t_cfg *shell, t_job *j);
+uint8_t			ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
 uint8_t			ft_fg(t_job *j, t_process *p);
@@ -132,7 +128,7 @@ char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 char			*cd_del_dotcomponents(char *curpath,
-char *opr, char **pwd, t_list **env);
+char			*opr, char **pwd, t_list **env);
 int				display_cd_errors(char *error);
 int				check_chdir_errors(char **error, char *path,
 									char *opr);
@@ -148,53 +144,51 @@ t_var			*search_alias_var(char *name, t_list *list);
 char			*search_alias_value(char *name, t_list *list);
 uint8_t			ft_unalias(t_job *j, t_process *p);
 uint8_t			ft_alias(t_job *j, t_process *p);
-
-char		**retrieve_ops(char **p_av, int *i, int *bang);
-int		check_closing_bracket(char **av);
-uint8_t		ft_test(t_job *j, t_process *p);
-void		init_test_op(void);
-int		check_closing_bracket(char **av);
-char		**retrieve_ops(char **p_av, int *i, int *bang);
-uint8_t		test_write_file(char *path);
-uint8_t		test_len_string(char *s1);
-uint8_t		test_read_file(char *path);
-uint8_t		test_regular_file(char *path);
-uint8_t		test_setgid_file(char *path);
-uint8_t		test_setuid_file(char *path);
-uint8_t		test_size_file(char *path);
-uint8_t		test_socket_file(char *path);
-uint8_t		test_equal_string(char *s1, char *s2);
-uint8_t		test_diff_string(char *s1, char *s2);
-uint8_t		test_symlink_file(char *path);
-uint8_t		test_char_file(char *path);
-uint8_t		test_dir_file(char *path);
-uint8_t		test_exec_file(char *path);
-uint8_t		test_fifo_file(char *path);
-uint8_t		test_entry_file(char *path);
-uint8_t		test_equal_int(char *s1, char *s2);
-uint8_t		test_greator_int(char *s1, char *s2);
-uint8_t		test_greater_int(char *s1, char *s2);
-uint8_t		test_lessor_int(char *s1, char *s2);
-uint8_t		test_lesser_int(char *s1, char *s2);
-uint8_t		test_diff_int(char *s1, char *s2);
-uint8_t		test_bloc_file(char *path);
-
-int			print_hist(int8_t *fl, char **av, int ac);
-void		exec_hist(char *file);
-int			edit_hist(int8_t *fl, char **av, int ac);
-char		*get_hist_cmd(char *av, t_cfg *cfg);
-void		reexecute_cmd(char **av, int ac);
-char		*get_histfilename(void);
-char		*create_tmphist(int8_t *fl, char **av, int ac);
-uint8_t		fc_check_opt(t_process *p, int32_t *ac);
-t_point		get_range(int8_t *fl, char **av, int ac, t_cfg *cfg);
-int			check_range(char **av, int ac);
-int			ft_intlen(int nb);
-int			range_error(void);
-uint8_t		fc_usage(void);
-uint8_t		fc_bad_option(char *s);
-uint8_t		fc_bad_usage(char *s);
-uint8_t		fc_missing_arg(void);
+char			**retrieve_ops(char **p_av, int *i, int *bang);
+int				check_closing_bracket(char **av);
+uint8_t			ft_test(t_job *j, t_process *p);
+void			init_test_op(void);
+int				check_closing_bracket(char **av);
+char			**retrieve_ops(char **p_av, int *i, int *bang);
+uint8_t			test_write_file(char *path);
+uint8_t			test_len_string(char *s1);
+uint8_t			test_read_file(char *path);
+uint8_t			test_regular_file(char *path);
+uint8_t			test_setgid_file(char *path);
+uint8_t			test_setuid_file(char *path);
+uint8_t			test_size_file(char *path);
+uint8_t			test_socket_file(char *path);
+uint8_t			test_equal_string(char *s1, char *s2);
+uint8_t			test_diff_string(char *s1, char *s2);
+uint8_t			test_symlink_file(char *path);
+uint8_t			test_char_file(char *path);
+uint8_t			test_dir_file(char *path);
+uint8_t			test_exec_file(char *path);
+uint8_t			test_fifo_file(char *path);
+uint8_t			test_entry_file(char *path);
+uint8_t			test_equal_int(char *s1, char *s2);
+uint8_t			test_greator_int(char *s1, char *s2);
+uint8_t			test_greater_int(char *s1, char *s2);
+uint8_t			test_lessor_int(char *s1, char *s2);
+uint8_t			test_lesser_int(char *s1, char *s2);
+uint8_t			test_diff_int(char *s1, char *s2);
+uint8_t			test_bloc_file(char *path);
+int				print_hist(int8_t *fl, char **av, int ac);
+void			exec_hist(char *file);
+int				edit_hist(int8_t *fl, char **av, int ac);
+char			*get_hist_cmd(char *av, t_cfg *cfg);
+void			reexecute_cmd(char **av, int ac);
+char			*get_histfilename(void);
+char			*create_tmphist(int8_t *fl, char **av, int ac);
+uint8_t			fc_check_opt(t_process *p, int32_t *ac);
+t_point			get_range(int8_t *fl, char **av, int ac, t_cfg *cfg);
+int				check_range(char **av, int ac);
+int				ft_intlen(int nb);
+int				range_error(void);
+uint8_t			fc_usage(void);
+uint8_t			fc_bad_option(char *s);
+uint8_t			fc_bad_usage(char *s);
+uint8_t			fc_missing_arg(void);
 
 /*
 *****************************************************
@@ -225,6 +219,8 @@ int16_t			get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr);
 *****************************************************
 */
 
+void			update_last_return(t_cfg *shell, uint8_t jret);
+void			cpy_lst_process(void *copy, void *process);
 uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
@@ -294,5 +290,4 @@ void			debug_print_all_job(t_list *job, char *where);
 void			debug_print_everything(t_list *job, char *where);
 void			debug_print_process(int32_t fd_debug, t_process *p,
 									char *where);
-
 #endif
