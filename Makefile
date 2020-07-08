@@ -36,6 +36,7 @@ LESRCS += history_keys.c
 LESRCS += hist_exp/hist_exp.c
 LESRCS += hist_exp/formats.c
 LESRCS += reverse_i_search/prompt.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c
@@ -145,6 +146,7 @@ JBSRCS += tools_job.c
 JBSRCS += ft_lst.c
 JBSRCS += routine_check_child.c
 JBSRCS += job_id.c
+JBSRCS += struct_job.c
 
 ## COMMON TOOLS  ##
 

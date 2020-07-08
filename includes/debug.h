@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 # define DEBUG_H
-#include "libft.h"
-#include "struct.h"
+
+# include "struct.h"
 
 int		get_nb_cmd(t_list *cmd);
 int		get_nb_and_or(t_list *and_or);
