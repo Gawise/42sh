@@ -66,14 +66,13 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	return (0);
 }
 
-
 void		print_ressource(char *rsc)
 {
 	int32_t		ret;
 	int32_t		fd;
 	char		*path;
 	char		*ascii;
-	
+
 	ascii = 0;
 	path = create_abs_path(rsc);
 	protect_malloc(path);
