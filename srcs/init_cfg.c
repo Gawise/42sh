@@ -68,7 +68,7 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 	if (ac == 1)
 		return ;
 	ac = 1;
-	while ((ret = ft_getopt(&ac, &i, av, "d")) != -1)
+	while ((ret = ft_getopt(&ac, &i, av, "dh")) != -1)
 	{
 		if (ret == '?')
 		{
@@ -78,6 +78,8 @@ static void		set_shell_mode(char **av, int ac, t_cfg *shell)
 		}
 		else if (ret == 'd')
 			shell->debug = set_debug(av, &ac);
+		else if (ret == 'h')
+			print_features();
 	}
 	if (av[ac])
 		set_nonint(shell, av[ac]);

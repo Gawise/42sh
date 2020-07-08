@@ -4,6 +4,7 @@
 #include "struct.h"
 #include "libft.h"
 #include "ft_printf.h"
+#include "get_next_line.h"
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
@@ -65,6 +66,34 @@ static int	check_terminal(t_cfg *cfg, uint8_t tty)
 	return (0);
 }
 
+
+void		print_ressource(char *rsc)
+{
+	int32_t		ret;
+	int32_t		fd;
+	char		*path;
+	char		*ascii;
+	
+	ascii = 0;
+	path = create_abs_path(rsc);
+	protect_malloc(path);
+	if (((fd = open(path, O_RDONLY))) == -1)
+	{
+		ft_strdel(&path);
+		return ;
+	}
+	while ((ret = get_next_line(fd, &ascii)) > 0)
+	{
+		if (ret == -1)
+			ft_ex(EXUEPTD);
+		ft_printf("%s\n", ascii);\
+		ft_strdel(&ascii);
+	}
+	ft_strdel(&path);
+	ft_strdel(&ascii);
+	close(fd);
+}
+
 t_cfg		*init_shell(char **env, char **av, int ac)
 {
 	uint8_t		shell_terminal;
@@ -83,6 +112,7 @@ t_cfg		*init_shell(char **env, char **av, int ac)
 			ft_ex(EX);
 		if (tcsetpgrp(shell_terminal, shell->pid))
 			ft_ex(EX);
+		print_ressource("ressources/42sh_header.txt");
 	}
 	return (shell);
 }
