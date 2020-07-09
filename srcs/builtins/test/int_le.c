@@ -1,6 +1,5 @@
 #include "libft.h"
-
-int		check_int_args(char *s1, char *s2);
+#include "exec.h"
 
 uint8_t		test_lessor_int(char *s1, char *s2)
 {

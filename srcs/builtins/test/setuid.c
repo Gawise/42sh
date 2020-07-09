@@ -10,4 +10,3 @@ uint8_t		test_setuid_file(char *path)
 		return (FAILURE);
 	return ((buf.st_mode & S_ISUID) ? 0 : 1);
 }
-

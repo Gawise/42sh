@@ -8,18 +8,20 @@ int		check_int_args(char *s1, char *s2)
 {
 	if (!ft_strdigit(s1))
 	{
-		ft_dprintf(2, "%s: test: %s: integer expression expected\n", PROJECT, s1);
+		ft_dprintf(2, "%s: test: %s: integer expression expected\n",
+				PROJECT, s1);
 		return (0);
 	}
 	if (!ft_strdigit(s2))
 	{
-		ft_dprintf(2, "%s: test: %s: integer expression expected\n", PROJECT, s2);
+		ft_dprintf(2, "%s: test: %s: integer expression expected\n",
+				PROJECT, s2);
 		return (0);
 	}
 	return (1);
 }
 
-char		**ret_empty_tab(void)
+char	**ret_empty_tab(void)
 {
 	char **res;
 
@@ -29,10 +31,10 @@ char		**ret_empty_tab(void)
 	return (res);
 }
 
-char		**retrieve_ops(char **p_av, int *i, int *bang)
+char	**retrieve_ops(char **p_av, int *i, int *bang)
 {
 	char	**res;
-	int	brack;
+	int		brack;
 
 	brack = 0;
 	*i = 1;
