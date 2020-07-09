@@ -6,9 +6,9 @@
 # define ERROR					48
 
 # if __APPLE__
-#  define SAVE_IN               252
-#  define SAVE_OUT              253
-#  define SAVE_ERR              254
+#  define SAVE_IN				252
+#  define SAVE_OUT				253
+#  define SAVE_ERR				254
 # else
 #  define SAVE_IN				256
 #  define SAVE_OUT				257
@@ -36,9 +36,8 @@
 # define B_SPECIAL				0x2000
 # define B_ECHO					0
 # define B_CD					0x4000
-# define B_ENV					0x8000
-# define B_SET					0xE000 //49152
-# define B_UNSET				0x12000  //65536
+# define B_SET					0xE000
+# define B_UNSET				0x12000
 # define B_HASH					0x14000
 # define B_EXIT					0x1A000
 # define B_JOBS					0x1C000
@@ -91,13 +90,9 @@
 # define S_SIGTSTP				"Stopped(SIGTSTP)"
 # define S_SIGSTOP				"Stopped(SIGSTOP)"
 
-
-# define FG_USG "fg: usage: fg [job_spec]"
-# define JOB_USG "jobs : usage: jobs [-lp] [job_id...]"
-# define BG_USG "bg: usage: bg [job_spec ...]"
-
-void		routine_fg_job(t_cfg *shell, t_job *j);
-void		update_last_return(t_cfg *shell, uint8_t jret);
+# define FG_USG 				"fg: usage: fg [job_spec]"
+# define JOB_USG 				"jobs : usage: jobs [-lp] [job_id...]"
+# define BG_USG 				"bg: usage: bg [job_spec ...]"
 
 /*
 *****************************************************
@@ -105,7 +100,7 @@ void		update_last_return(t_cfg *shell, uint8_t jret);
 *****************************************************
 */
 
-
+void			routine_fg_job(t_cfg *shell, t_job *j);
 uint8_t			ft_fc(t_job *j, t_process *p);
 uint8_t			ft_export(t_job *j, t_process *p);
 uint8_t			ft_bg(t_job *j, t_process *p);
@@ -133,7 +128,7 @@ char			*ft_strrep(char *str, char *rem, char *rep);
 char			*ft_pathjoin(char *str1, char *str2);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 char			*cd_del_dotcomponents(char *curpath,
-char *opr, char **pwd, t_list **env);
+char			*opr, char **pwd, t_list **env);
 int				display_cd_errors(char *error);
 int				check_chdir_errors(char **error, char *path,
 									char *opr);
@@ -235,6 +230,8 @@ int16_t			get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr);
 *****************************************************
 */
 
+void			update_last_return(t_cfg *shell, uint8_t jret);
+void			cpy_lst_process(void *copy, void *process);
 uint8_t			builtin_process(t_job *j, t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
@@ -304,5 +301,4 @@ void			debug_print_all_job(t_list *job, char *where);
 void			debug_print_everything(t_list *job, char *where);
 void			debug_print_process(int32_t fd_debug, t_process *p,
 									char *where);
-
 #endif

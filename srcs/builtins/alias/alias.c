@@ -48,12 +48,12 @@ static	uint8_t		make_alias(char *assign)
 	if ((tmp = ft_strchr(assign, '=')))
 	{
 		if (!(name = ft_strsub(assign, 0, tmp - assign)))
-				ft_ex(EXMALLOC);
+			ft_ex(EXMALLOC);
 		if (!(value = ft_strdup(tmp + 1)))
-				ft_ex(EXMALLOC);
+			ft_ex(EXMALLOC);
 	}
 	else
-			return (0);
+		return (0);
 	if (check_alias_name(name))
 		return (add_alias(name, value));
 	ft_strdel(&name);
@@ -78,7 +78,7 @@ uint8_t				ft_alias(t_job *j, t_process *p)
 					return (1);
 			}
 			else if (!print_single_alias(p->av[i]))
-					return (1);
+				return (1);
 			i++;
 		}
 	return (0);

@@ -148,6 +148,7 @@ JBSRCS += tools_job.c
 JBSRCS += ft_lst.c
 JBSRCS += routine_check_child.c
 JBSRCS += job_id.c
+JBSRCS += struct_job.c
 
 ## COMMON TOOLS  ##
 
@@ -172,7 +173,6 @@ BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c
 BTSRCS += export.c
-BTSRCS += env.c
 BTSRCS += set.c
 BTSRCS += unset.c
 BTSRCS += echo.c

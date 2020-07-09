@@ -5,7 +5,7 @@
 #include "exec.h"
 #include <signal.h>
 
-uint8_t		fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
+static uint8_t	fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 {
 	int32_t		i;
 	int8_t		ret;
@@ -25,7 +25,8 @@ uint8_t		fg_opt(uint8_t interactive, t_process *p, int32_t *ac)
 	return (SUCCESS);
 }
 
-uint8_t		find_target(t_list *ljob, char *wanted, t_job **target, char *blt)
+uint8_t			find_target(t_list *ljob, char *wanted,
+							t_job **target, char *blt)
 {
 	uint8_t		curr;
 	int8_t		ret;
@@ -43,26 +44,11 @@ uint8_t		find_target(t_list *ljob, char *wanted, t_job **target, char *blt)
 	return (ret);
 }
 
-void		job_is_running(t_job *j)
-{
-	t_list		*lst;
-	t_process	*p;
-
-	lst = j->process;
-	while (lst)
-	{
-		p = lst->data;
-		if (p->status & STOPPED)
-			p->status = RUNNING;
-		lst = lst->next;
-	}
-	j->status = RUNNING;
-}
-
-void		put_job_in_fg(t_cfg *shell, t_job *target)
+static uint8_t	put_job_in_fg(t_cfg *shell, t_job *target)
 {
 	t_job		*jcpy;
 	uint32_t	tmp;
+	uint8_t		ret;
 
 	jcpy = malloc(sizeof(t_job));
 	protect_malloc(jcpy);
@@ -77,17 +63,19 @@ void		put_job_in_fg(t_cfg *shell, t_job *target)
 	kill(-jcpy->pgid, SIGCONT);
 	routine_fg_job(shell, jcpy);
 	shell->cur_job = tmp;
-	update_last_return(shell, jcpy->ret);
 	if (!(jcpy->status & STOPPED))
 		nb_job_active(shell);
+	ret = jcpy->ret;
 	del_struct_job(jcpy, sizeof(t_job));
+	return (ret);
 }
 
-uint8_t		ft_fg(t_job *j, t_process *p)
+uint8_t			ft_fg(t_job *j, t_process *p)
 {
 	t_cfg		*shell;
-	int32_t		ac;
 	t_job		*target;
+	int32_t		ac;
+	uint8_t		ret;
 
 	(void)j;
 	target = 0;
@@ -97,6 +85,6 @@ uint8_t		ft_fg(t_job *j, t_process *p)
 		return (2);
 	if (find_target(shell->job, p->av[ac], &target, "fg") != SUCCESS)
 		return (1);
-	put_job_in_fg(shell, target);
-	return (SUCCESS);
+	ret = put_job_in_fg(shell, target);
+	return (ret);
 }
