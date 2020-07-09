@@ -17,6 +17,7 @@ WHITE=\033[0;37m
 ## LINE EDITION ##
 
 LESRCS += cursor.c
+LESRCS += history_utils.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
 LESRCS += print_cmd.c
@@ -36,6 +37,7 @@ LESRCS += history_keys.c
 LESRCS += hist_exp/hist_exp.c
 LESRCS += hist_exp/formats.c
 LESRCS += reverse_i_search/prompt.c
+LESRCS += reverse_i_search/search.c
 
 ## LEXER ##
 
@@ -163,6 +165,10 @@ BTSRCS += fc/fc.c
 BTSRCS += fc/errors.c
 BTSRCS += fc/history_file.c
 BTSRCS += fc/arg_process.c
+BTSRCS += fc/exec.c
+BTSRCS += fc/option_l.c
+BTSRCS += fc/option_e.c
+BTSRCS += fc/option_s.c
 BTSRCS += exit.c
 BTSRCS += hash/hash.c
 BTSRCS += hash/utils.c

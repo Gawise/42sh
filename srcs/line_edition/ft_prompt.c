@@ -81,7 +81,7 @@ void			read_input(void)
 	}
 }
 
-static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
+char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 {
 	char	*ret;
 
@@ -92,7 +92,7 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 		return (ft_strnew(0));
 	end_key(cs);
 	if (!cs->sig_int)
-		tputs(tgoto(tgetstr("cm", NULL), 0, cs->row), 1, &my_putchar);
+		tputs(tgoto(tgetstr("cm", NULL), 0, cs->row + 1), 1, &my_putchar);
 	term_init(0, NULL);
 	if (cs->input && !cs->sig_int && cs->input[0]
 		&& !ft_strcheck(cs->input, " \t") && ft_strcmp(cs->input, "\n") != 0
@@ -104,7 +104,6 @@ static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 			cs->history = cs->history->next;
 		ft_dlstdelone(&cs->history);
 	}
-	ft_strdel(&cs->clipboard);
 	return (!ret && !cs->sig_int && !cs->sig_eof ? ft_strdup("\n") : ret);
 }
 

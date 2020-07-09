@@ -58,7 +58,7 @@ int		exp_minus(char **src, t_exp *exp)
 		return (0);
 	val += histsize;
 	if (!(exp->param = ft_itoa(val)))
-			ft_ex(EXMALLOC);
+		ft_ex(EXMALLOC);
 	if (!(res = ft_hash_lookup(cfg_shell()->hist_map, exp->param)))
 		return (0);
 	exp_substitute(exp, res);

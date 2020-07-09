@@ -25,7 +25,7 @@ void		move_cs(t_cs_line **cs)
 	{
 		pos = cs_pos(tmp);
 		tmp->col = pos.x;
-		tmp->row = pos.y ;//+ (tmp->min_row >= tmp->screen.y - 1 ? 1 : 0);
+		tmp->row = pos.y;
 		tputs(tgoto(tgetstr("cm", NULL), tmp->col, tmp->row), 1, &my_putchar);
 	}
 }
@@ -48,7 +48,6 @@ t_cs_line	*cs_master(char *prompt, int init)
 		cs.prompt = prompt;
 		cs.clipb.x = -1;
 		cs.clipb.y = -1;
-		cs.clipboard = NULL;
 		cs.sig_int = 0;
 		cs.sig_eof = 0;
 		cs.old_history = NULL;

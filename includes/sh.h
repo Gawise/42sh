@@ -49,6 +49,7 @@
 # include <stdint.h>
 # include <stddef.h>
 
+uint8_t		protect_fd(int8_t value);
 void		print_ressource(char *rsc);
 void		print_features(void);
 void		init_builtin_map(t_hash_map *map);

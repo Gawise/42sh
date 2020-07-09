@@ -1,39 +1,39 @@
-	#include "ft_printf.h"
+#include "ft_printf.h"
 
-uint8_t	fc_usage(void)
+int	fc_usage(void)
 {
-    char    *usage;
-    char    *usage2;
+	char	*usage;
+	char	*usage2;
 
-    usage = " : fc [-r][-e editor] [first[last]]\n        ";
-    usage2 = "fc -l[-nr] [first[last]]\n        fc -s[old=new] [first]\n";
-    ft_dprintf(2, "usage%s%s", usage, usage2);
-    return (-1);
+	usage = " : fc [-r][-e editor] [first[last]]\n        ";
+	usage2 = "fc -l[-nr] [first[last]]\n        fc -s[old=new] [first]\n";
+	ft_dprintf(2, "usage%s%s", usage, usage2);
+	return (-1);
 }
 
-uint8_t	fc_bad_option(char *s)
+int	fc_bad_option(char *s)
 {
 	ft_dprintf(2, "fc : invallid option --%s\n", s);
 	fc_usage();
 	return (-1);
 }
 
-uint8_t fc_bad_usage(char *s)
+int	fc_bad_usage(char *s)
 {
-    ft_dprintf(2, "fc : bad usage --%s\n", s);
-    fc_usage();
-    return (-1);
+	ft_dprintf(2, "fc : bad usage -%s\n", s);
+	fc_usage();
+	return (-1);
 }
 
-uint8_t	fc_missing_arg(void)
+int	fc_missing_arg(void)
 {
 	ft_dprintf(2, "fc : missing argument after option -e\n");
-    fc_usage();
-    return (-1);
+	fc_usage();
+	return (-1);
 }
 
-int		range_error(void)
+int	range_error(void)
 {
-    ft_printf("fc : history specification out of range");
-    return (-1);
+	ft_printf("fc : history specification out of range");
+	return (-1);
 }

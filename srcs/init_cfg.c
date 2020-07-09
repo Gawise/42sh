@@ -96,6 +96,7 @@ t_cfg			*init_cfg(char **env, char **av, int ac)
 	create_lst_var(&shell->env, env);
 	set_var(shell);
 	shell->history = get_history();
+	shell->clipboard = NULL;
 	if (!(shell->map = ft_hash_init(128))
 		|| !(shell->input_map = ft_hash_init(64))
 		|| !(shell->builtin_map = ft_hash_init(16)))

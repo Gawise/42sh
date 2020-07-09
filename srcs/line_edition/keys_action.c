@@ -16,17 +16,17 @@ void	set_scroll(t_cs_line *cs)
 	{
 		cs->cr = get_line(cs);
 		if (cs->cr + cs->min_row >= cs->screen.y - (cs->screen.x
-			<= (int)ft_strlen(cs->prompt) ? 1 : 0))
+					<= (int)ft_strlen(cs->prompt) ? 1 : 0))
 		{
 			scroll_add = cs->cr + cs->min_row - cs->screen.y + 1 + (cs->screen.x
-            <= (int)ft_strlen(cs->prompt) ? 1 : 0);
+					<= (int)ft_strlen(cs->prompt) ? 1 : 0);
 			while (cs->min_row - scroll_add < 0)
 				scroll_add--;
 			cs->min_row -= scroll_add;
 			tputs(tgoto(tgetstr("SF", NULL), 0, scroll_add), 1, &my_putchar);
 		}
 		if (cs->cr - cs->scroll + cs->min_row + (cs->screen.x <= (int)
-			ft_strlen(cs->prompt) ? 1 : 0) >= cs->screen.y)
+					ft_strlen(cs->prompt) ? 1 : 0) >= cs->screen.y)
 			cs->scroll = cs->cr - (cs->screen.y - cs->min_row - 1);
 		if (cs->scroll < 0)
 			cs->scroll = 0;
@@ -75,24 +75,24 @@ void	init_input_map(t_hash_map *map)
 	init_char_keys(&map);
 }
 
-int		check_keys(char *caps)
+int		check_special_keys(t_cs_line *cs, char *caps, void (*fct)())
 {
-	int				ret;
-	t_cs_line		*cs;
-	void			(*fct)();
+	int	ret;
 
-	if (!(cfg_shell()))
-		return (-1);
-	ret = 0;
-	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
-	if ((cs = cs_master(NULL, 0)) && caps[0] == (char)4)
+	ret = -2;
+	if (caps[0] == (char)4)
+	{
+		if (cs->ctrl_r)
+			ctrl_r_off(cs, caps);
 		ret = ctrl_d(cs);
-	else if (fct && ret == 0)
+	}
+	else if (fct && ret == -2)
 	{
 		if (ft_strcmp(caps, "\ex012") != 0 && caps[0] != 127)
 			ctrl_r_off(cs, caps);
 		if (!(cs->ctrl_r && history_search(cs, caps)))
 			fct(cs);
+		ret = 0;
 	}
 	else if ((ft_strcmp(caps, "\n") == 0 || caps[0] == '\n') && (ret = -1) < 0)
 	{
@@ -101,17 +101,31 @@ int		check_keys(char *caps)
 	}
 	else if (ft_strcmp(caps, "\033[6n") == 0)
 		ret = -1;
-	else if (caps[0] != 127 && ret == 0 && (caps[0] != '\033' && caps[0] >= 32)
-			&& (ret = 1))
+	return (ret);
+}
+
+int		check_keys(char *caps)
+{
+	int				ret;
+	t_cs_line		*cs;
+	void			(*fct)();
+
+	if (!(cfg_shell()))
+		return (-1);
+	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
+	cs = cs_master(NULL, 0);
+	ret = check_special_keys(cs, caps, fct);
+	if (ret == -2 && caps[0] != 127 && (caps[0] != '\033'
+				&& caps[0] >= 32) && (ret = 1))
 	{
 		if (cs->ctrl_r == 1)
 			history_search(cs, caps);
 		else
 		{
-		line_master(cs, caps);
-		if (ft_strchr(caps, '\n'))
-			ret = -1;
-		print_cmdline(cs);
+			line_master(cs, caps);
+			if (ft_strchr(caps, '\n'))
+				ret = -1;
+			print_cmdline(cs);
 		}
 	}
 	return (ret);
