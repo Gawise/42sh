@@ -16,6 +16,7 @@ WHITE=\033[0;37m
 
 ## LINE EDITION ##
 
+LESCRS += history_utils.c
 LESRCS += cursor.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
@@ -36,6 +37,8 @@ LESRCS += history_keys.c
 LESRCS += hist_exp/hist_exp.c
 LESRCS += hist_exp/formats.c
 LESRCS += reverse_i_search/prompt.c
+LESRCS += reverse_i_search/search.c
+
 ## LEXER ##
 
 LEXSRCS += buffer.c

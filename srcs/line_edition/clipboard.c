@@ -13,8 +13,8 @@ void	copy_clip(t_cs_line *cs)
 			- cs->clipb.x > 0)
 		{
 			ft_strdel(&cfg_shell()->clipboard);
-			cfg_shell()->clipboard = ft_strsub(cs->input, cs->clipb.x, cs->clipb.y
-			- cs->clipb.x);
+			cfg_shell()->clipboard = ft_strsub(cs->input, cs->clipb.x,
+			cs->clipb.y - cs->clipb.x);
 		}
 	}
 }

@@ -204,6 +204,7 @@ char		*get_cmd_by_oc(t_cfg *cfg, char *av);
 char		*get_cmd_by_num(t_cfg *cfg, char *av);
 void        get_pattern(char **av, int *ac, char **old, char **n);
 void        del_fc_cmd(void);
+void		get_hist_elem(t_dlist **hist, char **input, char *caps);
 
 /*
 *****************************************************

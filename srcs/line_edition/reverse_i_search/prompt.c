@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/26 18:14:13 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/07/05 17:00:46 by ambelghi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libft.h"
 #include "line_edition.h"
 #include "struct.h"
@@ -25,7 +13,7 @@ char	*set_prompt(char *s)
 	return (prompt);
 }
 
-int	rev_i_search(t_cs_line *cs)
+int		rev_i_search(t_cs_line *cs)
 {
 	if (cs && cs->ctrl_r == 0)
 	{
@@ -38,7 +26,7 @@ int	rev_i_search(t_cs_line *cs)
 	return (0);
 }
 
-int	ctrl_r_off(t_cs_line *cs, char *caps)
+int		ctrl_r_off(t_cs_line *cs, char *caps)
 {
 	(void)caps;
 	if (cs && cs->ctrl_r == 1)
@@ -52,7 +40,7 @@ int	ctrl_r_off(t_cs_line *cs, char *caps)
 	return (0);
 }
 
-int	del_char(char **del, t_dlist *hist, t_cs_line *cs)
+int		del_char(char **del, t_dlist *hist, t_cs_line *cs)
 {
 	int		i;
 	char	*tmp;
@@ -66,52 +54,9 @@ int	del_char(char **del, t_dlist *hist, t_cs_line *cs)
 		ft_strdel(&tmp);
 		ft_clear(1);
 		print_prompt(cs);
-        ft_dprintf(cs->tty, "\"%s\" : %s", *del, (hist ? (char *)hist->data : NULL));
+		ft_dprintf(cs->tty, "\"%s\" : %s", *del,
+				(hist ? (char *)hist->data : NULL));
 		return (1);
-	}
-	return (0);
-}
-
-int	history_search(t_cs_line *cs, char *caps)
-{
-	static char		*input = NULL;
-	static t_dlist	*hist = NULL;
-	char			*tmp;
-
-	if (cs && caps && ft_strcmp(caps, "\n") != 0 && !cs->sig_int)
-	{
-		if (caps[0] == (char)127)
-			return (del_char(&input, hist, cs));
-		if (input)
-		{
-			tmp = input;
-			ft_asprintf(&input, "%s%s", tmp, caps);
-			ft_strdel(&tmp);
-		}
-		else
-			input = ft_strdup(caps);
-		if (!hist || !hist->prev || !hist->data)
-		{
-			hist = cfg_shell()->history;
-			while (hist->next)
-				hist = hist->next;
-		}
-		while (hist->prev && !ft_strstr((char *)hist->data, input))
-			hist = hist->prev;
-		ft_clear(1);
-		print_prompt(cs);
-		ft_dprintf(cs->tty, "\"%s\" : %s", input, (char *)hist->data);
-	}
-	else if (cs)
-	{
-		ctrl_r_off(cs, caps);
-		ft_strdel(&input);
-		if (hist && hist->data && !cs->sig_int && !cs->sig_eof)
-		{
-			ft_strdel(&cs->input);
-			cs->input = ft_strdup((char *)hist->data);
-		}
-		hist = NULL;
 	}
 	return (0);
 }

@@ -63,5 +63,8 @@ int		edit_hist(int8_t *fl, char **av, int ac)
 		ft_strdel(&hist);
 		return (1);
 	}
+	else
+		ft_dprintf(STDERR_FILENO,
+				"fc : Could not create temporary file : permission denied.");
 	return (0);
 }

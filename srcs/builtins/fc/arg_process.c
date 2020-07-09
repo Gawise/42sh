@@ -76,6 +76,8 @@ int		check_range(char **av, int ac)
 		while (av[i])
 		{
 			z = 0;
+			if (ft_strcmp(av[i], "-") == 0)
+				return (range_error());
 			if (av[i][z] == '-')
 				z = 1;
 			while (av[i][z])

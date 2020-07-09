@@ -7,32 +7,6 @@
 #include "struct.h"
 #include <stdlib.h>
 
-int			ft_strcheck(char *s, char *oc)
-{
-	int	i;
-
-	if (s && oc)
-	{
-		i = 0;
-		while (s[i])
-			if (!ft_strchr(oc, s[i++]) && s[i - 1] != '\n')
-				return (0);
-		return (1);
-	}
-	return (0);
-}
-
-static char	*get_home(void)
-{
-	t_cfg	*cfg;
-	char	*home;
-
-	if ((cfg = cfg_shell()))
-		if ((home = find_var_value(cfg->env, "HOME")))
-			return (home);
-	return (".");
-}
-
 static void	history_updater(t_cs_line *cs, t_dlist *hs)
 {
 	int		len;
@@ -41,7 +15,7 @@ static void	history_updater(t_cs_line *cs, t_dlist *hs)
 
 	len = ft_strlen(cs->input);
 	if (!(hs->prev && hs->prev->data && (cs->input[len - 1] = '\0')
-		!= 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
+				!= 0 && ft_strcmp(cs->input, (char *)hs->prev->data) == 0))
 	{
 		cs->input[len - 1] = '\0';
 		ft_strdel((char **)&hs->data);
@@ -61,19 +35,11 @@ void		update_history_file(t_dlist *hs, t_cfg *cfg)
 {
 	int		i;
 	int		fd;
-	char	*path;
 	t_dlist	*tmp;
 
-	if ((tmp = hs) && cfg)
+	tmp = hs;
+	if (tmp && cfg && (fd = open_histfd()) >= 0)
 	{
-		path = NULL;
-		ft_asprintf(&path, "%s/.%s_history", get_home(), PROJECT);
-		if ((fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0666)) < 0)
-		{
-			ft_strdel(&path);
-			return ;
-		}
-		ft_strdel(&path);
 		while (tmp && tmp->next)
 			tmp = tmp->next;
 		i = cfg->hist_nb;
@@ -84,7 +50,8 @@ void		update_history_file(t_dlist *hs, t_cfg *cfg)
 			if ((char *)tmp->data && ((char *)tmp->data)[0] != '\0')
 			{
 				ft_putstr_fd((char *)tmp->data, fd);
-				if (((char *)tmp->data)[ft_strlen((char *)tmp->data) - 1] != '\n')
+				if (((char *)tmp->data)[ft_strlen((char *)tmp->data) - 1]
+					!= '\n')
 					ft_putstr_fd("\n", fd);
 			}
 			tmp = tmp->next;
@@ -111,25 +78,25 @@ void		update_history(t_dlist *hs)
 	}
 }
 
-static void init_history(t_dlist *hs, int fd, char **line)
+static void	init_history(t_dlist *hs, int fd, char **line)
 {
-    char    *nb;
-    t_cfg   *cfg;
-    int     i;
+	char	*nb;
+	t_cfg	*cfg;
+	int		i;
 
-    if (hs && line && (cfg = cfg_shell()))
-    {
-        i = 0;
-        while (get_next_line(fd, line) > 0 && ++i)
-        {
-            ft_dlstaddtail(&hs, ft_dlstnew(*line, 1));
-            nb = ft_itoa(i);
-            ft_hash_add(cfg->hist_map, nb, ft_strdup(*line), NULL);
-            ft_strdel(&nb);
-        }
+	if (hs && line && (cfg = cfg_shell()))
+	{
+		i = 0;
+		while (get_next_line(fd, line) > 0 && ++i)
+		{
+			ft_dlstaddtail(&hs, ft_dlstnew(*line, 1));
+			nb = ft_itoa(i);
+			ft_hash_add(cfg->hist_map, nb, ft_strdup(*line), NULL);
+			ft_strdel(&nb);
+		}
 		cfg->hist_nb = i;
-        close(fd);
-    }
+		close(fd);
+	}
 }
 
 t_dlist		*get_history(void)

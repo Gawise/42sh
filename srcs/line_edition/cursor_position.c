@@ -38,7 +38,8 @@ t_point		cs_pos(t_cs_line *cs)
 		i.y = (i.y > cs->line_col ? cs->line_col : i.y);
 		pos.x = i.y + (j.x == 0 && cs->screen.x > len ? cs->min_col : 0)
 			- (cs->scroll ? 1 : 0);
-		pos.y = j.x - cs->scroll + cs->min_row + (!cs->scroll && cs->screen.x <= len ? 1 : 0);
+		pos.y = j.x - cs->scroll + cs->min_row + (!cs->scroll && cs->screen.x
+				<= len ? 1 : 0);
 		cs->min_col = j.y;
 	}
 	return (pos);

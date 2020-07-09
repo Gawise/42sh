@@ -18,6 +18,8 @@ char	*get_histfilename(void)
 	name = "/edit_hist";
 	if (access(prefix, W_OK | R_OK) < 0)
 		prefix = ".";
+	if (access(prefix, W_OK | R_OK) < 0)
+		return (NULL);
 	i = 0;
 	ft_asprintf(&name, "%s%s", prefix, name);
 	prefix = ft_strdup(name);

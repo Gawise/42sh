@@ -122,5 +122,9 @@ int				expand_history(char **line);
 int				rev_i_search(t_cs_line *cs);
 int				ctrl_r_off(t_cs_line *cs, char *caps);
 int				history_search(t_cs_line *cs, char *caps);
+int				open_histfd(void);
+char			*get_home(void);
+int				check_special_keys(t_cs_line *cs, char *caps, void (*fct)());
+int				del_char(char **del, t_dlist *hist, t_cs_line *cs);
 
 #endif
