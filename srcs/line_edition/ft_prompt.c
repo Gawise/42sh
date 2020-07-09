@@ -81,7 +81,7 @@ void			read_input(void)
 	}
 }
 
-static char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
+char		*get_cmd_line(t_cs_line *cs, t_dlist *hs)
 {
 	char	*ret;
 

@@ -126,5 +126,6 @@ int				open_histfd(void);
 char			*get_home(void);
 int				check_special_keys(t_cs_line *cs, char *caps, void (*fct)());
 int				del_char(char **del, t_dlist *hist, t_cs_line *cs);
+char			*get_cmd_line(t_cs_line *cs, t_dlist *hs);
 
 #endif

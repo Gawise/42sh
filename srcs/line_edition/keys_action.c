@@ -115,7 +115,7 @@ int		check_keys(char *caps)
 	fct = ft_hash_lookup(((t_cfg *)cfg_shell())->input_map, caps);
 	cs = cs_master(NULL, 0);
 	ret = check_special_keys(cs, caps, fct);
-	if (ret == -2 && caps[0] != 127 && ret == 0 && (caps[0] != '\033'
+	if (ret == -2 && caps[0] != 127 && (caps[0] != '\033'
 				&& caps[0] >= 32) && (ret = 1))
 	{
 		if (cs->ctrl_r == 1)

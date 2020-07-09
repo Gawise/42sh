@@ -16,8 +16,8 @@ WHITE=\033[0;37m
 
 ## LINE EDITION ##
 
-LESCRS += history_utils.c
 LESRCS += cursor.c
+LESRCS += history_utils.c
 LESRCS += ft_prompt.c
 LESRCS += history.c
 LESRCS += print_cmd.c
