@@ -314,7 +314,6 @@ typedef struct	s_job
 	t_pipe			pipe;
 	uint8_t			status;
 	uint8_t			ret;
-	uint8_t			cur;
 	int16_t			std[3];
 	struct termios	term_eval;
 }				t_job;
