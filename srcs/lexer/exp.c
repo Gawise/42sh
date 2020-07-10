@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:13 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 18:14:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ int	l_delim_exp(t_lexer *lexer, char c)
 
 int	l_build_exp(t_lexer *lexer, char c)
 {
-	if (lexer->state == S_TK_START && !l_create_token(lexer))
+	if (lexer->state == S_TK_START && !l_get_flag(lexer, F_HD_DELIM)
+	&& !l_create_token(lexer))
 		return (0);
 	l_buffer_add(lexer, c);
 	lexer->state = S_EXP;
-	lexer->curr_token->type = WORD;
+	if (!l_get_flag(lexer, F_HD_DELIM))
+		lexer->curr_token->type = WORD;
 	return (1);
 }
 

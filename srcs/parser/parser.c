@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:25 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 18:42:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,11 @@ int		ft_parser(t_lexer *lexer, t_parser *parser)
 	{
 		ft_lstdel(&lexer->token_lst, del_token);
 		if (!(pmt_prefix = p_get_prompt_prefix(parser))
-		|| ft_dprintf(0, "%s", pmt_prefix) == -1
-		|| !(pmt = ft_prompt(find_var_value(cfg_shell()->intern, "PS2")
-		, COLOR_SUBPROMPT)))
+		|| !(pmt = ft_prompt(pmt_prefix, COLOR_SUBPROMPT)))
+		{
+			ft_strdel(&pmt_prefix);
 			return (0);
+		}
 		ft_lexer(&pmt, lexer);
 		ft_strdel(&pmt);
 		ft_strdel(&pmt_prefix);

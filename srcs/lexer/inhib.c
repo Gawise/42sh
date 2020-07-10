@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:14 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:14 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 19:30:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	l_build_inhib(t_lexer *lexer, char c)
 		l_add_flag(lexer, c);
 	l_buffer_add(lexer, c);
 	lexer->state = S_FLAG;
-	lexer->curr_token->type = WORD;
+	if (!l_get_flag(lexer, F_HD_DELIM))
+		lexer->curr_token->type = WORD;
 	return (1);
 }
 

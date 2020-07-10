@@ -1,0 +1,4 @@
+bla=hfg
+cat << ${bla}
+gfs nhygfd
+${bla}

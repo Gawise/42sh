@@ -6,13 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:12 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:12 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:07:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
+#include "sh.h"
 
 void		l_buffer_flush(t_lexer *lexer)
 {
@@ -22,17 +23,11 @@ void		l_buffer_flush(t_lexer *lexer)
 	if (!token->str)
 	{
 		if (!(token->str = ft_strndup(lexer->buffer, lexer->buff_i)))
-		{
-			ft_printf("erreur malloc buffer_flush 1\n");
-			exit(EXIT_FAILURE);
-		}
+			ft_ex(EXMALLOC);
 	}
 	else if (!(token->str = ft_strnlclnjoin(token->str,
 	lexer->buffer, lexer->buff_i)))
-	{
-		ft_printf("erreur malloc buffer flush 2\n");
-		exit(EXIT_FAILURE);
-	}
+		ft_ex(EXMALLOC);
 	ft_bzero(lexer->buffer, L_BUFF_SIZE);
 	lexer->buff_i = 0;
 }

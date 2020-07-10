@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:25 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 18:45:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int		p_set_start_state(t_token *token, t_parser *parser)
 char	*p_get_prompt_prefix(t_parser *parser)
 {
 	if (parser->pmt_prefix == AND_IF)
-		return (ft_strdup("cmdand"));
+		return (ft_strdup("cmdand> "));
 	else if (parser->pmt_prefix == OR_IF)
-		return (ft_strdup("cmdor"));
+		return (ft_strdup("cmdor> "));
 	else if (parser->pmt_prefix == PIPE)
-		return (ft_strdup("pipe"));
+		return (ft_strdup("pipe> "));
 	return (ft_strdup(""));
 }
