@@ -112,28 +112,29 @@
 *****************************************************
 */
 
-int				check_int_args(char *s1, char *s2);
-void			routine_fg_job(t_cfg *shell, t_job *j);
-uint8_t			ft_fc(t_job *j, t_process *p);
-uint8_t			ft_export(t_job *j, t_process *p);
-uint8_t			ft_bg(t_job *j, t_process *p);
-uint8_t			ft_fg(t_job *j, t_process *p);
-uint8_t			ft_echo(t_job *j, t_process *p);
-uint8_t			ft_type(t_job *j, t_process *p);
-uint8_t			ft_set(t_job *j, t_process *p);
-uint8_t			ft_unset(t_job *j, t_process *p);
-uint8_t			ft_env(t_job *j, t_process *p);
-uint8_t			ft_exit(t_job *j, t_process *p);
+uint8_t			ft_unalias(t_process *p);
+uint8_t			ft_alias(t_process *p);
+uint8_t			ft_fc(t_process *p);
+uint8_t			ft_export(t_process *p);
+uint8_t			ft_bg(t_process *p);
+uint8_t			ft_fg(t_process *p);
+uint8_t			ft_echo(t_process *p);
+uint8_t			ft_type(t_process *p);
+uint8_t			ft_set(t_process *p);
+uint8_t			ft_unset(t_process *p);
+uint8_t			ft_exit(t_process *p);
+uint8_t			ft_hash(t_process *p);
+uint8_t			ft_jobs(t_process *p);
+uint8_t			ft_test(t_process *p);
+uint8_t			ft_cd(t_process *p);
+
 int8_t			protect_job(int8_t update);
-uint8_t			ft_hash(t_job *j, t_process *p);
-uint8_t			ft_jobs(t_job *j, t_process *p);
 uint8_t			print_jobs(t_cfg *shell, t_process *p, char opt, int32_t ac);
 uint8_t			print_all_jobs(t_cfg *shell, t_list *jobs, char opt);
-uint8_t			ft_cd(t_job *j, t_process *p);
 char			*ft_strcut(char *str, char *delim, unsigned int field);
 int				check_whole_path(char *path);
 char			cd_getopt(char **str, int *i);
-int				cd_home(t_job *job, t_process *p);
+int				cd_home(t_process *p);
 char			*cd_setcurpath(t_list **env, char *opr);
 int				cd_logically(t_list **env, char *curpath, char *opr);
 int				chdir_errors(char *curpath, char *opr, char *pwd, char *oldpwd);
@@ -155,12 +156,11 @@ void			print_all_alias(void);
 t_list			*search_alias_list(char *name, t_list *list);
 t_var			*search_alias_var(char *name, t_list *list);
 char			*search_alias_value(char *name, t_list *list);
-uint8_t			ft_unalias(t_job *j, t_process *p);
-uint8_t			ft_alias(t_job *j, t_process *p);
+int				check_int_args(char *s1, char *s2);
+void			routine_fg_job(t_cfg *shell, t_job *j);
 
 char			**retrieve_ops(char **p_av, int *i, int *bang);
 int				check_closing_bracket(char **av);
-uint8_t			ft_test(t_job *j, t_process *p);
 void			init_test_op(void);
 int				check_closing_bracket(char **av);
 char			**retrieve_ops(char **p_av, int *i, int *bang);
@@ -245,7 +245,7 @@ int16_t			get_job(t_list *ljob, char *ope, t_job **j, uint8_t *curr);
 
 void			update_last_return(t_cfg *shell, uint8_t jret);
 void			cpy_lst_process(void *copy, void *process);
-uint8_t			builtin_process(t_job *j, t_process *p);
+uint8_t			builtin_process(t_process *p);
 void			routine_process(t_cfg *shell, t_list *process, t_pipe *fd);
 void			run_process(t_cfg *shell, t_job *j, t_process *p);
 void			process_type(t_process *p);

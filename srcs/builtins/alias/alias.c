@@ -73,12 +73,11 @@ static	uint8_t		make_alias(char *assign)
 	return (0);
 }
 
-uint8_t				ft_alias(t_job *j, t_process *p)
+uint8_t				ft_alias(t_process *p)
 {
 	int	i;
 
 	i = 1;
-	(void)j;
 	if (!p->av || !p->av[1])
 		print_all_alias();
 	else

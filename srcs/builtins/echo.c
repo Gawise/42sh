@@ -37,7 +37,7 @@ static int	echo_options(char **av, int *i, int *j)
 	return (flags);
 }
 
-uint8_t		ft_echo(t_job *j, t_process *p)
+uint8_t		ft_echo(t_process *p)
 {
 	t_point	i;
 	int		fl;
@@ -45,7 +45,7 @@ uint8_t		ft_echo(t_job *j, t_process *p)
 
 	if (bad_fd(STDOUT_FILENO) == FAILURE)
 		return (1);
-	if (j && p && (params = p->av))
+	if (p && (params = p->av))
 	{
 		i = (t_point){1, 0};
 		if (((fl = echo_options(params, &i.x, &i.y)) & 1))

@@ -6,7 +6,7 @@
 /*   By: ambelghi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 18:32:54 by ambelghi          #+#    #+#             */
-/*   Updated: 2020/07/10 14:45:56 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 15:26:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	del_fc_cmd(void)
 	ft_strdel(&nb);
 }
 
-uint8_t	ft_fc(t_job *j, t_process *p)
+uint8_t	ft_fc(t_process *p)
 {
 	int8_t	fl;
 	int32_t	ac;
@@ -51,7 +51,7 @@ uint8_t	ft_fc(t_job *j, t_process *p)
 	ac = 1;
 	if ((fl = fc_check_opt(p, &ac)) < 0)
 		return (FAILURE);
-	if (j && p)
+	if (p)
 	{
 		if (fl & 1 || fl & 16)
 			del_fc_cmd();

@@ -16,11 +16,10 @@
 #include "var.h"
 #include "ft_printf.h"
 
-uint8_t			ft_set(t_job *j, t_process *p)
+uint8_t			ft_set(t_process *p)
 {
 	t_cfg	*shell;
 
-	(void)j;
 	shell = cfg_shell();
 	if (p->av[1])
 		return (SUCCESS);

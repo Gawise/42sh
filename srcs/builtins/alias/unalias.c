@@ -18,12 +18,11 @@
 #include "sh.h"
 #include "exec.h"
 
-uint8_t		ft_unalias(t_job *j, t_process *p)
+uint8_t		ft_unalias(t_process *p)
 {
 	t_list	**list;
 	int		i;
 
-	(void)j;
 	list = &cfg_shell()->alias;
 	i = 1;
 	if (ft_strequ(p->av[1], "-a"))

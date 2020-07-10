@@ -82,14 +82,13 @@ static uint8_t	put_job_in_fg(t_cfg *shell, t_job *target)
 	return (ret);
 }
 
-uint8_t			ft_fg(t_job *j, t_process *p)
+uint8_t			ft_fg(t_process *p)
 {
 	t_cfg		*shell;
 	t_job		*target;
 	int32_t		ac;
 	uint8_t		ret;
 
-	(void)j;
 	target = 0;
 	shell = cfg_shell();
 	ac = 1;

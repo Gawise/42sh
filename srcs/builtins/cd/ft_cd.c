@@ -20,7 +20,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int				cd_oldpwd(t_job *j, t_process *p)
+int				cd_oldpwd(t_process *p)
 {
 	char	**str;
 	char	*oldpwd;
@@ -39,7 +39,7 @@ int				cd_oldpwd(t_job *j, t_process *p)
 	str[2] = NULL;
 	tabfree(p->av);
 	p->av = str;
-	if (!(ret = ft_cd(j, p)))
+	if (!(ret = ft_cd(p)))
 		ft_printf("%s\n", oldpwd);
 	return (ret);
 }
@@ -50,7 +50,7 @@ static uint8_t	cd_too_many_args(void)
 	return (1);
 }
 
-uint8_t			ft_cd(t_job *job, t_process *p)
+uint8_t			ft_cd(t_process *p)
 {
 	char	opt;
 	char	*opr;
@@ -64,9 +64,9 @@ uint8_t			ft_cd(t_job *job, t_process *p)
 		return (cd_too_many_args());
 	opr = p->av[i];
 	if (!opr)
-		return (cd_home(job, p));
+		return (cd_home(p));
 	else if (ft_strequ(opr, "-"))
-		return (cd_oldpwd(job, p));
+		return (cd_oldpwd(p));
 	if (!(curpath = cd_setcurpath(&p->env, opr)))
 		ft_ex(EXMALLOC);
 	if (opt == 'L')
