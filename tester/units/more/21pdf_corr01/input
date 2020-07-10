@@ -1,0 +1,6 @@
+unset PATH
+PATH=/bin:/usr/bin
+/bin/ls
+unset PATH
+ls
+/bin/ls
