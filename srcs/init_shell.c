@@ -25,6 +25,7 @@ void		set_var(t_cfg *shell)
 	setvar_add(&shell->sp, "#", 0);
 	setvar_add(&shell->sp, "-", 0);
 	setvar_add(&shell->sp, "0", 0);
+	setvar_add(&shell->env, "HISTSIZE", "32767");
 	ft_strdel(&pid);
 	ft_setvar(&shell->intern, "PS1", NAME_SH);
 	ft_setvar(&shell->intern, "PS2", "> ");

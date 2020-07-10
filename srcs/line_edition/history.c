@@ -83,9 +83,13 @@ static void	init_history(t_dlist *hs, int fd, char **line)
 	char	*nb;
 	t_cfg	*cfg;
 	int		i;
+	int		histsize;
 
 	if (hs && line && (cfg = cfg_shell()))
 	{
+		histsize = atoi(find_var_value(cfg_shell()->env, "HISTSIZE"));
+		if (histsize <= 0)
+			histsize = 32767;
 		i = 0;
 		while (get_next_line(fd, line) > 0 && ++i)
 		{
