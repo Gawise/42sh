@@ -199,7 +199,6 @@ BTSRCS += test/int_gt.c
 BTSRCS += test/int_le.c
 BTSRCS += test/int_lt.c
 BTSRCS += test/int_neq.c
-BTSRCS += test/not.c
 BTSRCS += test/read.c
 BTSRCS += test/reg_file.c
 BTSRCS += test/setgid.c

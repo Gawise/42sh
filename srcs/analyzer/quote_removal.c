@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote_removal.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/10 14:45:16 by user42            #+#    #+#             */
+/*   Updated: 2020/07/10 14:45:52 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
@@ -98,12 +110,10 @@ char			*a_quote_removal(char **str)
 {
 	char	*tmp;
 	char	*res;
-	int		i;
 	int		flag;
 	char	*cpy;
 
 	flag = 0;
-	i = 0;
 	if (!(cpy = *str))
 		return (NULL);
 	if (!(res = ft_strnew(sizeof(char) * ft_strlen(*str))))

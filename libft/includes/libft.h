@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/10 15:09:42 by user42            #+#    #+#             */
+/*   Updated: 2020/07/10 15:11:55 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 
@@ -114,7 +126,7 @@ t_list			*ft_lstgettail(t_list *alst);
 void			ft_lstdeltail(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdelhead(t_list **alst, void (*del)(void*, size_t));
 uint32_t		ft_lstcount(t_list *elem);
-void            ft_lstfree(void *data, size_t size);
+void			ft_lstfree(void *data, size_t size);
 
 /*
 ** MEMORY
@@ -152,7 +164,7 @@ void			ft_putnbr_fd(int n, int fd);
 
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
-int       ft_strisdigit(char *s);
+int				ft_strisdigit(char *s);
 int				ft_strisalpha(char *s);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);

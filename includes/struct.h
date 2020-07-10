@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/10 15:07:05 by user42            #+#    #+#             */
+/*   Updated: 2020/07/10 15:08:13 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCT_H
 # define STRUCT_H
 
@@ -255,7 +267,6 @@ typedef struct	s_cs_line
 	int				cr;
 	char			*prompt;
 	char			*prompt_color;
-//	char			*clipboard;
 	t_dlist			*history;
 	t_point			clipb;
 	char			*old_history;
