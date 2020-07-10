@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:14 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:14 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 19:41:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int			lex_err(t_lexer *lexer, char c)
 {
 	(void)lexer;
 	(void)c;
-	ft_printf("lexing error\n");
+	ft_dprintf(2, "lexing error\n");
 	exit(1);
 	return (1);
 }

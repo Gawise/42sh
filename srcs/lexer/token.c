@@ -6,13 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:17 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 19:32:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
+#include "sh.h"
 
 void		init_token(t_token *token)
 {
@@ -24,16 +25,10 @@ void		init_token(t_token *token)
 int			l_create_token(t_lexer *lexer)
 {
 	if (!(lexer->curr_token = (t_token *)ft_memalloc(sizeof(t_token))))
-	{
-		ft_printf("erreur malloc create_token 1\n");
-		exit(EXIT_FAILURE);
-	}
+		ft_ex(EXMALLOC);
 	init_token(lexer->curr_token);
 	if (!ft_lstpush(&lexer->token_lst, lexer->curr_token, sizeof(t_token)))
-	{
-		ft_printf("erreur malloc create_token 2\n");
-		exit(EXIT_FAILURE);
-	}
+		ft_ex(EXMALLOC);
 	return (1);
 }
 
