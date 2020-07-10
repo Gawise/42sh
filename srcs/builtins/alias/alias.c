@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:45:52 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:45:52 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 20:46:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,20 @@ static int			check_alias_name(char *name)
 	int		i;
 
 	i = 0;
+	if (!name[i])
+	{
+		ft_dprintf(2, "%s: alias: %s : Invalid alias name\n",
+		PROJECT, name);
+		return (0);
+	}
 	while (name[i])
 	{
-		if (!ft_isalnum(name[i]) && !ft_strchr("_!%,@", name[i]))
+		if (!ft_isalnum(name[i]) || ft_strchr("=-/_!%,@", name[i]))
+		{
+			ft_dprintf(2, "%s: alias: %s : Invalid alias name\n",
+			PROJECT, name);
 			return (0);
+		}
 		i++;
 	}
 	return (1);

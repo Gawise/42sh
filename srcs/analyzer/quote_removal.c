@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:45:16 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:45:52 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 20:16:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void		a_handle_d_quote(char **tmp, int *flag)
 static void		a_handle_s_quote(char **tmp, int *flag)
 {
 	if (*flag == '\\')
-		**tmp = '\\';
+		**tmp = '\'';
 	else if (*flag == '\'')
 	{
 		*flag = 0;

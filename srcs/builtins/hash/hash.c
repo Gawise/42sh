@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:45:57 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:45:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 20:21:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,12 @@ uint8_t		ft_hash(t_process *p)
 	int			r_opt;
 	t_hash_map	**map;
 	int			ac;
+	uint8_t		ret;
 
 	r_opt = 0;
 	ac = 1;
 	map = &cfg_shell()->map;
+	ret = 0;
 	if (!p)
 		return (1);
 	if (!p->av[1])
@@ -102,8 +104,8 @@ uint8_t		ft_hash(t_process *p)
 	{
 		if (!hash_fill_map(map,
 		find_var_value(p->env, "PATH"), p->av[ac]))
-			return (1);
+			ret = 1;
 		ac++;
 	}
-	return (0);
+	return (ret);
 }
