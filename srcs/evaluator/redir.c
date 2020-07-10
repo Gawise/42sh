@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:08 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:58:08 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ uint32_t	process_redir(t_process *p, t_list *redir)
 	while (redir)
 	{
 		r = redir->data;
-		if (!r->file)
+		if (!r->file && !(r->type == DLESS || r->type == DLESSDASH))
 			ft_ex(EXUEPTD);
 		if (r->type == DLESS || r->type == DLESSDASH)
 			error = redir_heredoc(p, r);
