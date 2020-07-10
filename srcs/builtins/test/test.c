@@ -52,14 +52,13 @@ static uint8_t		single_str(char **av, int bang)
 	return (0);
 }
 
-uint8_t				ft_test(t_job *j, t_process *p)
+uint8_t				ft_test(t_process *p)
 {
 	uint8_t		ret;
 	char		**av;
 	int			count;
 	int			bang;
 
-	(void)j;
 	bang = 0;
 	if (ft_strequ(p->cmd, "[") && !check_closing_bracket(p->av))
 		return (2);

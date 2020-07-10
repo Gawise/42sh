@@ -53,14 +53,13 @@ static uint8_t		check_opt(t_process *p, int32_t *ac)
 	return (opt);
 }
 
-uint8_t				ft_export(t_job *j, t_process *p)
+uint8_t				ft_export(t_process *p)
 {
 	int32_t		ac;
 	int8_t		ret;
 	t_cfg		*shell;
 	char		*equal;
 
-	(void)j;
 	ac = 1;
 	shell = cfg_shell();
 	if ((ret = check_opt(p, &ac)) > 0)

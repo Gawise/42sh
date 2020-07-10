@@ -47,13 +47,12 @@ uint8_t		put_job_in_bg(t_cfg *shell, char *wanted)
 	return (SUCCESS);
 }
 
-uint8_t		ft_bg(t_job *j, t_process *p)
+uint8_t		ft_bg(t_process *p)
 {
 	t_cfg		*shell;
 	int32_t		ac;
 	uint8_t		err;
 
-	(void)j;
 	shell = cfg_shell();
 	ac = 1;
 	err = 0;

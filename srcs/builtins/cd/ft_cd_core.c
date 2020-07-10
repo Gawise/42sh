@@ -8,7 +8,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int		cd_home(t_job *job, t_process *p)
+int		cd_home(t_process *p)
 {
 	char	**str;
 	char	*home;
@@ -30,7 +30,7 @@ int		cd_home(t_job *job, t_process *p)
 	str[2] = NULL;
 	tabfree(p->av);
 	p->av = str;
-	ret = ft_cd(job, p);
+	ret = ft_cd(p);
 	str = NULL;
 	return (ret);
 }

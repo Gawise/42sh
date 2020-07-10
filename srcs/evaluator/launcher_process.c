@@ -4,7 +4,7 @@
 #include "var.h"
 #include "sh.h"
 
-static void			kick_off_child(t_job *j, t_process *p, char **envp)
+static void			kick_off_child(t_process *p, char **envp)
 {
 	if (p->setup & ERROR)
 	{
@@ -12,7 +12,7 @@ static void			kick_off_child(t_job *j, t_process *p, char **envp)
 		exit(p->ret);
 	}
 	if (p->setup & BUILTIN)
-		exit(builtin_process(j, p));
+		exit(builtin_process(p));
 	if (p->setup & NOCMD)
 		exit(0);
 	if ((execve(p->path, p->av, envp)) == -1)
@@ -57,7 +57,7 @@ static uint8_t		child_process(t_job *job, t_process *p,
 	set_signal_child();
 	do_pipe(p);
 	do_redir(p->fd);
-	kick_off_child(job, p, envp);
+	kick_off_child(p, envp);
 	exit(1);
 }
 
@@ -90,7 +90,7 @@ void				run_process(t_cfg *shell, t_job *j, t_process *p)
 		if ((p->setup & R_ERROR) &&
 				(p->setup & B_SPECIAL) && !shell->interactive)
 			exit(1);
-		builtin_process(j, p);
+		builtin_process(p);
 		builtin_restor_fd(j);
 	}
 	else

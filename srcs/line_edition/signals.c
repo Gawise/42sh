@@ -54,7 +54,7 @@ void	sigterm_handler(int sig)
 	ft_bzero(&p, sizeof(t_process));
 	if (!(p.av = ft_memalloc(sizeof(char *) * 2)))
 		ft_ex(EXMALLOC);
-	ft_exit(0, &p);
+	ft_exit(&p);
 	ft_memdel((void **)&p.av);
 }
 

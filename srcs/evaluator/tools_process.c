@@ -29,9 +29,9 @@ t_process	*find_process_by_status(t_list *lst, uint8_t want)
 	return (NULL);
 }
 
-uint8_t		builtin_process(t_job *j, t_process *p)
+uint8_t		builtin_process(t_process *p)
 {
-	uint8_t		(*tab_f[16])(t_job *, t_process *);
+	uint8_t		(*tab_f[16])(t_process *);
 
 	tab_f[0] = ft_echo;
 	tab_f[1] = ft_cd;
@@ -51,7 +51,7 @@ uint8_t		builtin_process(t_job *j, t_process *p)
 	tab_f[15] = ft_fc;
 	if (p->status == FAILED)
 		return (p->ret);
-	if ((p->ret = tab_f[(p->setup >> 14)](j, p)))
+	if ((p->ret = tab_f[(p->setup >> 14)](p)))
 		p->status = FAILED;
 	else
 		p->status = COMPLETED;

@@ -27,14 +27,13 @@ static char		jobs_opt(char **av, int *ac)
 	return (opt);
 }
 
-uint8_t			ft_jobs(t_job *j, t_process *p)
+uint8_t			ft_jobs(t_process *p)
 {
 	int32_t		ac;
 	char		opt;
 	t_cfg		*shell;
 
 	shell = cfg_shell();
-	(void)j;
 	ac = 1;
 	if ((opt = jobs_opt(p->av, &ac)) == FAILURE)
 		return (2);

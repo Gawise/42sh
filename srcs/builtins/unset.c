@@ -17,12 +17,11 @@ void		unsetvar_del(void *delete, size_t size)
 	free(delete);
 }
 
-uint8_t		ft_unset(t_job *j, t_process *p)
+uint8_t		ft_unset(t_process *p)
 {
 	uint8_t		i;
 	uint8_t		ret;
 
-	(void)j;
 	i = 0;
 	ret = 0;
 	while (p->av[++i])

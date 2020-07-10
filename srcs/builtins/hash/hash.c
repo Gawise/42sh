@@ -69,7 +69,7 @@ void		hash_print_tab(t_hash_map *map)
 	}
 }
 
-uint8_t		ft_hash(t_job *j, t_process *p)
+uint8_t		ft_hash(t_process *p)
 {
 	int			r_opt;
 	t_hash_map	**map;
@@ -77,7 +77,6 @@ uint8_t		ft_hash(t_job *j, t_process *p)
 
 	r_opt = 0;
 	ac = 1;
-	(void)j;
 	map = &cfg_shell()->map;
 	if (!p)
 		return (1);

@@ -46,7 +46,7 @@ static uint8_t	type_find(t_cfg *shell, t_process *ptype, t_list *env)
 		return (type_error(ptype->cmd));
 }
 
-uint8_t			ft_type(t_job *j, t_process *p)
+uint8_t			ft_type(t_process *p)
 {
 	uint8_t		i;
 	t_process	ptype;
@@ -56,7 +56,6 @@ uint8_t			ft_type(t_job *j, t_process *p)
 	i = 1;
 	ret = 0;
 	shell = cfg_shell();
-	(void)j;
 	while (p->av[i])
 	{
 		ft_bzero(&ptype, sizeof(t_process));

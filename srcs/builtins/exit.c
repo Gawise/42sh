@@ -39,12 +39,11 @@ static int16_t	exit_opt(t_list *sp, char **av, uint8_t *ret)
 	return ((*ret = ft_atoi(av[1])));
 }
 
-uint8_t			ft_exit(t_job *j, t_process *p)
+uint8_t			ft_exit(t_process *p)
 {
 	uint8_t		ret;
 	t_cfg		*shell;
 
-	(void)j;
 	ret = 0;
 	shell = cfg_shell();
 	if (find_job_by_status(shell->job, STOPPED) && protect_job(0) > 0)
