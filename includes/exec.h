@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 15:07:04 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 15:07:04 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:42:30 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void			get_hist_elem(t_dlist **hist, char **input, char *caps);
 */
 
 void			term_create_eval(struct termios *origin, struct termios *eval);
-void			set_termios(int32_t mode, struct termios *term);
+uint8_t			set_termios(int32_t mode, struct termios *term);
 
 /*
 *****************************************************

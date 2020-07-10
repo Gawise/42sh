@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:09 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:09 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:44:17 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 #include "exec.h"
 #include "sh.h"
 
-void	set_termios(int32_t mode, struct termios *term)
+uint8_t	set_termios(int32_t mode, struct termios *term)
 {
 	if (tcsetattr(STDIN_FILENO, mode, term) == -1)
-		ft_ex(EXUEPTD);
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 void	term_create_eval(struct termios *origin, struct termios *eval)

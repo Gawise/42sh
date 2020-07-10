@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:07 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:07 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:41:31 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void		routine_fg_job(t_cfg *shell, t_job *j)
 	wait_process(j);
 	shell->cur_job = 0;
 	tcsetpgrp(STDIN_FILENO, shell->pid);
-	set_termios(TCSADRAIN, &shell->term_origin);
+	if (set_termios(TCSADRAIN, &shell->term_origin) == FAILURE)
+		ft_ex(EXUEPTD);
 }
 
 void		update_last_return(t_cfg *shell, uint8_t jret)

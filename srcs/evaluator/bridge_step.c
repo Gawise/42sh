@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:46:06 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:46:06 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:40:54 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static uint8_t	lvl_simple_cmd(t_cfg *s, t_list *s_cmd, char *cmd, uint8_t fg)
 
 	cmd_to_job(s, &job, s_cmd, cmd);
 	if ((job.fg = fg) && s->interactive)
-		set_termios(TCSADRAIN, &job.term_eval);
+		if (set_termios(TCSADRAIN, &job.term_eval) == FAILURE)
+			ft_ex(EXUEPTD);
 	ret_job = run_job(s, &job, job.process);
 	routine_clean_job(&job, sizeof(t_job));
 	return (ret_job);

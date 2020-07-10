@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 14:45:57 by user42            #+#    #+#             */
-/*   Updated: 2020/07/10 14:45:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/07/10 17:39:11 by hmerieux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ static uint8_t	put_job_in_fg(t_cfg *shell, t_job *target)
 	ft_lstdelif(&shell->job, &target->pgid, focus_job, del_struct_job);
 	ft_printf("%s\n", jcpy->cmd);
 	tcsetpgrp(STDIN_FILENO, jcpy->pgid);
-	set_termios(TCSADRAIN, &jcpy->term_eval);
+	if (set_termios(TCSADRAIN, &jcpy->term_eval) == FAILURE)
+		ft_ex(EXUEPTD);
 	kill(-jcpy->pgid, SIGCONT);
 	routine_fg_job(shell, jcpy);
 	shell->cur_job = tmp;
