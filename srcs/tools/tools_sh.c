@@ -24,7 +24,7 @@ void	build_prompt_ps1(uint8_t update)
 	char			*buf;
 	static int		dont_touch = 0;
 
-	if (((dont_touch = update)) || dont_touch)
+	if (dont_touch || ((dont_touch = update)))
 		return ;
 	if (!(id = getpwuid(getuid())))
 		logname = ft_strncpy(ft_strnew(5), "USER", 5);

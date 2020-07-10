@@ -49,8 +49,11 @@ int		parser_routine(t_lexer *lexer, t_parser *parser)
 
 int		line_edition_routine(char **line)
 {
-	if (!(*line = ft_prompt(find_var_value(cfg_shell()->intern, "PS1")
-	, COLOR_SH)))
+	char	*prompt;
+
+	if (!(prompt = find_var_value(cfg_shell()->intern, "PS1")))
+		prompt = find_var_value(cfg_shell()->env, "PS1");
+	if (!(*line = ft_prompt(prompt, COLOR_SH)))
 		return (0);
 	else if (*line && (!line[0][0]))
 	{

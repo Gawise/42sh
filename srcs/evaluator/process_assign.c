@@ -12,6 +12,8 @@ static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 	while (assignment)
 	{
 		assign = assignment->data;
+		if (!ft_strcmp(assign->var, "PS1"))
+			build_prompt_ps1(1);
 		if ((tmp = find_var(shell->env, assign->var)))
 			ft_setvar(&tmp, assign->var, assign->val);
 		else
@@ -20,12 +22,10 @@ static void		assign_for_currenv(t_cfg *shell, t_list *assignment)
 	}
 }
 
-static void		assign_for_b_special(t_cfg *shell, t_process *p,
-		t_list *assignment)
+static void		assign_for_b_special(t_cfg *shell, t_list *assignment)
 {
 	t_assignment	*assign;
 
-	(void)p;
 	while (assignment)
 	{
 		assign = assignment->data;
@@ -44,7 +44,7 @@ void			process_assign(t_cfg *shell, t_process *p, t_list *assignment)
 	if (p->setup & NOCMD && !(p->setup & PIPE_ON))
 		assign_for_currenv(shell, assignment);
 	else if (p->setup & B_SPECIAL && !(p->setup & PIPE_ON))
-		assign_for_b_special(shell, p, assignment);
+		assign_for_b_special(shell, assignment);
 	else
 	{
 		while (assignment)
