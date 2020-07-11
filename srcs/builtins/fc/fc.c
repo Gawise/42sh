@@ -49,9 +49,7 @@ uint8_t	ft_fc(t_process *p)
 	int32_t	ac;
 
 	ac = 1;
-	if ((fl = fc_check_opt(p, &ac)) < 0)
-		return (FAILURE);
-	if (p)
+	if (p && (fl = fc_check_opt(p, &ac)) >= 0)
 	{
 		if (fl & 1 || fl & 16)
 			del_fc_cmd();
@@ -62,7 +60,8 @@ uint8_t	ft_fc(t_process *p)
 			return (FAILURE);
 		if (fl & 16)
 			reexecute_cmd(p->av, ac);
-		return (SUCCESS);
+		return (fl & 1 || fl & 16 ?
+				ft_atoi(find_var_value(cfg_shell()->sp, "?")) : SUCCESS);
 	}
-	return (SUCCESS);
+	return (FAILURE);
 }
