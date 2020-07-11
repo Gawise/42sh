@@ -72,8 +72,11 @@ static int		hist_exp_error(t_exp *exp, char **line)
 	ft_hash_delone(shell->hist_map, hist_nb, free);
 	while (dlst->next)
 		dlst = dlst->next;
-	dlst->prev->next = NULL;
-	ft_dlstdelone(&dlst);
+	if (dlst && dlst->prev)
+	{
+		dlst->prev->next = NULL;
+		ft_dlstdelone(&dlst);
+	}
 	shell->hist_nb--;
 	if (!shell->interactive)
 		exit_routine(shell, 127);
