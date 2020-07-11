@@ -13,9 +13,19 @@
 #include "libft.h"
 #include "ft_printf.h"
 #include "lexer.h"
+#include "sh.h"
 
 int	l_build_newline(t_lexer *lexer, char c)
 {
+	if (l_get_flag(lexer, F_HD_DELIM))
+	{
+		ft_dprintf(2,
+		"%s: syntax error near unexpected token `newline\'\n",
+		PROJECT);
+		ft_lstdel(&lexer->here_queue, del_here_queue);
+		ft_lstdel(&lexer->flag_queue, del_flag_queue);
+		return (0);
+	}
 	if (l_get_flag(lexer, F_HEREDOC))
 	{
 		lexer->state = S_HD_BODY;
