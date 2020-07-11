@@ -5,6 +5,11 @@
   |/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|
                                          
                              
+ ##  MODES
+
+    * Non-interactive mode
+    * Debug mode
+
  ## Separators and Redirections
 
     * Redirections and fd aggregation : > , >> , <, <<, >&, <&
