@@ -29,6 +29,9 @@ int	l_build_control(t_lexer *lexer, char c)
 	{
 		if (lexer->state == S_TK_START && !l_create_token(lexer))
 			return (0);
+		if ((ft_strequ(lexer->buffer, "&&") && c == '&')
+		|| (ft_strequ(lexer->buffer, "||") && c == '|'))
+			return (l_delim_control(lexer, c));
 		if (ft_strchr("&|", c))
 		{
 			lexer->state = S_AMP_PIPE;

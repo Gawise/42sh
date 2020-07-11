@@ -24,6 +24,8 @@ static int		a_count_tabs(char *str)
 	int	res;
 
 	res = 0;
+	if (!str)
+		return (0);
 	while (*str)
 	{
 		if (*str == '\t')
@@ -39,10 +41,10 @@ static void		a_tab_trim(t_redir *redir)
 	char	*res;
 	int		i;
 
-	if (redir->type != DLESSDASH)
+	if (redir->type != DLESSDASH
+	|| !(file = redir->file))
 		return ;
 	i = 0;
-	file = redir->file;
 	if (!(res = ft_strnew(ft_strlen(file) - a_count_tabs(file))))
 		ft_ex(EXMALLOC);
 	while (*file)

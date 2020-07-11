@@ -29,6 +29,9 @@ int	l_build_redir(t_lexer *lexer, char c)
 {
 	if (lexer->state == S_TK_REDIR)
 	{
+		if ((ft_strequ("<", lexer->buffer) && c == '>')
+		|| (ft_strequ(">", lexer->buffer) && c == '<'))
+			return (l_delim_redir(lexer, c));
 		if (c == '&' && !l_is_duplicable_redir(lexer)
 		&& !l_delim_control(lexer, c))
 			return (0);
@@ -63,6 +66,7 @@ int	l_add_hyphen_redir(t_lexer *lexer, char c)
 	{
 		l_buffer_add(lexer, c);
 		lexer->curr_token->type = DLESSDASH;
+		return (1);
 	}
-	return (1);
+	return (0);
 }
