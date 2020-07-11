@@ -56,13 +56,29 @@ static int		handle_exp_flag(char **src, t_exp *exp, int *flag)
 	return (1);
 }
 
-static int		hist_exp_error(t_exp *exp)
+static int		hist_exp_error(t_exp *exp, char **line)
 {
+	t_cfg	*shell;
+	char	*hist_nb;
+	t_dlist	*dlst;
+
+	shell = cfg_shell();
+	dlst = shell->history;
+	if (!(hist_nb = ft_itoa(shell->hist_nb)))
+		ft_ex(EXMALLOC);
 	ft_dprintf(2, "%s: !%s: event not found\n", PROJECT, exp->word);
 	free_exp_content(exp);
-	ft_setvar(&cfg_shell()->sp, "?", "127");
-	if (!cfg_shell()->interactive)
-		exit_routine(cfg_shell(), 127);
+	ft_setvar(&shell->sp, "?", "127");
+	ft_hash_delone(shell->hist_map, hist_nb, free);
+	while (dlst->next)
+		dlst = dlst->next;
+	dlst->prev->next = NULL;
+	ft_dlstdelone(&dlst);
+	shell->hist_nb--;
+	if (!shell->interactive)
+		exit_routine(shell, 127);
+	ft_strdel(line);
+	ft_strdel(&hist_nb);
 	return (0);
 }
 
@@ -103,7 +119,7 @@ int				expand_history(char **line)
 	while (*str)
 	{
 		if (*str == '!' && !handle_exp_flag(&str, &exp, &flag))
-			return (hist_exp_error(&exp));
+			return (hist_exp_error(&exp, line));
 		exp_add_to_buf(&exp, &str, &exp.res);
 	}
 	exp_flush_buf(&exp, &exp.res);
